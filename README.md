@@ -38,7 +38,7 @@ ERP 业务数据与 API RunStore 仍在 SQLite；PostgreSQL 只保存图状态�
 ```bash
 # 安装 uv（若未安装）：https://docs.astral.sh/uv/
 uv sync --all-packages       # 创建虚拟环境并安装全部工作区依赖
-cp .env.example .env         # 填入 ZHIPU_API_KEY；本地 PostgreSQL URL 已给出示例值
+cp .env.example .env         # 填供应商 key，或 LLM_API_KEY + LLM_BASE_URL + LLM_MODEL
 docker compose up -d postgres # API graph checkpoint（本地演示凭据仅供开发）
 uv run pytest                # 单元测试（mock，不消耗 token）
 
@@ -109,7 +109,13 @@ B3 取消订单与库存调整先保存业务预览再审批：确认页展示�
 
 B4 支持从持久化草稿继续多轮任务：单份未提交草稿可找回客户、商品、数量与备注，多份先澄清；按指定版本的商品行修改数量，不依赖旧聊天文本。网页“历史会话”可分页找回旧任务，切换不会执行或取消待审批操作，恢复失败时保持输入锁定。见 [B4 验收](reports/acceptance/2026-10-11-task-history.md)与[实施计划](docs/superpowers/plans/2026-10-11-task-history.md)。
 
-B5 已接通只读取消资格查询：`assess_order_cancellation` 返回订单事实、有效政策版本和证据缺口，网页可展开引用；查询不取消订单、不申请审批。明确取消仍使用原预览与审批流程。见 B5 工程验收；真实模型运行见[模型对照验收](reports/acceptance/2026-10-12-model-comparison.md)：GLM 完整基线 35/35（≈¥0.033）、DeepSeek 34/35（≈$0.021，multi-06 步数超限），B5 七用例 GLM 5/7、DeepSeek 6/7，均为可见文本措辞义务失败、结构化证据零失败——B5 模型门槛未达成、如实保留；对照入口 `uv run python -m evals.compare --strict <报告A> <报告B>`（币种各自列示）。仅补元数据且片段完全一致时可运行 `uv run --package rag python -m rag refresh` 复用原向量；正文变化须重新 build。
+B4 新增独立多轮模型评测入口：`uv run python -m evals --suite b4 --budget 0.05 --budget-currency CNY --timeout 60`。七个场景共十五轮覆盖行号指代、连续修改、多草稿澄清、指定目标、丢失聊天后的恢复、旧版本商品顺序及会话隔离；报告逐轮记录可见原文、工具、草稿状态和 trace。2026-10-17 新批次 **GLM 7/7、DeepSeek 6/7，均十五轮完整执行**，同源码 strict 对照通过；DeepSeek 在商品顺序变化后先澄清而未修改，原门槛未通过。旧 GLM 超时已完成本地计量审计，用户补充费用 USD 0.000222，原缺失 usage 保留。见[本轮计量与对照验收](reports/acceptance/2026-10-17-b4-model-comparison.md)；[2026-10-16 原始失败与 DeepSeek 7/7 记录](reports/acceptance/2026-10-16-task-model-evaluation.md)不合并成功率。DeepSeek 运行须使用 USD 预算。
+
+2026-10-17 草稿增量区分明确当前行号与旧展示歧义，数量修改可绑定 `expected_sku`；草稿响应及页面明确库存是报价时预计值，保存不预留、不扣减。独立 `--suite b4-reference` 三场景七轮保留旧 B4 原判分；首轮 GLM 1/3、DeepSeek 2/3，修复后 GLM 诊断遇到新连接错误、usage 未知，预算已冻结，最终源码的完整真实验收仍待补。离线全仓 765 项、前端 77 项和浏览器 13 项通过。评测 `--timeout` 已补为连接与整个流的总截止时间，超时缺用量后停止后续请求。详见[草稿增量验收](reports/acceptance/2026-10-17-draft-reference-contract.md)。
+
+B5 已接通只读取消资格查询：`assess_order_cancellation` 返回订单事实、有效政策版本和证据缺口，网页可展开引用；查询不取消订单、不申请审批。明确取消仍使用原预览与审批流程。首次[模型对照验收](reports/acceptance/2026-10-12-model-comparison.md)中，GLM 完整基线 35/35（≈¥0.033）、DeepSeek 34/35（≈$0.021，multi-06 步数超限），B5 七用例 GLM 5/7、DeepSeek 6/7，原失败保留。2026-10-17 的本轮 B5 复测两模型均 7/7，见下文；原 35 条 baseline 未在本轮重跑。对照入口 `uv run python -m evals.compare --strict <报告A> <报告B>`（币种各自列示）。仅补元数据且片段完全一致时可运行 `uv run --package rag python -m rag refresh` 复用原向量；正文或嵌入模型变化须重新 build。
+
+2026-10-17 补强 B5 选单与回答规则：多笔订单先由用户确认目标，等待选单时不检索 / 概述政策；资格答复说明审批与未执行边界。新评测 JSON 保存 `visible_text`，支持直接复核回答与中断片段。用户提供新嵌入配置后，已重建 `qwen3.7-text-embedding-flash` 索引并校准阈值至 0.57（12/12），配置示例见 `.env.example`。完整 B5 **GLM 7/7、DeepSeek 7/7**，strict 对照通过，零写入尝试；一次完整通过不代表长期稳定率。见[B5 修复验收](reports/acceptance/2026-10-17-b5-response-reliability.md)与[嵌入校准](reports/rag/20261017-qwen-embedding-calibration.md)。
 
 新订单和报价共用数量折扣与十进制舍入口径：同 SKU 合并数量后计算折扣单价，四舍五入到两位再乘数量；历史成交价和幂等重放结果保持原值。报价不锁价或预留库存。政策源文件更新后默认检索会拒绝旧索引，须运行 `uv run --env-file .env --package rag python -m rag build` 重新生成索引（消耗嵌入 token；`--env-file` 显式加载配置）。
 

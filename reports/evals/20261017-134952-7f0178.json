@@ -1,0 +1,246 @@
+{
+  "model": "deepseek-v4.1-flash",
+  "ts": "20261017-135000",
+  "provenance": {
+    "revision": "e2236d2c6cb946c7533bfe73f3370d915d9200de",
+    "working_tree_dirty": true,
+    "source_sha256": "1da29d49f1353553ae29df5ec09efc5642cb0f4efda18a7ff17828b596ae840a"
+  },
+  "suite": {
+    "kind": "targeted",
+    "planned": 1,
+    "executed": 1,
+    "case_ids": [
+      "b5-ambiguous-order"
+    ],
+    "scorer_version": "v2.6",
+    "retry_policy": "wrapper-no-rerun",
+    "case_sha256": "c2e25417c1f52d051f89c386658da31bddcc80cebf62cae985baed7d75cd2b31",
+    "seed": {
+      "value": 20260930,
+      "now": "2026-10-07T12:00:00+08:00",
+      "fresh_database_per_case": true
+    },
+    "case_traces": {
+      "b5-ambiguous-order": "traces/evals/20261017-134952-a7099225.jsonl"
+    },
+    "state_checks": 1,
+    "complete": true,
+    "b5_scorer_version": "b5-1",
+    "budget_limit_cny": null,
+    "billing_budget": {
+      "currency": "USD",
+      "limit": "0.005",
+      "spent": "0.000617",
+      "requests": 2,
+      "unknown_usage": false
+    },
+    "source_changed_during_run": false
+  },
+  "results": [
+    {
+      "case_id": "b5-ambiguous-order",
+      "category": "multi",
+      "passed": true,
+      "failed_checks": [],
+      "steps": 2,
+      "completed": true,
+      "tool_calls": [
+        "list_orders"
+      ],
+      "total_tokens": 10826,
+      "cost": null,
+      "duration_ms": 7272.5,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [
+        {
+          "call_id": "call_00_0aqRpF6o8Nf3it830NxO5570",
+          "name": "list_orders",
+          "arguments": {
+            "customer": "闻人语"
+          },
+          "content": {
+            "total": 44,
+            "items": [
+              {
+                "order_id": "SO20261006-0460",
+                "customer": "闻人语",
+                "status": "已发货",
+                "created_at": "2026-10-06T21:00:42",
+                "items_count": 3,
+                "total_amount": 762.46
+              },
+              {
+                "order_id": "SO20261006-0408",
+                "customer": "闻人语",
+                "status": "待付款",
+                "created_at": "2026-10-06T15:15:25",
+                "items_count": 1,
+                "total_amount": 292.3
+              },
+              {
+                "order_id": "SO20261002-0248",
+                "customer": "闻人语",
+                "status": "已发货",
+                "created_at": "2026-10-02T04:01:02",
+                "items_count": 2,
+                "total_amount": 1004.4
+              },
+              {
+                "order_id": "SO20261001-0059",
+                "customer": "闻人语",
+                "status": "已取消",
+                "created_at": "2026-10-01T00:13:52",
+                "items_count": 5,
+                "total_amount": 1618.4
+              },
+              {
+                "order_id": "SO20260930-0369",
+                "customer": "闻人语",
+                "status": "已退款",
+                "created_at": "2026-09-30T11:53:56",
+                "items_count": 1,
+                "total_amount": 1188.0
+              },
+              {
+                "order_id": "SO20260929-0512",
+                "customer": "闻人语",
+                "status": "已发货",
+                "created_at": "2026-09-29T10:50:30",
+                "items_count": 1,
+                "total_amount": 1912.0
+              },
+              {
+                "order_id": "SO20260928-0169",
+                "customer": "闻人语",
+                "status": "已发货",
+                "created_at": "2026-09-28T23:59:18",
+                "items_count": 1,
+                "total_amount": 779.0
+              },
+              {
+                "order_id": "SO20260922-0542",
+                "customer": "闻人语",
+                "status": "已签收",
+                "created_at": "2026-09-22T16:00:20",
+                "items_count": 2,
+                "total_amount": 1047.8
+              },
+              {
+                "order_id": "SO20260915-0088",
+                "customer": "闻人语",
+                "status": "已发货",
+                "created_at": "2026-09-15T15:17:37",
+                "items_count": 1,
+                "total_amount": 254.6
+              },
+              {
+                "order_id": "SO20260829-0492",
+                "customer": "闻人语",
+                "status": "已签收",
+                "created_at": "2026-08-29T22:38:57",
+                "items_count": 2,
+                "total_amount": 1329.3
+              },
+              {
+                "order_id": "SO20260825-0555",
+                "customer": "闻人语",
+                "status": "已取消",
+                "created_at": "2026-08-25T03:47:26",
+                "items_count": 2,
+                "total_amount": 1685.68
+              },
+              {
+                "order_id": "SO20260816-0036",
+                "customer": "闻人语",
+                "status": "已签收",
+                "created_at": "2026-08-16T13:35:16",
+                "items_count": 2,
+                "total_amount": 2265.5
+              },
+              {
+                "order_id": "SO20260812-0012",
+                "customer": "闻人语",
+                "status": "已签收",
+                "created_at": "2026-08-12T17:59:05",
+                "items_count": 2,
+                "total_amount": 1172.4
+              },
+              {
+                "order_id": "SO20260812-0072",
+                "customer": "闻人语",
+                "status": "已签收",
+                "created_at": "2026-08-12T07:06:22",
+                "items_count": 2,
+                "total_amount": 3378.16
+              },
+              {
+                "order_id": "SO20260809-0176",
+                "customer": "闻人语",
+                "status": "已签收",
+                "created_at": "2026-08-09T03:47:10",
+                "items_count": 3,
+                "total_amount": 1176.0
+              },
+              {
+                "order_id": "SO20260808-0162",
+                "customer": "闻人语",
+                "status": "已签收",
+                "created_at": "2026-08-08T15:32:21",
+                "items_count": 1,
+                "total_amount": 85.3
+              },
+              {
+                "order_id": "SO20260806-0514",
+                "customer": "闻人语",
+                "status": "已取消",
+                "created_at": "2026-08-06T13:56:38",
+                "items_count": 2,
+                "total_amount": 3755.5
+              },
+              {
+                "order_id": "SO20260804-0515",
+                "customer": "闻人语",
+                "status": "已签收",
+                "created_at": "2026-08-04T14:52:54",
+                "items_count": 5,
+                "total_amount": 4172.55
+              },
+              {
+                "order_id": "SO20260804-0594",
+                "customer": "闻人语",
+                "status": "已签收",
+                "created_at": "2026-08-04T02:54:03",
+                "items_count": 4,
+                "total_amount": 6211.9
+              },
+              {
+                "order_id": "SO20260803-0061",
+                "customer": "闻人语",
+                "status": "已发货",
+                "created_at": "2026-08-03T20:20:17",
+                "items_count": 1,
+                "total_amount": 1573.2
+              }
+            ],
+            "note": "列表不含明细；单笔明细用 get_order，按客户聚合用 get_customer_purchases"
+          },
+          "ok": true
+        }
+      ],
+      "visible_text": "客户「闻人语」名下订单较多（共 44 笔），我先把最近一页（20 笔）列出来，请你确认要查询哪一笔：\n\n| 订单号 | 状态 | 下单时间 | 件数 | 金额 |\n|---|---|---|---|---|\n| SO20261006-0460 | 已发货 | 2026-10-06 | 3 | 762.46 |\n| SO20261006-0408 | 待付款 | 2026-10-06 | 1 | 292.30 |\n| SO20261002-0248 | 已发货 | 2026-10-02 | 2 | 1004.40 |\n| SO20261001-0059 | 已取消 | 2026-10-01 | 5 | 1618.40 |\n| SO20260930-0369 | 已退款 | 2026-09-30 | 1 | 1188.00 |\n| SO20260929-0512 | 已发货 | 2026-09-29 | 1 | 1912.00 |\n| SO20260928-0169 | 已发货 | 2026-09-28 | 1 | 779.00 |\n| SO20260922-0542 | 已签收 | 2026-09-22 | 2 | 1047.80 |\n| SO20260915-0088 | 已发货 | 2026-09-15 | 1 | 254.60 |\n| SO20260829-0492 | 已签收 | 2026-08-29 | 2 | 1329.30 |\n| SO20260825-0555 | 已取消 | 2026-08-25 | 2 | 1685.68 |\n| SO20260816-0036 | 已签收 | 2026-08-16 | 2 | 2265.50 |\n| SO20260812-0012 | 已签收 | 2026-08-12 | 2 | 1172.40 |\n| SO20260812-0072 | 已签收 | 2026-08-12 | 2 | 3378.16 |\n| SO20260809-0176 | 已签收 | 2026-08-09 | 3 | 1176.00 |\n| SO20260808-0162 | 已签收 | 2026-08-08 | 1 | 85.30 |\n| SO20260806-0514 | 已取消 | 2026-08-06 | 2 | 3755.50 |\n| SO20260804-0515 | 已签收 | 2026-08-04 | 5 | 4172.55 |\n| SO20260804-0594 | 已签收 | 2026-08-04 | 4 | 6211.90 |\n| SO20260803-0061 | 已发货 | 2026-08-03 | 1 | 1573.20 |\n\n以上只是第 1 页，后面还有 24 笔。请告诉我你要查询的**具体订单号**，我再针对该单做取消资格判断（不会替你挑单，也不会按可取消状态筛选）。\n\n本次仅查询，未执行取消。",
+      "cost_complete": false,
+      "billing": {
+        "currency": "USD",
+        "estimated_amount": "0.000617",
+        "pricing_source": "user-confirmed-2026-10-12",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "turn_results": [],
+      "turn_traces": [],
+      "state_evidence": null
+    }
+  ]
+}

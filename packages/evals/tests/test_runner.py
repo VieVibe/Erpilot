@@ -98,6 +98,47 @@ async def test_run_case_failure_records_failed_checks(resolved, tools, tmp_path)
     assert any("must_mention" in f for f in result.failed_checks)
 
 
+async def test_report_preserves_scored_text_without_tool_payloads(resolved, tools, tmp_path):
+    from evals.report import write_report
+
+    def handler(request):
+        messages = json.loads(request.content)["messages"]
+        if messages[-1]["role"] == "tool":
+            return sse_response([chunk(delta={"content": "本次仅查询，未执行取消。"})])
+        return sse_response([
+            chunk(delta={"content": "正在查询订单。\n", "reasoning_content": "内部思考"}),
+            *tool_call_chunks("c1", "get_order", json.dumps({"order_id": resolved["order_id"]})),
+        ])
+
+    # 让文本检查失败，确认失败原文也能随报告独立保存。
+    result, _ = await run_case(
+        _case(must_mention=["仍需审批"]), client=make_client(handler),
+        tools=tools, resolved=resolved, trace_dir=tmp_path,
+    )
+    assert not result.passed
+    assert result.tool_results[0].succeeded
+    assert result.visible_text == "正在查询订单。\n本次仅查询，未执行取消。"
+    path = write_report(tmp_path / "reports", [result], model="test")
+    payload = json.loads(path.with_suffix(".json").read_text(encoding="utf-8"))
+    assert payload["results"][0]["visible_text"] == result.visible_text
+
+
+async def test_interrupted_stream_keeps_visible_partial_answer(tmp_path):
+    def handler(request):
+        return sse_response([
+            chunk(delta={"content": "已查询订单，"}),
+            {"error": {"message": "stream interrupted", "type": "server_error"}},
+        ])
+
+    result, _ = await run_case(
+        _case(), client=make_client(handler, max_retries=0), tools=[],
+        resolved={}, trace_dir=tmp_path, retries=0,
+    )
+    assert not result.passed and result.error is not None
+    assert not result.completed
+    assert result.visible_text == "已查询订单，"
+
+
 async def test_run_case_survives_llm_error(resolved, tools, tmp_path) -> None:
     """上游错误不外抛：CaseResult.error 记失败，评测继续（本用例关闭重试保速度）。"""
     from httpx2 import Response

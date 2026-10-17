@@ -55,6 +55,25 @@ def test_report_shows_usd_billing_and_keeps_cny_out(tmp_path):
     assert "wrapper-no-rerun" in markdown
 
 
+def test_complete_usd_usage_is_not_reported_as_incomplete_metering():
+    result = _usd_billed_result()
+    assert result.cost is None and not result.cost_complete
+    report = render_report([result], model="deepseek-v4.1-flash")
+    assert "计量不完整：0 条" in report
+    assert "$0.2250 USD" in report
+
+
+def test_unknown_usd_usage_is_still_reported_as_incomplete_metering():
+    result = _usd_billed_result()
+    result.billing = result.billing.model_copy(update={
+        "estimated_amount": None, "complete": False, "cache_assumption": "unknown_usage",
+    })
+    report = render_report([result], model="deepseek-v4.1-flash")
+    assert "计量不完整：1 条" in report
+    assert "未计量" in report
+    assert "$0.0000" not in report
+
+
 def test_report_marks_unmeasured_without_zero_fee_look(tmp_path):
     results = [CaseResult(case_id="t-02", category=CaseCategory.SINGLE, passed=True)]
     report = render_report(results, model="test")

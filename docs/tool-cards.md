@@ -31,6 +31,7 @@ API 的 MCP 组合层绑定可信会话标识，不在工具参数中接受 `ses
 会话工具面替换原始 `create_order` 为 `submit_order_draft`；CLI / 独立 MCP
 仍保留原始建单入口。只读模式允许保存草稿，但不注册提交工具。
 草稿按版本保存，不占库存；每版有效期 30 分钟。修改或刷新生成新版本。
+返回的 `inventory_effect=projection` 与 `inventory_note` 明确：库存前后是报价时测算的预计提交前后值，不是实时库存，也不表示预留或扣减；已提交草稿仍保留原报价快照。
 
 ### prepare_order_draft
 - 用途：为当前会话准备确定性报价草稿，不建立订单、不扣库存
@@ -58,9 +59,10 @@ API 的 MCP 组合层绑定可信会话标识，不在工具参数中接受 `ses
 
 ### revise_order_draft_quantity
 - 用途：按明确草稿当前版本的行号修改数量，保留客户、备注和其他商品；只保存新报价，不建单
-- 参数：`draft_id`、`expected_revision`、`item_number`（1 起算整数）、`quantity`（正整数）
+- 参数：`draft_id`、`expected_revision`、`item_number`（1 起算整数）、`quantity`（正整数）、可选 `expected_sku`（目标 SKU 校验；新模型调用应提供）
 - 返回：新版本完整草稿；需重新确认并按原流程提交审批
-- 错误：`invalid_argument`（越界或非法数量）、`draft_changed`、`draft_submitted`、`not_found`
+- 错误：`invalid_argument`（越界、非法数量或 SKU）、`draft_item_changed`（行号与指定 SKU 不符）、`draft_changed`、`draft_submitted`、`not_found`
+- 指代：商品顺序与旧展示不一致时，模糊行号先确认 SKU；明确当前行号或 SKU 后，重新查询当前版本，再绑定 `expected_sku` 修改。旧客户端省略此参数时仍按原版本 / 行号契约执行。
 
 ### submit_order_draft
 - 用途：批准指定版本后原子建单（**single_confirm**）

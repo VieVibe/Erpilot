@@ -1,0 +1,1656 @@
+{
+  "model": "glm-5.3-flash",
+  "ts": "20261017-145933",
+  "provenance": {
+    "revision": "e2236d2c6cb946c7533bfe73f3370d915d9200de",
+    "working_tree_dirty": true,
+    "source_sha256": "1d3d577c8493e4fdfeb61358ce9ffcc16bd8036ba75e3522f0162b413be4006d"
+  },
+  "suite": {
+    "kind": "targeted",
+    "planned": 3,
+    "executed": 3,
+    "case_ids": [
+      "b4-reference-current",
+      "b4-reference-confirmed",
+      "b4-reference-inventory"
+    ],
+    "scorer_version": "v2.6",
+    "retry_policy": "wrapper-no-rerun",
+    "case_sha256": "d2d7111aad3a049be6b569a26fb881ff1ac16cade2cc018525a249f1924bad16",
+    "seed": {
+      "value": 20260930,
+      "now": "2026-10-07T12:00:00+08:00",
+      "fresh_database_per_case": true
+    },
+    "case_traces": {
+      "b4-reference-current": "traces/evals/20261017-145748-6ec21709.jsonl",
+      "b4-reference-confirmed": "traces/evals/20261017-145820-bc974230.jsonl",
+      "b4-reference-inventory": "traces/evals/20261017-145914-8157d0fc.jsonl"
+    },
+    "state_checks": 3,
+    "complete": true,
+    "b4_scorer_version": "b4-1",
+    "turns_planned": 7,
+    "b4_reference_scorer_version": "b4-reference-1",
+    "turns_executed": 7,
+    "case_turn_traces": {
+      "b4-reference-current": [
+        "F:\\VIE\\Erpilot\\traces\\evals\\20261017-145748-6ec21709.jsonl",
+        "F:\\VIE\\Erpilot\\traces\\evals\\20261017-145810-936f9be5.jsonl"
+      ],
+      "b4-reference-confirmed": [
+        "F:\\VIE\\Erpilot\\traces\\evals\\20261017-145820-bc974230.jsonl",
+        "F:\\VIE\\Erpilot\\traces\\evals\\20261017-145838-ca0f1c56.jsonl",
+        "F:\\VIE\\Erpilot\\traces\\evals\\20261017-145853-ff133916.jsonl"
+      ],
+      "b4-reference-inventory": [
+        "F:\\VIE\\Erpilot\\traces\\evals\\20261017-145914-8157d0fc.jsonl",
+        "F:\\VIE\\Erpilot\\traces\\evals\\20261017-145923-fd85e196.jsonl"
+      ]
+    },
+    "budget_limit_cny": null,
+    "billing_budget": {
+      "currency": "CNY",
+      "limit": "0.03",
+      "spent": "0.009978",
+      "requests": 15,
+      "unknown_usage": false
+    },
+    "source_changed_during_run": false
+  },
+  "results": [
+    {
+      "case_id": "b4-reference-current",
+      "category": "multi",
+      "passed": false,
+      "failed_checks": [
+        "b4-reference-current:turn-2: expect_tools_all: 未调用 revise_order_draft_quantity",
+        "b4-reference-current:turn-2: tools_in_order: 期望顺序 get_order_task → revise_order_draft_quantity，实际 ['get_order_task']",
+        "b4-reference-current:turn-2: expect_successful_tools: revise_order_draft_quantity 无成功执行证据",
+        "b4-reference-current:turn-2: b4_revision_count: 期望新增一版，实际 0",
+        "b4-reference-current:turn-2: b4_reference_sku_guard: 修改必须绑定用户明确的目标 SKU"
+      ],
+      "steps": 4,
+      "completed": true,
+      "tool_calls": [
+        "get_order_task",
+        "get_order_task"
+      ],
+      "total_tokens": 23341,
+      "cost": 0.002474,
+      "duration_ms": 31064.0,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [
+        {
+          "call_id": "3b2cce0d-7e58-46ba-b453-88b61589449a",
+          "name": "get_order_task",
+          "arguments": {},
+          "content": {
+            "status": "active",
+            "draft": {
+              "customer": "B4客户甲",
+              "note": "分开发票，周五发货",
+              "items": [
+                {
+                  "sku": "A1004",
+                  "name": "青瓷茶具（便携款）",
+                  "quantity": 2,
+                  "base_price": 599.9,
+                  "discount": 1.0,
+                  "unit_price": 599.9,
+                  "line_total": 1199.8,
+                  "stock_before": 142,
+                  "stock_after": 140
+                },
+                {
+                  "sku": "A1005",
+                  "name": "紫砂壶（旅行装）",
+                  "quantity": 3,
+                  "base_price": 100.9,
+                  "discount": 1.0,
+                  "unit_price": 100.9,
+                  "line_total": 302.7,
+                  "stock_before": 197,
+                  "stock_after": 194
+                }
+              ],
+              "total_amount": 1502.5,
+              "draft_id": "d49c97562b444270ab9800af466129c2",
+              "revision": 1,
+              "expires_at": "2026-10-17T07:27:48.512395+00:00",
+              "status": "open",
+              "order_id": null,
+              "inventory_effect": "projection",
+              "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+            },
+            "candidates": [
+              {
+                "draft_id": "d49c97562b444270ab9800af466129c2",
+                "revision": 1,
+                "customer": "B4客户甲",
+                "status": "open"
+              }
+            ],
+            "has_more": false
+          },
+          "ok": true
+        },
+        {
+          "call_id": "call_03a59912891a4093b9a7312c",
+          "name": "get_order_task",
+          "arguments": {},
+          "content": {
+            "status": "active",
+            "draft": {
+              "customer": "B4客户甲",
+              "note": "分开发票，周五发货",
+              "items": [
+                {
+                  "sku": "A1005",
+                  "name": "紫砂壶（旅行装）",
+                  "quantity": 2,
+                  "base_price": 100.9,
+                  "discount": 1.0,
+                  "unit_price": 100.9,
+                  "line_total": 201.8,
+                  "stock_before": 197,
+                  "stock_after": 195
+                },
+                {
+                  "sku": "A1004",
+                  "name": "青瓷茶具（便携款）",
+                  "quantity": 3,
+                  "base_price": 599.9,
+                  "discount": 1.0,
+                  "unit_price": 599.9,
+                  "line_total": 1799.7,
+                  "stock_before": 142,
+                  "stock_after": 139
+                }
+              ],
+              "total_amount": 2001.5,
+              "draft_id": "d49c97562b444270ab9800af466129c2",
+              "revision": 2,
+              "expires_at": "2026-10-17T07:28:10.125162+00:00",
+              "status": "open",
+              "order_id": null,
+              "inventory_effect": "projection",
+              "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+            },
+            "candidates": [
+              {
+                "draft_id": "d49c97562b444270ab9800af466129c2",
+                "revision": 2,
+                "customer": "B4客户甲",
+                "status": "open"
+              }
+            ],
+            "has_more": false
+          },
+          "ok": true
+        }
+      ],
+      "visible_text": "",
+      "cost_complete": true,
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": "0.002473",
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "turn_results": [
+        {
+          "case_id": "b4-reference-current:turn-1",
+          "category": "multi",
+          "passed": true,
+          "failed_checks": [],
+          "steps": 2,
+          "completed": true,
+          "tool_calls": [
+            "get_order_task"
+          ],
+          "total_tokens": 11025,
+          "cost": 0.001145264,
+          "duration_ms": 21567.2,
+          "attempts": 1,
+          "error": null,
+          "tool_results": [
+            {
+              "call_id": "3b2cce0d-7e58-46ba-b453-88b61589449a",
+              "name": "get_order_task",
+              "arguments": {},
+              "content": {
+                "status": "active",
+                "draft": {
+                  "customer": "B4客户甲",
+                  "note": "分开发票，周五发货",
+                  "items": [
+                    {
+                      "sku": "A1004",
+                      "name": "青瓷茶具（便携款）",
+                      "quantity": 2,
+                      "base_price": 599.9,
+                      "discount": 1.0,
+                      "unit_price": 599.9,
+                      "line_total": 1199.8,
+                      "stock_before": 142,
+                      "stock_after": 140
+                    },
+                    {
+                      "sku": "A1005",
+                      "name": "紫砂壶（旅行装）",
+                      "quantity": 3,
+                      "base_price": 100.9,
+                      "discount": 1.0,
+                      "unit_price": 100.9,
+                      "line_total": 302.7,
+                      "stock_before": 197,
+                      "stock_after": 194
+                    }
+                  ],
+                  "total_amount": 1502.5,
+                  "draft_id": "d49c97562b444270ab9800af466129c2",
+                  "revision": 1,
+                  "expires_at": "2026-10-17T07:27:48.512395+00:00",
+                  "status": "open",
+                  "order_id": null,
+                  "inventory_effect": "projection",
+                  "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+                },
+                "candidates": [
+                  {
+                    "draft_id": "d49c97562b444270ab9800af466129c2",
+                    "revision": 1,
+                    "customer": "B4客户甲",
+                    "status": "open"
+                  }
+                ],
+                "has_more": false
+              },
+              "ok": true
+            }
+          ],
+          "visible_text": "当前会话有 1 份未提交草稿，明细如下：\n\n**草稿信息**\n- 客户：B4客户甲\n- 备注：分开发票，周五发货\n- 草稿号：`d49c97562b444270ab9800af466129c2`（版本 v1）\n- 有效期至：2026-10-17 07:27 UTC\n\n**商品明细**\n\n| 行号 | SKU | 商品 | 数量 | 单价（折后） | 小计 |\n|---|---|---|---|---|---|\n| 1 | A1004 | 青瓷茶具（便携款） | 2 | ¥599.90 | ¥1,199.80 |\n| 2 | A1005 | 紫砂壶（旅行装） | 3 | ¥100.90 | ¥302.70 |\n\n**合计：¥1,502.50**\n\n说明：两行的 stock_before / stock_after（142→140、197→194）是该版本报价时测算的预计提交前后库存，**保存草稿不会预留或扣减库存**，实际库存以提交订单结果为准。该草稿价格为现价直接计算，未触发折扣梯度。\n\n需要修改数量、刷新商品或提交送审吗？",
+          "cost_complete": true,
+          "billing": {
+            "currency": "CNY",
+            "estimated_amount": "0.001145",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          },
+          "turn_results": [],
+          "turn_traces": [],
+          "state_evidence": {
+            "before_sha256": "73fba561766d526469ee763ddc2d7387d67c22501f055a1173e18bf03e140d1e",
+            "after_sha256": "73fba561766d526469ee763ddc2d7387d67c22501f055a1173e18bf03e140d1e",
+            "drafts_before": [
+              {
+                "draft_id": "d49c97562b444270ab9800af466129c2",
+                "revision": 1,
+                "session_id": "eval:b4-reference-current",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:27:48.512395+00:00",
+                "created_at": "2026-10-17T06:57:48.512395+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "f2aea3b95820419a8c30b517279abe31",
+                "revision": 1,
+                "session_id": "b4-foreign",
+                "snapshot": "{\"customer\": \"其他会话客户\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:27:48.506393+00:00",
+                "created_at": "2026-10-17T06:57:48.506393+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "drafts_after": [
+              {
+                "draft_id": "d49c97562b444270ab9800af466129c2",
+                "revision": 1,
+                "session_id": "eval:b4-reference-current",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:27:48.512395+00:00",
+                "created_at": "2026-10-17T06:57:48.512395+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "f2aea3b95820419a8c30b517279abe31",
+                "revision": 1,
+                "session_id": "b4-foreign",
+                "snapshot": "{\"customer\": \"其他会话客户\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:27:48.506393+00:00",
+                "created_at": "2026-10-17T06:57:48.506393+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "history_reset": false,
+            "external_revision": false
+          }
+        },
+        {
+          "case_id": "b4-reference-current:turn-2",
+          "category": "multi",
+          "passed": false,
+          "failed_checks": [
+            "expect_tools_all: 未调用 revise_order_draft_quantity",
+            "tools_in_order: 期望顺序 get_order_task → revise_order_draft_quantity，实际 ['get_order_task']",
+            "expect_successful_tools: revise_order_draft_quantity 无成功执行证据",
+            "b4_revision_count: 期望新增一版，实际 0",
+            "b4_reference_sku_guard: 修改必须绑定用户明确的目标 SKU"
+          ],
+          "steps": 2,
+          "completed": true,
+          "tool_calls": [
+            "get_order_task"
+          ],
+          "total_tokens": 12316,
+          "cost": 0.001328736,
+          "duration_ms": 9496.8,
+          "attempts": 1,
+          "error": null,
+          "tool_results": [
+            {
+              "call_id": "call_03a59912891a4093b9a7312c",
+              "name": "get_order_task",
+              "arguments": {},
+              "content": {
+                "status": "active",
+                "draft": {
+                  "customer": "B4客户甲",
+                  "note": "分开发票，周五发货",
+                  "items": [
+                    {
+                      "sku": "A1005",
+                      "name": "紫砂壶（旅行装）",
+                      "quantity": 2,
+                      "base_price": 100.9,
+                      "discount": 1.0,
+                      "unit_price": 100.9,
+                      "line_total": 201.8,
+                      "stock_before": 197,
+                      "stock_after": 195
+                    },
+                    {
+                      "sku": "A1004",
+                      "name": "青瓷茶具（便携款）",
+                      "quantity": 3,
+                      "base_price": 599.9,
+                      "discount": 1.0,
+                      "unit_price": 599.9,
+                      "line_total": 1799.7,
+                      "stock_before": 142,
+                      "stock_after": 139
+                    }
+                  ],
+                  "total_amount": 2001.5,
+                  "draft_id": "d49c97562b444270ab9800af466129c2",
+                  "revision": 2,
+                  "expires_at": "2026-10-17T07:28:10.125162+00:00",
+                  "status": "open",
+                  "order_id": null,
+                  "inventory_effect": "projection",
+                  "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+                },
+                "candidates": [
+                  {
+                    "draft_id": "d49c97562b444270ab9800af466129c2",
+                    "revision": 2,
+                    "customer": "B4客户甲",
+                    "status": "open"
+                  }
+                ],
+                "has_more": false
+              },
+              "ok": true
+            }
+          ],
+          "visible_text": "先说明一个情况：当前草稿版本已经变化（现在是 v2），行序和上一轮展示不同了，而您指的\"第二行\"是按上一轮展示说的，需要先确认目标商品：\n\n| 上一轮展示（v1） | 当前版本（v2） |\n|---|---|\n| 第 1 行：A1004 青瓷茶具（便携款），数量 2 | 第 1 行：A1005 紫砂壶（旅行装），数量 2 |\n| 第 2 行：**A1005 紫砂壶（旅行装）**，数量 3 | 第 2 行：**A1004 青瓷茶具（便携款）**，数量 3 |\n\n也就是说：\n- 您上一轮看到的\"第二行\"是 **A1005 紫砂壶（旅行装）**，现在它排在第 1 行；\n- 当前版本的第 2 行是 **A1004 青瓷茶具（便携款）**。\n\n请确认要把哪个 SKU 的数量改成 50 件：\n1. **A1005 紫砂壶（旅行装）**（您上轮看到的第二行）\n2. **A1004 青瓷茶具（便携款）**（当前版本的第二行）\n\n确认后我再修改，只保存草稿、不提交。",
+          "cost_complete": true,
+          "billing": {
+            "currency": "CNY",
+            "estimated_amount": "0.001328",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          },
+          "turn_results": [],
+          "turn_traces": [],
+          "state_evidence": {
+            "before_sha256": "c7ee18868a0eee0bde0b21e849afa3b8ba74a1ec044107c33711b0bcac8b9bdc",
+            "after_sha256": "c7ee18868a0eee0bde0b21e849afa3b8ba74a1ec044107c33711b0bcac8b9bdc",
+            "drafts_before": [
+              {
+                "draft_id": "d49c97562b444270ab9800af466129c2",
+                "revision": 1,
+                "session_id": "eval:b4-reference-current",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:27:48.512395+00:00",
+                "created_at": "2026-10-17T06:57:48.512395+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "d49c97562b444270ab9800af466129c2",
+                "revision": 2,
+                "session_id": "eval:b4-reference-current",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 2, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 201.8, \"stock_before\": 197, \"stock_after\": 195}, {\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 3, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1799.7, \"stock_before\": 142, \"stock_after\": 139}], \"total_amount\": 2001.5}",
+                "expires_at": "2026-10-17T07:28:10.125162+00:00",
+                "created_at": "2026-10-17T06:58:10.125162+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "f2aea3b95820419a8c30b517279abe31",
+                "revision": 1,
+                "session_id": "b4-foreign",
+                "snapshot": "{\"customer\": \"其他会话客户\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:27:48.506393+00:00",
+                "created_at": "2026-10-17T06:57:48.506393+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "drafts_after": [
+              {
+                "draft_id": "d49c97562b444270ab9800af466129c2",
+                "revision": 1,
+                "session_id": "eval:b4-reference-current",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:27:48.512395+00:00",
+                "created_at": "2026-10-17T06:57:48.512395+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "d49c97562b444270ab9800af466129c2",
+                "revision": 2,
+                "session_id": "eval:b4-reference-current",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 2, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 201.8, \"stock_before\": 197, \"stock_after\": 195}, {\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 3, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1799.7, \"stock_before\": 142, \"stock_after\": 139}], \"total_amount\": 2001.5}",
+                "expires_at": "2026-10-17T07:28:10.125162+00:00",
+                "created_at": "2026-10-17T06:58:10.125162+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "f2aea3b95820419a8c30b517279abe31",
+                "revision": 1,
+                "session_id": "b4-foreign",
+                "snapshot": "{\"customer\": \"其他会话客户\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:27:48.506393+00:00",
+                "created_at": "2026-10-17T06:57:48.506393+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "history_reset": false,
+            "external_revision": true
+          }
+        }
+      ],
+      "turn_traces": [
+        "F:\\VIE\\Erpilot\\traces\\evals\\20261017-145748-6ec21709.jsonl",
+        "F:\\VIE\\Erpilot\\traces\\evals\\20261017-145810-936f9be5.jsonl"
+      ],
+      "state_evidence": null
+    },
+    {
+      "case_id": "b4-reference-confirmed",
+      "category": "multi",
+      "passed": true,
+      "failed_checks": [],
+      "steps": 7,
+      "completed": true,
+      "tool_calls": [
+        "get_order_task",
+        "get_order_task",
+        "get_order_task",
+        "revise_order_draft_quantity"
+      ],
+      "total_tokens": 44804,
+      "cost": 0.004811876,
+      "duration_ms": 54096.200000000004,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [
+        {
+          "call_id": "call_0e2156ace157447da43c999a",
+          "name": "get_order_task",
+          "arguments": {},
+          "content": {
+            "status": "active",
+            "draft": {
+              "customer": "B4客户甲",
+              "note": "分开发票，周五发货",
+              "items": [
+                {
+                  "sku": "A1004",
+                  "name": "青瓷茶具（便携款）",
+                  "quantity": 2,
+                  "base_price": 599.9,
+                  "discount": 1.0,
+                  "unit_price": 599.9,
+                  "line_total": 1199.8,
+                  "stock_before": 142,
+                  "stock_after": 140
+                },
+                {
+                  "sku": "A1005",
+                  "name": "紫砂壶（旅行装）",
+                  "quantity": 3,
+                  "base_price": 100.9,
+                  "discount": 1.0,
+                  "unit_price": 100.9,
+                  "line_total": 302.7,
+                  "stock_before": 197,
+                  "stock_after": 194
+                }
+              ],
+              "total_amount": 1502.5,
+              "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+              "revision": 1,
+              "expires_at": "2026-10-17T07:28:20.149734+00:00",
+              "status": "open",
+              "order_id": null,
+              "inventory_effect": "projection",
+              "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+            },
+            "candidates": [
+              {
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                "revision": 1,
+                "customer": "B4客户甲",
+                "status": "open"
+              }
+            ],
+            "has_more": false
+          },
+          "ok": true
+        },
+        {
+          "call_id": "chatcmpl-tool-9f63ac759f827770",
+          "name": "get_order_task",
+          "arguments": {},
+          "content": {
+            "status": "active",
+            "draft": {
+              "customer": "B4客户甲",
+              "note": "分开发票，周五发货",
+              "items": [
+                {
+                  "sku": "A1005",
+                  "name": "紫砂壶（旅行装）",
+                  "quantity": 2,
+                  "base_price": 100.9,
+                  "discount": 1.0,
+                  "unit_price": 100.9,
+                  "line_total": 201.8,
+                  "stock_before": 197,
+                  "stock_after": 195
+                },
+                {
+                  "sku": "A1004",
+                  "name": "青瓷茶具（便携款）",
+                  "quantity": 3,
+                  "base_price": 599.9,
+                  "discount": 1.0,
+                  "unit_price": 599.9,
+                  "line_total": 1799.7,
+                  "stock_before": 142,
+                  "stock_after": 139
+                }
+              ],
+              "total_amount": 2001.5,
+              "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+              "revision": 2,
+              "expires_at": "2026-10-17T07:28:38.771679+00:00",
+              "status": "open",
+              "order_id": null,
+              "inventory_effect": "projection",
+              "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+            },
+            "candidates": [
+              {
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                "revision": 2,
+                "customer": "B4客户甲",
+                "status": "open"
+              }
+            ],
+            "has_more": false
+          },
+          "ok": true
+        },
+        {
+          "call_id": "c43e493f-a6f7-4898-969a-83eaac0698ef",
+          "name": "get_order_task",
+          "arguments": {},
+          "content": {
+            "status": "active",
+            "draft": {
+              "customer": "B4客户甲",
+              "note": "分开发票，周五发货",
+              "items": [
+                {
+                  "sku": "A1005",
+                  "name": "紫砂壶（旅行装）",
+                  "quantity": 2,
+                  "base_price": 100.9,
+                  "discount": 1.0,
+                  "unit_price": 100.9,
+                  "line_total": 201.8,
+                  "stock_before": 197,
+                  "stock_after": 195
+                },
+                {
+                  "sku": "A1004",
+                  "name": "青瓷茶具（便携款）",
+                  "quantity": 3,
+                  "base_price": 599.9,
+                  "discount": 1.0,
+                  "unit_price": 599.9,
+                  "line_total": 1799.7,
+                  "stock_before": 142,
+                  "stock_after": 139
+                }
+              ],
+              "total_amount": 2001.5,
+              "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+              "revision": 2,
+              "expires_at": "2026-10-17T07:28:38.771679+00:00",
+              "status": "open",
+              "order_id": null,
+              "inventory_effect": "projection",
+              "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+            },
+            "candidates": [
+              {
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                "revision": 2,
+                "customer": "B4客户甲",
+                "status": "open"
+              }
+            ],
+            "has_more": false
+          },
+          "ok": true
+        },
+        {
+          "call_id": "7ba5a3e6-bb8a-4230-a639-f7d7e11129e7",
+          "name": "revise_order_draft_quantity",
+          "arguments": {
+            "quantity": 50,
+            "item_number": 1,
+            "expected_revision": 2,
+            "expected_sku": "A1005",
+            "draft_id": "c14b0ba13721475c874fabba2a34c5f9"
+          },
+          "content": {
+            "customer": "B4客户甲",
+            "note": "分开发票，周五发货",
+            "items": [
+              {
+                "sku": "A1005",
+                "name": "紫砂壶（旅行装）",
+                "quantity": 50,
+                "base_price": 100.9,
+                "discount": 0.95,
+                "unit_price": 95.86,
+                "line_total": 4793.0,
+                "stock_before": 197,
+                "stock_after": 147
+              },
+              {
+                "sku": "A1004",
+                "name": "青瓷茶具（便携款）",
+                "quantity": 3,
+                "base_price": 599.9,
+                "discount": 1.0,
+                "unit_price": 599.9,
+                "line_total": 1799.7,
+                "stock_before": 142,
+                "stock_after": 139
+              }
+            ],
+            "total_amount": 6592.7,
+            "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+            "revision": 3,
+            "expires_at": "2026-10-17T07:29:01.627608+00:00",
+            "status": "open",
+            "order_id": null,
+            "inventory_effect": "projection",
+            "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+          },
+          "ok": true
+        }
+      ],
+      "visible_text": "",
+      "cost_complete": true,
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": "0.004811",
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "turn_results": [
+        {
+          "case_id": "b4-reference-confirmed:turn-1",
+          "category": "multi",
+          "passed": true,
+          "failed_checks": [],
+          "steps": 2,
+          "completed": true,
+          "tool_calls": [
+            "get_order_task"
+          ],
+          "total_tokens": 10551,
+          "cost": 0.00109976,
+          "duration_ms": 18567.4,
+          "attempts": 1,
+          "error": null,
+          "tool_results": [
+            {
+              "call_id": "call_0e2156ace157447da43c999a",
+              "name": "get_order_task",
+              "arguments": {},
+              "content": {
+                "status": "active",
+                "draft": {
+                  "customer": "B4客户甲",
+                  "note": "分开发票，周五发货",
+                  "items": [
+                    {
+                      "sku": "A1004",
+                      "name": "青瓷茶具（便携款）",
+                      "quantity": 2,
+                      "base_price": 599.9,
+                      "discount": 1.0,
+                      "unit_price": 599.9,
+                      "line_total": 1199.8,
+                      "stock_before": 142,
+                      "stock_after": 140
+                    },
+                    {
+                      "sku": "A1005",
+                      "name": "紫砂壶（旅行装）",
+                      "quantity": 3,
+                      "base_price": 100.9,
+                      "discount": 1.0,
+                      "unit_price": 100.9,
+                      "line_total": 302.7,
+                      "stock_before": 197,
+                      "stock_after": 194
+                    }
+                  ],
+                  "total_amount": 1502.5,
+                  "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                  "revision": 1,
+                  "expires_at": "2026-10-17T07:28:20.149734+00:00",
+                  "status": "open",
+                  "order_id": null,
+                  "inventory_effect": "projection",
+                  "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+                },
+                "candidates": [
+                  {
+                    "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                    "revision": 1,
+                    "customer": "B4客户甲",
+                    "status": "open"
+                  }
+                ],
+                "has_more": false
+              },
+              "ok": true
+            }
+          ],
+          "visible_text": "当前会话有一份未提交的报价草稿，明细如下：\n\n**草稿信息**\n- 草稿 ID：`c14b0ba13721475c874fabba2a34c5f9`（版本 revision 1）\n- 客户：B4客户甲\n- 备注：分开发票，周五发货\n- 状态：open（有效至 2026-10-17 07:28 UTC）\n\n**商品明细**\n\n| 行号 | SKU | 商品 | 数量 | 单价 | 折扣 | 行小计 |\n|---|---|---|---|---|---|---|\n| 1 | A1004 | 青瓷茶具（便携款） | 2 | ¥599.90 | 无 | ¥1,199.80 |\n| 2 | A1005 | 紫砂壶（旅行装） | 3 | ¥100.90 | 无 | ¥302.70 |\n\n**合计金额：¥1,502.50**\n\n> 说明：明细中的 stock_before / stock_after（如 A1004：142 → 140）是本版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不占用、不扣减库存，实际变更以订单提交结果为准。\n\n需要修改数量、换商品，还是确认提交这份草稿？",
+          "cost_complete": true,
+          "billing": {
+            "currency": "CNY",
+            "estimated_amount": "0.001099",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          },
+          "turn_results": [],
+          "turn_traces": [],
+          "state_evidence": {
+            "before_sha256": "f0e2f11256a8f441c7396eadec3ca31412d6f6452dce9117cd1508aec15b99fe",
+            "after_sha256": "f0e2f11256a8f441c7396eadec3ca31412d6f6452dce9117cd1508aec15b99fe",
+            "drafts_before": [
+              {
+                "draft_id": "1f27551ac6564ddaa55122a26cd3d3fe",
+                "revision": 1,
+                "session_id": "b4-foreign",
+                "snapshot": "{\"customer\": \"其他会话客户\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:28:20.140735+00:00",
+                "created_at": "2026-10-17T06:58:20.140735+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                "revision": 1,
+                "session_id": "eval:b4-reference-confirmed",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:28:20.149734+00:00",
+                "created_at": "2026-10-17T06:58:20.149734+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "drafts_after": [
+              {
+                "draft_id": "1f27551ac6564ddaa55122a26cd3d3fe",
+                "revision": 1,
+                "session_id": "b4-foreign",
+                "snapshot": "{\"customer\": \"其他会话客户\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:28:20.140735+00:00",
+                "created_at": "2026-10-17T06:58:20.140735+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                "revision": 1,
+                "session_id": "eval:b4-reference-confirmed",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:28:20.149734+00:00",
+                "created_at": "2026-10-17T06:58:20.149734+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "history_reset": false,
+            "external_revision": false
+          }
+        },
+        {
+          "case_id": "b4-reference-confirmed:turn-2",
+          "category": "multi",
+          "passed": true,
+          "failed_checks": [],
+          "steps": 2,
+          "completed": true,
+          "tool_calls": [
+            "get_order_task"
+          ],
+          "total_tokens": 12652,
+          "cost": 0.001402716,
+          "duration_ms": 14414.6,
+          "attempts": 1,
+          "error": null,
+          "tool_results": [
+            {
+              "call_id": "chatcmpl-tool-9f63ac759f827770",
+              "name": "get_order_task",
+              "arguments": {},
+              "content": {
+                "status": "active",
+                "draft": {
+                  "customer": "B4客户甲",
+                  "note": "分开发票，周五发货",
+                  "items": [
+                    {
+                      "sku": "A1005",
+                      "name": "紫砂壶（旅行装）",
+                      "quantity": 2,
+                      "base_price": 100.9,
+                      "discount": 1.0,
+                      "unit_price": 100.9,
+                      "line_total": 201.8,
+                      "stock_before": 197,
+                      "stock_after": 195
+                    },
+                    {
+                      "sku": "A1004",
+                      "name": "青瓷茶具（便携款）",
+                      "quantity": 3,
+                      "base_price": 599.9,
+                      "discount": 1.0,
+                      "unit_price": 599.9,
+                      "line_total": 1799.7,
+                      "stock_before": 142,
+                      "stock_after": 139
+                    }
+                  ],
+                  "total_amount": 2001.5,
+                  "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                  "revision": 2,
+                  "expires_at": "2026-10-17T07:28:38.771679+00:00",
+                  "status": "open",
+                  "order_id": null,
+                  "inventory_effect": "projection",
+                  "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+                },
+                "candidates": [
+                  {
+                    "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                    "revision": 2,
+                    "customer": "B4客户甲",
+                    "status": "open"
+                  }
+                ],
+                "has_more": false
+              },
+              "ok": true
+            }
+          ],
+          "visible_text": "查询后发现，当前草稿（revision 2）的商品行顺序相比上一轮展示发生了变化，行号与 SKU 的对应关系已不一致：\n\n| 上一轮展示 | 当前版本（revision 2） |\n|---|---|\n| 行 1：A1004 青瓷茶具（便携款）×2 | 行 1：A1005 紫砂壶（旅行装）×2 |\n| 行 2：A1005 紫砂壶（旅行装）×3 | 行 2：A1004 青瓷茶具（便携款）×3 |\n\n您说「第二个」时指的是哪个？\n\n1. **上一轮展示的第二个** → A1005 紫砂壶（旅行装），改为 50 件\n2. **当前版本的第二个** → A1004 青瓷茶具（便携款），改为 50 件\n\n请确认目标商品（或直接说 SKU），我确认后再执行修改，客户、备注和其他商品保持不变，且不会提交。",
+          "cost_complete": true,
+          "billing": {
+            "currency": "CNY",
+            "estimated_amount": "0.001402",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          },
+          "turn_results": [],
+          "turn_traces": [],
+          "state_evidence": {
+            "before_sha256": "dba11099498a88d97eb5bf67f29f2acb469666f4a0c9ca4799dd2a0e4edc0d77",
+            "after_sha256": "dba11099498a88d97eb5bf67f29f2acb469666f4a0c9ca4799dd2a0e4edc0d77",
+            "drafts_before": [
+              {
+                "draft_id": "1f27551ac6564ddaa55122a26cd3d3fe",
+                "revision": 1,
+                "session_id": "b4-foreign",
+                "snapshot": "{\"customer\": \"其他会话客户\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:28:20.140735+00:00",
+                "created_at": "2026-10-17T06:58:20.140735+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                "revision": 1,
+                "session_id": "eval:b4-reference-confirmed",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:28:20.149734+00:00",
+                "created_at": "2026-10-17T06:58:20.149734+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                "revision": 2,
+                "session_id": "eval:b4-reference-confirmed",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 2, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 201.8, \"stock_before\": 197, \"stock_after\": 195}, {\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 3, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1799.7, \"stock_before\": 142, \"stock_after\": 139}], \"total_amount\": 2001.5}",
+                "expires_at": "2026-10-17T07:28:38.771679+00:00",
+                "created_at": "2026-10-17T06:58:38.771679+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "drafts_after": [
+              {
+                "draft_id": "1f27551ac6564ddaa55122a26cd3d3fe",
+                "revision": 1,
+                "session_id": "b4-foreign",
+                "snapshot": "{\"customer\": \"其他会话客户\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:28:20.140735+00:00",
+                "created_at": "2026-10-17T06:58:20.140735+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                "revision": 1,
+                "session_id": "eval:b4-reference-confirmed",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:28:20.149734+00:00",
+                "created_at": "2026-10-17T06:58:20.149734+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                "revision": 2,
+                "session_id": "eval:b4-reference-confirmed",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 2, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 201.8, \"stock_before\": 197, \"stock_after\": 195}, {\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 3, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1799.7, \"stock_before\": 142, \"stock_after\": 139}], \"total_amount\": 2001.5}",
+                "expires_at": "2026-10-17T07:28:38.771679+00:00",
+                "created_at": "2026-10-17T06:58:38.771679+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "history_reset": false,
+            "external_revision": true
+          }
+        },
+        {
+          "case_id": "b4-reference-confirmed:turn-3",
+          "category": "multi",
+          "passed": true,
+          "failed_checks": [],
+          "steps": 3,
+          "completed": true,
+          "tool_calls": [
+            "get_order_task",
+            "revise_order_draft_quantity"
+          ],
+          "total_tokens": 21601,
+          "cost": 0.0023094,
+          "duration_ms": 21114.2,
+          "attempts": 1,
+          "error": null,
+          "tool_results": [
+            {
+              "call_id": "c43e493f-a6f7-4898-969a-83eaac0698ef",
+              "name": "get_order_task",
+              "arguments": {},
+              "content": {
+                "status": "active",
+                "draft": {
+                  "customer": "B4客户甲",
+                  "note": "分开发票，周五发货",
+                  "items": [
+                    {
+                      "sku": "A1005",
+                      "name": "紫砂壶（旅行装）",
+                      "quantity": 2,
+                      "base_price": 100.9,
+                      "discount": 1.0,
+                      "unit_price": 100.9,
+                      "line_total": 201.8,
+                      "stock_before": 197,
+                      "stock_after": 195
+                    },
+                    {
+                      "sku": "A1004",
+                      "name": "青瓷茶具（便携款）",
+                      "quantity": 3,
+                      "base_price": 599.9,
+                      "discount": 1.0,
+                      "unit_price": 599.9,
+                      "line_total": 1799.7,
+                      "stock_before": 142,
+                      "stock_after": 139
+                    }
+                  ],
+                  "total_amount": 2001.5,
+                  "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                  "revision": 2,
+                  "expires_at": "2026-10-17T07:28:38.771679+00:00",
+                  "status": "open",
+                  "order_id": null,
+                  "inventory_effect": "projection",
+                  "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+                },
+                "candidates": [
+                  {
+                    "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                    "revision": 2,
+                    "customer": "B4客户甲",
+                    "status": "open"
+                  }
+                ],
+                "has_more": false
+              },
+              "ok": true
+            },
+            {
+              "call_id": "7ba5a3e6-bb8a-4230-a639-f7d7e11129e7",
+              "name": "revise_order_draft_quantity",
+              "arguments": {
+                "quantity": 50,
+                "item_number": 1,
+                "expected_revision": 2,
+                "expected_sku": "A1005",
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9"
+              },
+              "content": {
+                "customer": "B4客户甲",
+                "note": "分开发票，周五发货",
+                "items": [
+                  {
+                    "sku": "A1005",
+                    "name": "紫砂壶（旅行装）",
+                    "quantity": 50,
+                    "base_price": 100.9,
+                    "discount": 0.95,
+                    "unit_price": 95.86,
+                    "line_total": 4793.0,
+                    "stock_before": 197,
+                    "stock_after": 147
+                  },
+                  {
+                    "sku": "A1004",
+                    "name": "青瓷茶具（便携款）",
+                    "quantity": 3,
+                    "base_price": 599.9,
+                    "discount": 1.0,
+                    "unit_price": 599.9,
+                    "line_total": 1799.7,
+                    "stock_before": 142,
+                    "stock_after": 139
+                  }
+                ],
+                "total_amount": 6592.7,
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                "revision": 3,
+                "expires_at": "2026-10-17T07:29:01.627608+00:00",
+                "status": "open",
+                "order_id": null,
+                "inventory_effect": "projection",
+                "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+              },
+              "ok": true
+            }
+          ],
+          "visible_text": "当前版本（revision 2）中，A1005 紫砂壶（旅行装）位于第 1 行（数量 2）。按您确认的 SKU 执行修改：已保存为新版本（revision 3），未提交：\n\n**草稿 c14b0ba13721475c874fabba2a34c5f9 · revision 3**\n- 客户：B4客户甲\n- 备注：分开发票，周五发货（保持不变）\n\n| 行号 | SKU | 商品 | 数量 | 原价 | 折扣 | 单价 | 行小计 |\n|---|---|---|---|---|---|---|---|\n| 1 | A1005 | 紫砂壶（旅行装） | **50** ↑ | ¥100.90 | 0.95 | ¥95.86 | ¥4,793.00 |\n| 2 | A1004 | 青瓷茶具（便携款） | 3 | ¥599.90 | 无 | ¥599.90 | ¥1,799.70 |\n\n**合计：¥6,592.70**\n\n说明：\n- A1005 数量达到 50 件，自动套用店铺折扣梯度 0.95 折扣，单价由 ¥100.90 变为 ¥95.86。\n- stock_before / stock_after（如 A1005：197 → 147）仅为本次报价时的预计提交前后库存，不是实时库存；保存草稿未占用、未扣减任何库存。\n- 客户、备注及 A1004 明细均按当前版本保留。\n\n草稿 30 分钟内有效（至 2026-10-17 07:29 UTC）。需要提交时请明确告诉我确认提交 revision 3。",
+          "cost_complete": true,
+          "billing": {
+            "currency": "CNY",
+            "estimated_amount": "0.002310",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          },
+          "turn_results": [],
+          "turn_traces": [],
+          "state_evidence": {
+            "before_sha256": "dba11099498a88d97eb5bf67f29f2acb469666f4a0c9ca4799dd2a0e4edc0d77",
+            "after_sha256": "3946653cfd9c1b27d0c8d769b32e74111edc3ec2e32962831063272dff4593a3",
+            "drafts_before": [
+              {
+                "draft_id": "1f27551ac6564ddaa55122a26cd3d3fe",
+                "revision": 1,
+                "session_id": "b4-foreign",
+                "snapshot": "{\"customer\": \"其他会话客户\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:28:20.140735+00:00",
+                "created_at": "2026-10-17T06:58:20.140735+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                "revision": 1,
+                "session_id": "eval:b4-reference-confirmed",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:28:20.149734+00:00",
+                "created_at": "2026-10-17T06:58:20.149734+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                "revision": 2,
+                "session_id": "eval:b4-reference-confirmed",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 2, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 201.8, \"stock_before\": 197, \"stock_after\": 195}, {\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 3, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1799.7, \"stock_before\": 142, \"stock_after\": 139}], \"total_amount\": 2001.5}",
+                "expires_at": "2026-10-17T07:28:38.771679+00:00",
+                "created_at": "2026-10-17T06:58:38.771679+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "drafts_after": [
+              {
+                "draft_id": "1f27551ac6564ddaa55122a26cd3d3fe",
+                "revision": 1,
+                "session_id": "b4-foreign",
+                "snapshot": "{\"customer\": \"其他会话客户\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:28:20.140735+00:00",
+                "created_at": "2026-10-17T06:58:20.140735+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                "revision": 1,
+                "session_id": "eval:b4-reference-confirmed",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:28:20.149734+00:00",
+                "created_at": "2026-10-17T06:58:20.149734+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                "revision": 2,
+                "session_id": "eval:b4-reference-confirmed",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 2, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 201.8, \"stock_before\": 197, \"stock_after\": 195}, {\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 3, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1799.7, \"stock_before\": 142, \"stock_after\": 139}], \"total_amount\": 2001.5}",
+                "expires_at": "2026-10-17T07:28:38.771679+00:00",
+                "created_at": "2026-10-17T06:58:38.771679+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "c14b0ba13721475c874fabba2a34c5f9",
+                "revision": 3,
+                "session_id": "eval:b4-reference-confirmed",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 50, \"base_price\": 100.9, \"discount\": 0.95, \"unit_price\": 95.86, \"line_total\": 4793.0, \"stock_before\": 197, \"stock_after\": 147}, {\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 3, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1799.7, \"stock_before\": 142, \"stock_after\": 139}], \"total_amount\": 6592.7}",
+                "expires_at": "2026-10-17T07:29:01.627608+00:00",
+                "created_at": "2026-10-17T06:59:01.627608+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "history_reset": false,
+            "external_revision": false
+          }
+        }
+      ],
+      "turn_traces": [
+        "F:\\VIE\\Erpilot\\traces\\evals\\20261017-145820-bc974230.jsonl",
+        "F:\\VIE\\Erpilot\\traces\\evals\\20261017-145838-ca0f1c56.jsonl",
+        "F:\\VIE\\Erpilot\\traces\\evals\\20261017-145853-ff133916.jsonl"
+      ],
+      "state_evidence": null
+    },
+    {
+      "case_id": "b4-reference-inventory",
+      "category": "multi",
+      "passed": false,
+      "failed_checks": [
+        "b4-reference-inventory:turn-2: must_mention_any_groups: 不预留/未预留/不占用/未占用/不会占用/不会扣减/不扣减/未扣减 均未出现"
+      ],
+      "steps": 4,
+      "completed": true,
+      "tool_calls": [
+        "prepare_order_draft",
+        "get_order_task"
+      ],
+      "total_tokens": 22803,
+      "cost": 0.0026941680000000003,
+      "duration_ms": 18413.6,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [
+        {
+          "call_id": "call_6370817b7c624028b8905a0c",
+          "name": "prepare_order_draft",
+          "arguments": {
+            "customer": "B4客户甲",
+            "items": [
+              {
+                "quantity": 2,
+                "sku": "A1004"
+              },
+              {
+                "quantity": 3,
+                "sku": "A1005"
+              }
+            ],
+            "note": "分开发票，周五发货"
+          },
+          "content": {
+            "customer": "B4客户甲",
+            "note": "分开发票，周五发货",
+            "items": [
+              {
+                "sku": "A1004",
+                "name": "青瓷茶具（便携款）",
+                "quantity": 2,
+                "base_price": 599.9,
+                "discount": 1.0,
+                "unit_price": 599.9,
+                "line_total": 1199.8,
+                "stock_before": 142,
+                "stock_after": 140
+              },
+              {
+                "sku": "A1005",
+                "name": "紫砂壶（旅行装）",
+                "quantity": 3,
+                "base_price": 100.9,
+                "discount": 1.0,
+                "unit_price": 100.9,
+                "line_total": 302.7,
+                "stock_before": 197,
+                "stock_after": 194
+              }
+            ],
+            "total_amount": 1502.5,
+            "draft_id": "eb45827ca1314b6dabaf1fe2ea408327",
+            "revision": 1,
+            "expires_at": "2026-10-17T07:29:20.284408+00:00",
+            "status": "open",
+            "order_id": null,
+            "inventory_effect": "projection",
+            "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+          },
+          "ok": true
+        },
+        {
+          "call_id": "call_f9324c1ec11446e68308c7b9",
+          "name": "get_order_task",
+          "arguments": {},
+          "content": {
+            "status": "active",
+            "draft": {
+              "customer": "B4客户甲",
+              "note": "分开发票，周五发货",
+              "items": [
+                {
+                  "sku": "A1004",
+                  "name": "青瓷茶具（便携款）",
+                  "quantity": 2,
+                  "base_price": 599.9,
+                  "discount": 1.0,
+                  "unit_price": 599.9,
+                  "line_total": 1199.8,
+                  "stock_before": 142,
+                  "stock_after": 140
+                },
+                {
+                  "sku": "A1005",
+                  "name": "紫砂壶（旅行装）",
+                  "quantity": 3,
+                  "base_price": 100.9,
+                  "discount": 1.0,
+                  "unit_price": 100.9,
+                  "line_total": 302.7,
+                  "stock_before": 197,
+                  "stock_after": 194
+                }
+              ],
+              "total_amount": 1502.5,
+              "draft_id": "eb45827ca1314b6dabaf1fe2ea408327",
+              "revision": 1,
+              "expires_at": "2026-10-17T07:29:20.284408+00:00",
+              "status": "open",
+              "order_id": null,
+              "inventory_effect": "projection",
+              "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+            },
+            "candidates": [
+              {
+                "draft_id": "eb45827ca1314b6dabaf1fe2ea408327",
+                "revision": 1,
+                "customer": "B4客户甲",
+                "status": "open"
+              }
+            ],
+            "has_more": false
+          },
+          "ok": true
+        }
+      ],
+      "visible_text": "",
+      "cost_complete": true,
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": "0.002694",
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "turn_results": [
+        {
+          "case_id": "b4-reference-inventory:turn-1",
+          "category": "multi",
+          "passed": true,
+          "failed_checks": [],
+          "steps": 2,
+          "completed": true,
+          "tool_calls": [
+            "prepare_order_draft"
+          ],
+          "total_tokens": 11404,
+          "cost": 0.001342932,
+          "duration_ms": 8818.7,
+          "attempts": 1,
+          "error": null,
+          "tool_results": [
+            {
+              "call_id": "call_6370817b7c624028b8905a0c",
+              "name": "prepare_order_draft",
+              "arguments": {
+                "customer": "B4客户甲",
+                "items": [
+                  {
+                    "quantity": 2,
+                    "sku": "A1004"
+                  },
+                  {
+                    "quantity": 3,
+                    "sku": "A1005"
+                  }
+                ],
+                "note": "分开发票，周五发货"
+              },
+              "content": {
+                "customer": "B4客户甲",
+                "note": "分开发票，周五发货",
+                "items": [
+                  {
+                    "sku": "A1004",
+                    "name": "青瓷茶具（便携款）",
+                    "quantity": 2,
+                    "base_price": 599.9,
+                    "discount": 1.0,
+                    "unit_price": 599.9,
+                    "line_total": 1199.8,
+                    "stock_before": 142,
+                    "stock_after": 140
+                  },
+                  {
+                    "sku": "A1005",
+                    "name": "紫砂壶（旅行装）",
+                    "quantity": 3,
+                    "base_price": 100.9,
+                    "discount": 1.0,
+                    "unit_price": 100.9,
+                    "line_total": 302.7,
+                    "stock_before": 197,
+                    "stock_after": 194
+                  }
+                ],
+                "total_amount": 1502.5,
+                "draft_id": "eb45827ca1314b6dabaf1fe2ea408327",
+                "revision": 1,
+                "expires_at": "2026-10-17T07:29:20.284408+00:00",
+                "status": "open",
+                "order_id": null,
+                "inventory_effect": "projection",
+                "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+              },
+              "ok": true
+            }
+          ],
+          "visible_text": "草稿已保存，未提交订单。详情如下：\n\n**报价草稿**（draft_id: `eb45827ca1314b6dabaf1fe2ea408327`，版本 v1，有效期至 2026-10-17 07:29 UTC）\n\n| # | SKU | 商品 | 数量 | 单价 | 小计 |\n|---|------|------|------|------|------|\n| 1 | A1004 | 青瓷茶具（便携款） | 2 | ¥599.90 | ¥1,199.80 |\n| 2 | A1005 | 紫砂壶（旅行装） | 3 | ¥100.90 | ¥302.70 |\n\n- **客户**：B4客户甲\n- **备注**：分开发票，周五发货\n- **合计**：¥1,502.50（当前无梯度折扣）\n\n说明：草稿中的库存前后值（A1004 预计 142→140，A1005 预计 197→194）仅是报价时测算的预计值，保存草稿不预留、不扣减库存，实际变更以订单提交审批结果为准。\n\n需要提交建单或修改这份草稿时，请告诉我（修改或提交前我会先重新查询草稿最新版本再操作）。",
+          "cost_complete": true,
+          "billing": {
+            "currency": "CNY",
+            "estimated_amount": "0.001343",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          },
+          "turn_results": [],
+          "turn_traces": [],
+          "state_evidence": {
+            "before_sha256": "b758c96725d15e5185fe59e87a92f7474aa16c5ce7427ca9ae80ff38b5a7e1f4",
+            "after_sha256": "ed400acc673dd77dc44a7c765c36052727c133732e6ac73b60abb264ca88d09f",
+            "drafts_before": [
+              {
+                "draft_id": "4e315723f843400481c0e333d8ed97b1",
+                "revision": 1,
+                "session_id": "b4-foreign",
+                "snapshot": "{\"customer\": \"其他会话客户\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:29:14.892359+00:00",
+                "created_at": "2026-10-17T06:59:14.892359+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "drafts_after": [
+              {
+                "draft_id": "4e315723f843400481c0e333d8ed97b1",
+                "revision": 1,
+                "session_id": "b4-foreign",
+                "snapshot": "{\"customer\": \"其他会话客户\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:29:14.892359+00:00",
+                "created_at": "2026-10-17T06:59:14.892359+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "eb45827ca1314b6dabaf1fe2ea408327",
+                "revision": 1,
+                "session_id": "eval:b4-reference-inventory",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:29:20.284408+00:00",
+                "created_at": "2026-10-17T06:59:20.284408+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "history_reset": false,
+            "external_revision": false
+          }
+        },
+        {
+          "case_id": "b4-reference-inventory:turn-2",
+          "category": "multi",
+          "passed": false,
+          "failed_checks": [
+            "must_mention_any_groups: 不预留/未预留/不占用/未占用/不会占用/不会扣减/不扣减/未扣减 均未出现"
+          ],
+          "steps": 2,
+          "completed": true,
+          "tool_calls": [
+            "get_order_task"
+          ],
+          "total_tokens": 11399,
+          "cost": 0.001351236,
+          "duration_ms": 9594.9,
+          "attempts": 1,
+          "error": null,
+          "tool_results": [
+            {
+              "call_id": "call_f9324c1ec11446e68308c7b9",
+              "name": "get_order_task",
+              "arguments": {},
+              "content": {
+                "status": "active",
+                "draft": {
+                  "customer": "B4客户甲",
+                  "note": "分开发票，周五发货",
+                  "items": [
+                    {
+                      "sku": "A1004",
+                      "name": "青瓷茶具（便携款）",
+                      "quantity": 2,
+                      "base_price": 599.9,
+                      "discount": 1.0,
+                      "unit_price": 599.9,
+                      "line_total": 1199.8,
+                      "stock_before": 142,
+                      "stock_after": 140
+                    },
+                    {
+                      "sku": "A1005",
+                      "name": "紫砂壶（旅行装）",
+                      "quantity": 3,
+                      "base_price": 100.9,
+                      "discount": 1.0,
+                      "unit_price": 100.9,
+                      "line_total": 302.7,
+                      "stock_before": 197,
+                      "stock_after": 194
+                    }
+                  ],
+                  "total_amount": 1502.5,
+                  "draft_id": "eb45827ca1314b6dabaf1fe2ea408327",
+                  "revision": 1,
+                  "expires_at": "2026-10-17T07:29:20.284408+00:00",
+                  "status": "open",
+                  "order_id": null,
+                  "inventory_effect": "projection",
+                  "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+                },
+                "candidates": [
+                  {
+                    "draft_id": "eb45827ca1314b6dabaf1fe2ea408327",
+                    "revision": 1,
+                    "customer": "B4客户甲",
+                    "status": "open"
+                  }
+                ],
+                "has_more": false
+              },
+              "ok": true
+            }
+          ],
+          "visible_text": "已查询当前会话的草稿任务，结合系统返回的字段说明如下：\n\n**1. stock_before / stock_after 的含义**\n这两个值是该草稿版本**报价时测算的\"预计\"库存**（inventory_effect = projection）：\n- stock_before = 该版本报价时按当时查询到的库存测算的\"提交前\"数量；\n- stock_after = 假设此报价提交成功后的预计数量。\n\n以当前这份草稿为例：\n- 青瓷茶具（便携款）A1004 ×2：预计 142 → 140\n- 紫砂壶（旅行装）A1005 ×3：预计 197 → 194\n\n**它们不是实时库存**。从报价到提交之间，库存可能已被其他订单变动，所以这两个数字只用于参考，不代表当前实际库存。\n\n**2. 保存草稿是否占用/扣减库存？**\n**没有。** 保存草稿（包括后续修改草稿生成新版本）都不会预留、占用或扣减任何库存，也不会影响可售数量。即使草稿状态显示已提交，这些 stock_before/stock_after 字段仍然只是报价快照中的测算值。\n\n实际库存变化只发生在订单真正提交并通过审批之后，以业务数据中的实际结果为准。如需确认某商品当前的真实库存，可随时让我按 SKU 单独查询（A1004 / A1005 均可）。\n\n以上仅为说明，未做任何修改或提交操作。",
+          "cost_complete": true,
+          "billing": {
+            "currency": "CNY",
+            "estimated_amount": "0.001351",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          },
+          "turn_results": [],
+          "turn_traces": [],
+          "state_evidence": {
+            "before_sha256": "ed400acc673dd77dc44a7c765c36052727c133732e6ac73b60abb264ca88d09f",
+            "after_sha256": "ed400acc673dd77dc44a7c765c36052727c133732e6ac73b60abb264ca88d09f",
+            "drafts_before": [
+              {
+                "draft_id": "4e315723f843400481c0e333d8ed97b1",
+                "revision": 1,
+                "session_id": "b4-foreign",
+                "snapshot": "{\"customer\": \"其他会话客户\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:29:14.892359+00:00",
+                "created_at": "2026-10-17T06:59:14.892359+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "eb45827ca1314b6dabaf1fe2ea408327",
+                "revision": 1,
+                "session_id": "eval:b4-reference-inventory",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:29:20.284408+00:00",
+                "created_at": "2026-10-17T06:59:20.284408+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "drafts_after": [
+              {
+                "draft_id": "4e315723f843400481c0e333d8ed97b1",
+                "revision": 1,
+                "session_id": "b4-foreign",
+                "snapshot": "{\"customer\": \"其他会话客户\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:29:14.892359+00:00",
+                "created_at": "2026-10-17T06:59:14.892359+00:00",
+                "order_id": null,
+                "submission_result": null
+              },
+              {
+                "draft_id": "eb45827ca1314b6dabaf1fe2ea408327",
+                "revision": 1,
+                "session_id": "eval:b4-reference-inventory",
+                "snapshot": "{\"customer\": \"B4客户甲\", \"note\": \"分开发票，周五发货\", \"items\": [{\"sku\": \"A1004\", \"name\": \"青瓷茶具（便携款）\", \"quantity\": 2, \"base_price\": 599.9, \"discount\": 1.0, \"unit_price\": 599.9, \"line_total\": 1199.8, \"stock_before\": 142, \"stock_after\": 140}, {\"sku\": \"A1005\", \"name\": \"紫砂壶（旅行装）\", \"quantity\": 3, \"base_price\": 100.9, \"discount\": 1.0, \"unit_price\": 100.9, \"line_total\": 302.7, \"stock_before\": 197, \"stock_after\": 194}], \"total_amount\": 1502.5}",
+                "expires_at": "2026-10-17T07:29:20.284408+00:00",
+                "created_at": "2026-10-17T06:59:20.284408+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "history_reset": true,
+            "external_revision": false
+          }
+        }
+      ],
+      "turn_traces": [
+        "F:\\VIE\\Erpilot\\traces\\evals\\20261017-145914-8157d0fc.jsonl",
+        "F:\\VIE\\Erpilot\\traces\\evals\\20261017-145923-fd85e196.jsonl"
+      ],
+      "state_evidence": null
+    }
+  ]
+}

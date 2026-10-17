@@ -173,6 +173,18 @@ def test_compatibility_key_equal_for_compatible_pair() -> None:
     assert compatibility_key(a) == compatibility_key(b)
 
 
+def test_reference_contract_requires_its_own_version_for_strict_comparison():
+    report = _full_report()
+    report["suite"]["case_ids"] = ["b4-reference-current"]
+    report["suite"]["b4_scorer_version"] = "b4-1"
+    with pytest.raises(ValueError, match="b4_reference_scorer_version"):
+        compatibility_key(report)
+    report["suite"]["b4_reference_scorer_version"] = "b4-reference-1"
+    first = compatibility_key(report)
+    report["suite"]["b4_reference_scorer_version"] = "b4-reference-2"
+    assert compatibility_key(report) != first
+
+
 @pytest.mark.parametrize("mutation", [
     "source_sha256", "case_sha256", "scorer_version", "seed", "retry_policy",
     "retry_policy_missing", "billing_budget_missing", "billing_currency",
@@ -217,6 +229,18 @@ def test_compatibility_key_b5_scope_requires_policy_fingerprints() -> None:
     hybrid["suite"]["case_ids"] = ["b5-eligible"]
     with pytest.raises(ValueError, match="b5_scorer_version"):
         compatibility_key(hybrid)
+
+
+def test_compatibility_key_b4_requires_matching_turn_scorer() -> None:
+    left = _full_report("glm-5.3-flash")
+    left["suite"]["case_ids"] = ["b4-second-item"]
+    with pytest.raises(ValueError, match="b4_scorer_version"):
+        compatibility_key(left)
+    left["suite"]["b4_scorer_version"] = "b4-1"
+    right = deepcopy(left)
+    assert compatibility_key(left) == compatibility_key(right)
+    right["suite"]["b4_scorer_version"] = "b4-2"
+    assert compatibility_key(left) != compatibility_key(right)
 
 
 def test_compatibility_key_rejects_reports_without_provenance() -> None:
@@ -277,3 +301,17 @@ def test_compare_rows_show_currency_and_unmeasured() -> None:
     md2 = compare_markdown([summarize(unmeasured_report, report_name="x.json")], strict=True)
     assert "未计量" in md2
     assert "$0.0100 USD" in md2  # 已知部分单独显示，不虚报 0
+
+
+def test_strict_compatibility_includes_request_deadline_when_recorded():
+    from evals.compare import compatibility_key
+
+    left = _full_report("glm-5.3-flash")
+    right = _full_report("deepseek-v4.1-flash")
+    left["suite"]["request_timeout_seconds"] = 60
+    right["suite"]["request_timeout_seconds"] = 60
+    assert compatibility_key(left) == compatibility_key(right)
+    right["suite"]["request_timeout_seconds"] = 30
+    assert compatibility_key(left) != compatibility_key(right)
+    del right["suite"]["request_timeout_seconds"]
+    assert compatibility_key(left) != compatibility_key(right)

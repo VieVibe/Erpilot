@@ -25,7 +25,7 @@ def query_policy(
     *,
     at: datetime,
     k: int = 3,
-    threshold: float = 0.66,
+    threshold: float = 0.57,
     rule_id: str | None = None,
 ) -> PolicyEvidence:
     if at.tzinfo is None or at.utcoffset() is None:

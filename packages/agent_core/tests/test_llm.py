@@ -7,6 +7,7 @@ import pytest
 from agent_core.llm import (
     DEFAULT_BASE_URL,
     DEFAULT_MODEL,
+    LLMClient,
     LLMConfig,
     ReasoningDelta,
     StreamEnd,
@@ -22,6 +23,29 @@ from pydantic import BaseModel, ValidationError
 
 async def _collect(client, *args, **kwargs) -> list:
     return [e async for e in client.stream_chat(*args, **kwargs)]
+
+
+@pytest.mark.parametrize("timeout", [0, -1, float("nan"), float("inf"), True])
+def test_request_deadline_rejects_invalid_timeout(timeout):
+    with pytest.raises(ValueError, match="request_timeout"):
+        LLMClient(LLMConfig(api_key="test-key"), request_timeout=timeout)
+
+
+async def test_request_deadline_preserves_successful_usage():
+    from openai import AsyncOpenAI
+
+    sdk = AsyncOpenAI(api_key="test-key", max_retries=0, http_client=httpx2.AsyncClient(
+        transport=httpx2.MockTransport(lambda request: sse_response([
+            chunk(delta={"content": "完成"}), chunk(usage=USAGE),
+        ])),
+    ))
+    try:
+        client = LLMClient(LLMConfig(api_key="test-key"), sdk, request_timeout=1)
+        assert await client.chat([]) == StreamResult(
+            text="完成", usage=Usage(prompt_tokens=13, completion_tokens=7, total_tokens=20),
+        )
+    finally:
+        await sdk.close()
 
 
 # ---- 第 1 周：流式 + usage ----
@@ -268,6 +292,7 @@ def _clear_llm_env(monkeypatch) -> None:
         "LLM_PROVIDER",
         "LLM_BASE_URL",
         "LLM_MODEL",
+        "LLM_API_KEY",
         "ERPILOT_THINKING",
         "ZHIPU_API_KEY",
         "DEEPSEEK_API_KEY",
@@ -347,3 +372,23 @@ def test_from_env_missing_key_names_provider_env(monkeypatch) -> None:
     monkeypatch.setenv("LLM_PROVIDER", "qwen")
     with pytest.raises(RuntimeError, match="DASHSCOPE_API_KEY"):
         LLMConfig.from_env()
+
+
+def test_generic_gateway_key_overrides_provider_key(monkeypatch) -> None:
+    _clear_llm_env(monkeypatch)
+    monkeypatch.setenv("LLM_API_KEY", "gateway-test-key")
+    monkeypatch.setenv("ZHIPU_API_KEY", "provider-test-key")
+    monkeypatch.setenv("LLM_BASE_URL", "https://gateway.test/v1")
+    monkeypatch.setenv("LLM_MODEL", "deepseek-v4.1-flash")
+    config = LLMConfig.from_env()
+    assert config.api_key == "gateway-test-key"
+    assert config.base_url == "https://gateway.test/v1"
+    assert config.model == "deepseek-v4.1-flash"
+    assert "gateway-test-key" not in repr(config)
+
+
+def test_empty_generic_key_falls_back_to_provider(monkeypatch) -> None:
+    _clear_llm_env(monkeypatch)
+    monkeypatch.setenv("LLM_API_KEY", "")
+    monkeypatch.setenv("ZHIPU_API_KEY", "provider-test-key")
+    assert LLMConfig.from_env().api_key == "provider-test-key"

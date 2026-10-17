@@ -121,6 +121,11 @@ class ErpDrafts(ErpMutations):
             "expires_at": row.expires_at,
             "status": status,
             "order_id": row.order_id,
+            "inventory_effect": "projection",
+            "inventory_note": (
+                "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；"
+                "保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+            ),
         }
 
     def _save_revision(self, session, session_id, draft_id, revision, snapshot):
@@ -219,7 +224,9 @@ class ErpDrafts(ErpMutations):
                 "has_more": len(rows) > 20,
             }
 
-    def revise_quantity(self, session_id, draft_id, expected_revision, item_number, quantity):
+    def revise_quantity(
+        self, session_id, draft_id, expected_revision, item_number, quantity, *, expected_sku=None,
+    ):
         with self._write_session() as session:
             latest = self._latest(session, session_id, draft_id)
             if latest.order_id:
@@ -232,6 +239,15 @@ class ErpDrafts(ErpMutations):
             previous = json.loads(latest.snapshot)
             if item_number > len(previous["items"]):
                 raise MutationError("invalid_argument", "商品行号超出草稿明细范围")
+            if expected_sku is not None:
+                if (not isinstance(expected_sku, str) or not expected_sku.strip()
+                        or len(expected_sku) > 32):
+                    raise MutationError("invalid_argument", "目标 SKU 须为 1~32 个非空字符")
+                if previous["items"][item_number - 1]["sku"] != expected_sku.strip():
+                    raise MutationError(
+                        "draft_item_changed", "指定 SKU 与当前版本的商品行不一致",
+                        "请重新查询草稿并按用户确认的 SKU 定位商品；本次未修改",
+                    )
             items = [
                 (line["sku"], quantity if index == item_number else line["quantity"])
                 for index, line in enumerate(previous["items"], 1)

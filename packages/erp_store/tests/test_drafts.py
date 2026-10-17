@@ -248,6 +248,45 @@ def test_quantity_revision_uses_one_based_order_and_preserves_context(store):
     assert repo.count_orders(customer="客户") == 0 and repo.get_stock("A").quantity == 1000
 
 
+def test_quantity_revision_binds_sku_to_current_row_without_silent_retargeting(store):
+    _, repo, drafts = store
+    draft = drafts.prepare("s1", "客户", [("B", 2), ("A", 3)], "保留备注")
+    with pytest.raises(MutationError) as error:
+        drafts.revise_quantity("s1", draft["draft_id"], 1, 2, 50, expected_sku="B")
+    assert error.value.code == "draft_item_changed"
+    assert drafts.get("s1", draft["draft_id"])["revision"] == 1
+    changed = drafts.revise_quantity("s1", draft["draft_id"], 1, 1, 50, expected_sku="B")
+    assert [(line["sku"], line["quantity"]) for line in changed["items"]] == [("B", 50), ("A", 3)]
+    assert changed["note"] == "保留备注" and changed["customer"] == "客户"
+    assert repo.get_stock("B").quantity == 1000 and repo.count_orders(customer="客户") == 0
+
+
+@pytest.mark.parametrize("sku", ["", " ", 1, True, "x" * 33])
+def test_quantity_revision_rejects_invalid_sku_guards(store, sku):
+    _, _, drafts = store
+    draft = drafts.prepare("s1", "客户", [("A", 2)])
+    with pytest.raises(MutationError) as error:
+        drafts.revise_quantity("s1", draft["draft_id"], 1, 1, 50, expected_sku=sku)
+    assert error.value.code == "invalid_argument"
+    assert drafts.get("s1", draft["draft_id"])["revision"] == 1
+
+
+def test_draft_inventory_projection_is_a_quote_snapshot_not_a_reservation(store):
+    _, repo, drafts = store
+    draft = drafts.prepare("s1", "客户", [("A", 2)])
+    drafts.adjust_stock("A", 10, client_token="stock-change")
+    saved = drafts.get("s1", draft["draft_id"])
+    assert saved["inventory_effect"] == "projection"
+    assert saved["items"][0]["stock_before"] == 1000
+    assert repo.get_stock("A").quantity == 1010
+    drafts.revise("s1", draft["draft_id"], 1, "客户", [("A", 2)])
+    drafts.submit("s1", draft["draft_id"], 2, "approved")
+    submitted = drafts.get("s1", draft["draft_id"])
+    assert submitted["inventory_effect"] == "projection" and submitted["status"] == "submitted"
+    assert submitted["items"][0]["stock_before"] == 1010
+    assert repo.get_stock("A").quantity == 1008
+
+
 @pytest.mark.parametrize("revision,row,quantity", [
     (True, 1, 2), (1.0, 1, 2), ("1", 1, 2),
     (1, 0, 2), (1, 3, 2), (1, True, 2), (1, 1.5, 2), (1, "1", 2),

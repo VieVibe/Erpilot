@@ -46,6 +46,21 @@ test('桌面工作台把历史、对话和业务表单分开', async ({ page }) 
   await expect(page.getByRole('textbox', { name: '消息', exact: true })).toBeEnabled();
 });
 
+test('报价库存显示为预计提交值，打开草稿不会发送写请求', async ({ page }) => {
+  const mutations = await mockWorkspace(page);
+  const draft = { draft_id: 'projection', revision: 1, customer: '报价客户', note: null,
+    items: [{ sku: 'A', name: '验收商品', quantity: 3, base_price: 10, discount: 1,
+      unit_price: 10, line_total: 30, stock_before: 20, stock_after: 17 }],
+    total_amount: 30, expires_at: '2099-01-01T00:00:00Z', status: 'open', order_id: null };
+  await page.route('**/api/sessions/*/order-drafts', route => route.fulfill({ json: { items: [draft] } }));
+  await page.goto('/');
+  const panel = page.getByRole('complementary', { name: '业务面板' });
+  await expect(panel.getByRole('columnheader', { name: '报价时库存 → 预计提交后' })).toBeVisible();
+  await expect(panel.getByText('库存前后值为报价时测算，保存草稿不预留、不扣减库存；实际变化以订单提交结果为准。')).toBeVisible();
+  await expect(panel.getByText('20 → 17', { exact: true })).toBeVisible();
+  expect(mutations).toEqual([]);
+});
+
 test('窄屏工作台通过抽屉查看会话和业务，关闭后恢复焦点', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 }); await mockWorkspace(page); await page.goto('/');
   await page.getByRole('button', { name: '历史会话', exact: true }).click();

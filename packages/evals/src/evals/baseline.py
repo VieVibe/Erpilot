@@ -31,6 +31,9 @@ from evals.policy_cases import (
 from evals.policy_runtime import CACHE_FILENAME, B5Harness  # noqa: F401  CACHE_FILENAME 供报告指引
 from evals.report import source_provenance, write_report
 from evals.runner import Budget, run_case
+from evals.task_cases import B4_SCORER_VERSION, TaskCase
+from evals.task_reference_cases import REFERENCE_SCORER_VERSION, ReferenceTaskCase
+from evals.task_runtime import run_task_case
 from evals.write_cases import WRITE_CASES
 
 BASELINE_CASES = [*ALL_CASES, *WRITE_CASES, *APPROVAL_CASES]
@@ -65,6 +68,8 @@ async def run_baseline(
     case_ids = {c.id for c in cases}
     b5_ids = case_ids & {c.id for c in cases if c.id.startswith("b5-")}
     write_ids |= b5_ids
+    b4_ids = {c.id for c in cases if isinstance(c, TaskCase)}
+    write_ids |= b4_ids
     provenance = source_provenance()
     metadata = {
         "kind": "full" if [c.id for c in cases] == [c.id for c in BASELINE_CASES] else "targeted",
@@ -72,6 +77,7 @@ async def run_baseline(
         "case_ids": [c.id for c in cases],
         "scorer_version": SCORER_VERSION,
         "retry_policy": "wrapper-no-rerun" if wrapper_retry else "runner-retry",
+        "request_timeout_seconds": getattr(client, "request_timeout", None),
         "case_sha256": hashlib.sha256(
             "\n".join(c.model_dump_json() for c in cases).encode()
         ).hexdigest(),
@@ -86,6 +92,12 @@ async def run_baseline(
     }
     if b5_ids:
         metadata["b5_scorer_version"] = B5_SCORER_VERSION
+    if b4_ids:
+        metadata["b4_scorer_version"] = B4_SCORER_VERSION
+        metadata["turns_planned"] = sum(len(c.turns) for c in cases if isinstance(c, TaskCase))
+        metadata["retry_policy"] = "wrapper-no-rerun" if wrapper_retry else "task-no-rerun"
+    if any(isinstance(case, ReferenceTaskCase) for case in cases):
+        metadata["b4_reference_scorer_version"] = REFERENCE_SCORER_VERSION
 
     def checkpoint(path=None):
         pending = [CaseResult(
@@ -96,6 +108,10 @@ async def run_baseline(
             not any(f.startswith("budget:") for f in r.failed_checks) for r in results
         )
         metadata["complete"] = len(results) == len(cases)
+        if b4_ids:
+            metadata["turns_executed"] = sum(len(r.turn_traces) for r in results)
+            metadata["case_turn_traces"] = {r.case_id: r.turn_traces for r in results}
+            metadata["complete"] &= metadata["turns_executed"] == metadata["turns_planned"]
         if wrapper_retry:
             metadata["budget_limit_cny"] = None
             metadata["billing_budget"] = {
@@ -146,9 +162,12 @@ async def run_baseline(
                     resolver = case_harness.resolver_overrides.get(
                         case.id, case_harness.policy_resolver
                     )
+                session_options = {"session_id": f"eval:{case.id}"} \
+                    if isinstance(case, TaskCase) else {}
                 tools = await build_agent_tools_async(
                     db, writes=writes, approval_gate=gate,
                     policy_resolver=resolver,
+                    **session_options,
                 )
                 if case_harness is not None and case.id in case_harness.poison_case_ids:
                     tools = _poison_assess_tool(tools, case.id, case_harness)
@@ -157,18 +176,25 @@ async def run_baseline(
                 if case.id.startswith("b5-"):
                     guidance = CANCELLATION_GUIDANCE
                     prompt = prompt + "\n" + guidance
-                result, trace_path = await run_case(
-                    case, client=client, tools=tools, resolved=resolve(ErpRepository(engine)),
-                    trace_dir=trace_dir, system_prompt=prompt,
-                    state_engine=engine if writes else None,
-                )
+                if isinstance(case, TaskCase):
+                    result, trace_path = await run_task_case(
+                        case, client=client, tools=tools, engine=engine,
+                        resolved=resolve(ErpRepository(engine)), trace_dir=trace_dir,
+                        session_id=f"eval:{case.id}", budget=active,
+                    )
+                else:
+                    result, trace_path = await run_case(
+                        case, client=client, tools=tools, resolved=resolve(ErpRepository(engine)),
+                        trace_dir=trace_dir, system_prompt=prompt,
+                        state_engine=engine if writes else None,
+                    )
                 try:
                     trace_ref = trace_path.resolve().relative_to(Path.cwd().resolve()).as_posix()
                 except ValueError:
                     trace_ref = trace_path.resolve().as_posix()
                 metadata["case_traces"][case.id] = trace_ref
                 results.append(result)
-                if budget is not None and not wrapper_retry:
+                if budget is not None and not wrapper_retry and not isinstance(case, TaskCase):
                     budget.record(result.cost)
                 print(f"{case.id}: {'PASS' if result.passed else 'FAIL'} "
                       f"({result.steps} steps, {result.attempts} attempts)", flush=True)
