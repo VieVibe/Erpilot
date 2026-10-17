@@ -21,6 +21,57 @@ def _time(value):
     return parsed
 
 
+def valid_references(references: list, at: datetime) -> bool:
+    """Check citation identity, score and validity at the recorded query time."""
+    versions = {}
+    for reference in references:
+        if not isinstance(reference, dict):
+            return False
+        if not all(
+            _text(reference.get(key))
+            for key in ("source", "title", "text", "policy_id", "version")
+        ):
+            return False
+        if not _number(reference.get("score"), -1, 1):
+            return False
+        start = _time(reference.get("effective_from"))
+        end = reference.get("effective_until")
+        if start > at or (end is not None and _time(end) <= at):
+            return False
+        identity = reference["policy_id"]
+        version = (reference["version"], reference["effective_from"], end)
+        if identity in versions and versions[identity] != version:
+            return False
+        versions[identity] = version
+    return True
+
+
+def policy_search_fields(arguments: dict, result: dict) -> dict | None:
+    try:
+        if type(result.get("schema_version")) is not int or result["schema_version"] != 1:
+            return None
+        query = arguments.get("query")
+        if not _text(query) or result.get("query") != query.strip():
+            return None
+        at = _time(result.get("queried_at"))
+        state = result.get("policy_state")
+        if state not in {"matched", "no_match", "unavailable", "inactive", "conflict"}:
+            return None
+        references = result.get("matches")
+        k = arguments.get("k", 3)
+        if type(k) is not int or not 1 <= k <= 5:
+            return None
+        if not isinstance(references, list) or len(references) > k:
+            return None
+        if bool(references) != (state == "matched") or not valid_references(references, at):
+            return None
+        if not isinstance(result.get("note"), str):
+            return None
+        return {"search": result}
+    except (ValueError, TypeError, KeyError):
+        return None
+
+
 def assessment_fields(arguments: dict, result: dict) -> dict | None:
     try:
         if type(result.get("schema_version")) is not int or result["schema_version"] != 1:
@@ -59,26 +110,8 @@ def assessment_fields(arguments: dict, result: dict) -> dict | None:
         references = result.get("references")
         if not isinstance(references, list) or bool(references) != (state == "matched"):
             return None
-        versions = {}
-        for reference in references:
-            if not isinstance(reference, dict):
-                return None
-            if not all(
-                _text(reference.get(key))
-                for key in ("source", "title", "text", "policy_id", "version")
-            ):
-                return None
-            if not _number(reference.get("score"), -1, 1):
-                return None
-            start = _time(reference.get("effective_from"))
-            end = reference.get("effective_until")
-            if start > at or (end is not None and _time(end) <= at):
-                return None
-            identity = reference["policy_id"]
-            version = (reference["version"], reference["effective_from"], end)
-            if identity in versions and versions[identity] != version:
-                return None
-            versions[identity] = version
+        if not valid_references(references, at):
+            return None
         return {"assessment": result}
     except (ValueError, TypeError, KeyError):
         return None

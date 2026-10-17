@@ -22,6 +22,7 @@ M4（ADR-0005）：写操作 ×4，`include_writes=True` 才注册（默认关�
 """
 
 from collections.abc import Callable
+from datetime import datetime
 from pathlib import Path
 from typing import Annotated, Any
 
@@ -102,6 +103,7 @@ def create_server(
     include_writes: bool = False,
     policy_resolver: PolicyResolver | None = None,
     session_id: str | None = None,
+    replenishment_at: datetime | None = None,
 ) -> FastMCP:
     """构建 MCP server 实例（库内集成与独立进程共用）。
 
@@ -415,7 +417,9 @@ def create_server(
         return {"total": len(cats), "items": [c.model_dump(mode="json") for c in cats]}
 
     from mcp_erp.policy_tools import register_policy_tools
+    from mcp_erp.replenishment_tools import register_replenishment_tools
 
+    register_replenishment_tools(mcp, repo, as_of=replenishment_at)
     register_policy_tools(mcp, repo, policy_resolver or _default_policy_resolver,
                           POLICY_SCORE_THRESHOLD)
 

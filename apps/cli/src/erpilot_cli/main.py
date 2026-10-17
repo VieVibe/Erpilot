@@ -113,6 +113,10 @@ def chat(
         gate = StreamApprovalGate()
     tools = _resolve_tools(tools_mode, writes=writes, gate=gate)
     prompt_rules = system_prompt(any(t.risk for t in tools))
+    if any(t.name == "suggest_replenishment" for t in tools):
+        from mcp_erp.replenishment_tools import REPLENISHMENT_GUIDANCE
+
+        prompt_rules += "\n" + REPLENISHMENT_GUIDANCE
     if any(t.name == "assess_order_cancellation" for t in tools):
         from mcp_erp.policy_tools import CANCELLATION_GUIDANCE
 

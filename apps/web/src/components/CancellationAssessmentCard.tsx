@@ -1,20 +1,7 @@
 import { Card, Tag } from 'antd';
 import type { CancellationAssessmentDisplay } from '../protocol';
-
-function record(value: unknown): value is Record<string, unknown> {
-  return !!value && typeof value === 'object' && !Array.isArray(value);
-}
-function text(value: unknown): value is string {
-  return typeof value === 'string' && value.trim().length > 0;
-}
-function time(value: unknown): value is string {
-  return typeof value === 'string' &&
-    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(value) &&
-    Number.isFinite(Date.parse(value));
-}
-function number(value: unknown, low: number, high = Infinity): value is number {
-  return typeof value === 'number' && Number.isFinite(value) && value >= low && value <= high;
-}
+import { record, text, time, number, validReferences } from '../policyEvidence';
+import { PolicyReferences } from './PolicyReferences';
 
 export function isUsableAssessmentDisplay(value: unknown): value is CancellationAssessmentDisplay {
   if (!record(value) || value.version !== 1 || value.kind !== 'cancellation_assessment' ||
@@ -36,18 +23,7 @@ export function isUsableAssessmentDisplay(value: unknown): value is Cancellation
     proof.policy_state === 'matched' ? 'eligible' : 'needs_review';
   if (proof.decision !== expected || !Array.isArray(proof.references) ||
       (proof.references.length > 0) !== (proof.policy_state === 'matched')) return false;
-  const versions = new Map<string, string>();
-  for (const citation of proof.references) {
-    if (!record(citation) || !text(citation.source) || !text(citation.title) || !text(citation.text) ||
-        !text(citation.policy_id) || !text(citation.version) || !number(citation.score, -1, 1) ||
-        !time(citation.effective_from) || Date.parse(citation.effective_from) > Date.parse(proof.assessed_at)) return false;
-    if (citation.effective_until !== null && (!time(citation.effective_until) ||
-        Date.parse(citation.effective_until) <= Date.parse(proof.assessed_at))) return false;
-    const version = JSON.stringify([citation.version, citation.effective_from, citation.effective_until]);
-    if (versions.has(citation.policy_id) && versions.get(citation.policy_id) !== version) return false;
-    versions.set(citation.policy_id, version);
-  }
-  return true;
+  return validReferences(proof.references, proof.assessed_at);
 }
 
 const labels = {eligible: '可发起取消申请', ineligible: '当前不可取消', needs_review: '政策待核对'};
@@ -68,12 +44,7 @@ export function CancellationAssessmentCard({display}: {display: CancellationAsse
       <p>{proof.message}</p>
       <p>查询时间 <time dateTime={proof.assessed_at}>{proof.assessed_at}</time></p>
       {proof.references.length > 0 && <details><summary>查看政策依据</summary>
-        {proof.references.map((citation, index) => <section key={index}>
-          <p><strong>{citation.title}</strong> · {citation.source}</p>
-          <p>政策 {citation.policy_id} · 版本 {citation.version}</p>
-          <p>生效 {citation.effective_from} · {citation.effective_until ? `截至 ${citation.effective_until}` : '未设截止时间'}</p>
-          <p>{citation.text}</p>
-        </section>)}
+        <PolicyReferences references={proof.references} query="订单取消条件"/>
       </details>}
     </div>
   </Card>;

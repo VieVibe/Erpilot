@@ -103,10 +103,12 @@ def register_policy_tools(mcp, repo, resolver, threshold):
             return _err("invalid_argument", "查询不能为空", "例如：满多少件有折扣、几天内可退货")
         if not 1 <= k <= 5:
             return _err("invalid_argument", "k 须在 1~5")
+        query = query.strip()
+        at = datetime.now(UTC)
         try:
             index, embedder = resolver()
             evidence = query_policy(
-                index, embedder, query.strip(), at=datetime.now(UTC), k=k, threshold=threshold
+                index, embedder, query, at=at, k=k, threshold=threshold
             )
         except Exception:
             evidence = None
@@ -117,6 +119,9 @@ def register_policy_tools(mcp, repo, resolver, threshold):
                 "请核对政策目录与嵌入配置，运行 python -m rag build 或 rag refresh",
             )
         return {
+            "schema_version": 1,
+            "query": query,
+            "queried_at": at.isoformat().replace("+00:00", "Z"),
             "policy_state": evidence.state,
             "matches": [reference(hit) for hit in evidence.matches],
             "note": evidence.reason

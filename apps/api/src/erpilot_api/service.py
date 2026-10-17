@@ -221,6 +221,7 @@ class ChatService:
         session_reconciler_factory=None,
         drafts=None,
         operations=None,
+        trace_sinks: Sequence[TraceSink] | None = None,
     ):
         self._client_factory = client_factory
         self._model, self._trace_dir = model, trace_dir
@@ -235,7 +236,7 @@ class ChatService:
         self._drafts = drafts
         self._operations = operations
         self._approval_ttl_seconds, self._clock = approval_ttl_seconds, clock
-        self._sinks = _sinks_from_env()
+        self._sinks = _sinks_from_env() if trace_sinks is None else list(trace_sinks)
         self._client = None
         self._locks: dict[str, asyncio.Lock] = {}
         self.last_trace: Path | None = None
@@ -364,6 +365,10 @@ class ChatService:
 
     def _system_prompt(self):
         prompt = system_prompt(any(t.risk for t in self._tools))
+        if any(t.name == "suggest_replenishment" for t in self._tools):
+            from mcp_erp.replenishment_tools import REPLENISHMENT_GUIDANCE
+
+            prompt += "\n" + REPLENISHMENT_GUIDANCE
         if any(t.name == "assess_order_cancellation" for t in self._tools):
             from mcp_erp.policy_tools import CANCELLATION_GUIDANCE
 

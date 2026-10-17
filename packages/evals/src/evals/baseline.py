@@ -15,6 +15,7 @@ from erp_store.repository import ErpRepository
 from erp_store.seed import DEFAULT_SEED, seed_database
 from mcp_erp import build_agent_tools_async
 from mcp_erp.policy_tools import CANCELLATION_GUIDANCE
+from mcp_erp.replenishment_tools import REPLENISHMENT_GUIDANCE
 
 from evals.approval_cases import APPROVAL_CASES
 from evals.approval_policy import ScriptedPolicyGate
@@ -29,6 +30,13 @@ from evals.policy_cases import (
     poison_assessment_payload,
 )
 from evals.policy_runtime import CACHE_FILENAME, B5Harness  # noqa: F401  CACHE_FILENAME 供报告指引
+from evals.replenishment_cases import (
+    B6_AT,
+    B6_FIXTURE_VERSION,
+    B6_SCORER_VERSION,
+    no_policy_resolver,
+    seed_replenishment_fixture,
+)
 from evals.report import source_provenance, write_report
 from evals.runner import Budget, run_case
 from evals.task_cases import B4_SCORER_VERSION, TaskCase
@@ -68,6 +76,8 @@ async def run_baseline(
     case_ids = {c.id for c in cases}
     b5_ids = case_ids & {c.id for c in cases if c.id.startswith("b5-")}
     write_ids |= b5_ids
+    b6_ids = {c.id for c in cases if c.id.startswith("b6-")}
+    write_ids |= b6_ids
     b4_ids = {c.id for c in cases if isinstance(c, TaskCase)}
     write_ids |= b4_ids
     provenance = source_provenance()
@@ -92,6 +102,12 @@ async def run_baseline(
     }
     if b5_ids:
         metadata["b5_scorer_version"] = B5_SCORER_VERSION
+    if b6_ids:
+        metadata["b6_scorer_version"] = B6_SCORER_VERSION
+        metadata["b6_fixture"] = {"version": B6_FIXTURE_VERSION, "as_of": B6_AT.isoformat()}
+        if len(b6_ids) == len(cases):
+            metadata["seed"] = {"value": B6_FIXTURE_VERSION, "now": B6_AT.isoformat(),
+                                "fresh_database_per_case": True}
     if b4_ids:
         metadata["b4_scorer_version"] = B4_SCORER_VERSION
         metadata["turns_planned"] = sum(len(c.turns) for c in cases if isinstance(c, TaskCase))
@@ -152,18 +168,25 @@ async def run_baseline(
                 checkpoint(path)
                 continue
             db = Path(directory) / f"{case.id}.db"
-            seed_database(db, seed=DEFAULT_SEED, now=BASELINE_SEED_NOW)
+            if case.id in b6_ids:
+                seed_replenishment_fixture(db)
+            else:
+                seed_database(db, seed=DEFAULT_SEED, now=BASELINE_SEED_NOW)
             engine = make_engine(db)
             try:
                 writes = case.id in write_ids
                 gate = ScriptedPolicyGate() if case.id in approval_ids else AutoDenyGate()
                 resolver = None
+                if case.id in b6_ids:
+                    resolver = no_policy_resolver
                 if case_harness is not None:
                     resolver = case_harness.resolver_overrides.get(
                         case.id, case_harness.policy_resolver
                     )
                 session_options = {"session_id": f"eval:{case.id}"} \
-                    if isinstance(case, TaskCase) else {}
+                    if isinstance(case, TaskCase) or case.id in b6_ids else {}
+                if case.id in b6_ids:
+                    session_options["replenishment_at"] = B6_AT
                 tools = await build_agent_tools_async(
                     db, writes=writes, approval_gate=gate,
                     policy_resolver=resolver,
@@ -176,6 +199,8 @@ async def run_baseline(
                 if case.id.startswith("b5-"):
                     guidance = CANCELLATION_GUIDANCE
                     prompt = prompt + "\n" + guidance
+                if case.id in b6_ids:
+                    prompt += "\n" + REPLENISHMENT_GUIDANCE
                 if isinstance(case, TaskCase):
                     result, trace_path = await run_task_case(
                         case, client=client, tools=tools, engine=engine,
@@ -184,7 +209,8 @@ async def run_baseline(
                     )
                 else:
                     result, trace_path = await run_case(
-                        case, client=client, tools=tools, resolved=resolve(ErpRepository(engine)),
+                        case, client=client, tools=tools,
+                        resolved={} if case.id in b6_ids else resolve(ErpRepository(engine)),
                         trace_dir=trace_dir, system_prompt=prompt,
                         state_engine=engine if writes else None,
                     )

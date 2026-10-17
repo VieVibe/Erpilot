@@ -18,6 +18,7 @@ approval_gate——审批门（agent_core.approval.guarded）包在 handler 外�
 
 import asyncio
 import json
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
@@ -143,6 +144,7 @@ async def build_agent_tools_async(
     approval_gate: ApprovalGate | None = None,
     policy_resolver: PolicyResolver | None = None,
     session_id: str | None = None,
+    replenishment_at: datetime | None = None,
 ) -> list[Tool]:
     """发现 MCP 工具并转换为 agent_core Tool 列表（可在运行中的 loop 内调用）。
 
@@ -159,7 +161,8 @@ async def build_agent_tools_async(
             "python -m erp_store seed 生成）"
         )
     server = create_server(
-        db_path, include_writes=writes, policy_resolver=policy_resolver, session_id=session_id
+        db_path, include_writes=writes, policy_resolver=policy_resolver, session_id=session_id,
+        replenishment_at=replenishment_at,
     )
     async with Client(server) as client:
         mcp_tools = await client.list_tools()
@@ -172,6 +175,7 @@ async def build_agent_tools_async(
             writes,
             policy_resolver,
             session_id,
+            replenishment_at,
         )
         for t in mcp_tools
     ]
@@ -205,6 +209,7 @@ def _convert(
     writes: bool,
     policy_resolver: PolicyResolver | None = None,
     session_id: str | None = None,
+    replenishment_at: datetime | None = None,
 ) -> Tool:
     """把一个 MCP 工具转成 agent Tool；调用侧必须以同一 writes 口径建 server。
 
@@ -219,7 +224,8 @@ def _convert(
             # 同次工具执行的超时/异常重试复用同一个参数对象与 token。
             args.client_token = uuid4().hex
         server = create_server(
-            db_path, include_writes=writes, policy_resolver=policy_resolver, session_id=session_id
+            db_path, include_writes=writes, policy_resolver=policy_resolver, session_id=session_id,
+            replenishment_at=replenishment_at,
         )
         async with Client(server) as client:
             result = await client.call_tool(_name, args.model_dump(mode="json", exclude_none=True))

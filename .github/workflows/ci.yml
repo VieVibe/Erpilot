@@ -59,12 +59,22 @@ jobs:
       - name: Browser regression tests
         run: npm run test:ui -- --workers=2
         working-directory: apps/web
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - name: Sync offline demo workspace
+        run: uv sync --all-packages
+      - name: Browser demo against real API and temporary ERP
+        run: npm run test:demo
+        working-directory: apps/web
       - name: Upload browser failure evidence
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: browser-failure-evidence
-          path: .playwright-mcp/workspace-tests/
+          path: |
+            .playwright-mcp/workspace-tests/
+            .playwright-mcp/demo-tests/
           include-hidden-files: true
           if-no-files-found: ignore
 

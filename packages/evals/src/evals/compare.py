@@ -155,6 +155,11 @@ def compatibility_key(report: dict) -> str:
         if not version:
             raise ValueError("严格对照需要 B4 指代指纹 b4_reference_scorer_version")
         parts.append(f"suite.b4_reference_scorer_version={version}")
+    if any(str(cid).startswith("b6-") for cid in suite.get("case_ids", [])):
+        for name in ("b6_scorer_version", "b6_fixture"):
+            if not suite.get(name):
+                raise ValueError(f"严格对照需要 B6 指纹 {name}")
+            parts.append(f"suite.{name}={suite[name]}")
     budget = report.get("suite", {}).get("billing_budget")
     if isinstance(budget, dict) and budget.get("currency"):
         parts.append("billing_recorded")

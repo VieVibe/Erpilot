@@ -25,7 +25,7 @@ export function SessionHistory({ currentId, locked, onSelect, onClose }: {
       if (!controller.signal.aborted && generation === request.current) setLoading(false);
     });
     return () => controller.abort();
-  }, [offset, revision, currentId]);
+  }, [offset, revision, currentId, locked]);
   return <section className="session-history" aria-labelledby="history-heading" aria-busy={loading}>
     <div className="history-heading">
       <h2 id="history-heading">历史会话</h2>

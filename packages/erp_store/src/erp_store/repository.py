@@ -1,7 +1,7 @@
 """只读查询 API：M3 工具层（mcp_erp）取数的唯一入口。
 
 写操作刻意不在此层——动账动货要请示东家（HITL，M4+），接口先不给。
-所有查询返回 models.py 的 Pydantic 模型，工具层拿到的直接是可序列化对象。
+实体查询返回 models.py 的 Pydantic 模型；补货建议返回版本化的只读测算快照。
 """
 
 from collections.abc import Iterator
@@ -285,6 +285,12 @@ class ErpRepository:
 
 
     # ---- 运营视图（掌柜的日常：盘库存、看销量） ----
+
+    def suggest_replenishment(self, **options) -> dict:
+        """当前库存与窗口销量的只读条件测算，计算口径见 replenishment。"""
+        from erp_store.replenishment import estimate_replenishment
+
+        return estimate_replenishment(self._engine, **options)
 
     def list_low_stock(self, *, threshold: int = 10, limit: int = 20) -> list[LowStockItem]:
         """库存 ≤ threshold 的商品，按库存升序——盘库存场景。"""

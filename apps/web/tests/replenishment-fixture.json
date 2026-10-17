@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "assessed_at": "2026-10-17T12:00:00+08:00",
+  "window_start": "2026-09-17T12:00:00+08:00",
+  "window_end": "2026-10-17T12:00:00+08:00",
+  "timezone": "Asia/Shanghai",
+  "days": 30,
+  "coverage_days": 14,
+  "lead_time_days": 7,
+  "sales_basis": "按订单创建时间统计当前为待发货、已发货、已签收的订单件数；不含待付款、取消和退款",
+  "formula": "目标数量=向上取整(有效销量×(覆盖天数+已提供的采购周期)/统计天数)；建议数量=max(0,目标数量-当前库存)",
+  "assumptions": ["统计最近 30 天，目标为到货后覆盖 14 天的销量。", "按本次提供的采购周期 7 天测算。"],
+  "limitations": ["仅按历史日均销量测算，不代表需求预测；未计入季节性、缺货时长和在途采购。", "本次仅提供只读建议，未采购、未调整库存、未申请审批。"],
+  "total": 1,
+  "returned": 1,
+  "offset": 0,
+  "limit": 20,
+  "has_more": false,
+  "items": [{
+    "sku": "B6-A", "name": "青瓷茶杯", "product_status": "在售",
+    "stock_quantity": 5, "sold_quantity": 60, "daily_sales": 2,
+    "estimated_days_remaining": 2.5, "target_quantity": 42, "suggested_quantity": 37,
+    "stockout_before_arrival": true, "decision": "reorder",
+    "reason": "按当前销量和备货假设，库存低于目标覆盖量。"
+  }]
+}

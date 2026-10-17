@@ -5,6 +5,8 @@
  */
 import { Card, Tag } from "antd";
 import { CancellationAssessmentCard, isUsableAssessmentDisplay } from './CancellationAssessmentCard';
+import { ReplenishmentCard, isUsableReplenishmentDisplay } from './ReplenishmentCard';
+import { PolicySearchCard, isUsablePolicySearchDisplay } from './PolicySearchCard';
 import type { ReactNode } from "react";
 import type {
   BusinessDisplay,
@@ -14,6 +16,8 @@ import type {
 } from "../protocol";
 
 export function isUsableDisplay(display: BusinessDisplay | null | undefined): boolean {
+  if (display?.kind === 'policy_search') return isUsablePolicySearchDisplay(display);
+  if (display?.kind === 'replenishment_suggestion') return isUsableReplenishmentDisplay(display);
   if (display?.kind === 'cancellation_assessment') return isUsableAssessmentDisplay(display);
   if (!display || display.version !== 1) return false;
   for (const field of ["sku", "message", "hint", "error_code", "order_id", "customer", "status"]) {
@@ -40,6 +44,8 @@ export function isUsableDisplay(display: BusinessDisplay | null | undefined): bo
 const OUTCOME_LABEL: Record<string, string> = { succeeded: '成功', failed: '失败', denied: '未执行', unknown: '结果未知' };
 
 export function BusinessResultCard({ display }: { display: BusinessDisplay }) {
+  if (isUsablePolicySearchDisplay(display)) return <PolicySearchCard display={display}/>;
+  if (isUsableReplenishmentDisplay(display)) return <ReplenishmentCard display={display}/>;
   if (isUsableAssessmentDisplay(display)) return <CancellationAssessmentCard display={display}/>;
   if (!isUsableDisplay(display)) return null;
   let title = ''; let content: ReactNode;

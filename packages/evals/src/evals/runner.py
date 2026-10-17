@@ -27,6 +27,7 @@ from evals.billing import BillingEstimate, BudgetedClient
 from evals.checks import evaluate_case
 from evals.model import CaseResult, EvalCase, ToolResult
 from evals.policy_cases import check_policy_result
+from evals.replenishment_cases import check_replenishment_result
 from evals.state import check_state, snapshot
 
 
@@ -132,7 +133,11 @@ async def run_case(
     case = case.format_with(resolved)
     trace_path = new_trace_path(trace_dir, client.config.model)
     started = time.perf_counter()
-    before = snapshot(state_engine) if case.state and state_engine is not None else None
+
+    def state_snapshot():
+        return snapshot(state_engine, all_tables=case.id.startswith("b6-"))
+
+    before = state_snapshot() if case.state and state_engine is not None else None
     # 整轮重跑可能重复模型已发起的写操作；写工具面仅重试工具执行，不重跑任务。
     if any(t.risk for t in tools):
         retries = 0
@@ -255,7 +260,7 @@ async def run_case(
             if before is None or state_engine is None:
                 failed.append("state: 缺少数据库状态证据")
             else:
-                failed.extend(check_state(case.state, before, snapshot(state_engine)))
+                failed.extend(check_state(case.state, before, state_snapshot()))
         for name, expected_count in case.successful_tool_counts.items():
             count = sum(t.name == name and t.succeeded for t in tool_results)
             if count != expected_count:
@@ -284,6 +289,11 @@ async def run_case(
             if extra:
                 result.failed_checks.extend(extra)
                 result.passed = False  # b5-1 判分失败必须计入总判过
+        if case.id.startswith("b6-") and before is not None and state_engine is not None:
+            extra = check_replenishment_result(case.id, result, before, state_snapshot())
+            if extra:
+                result.failed_checks.extend(extra)
+                result.passed = False
         return result, trace_path
 
     raise AssertionError("unreachable：重试循环必须 return 或 continue")

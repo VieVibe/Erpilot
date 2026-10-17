@@ -99,8 +99,11 @@ def create_app(
     approval_ttl_seconds: int | None = None,
     clock=None,
     session_erp_tools=None,
+    scripted_demo: bool = False,
 ) -> FastAPI:
     """应用工厂：测试注入 mock 的 LLMClient 工厂、临时 trace 目录与工具集。"""
+    if scripted_demo and client_factory is None:
+        raise ValueError("scripted_demo requires an explicit offline client_factory")
     if (
         session_erp_tools is None
         and tools is None
@@ -139,6 +142,7 @@ def create_app(
         session_reconciler_factory=session_erp_tools.reconciler if session_erp_tools else None,
         drafts=session_erp_tools.drafts if session_erp_tools else None,
         operations=getattr(session_erp_tools, "operations", None),
+        trace_sinks=[] if scripted_demo else None,
     )
 
     @asynccontextmanager
@@ -179,6 +183,7 @@ def create_app(
     @app.get("/api/runtime")
     def runtime_info() -> dict[str, Any]:
         return {
+            **({"scripted_demo": True} if scripted_demo else {}),
             "data_source": "mcp"
             if session_erp_tools is not None
             else "custom"
@@ -320,4 +325,10 @@ def create_app(
     return app
 
 
-app = create_app()
+def __getattr__(name):
+    # 保留 uvicorn erpilot_api.main:app；仅导入工厂时不创建默认 RunStore 或发现真实工具。
+    if name == "app":
+        app = create_app()
+        globals()[name] = app
+        return app
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
