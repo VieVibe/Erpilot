@@ -84,6 +84,7 @@ def _run_error_result(
     cost: float | None = None,
     tool_results: Sequence[ToolResult] = (),
     billing: BillingEstimate | None = None,
+    visible_text: str = "",
 ) -> CaseResult:
     return CaseResult(
         case_id=case.id,
@@ -101,6 +102,7 @@ def _run_error_result(
         cost_complete=False,
         tool_results=list(tool_results),
         billing=billing,
+        visible_text=visible_text,
     )
 
 
@@ -116,6 +118,7 @@ async def run_case(
     backoff: float = 2.0,
     system_prompt: str = SYSTEM_PROMPT,
     state_engine: Engine | None = None,
+    conversation: list | None = None,
 ) -> tuple[CaseResult, Path]:
     """跑一条已解析占位符的 case，返回 (结果, trace 路径)。
 
@@ -133,6 +136,9 @@ async def run_case(
     # 整轮重跑可能重复模型已发起的写操作；写工具面仅重试工具执行，不重跑任务。
     if any(t.risk for t in tools):
         retries = 0
+    # 多轮任务可能已经保存了草稿；不重新播放已经完成的用户轮次。
+    if conversation is not None:
+        retries = 0
     # 计费包装模式禁用整轮重试：预算 / 计量 / 重试策略由包装层把关，
     # 重试语义差异在报告里注明，不与旧重试策略的报告混比。
     if isinstance(client, BudgetedClient):
@@ -144,10 +150,11 @@ async def run_case(
 
     for attempt in range(1, retries + 2):
         agent = LangGraphRuntime(client, tools=list(tools), checkpointer=InMemorySaver())
-        messages: list = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": case.question},
-        ]
+        messages: list = (
+            list(conversation) if conversation is not None
+            else [{"role": "system", "content": system_prompt}]
+        )
+        messages.append({"role": "user", "content": case.question})
         recorder = JsonlTraceRecorder(trace_path, client.config.model, sinks=list(sinks))
 
         tool_calls: list[str] = []
@@ -199,6 +206,8 @@ async def run_case(
                         all_tool_results.append(tool_results[-1])
                     case LoopEnd(steps=s, completed=c):
                         steps, completed = s, c
+                        if conversation is not None:
+                            conversation[:] = messages
         except Exception as exc:  # 评测失败 ≠ runner 崩溃：留痕后按失败计
             cost_complete = False  # 中断的生成可能已经计费，但未返回 usage。
             duration_ms = round((time.perf_counter() - started) * 1000, 1)
@@ -215,6 +224,7 @@ async def run_case(
                 cost=_cost_of(client, measured),
                 tool_results=all_tool_results,
                 billing=_billing_of(client),
+                visible_text="".join(visible_parts) + "".join(step_text),
             )
             if case.state and before is not None and state_engine is not None:
                 result.failed_checks.extend(check_state(case.state, before, snapshot(state_engine)))
@@ -267,6 +277,7 @@ async def run_case(
             tool_results=all_tool_results,
             cost_complete=cost_complete and _cost_of(client, measured) is not None,
             billing=_billing_of(client),
+            visible_text="".join(visible_parts),
         )
         if case.id.startswith("b5-") and before is not None and state_engine is not None:
             extra = check_policy_result(case.id, result, before, snapshot(state_engine))

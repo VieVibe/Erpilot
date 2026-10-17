@@ -1,9 +1,13 @@
 """M06-01/02 原币种估价与预算熔断：USD 不冒充 CNY，未知计量拒绝继续，预算耗尽不发请求。"""
 
+import asyncio
+import json
 from decimal import Decimal
 
+import httpx2
 import pytest
 from agent_core.llm import LLMClient, LLMConfig, StreamEnd, TextDelta, Usage
+from agent_core.testing import SSE_HEADERS, chunk
 from evals.billing import (
     BillingEstimate,
     BudgetedClient,
@@ -13,6 +17,7 @@ from evals.billing import (
     endpoint_rate,
     quote_usage,
 )
+from openai import AsyncOpenAI
 
 _RELAY = "https://flashcoding.ai/v1"
 
@@ -240,3 +245,52 @@ async def test_wrapper_case_window_reports_increment_and_resets():
     assert Decimal(per_case.estimated_amount) == Decimal("0.2250")
     wrapper.begin_case()
     assert wrapper.case_billing() is None  # 复位后无增量，baseline 不能累计旧 case
+
+
+@pytest.mark.parametrize("stage", ["connect", "stream"])
+async def test_request_deadline_stops_stalls_and_freezes_unknown_budget(stage):
+    requests = 0
+    closed = False
+    waiting = asyncio.Event()
+
+    class StalledStream(httpx2.AsyncByteStream):
+        async def __aiter__(self):
+            yield ("data: " + json.dumps(chunk(delta={"content": "部分文本"})) + "\n\n").encode()
+            await waiting.wait()
+
+        async def aclose(self):
+            nonlocal closed
+            closed = True
+
+    async def handler(request):
+        nonlocal requests
+        requests += 1
+        if stage == "connect":
+            await waiting.wait()
+        return httpx2.Response(200, headers=SSE_HEADERS, stream=StalledStream())
+
+    sdk = AsyncOpenAI(
+        api_key="test-key", base_url="https://test.local/v1", max_retries=0,
+        http_client=httpx2.AsyncClient(transport=httpx2.MockTransport(handler)),
+    )
+    client = LLMClient(_StubStreamClient().config, client=sdk, request_timeout=0.05)
+    budget = CurrencyBudget(Decimal("1"), "USD", max_requests=40)
+    wrapper = BudgetedClient(client, _rate(), budget)
+    events = []
+    started = asyncio.get_running_loop().time()
+    try:
+        with pytest.raises(TimeoutError):
+            async with asyncio.timeout(2):
+                async for event in wrapper.stream_chat([]):
+                    events.append(event)
+        assert asyncio.get_running_loop().time() - started < 1
+        assert events == ([TextDelta("部分文本")] if stage == "stream" else [])
+        assert stage == "connect" or closed
+        assert budget.unknown_usage and budget.exhausted
+        assert wrapper.case_billing().estimated_amount is None
+        with pytest.raises(BudgetExhausted):
+            async for _ in wrapper.stream_chat([]):
+                pass
+        assert requests == budget.requests == 1
+    finally:
+        await sdk.close()

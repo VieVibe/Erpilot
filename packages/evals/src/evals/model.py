@@ -104,11 +104,18 @@ class CaseResult(BaseModel):
         default=None, description="run 异常（APIError 等）；None = 正常结束"
     )
     tool_results: list["ToolResult"] = Field(default_factory=list)
+    visible_text: str = Field(
+        default="",
+        description="本次尝试的助手可见原文（过程消息与最终答复）；异常时含已显示的片段",
+    )
     cost_complete: bool = True
     billing: BillingEstimate | None = Field(
         default=None,
         description="M06 支线：本 case 增量的原币种计费估算；None = 未启用计费包装",
     )
+    turn_results: list["CaseResult"] = Field(default_factory=list)
+    turn_traces: list[str] = Field(default_factory=list)
+    state_evidence: dict[str, Any] | None = None
 
 
 class ToolResult(BaseModel):

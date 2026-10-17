@@ -135,6 +135,8 @@ def compatibility_key(report: dict) -> str:
             raise ValueError(f"严格对照要求 {section}.{name} 为非空值")
         parts.append(f"{section}.{name}={json.dumps(value, ensure_ascii=False, sort_keys=True)}")
     suite = report.get("suite", {})
+    if "request_timeout_seconds" in suite:
+        parts.append(f"suite.request_timeout_seconds={suite['request_timeout_seconds']}")
     has_b5_scope = any(
         str(cid).startswith("b5-") for cid in suite.get("case_ids", [])
     ) or "b5_scorer_version" in suite
@@ -143,6 +145,16 @@ def compatibility_key(report: dict) -> str:
             if not isinstance(suite, dict) or name not in suite or suite[name] in (None, ""):
                 raise ValueError(f"严格对照需要 B5 指纹 {name}，报告缺失该字段")
             parts.append(f"{section}.{name}={suite[name]}")
+    if any(str(cid).startswith("b4-") for cid in suite.get("case_ids", [])):
+        version = suite.get("b4_scorer_version")
+        if not version:
+            raise ValueError("严格对照需要 B4 指纹 b4_scorer_version")
+        parts.append(f"suite.b4_scorer_version={version}")
+    if any(str(cid).startswith("b4-reference-") for cid in suite.get("case_ids", [])):
+        version = suite.get("b4_reference_scorer_version")
+        if not version:
+            raise ValueError("严格对照需要 B4 指代指纹 b4_reference_scorer_version")
+        parts.append(f"suite.b4_reference_scorer_version={version}")
     budget = report.get("suite", {}).get("billing_budget")
     if isinstance(budget, dict) and budget.get("currency"):
         parts.append("billing_recorded")

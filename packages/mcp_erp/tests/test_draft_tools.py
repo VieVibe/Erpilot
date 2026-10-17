@@ -87,8 +87,9 @@ async def test_task_tools_rebuild_context_and_edit_without_business_write(db):
         assert "get_order_task" in schemas and "revise_order_draft_quantity" in schemas
         assert schemas["get_order_task"]["properties"] == {}
         assert set(schemas["revise_order_draft_quantity"]["properties"]) == {
-            "draft_id", "expected_revision", "item_number", "quantity"
+            "draft_id", "expected_revision", "item_number", "quantity", "expected_sku"
         }
+        assert "expected_sku" not in schemas["revise_order_draft_quantity"].get("required", [])
         assert (await client.call_tool("get_order_task", {})).data["status"] == "none"
         draft = (await client.call_tool("prepare_order_draft", {
             "customer": "保留客户", "items": [{"sku": "A", "quantity": 2}], "note": "保留备注"
@@ -118,9 +119,38 @@ async def test_task_tools_rebuild_context_and_edit_without_business_write(db):
     assert "submit_order_draft" not in tools
 
 
+async def test_sku_guard_rejects_wrong_row_and_keeps_ownership_and_version_checks(db):
+    async with Client(create_server(db, session_id="s1")) as client:
+        draft = (await client.call_tool("prepare_order_draft", {
+            "customer": "客户", "items": [{"sku": "A", "quantity": 2}]
+        })).data
+        args = {"draft_id": draft["draft_id"], "expected_revision": 1,
+                "item_number": 1, "quantity": 50, "expected_sku": "B"}
+        wrong = (await client.call_tool("revise_order_draft_quantity", args)).data
+        assert wrong["error"]["code"] == "draft_item_changed"
+        current = (await client.call_tool("get_order_draft", {
+            "draft_id": draft["draft_id"]
+        })).data
+        assert current["revision"] == 1 and current["inventory_effect"] == "projection"
+        changed = (await client.call_tool(
+            "revise_order_draft_quantity", {**args, "expected_sku": "A"}
+        )).data
+        assert changed["revision"] == 2 and changed["items"][0]["quantity"] == 50
+        stale = (await client.call_tool(
+            "revise_order_draft_quantity", {**args, "expected_sku": "A"}
+        )).data
+        assert stale["error"]["code"] == "draft_changed"
+    async with Client(create_server(db, session_id="other")) as client:
+        stolen = (await client.call_tool(
+            "revise_order_draft_quantity", {**args, "expected_revision": 2, "expected_sku": "A"}
+        )).data
+        assert stolen["error"]["code"] == "not_found"
+
+
 @pytest.mark.parametrize("key,value", [
     ("expected_revision", True), ("expected_revision", "1"),
     ("item_number", True), ("item_number", 1.5), ("quantity", True), ("quantity", "3"),
+    ("expected_sku", True), ("expected_sku", 123),
 ])
 async def test_quantity_tool_rejects_coerced_numbers(db, key, value):
     async with Client(create_server(db, session_id="s1")) as client:

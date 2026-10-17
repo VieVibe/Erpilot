@@ -73,6 +73,11 @@ def render_report(
     executed = [r for r in results if not _skipped(r)]
     passed = [r for r in executed if r.passed]
     cny_costs = [r.cost for r in results if r.cost is not None]
+    incomplete_metering = sum(
+        not (r.billing.complete and r.billing.estimated_amount is not None)
+        if r.billing is not None else not r.cost_complete
+        for r in executed
+    )
     lines = [
         f"# 评测回归报告 · {datetime.now().strftime('%Y-%m-%d %H:%M')}",
         "",
@@ -100,7 +105,7 @@ def render_report(
     lines += [
         f"- 总耗时：{elapsed_s:.0f}s",
         f"- 重试次数：{sum(max(0, r.attempts - 1) for r in executed)}；"
-        f"计量不完整：{sum(not r.cost_complete for r in executed)} 条"
+        f"计量不完整：{incomplete_metering} 条"
         + (f"；重试策略：{retry_policy}" if retry_policy else ""),
         "- 成本：¥ 为人民币价目估算（包含已返回 usage 的失败尝试）；"
         "计费包装运行按实际币种显示估价。中断生成及 SDK 内部重试可能缺失计量，"
@@ -143,6 +148,18 @@ def render_report(
             f"| {r.case_id} | {mark} | {', '.join(r.tool_calls) or '-'} | {r.steps} "
             f"| {tokens} | {cost} | {detail} |"
         )
+    if any(r.turn_results for r in results):
+        lines += ["", "## 多轮任务明细", "",
+                  "| 轮次 | 结果 | 工具调用 | 失败检查 | trace |",
+                  "|---|---|---|---|---|"]
+        for result in results:
+            for index, turn in enumerate(result.turn_results):
+                trace = result.turn_traces[index] if index < len(result.turn_traces) else "未执行"
+                lines.append(
+                    f"| {turn.case_id} | {'通过' if turn.passed else '失败'} | "
+                    f"{', '.join(turn.tool_calls) or '-'} | {'; '.join(turn.failed_checks)} "
+                    f"| {trace} |"
+                )
     return "\n".join(lines) + "\n"
 
 

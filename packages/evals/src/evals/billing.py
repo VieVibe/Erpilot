@@ -264,6 +264,10 @@ class BudgetedClient:
     def budget(self) -> CurrencyBudget:
         return self._budget
 
+    @property
+    def request_timeout(self) -> float | None:
+        return getattr(self._client, "request_timeout", None)
+
     def begin_case(self) -> None:
         """run_case 开头复位增量窗口。"""
         self._case_estimates = []

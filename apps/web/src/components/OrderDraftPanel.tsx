@@ -16,9 +16,10 @@ export function DraftSummary({ draft }: { draft: OrderDraft }) {
         { title: '折扣', dataIndex: 'discount', render: value => Math.round(value * 100) + '%' },
         { title: '单价', dataIndex: 'unit_price', render: money },
         { title: '小计', dataIndex: 'line_total', render: money },
-        { title: '库存前 → 后', key: 'stock', width: 110, render: (_, line) => line.stock_before + ' → ' + line.stock_after },
+        { title: '报价时库存 → 预计提交后', key: 'stock', width: 180, render: (_, line) => line.stock_before + ' → ' + line.stock_after },
       ]} />
     </div>
+    <p className="secondary-text">库存前后值为报价时测算，保存草稿不预留、不扣减库存；实际变化以订单提交结果为准。</p>
     <p><strong>总金额 {money(draft.total_amount)}</strong></p>
     <p className="secondary-text">报价有效至 <time dateTime={draft.expires_at}>{new Date(draft.expires_at).toLocaleString('zh-CN')}</time></p>
     {draft.note && <p>备注：{draft.note}</p>}{draft.order_id && <p>订单：{draft.order_id}</p>}

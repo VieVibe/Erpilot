@@ -7,7 +7,9 @@
 保证恰好以一个 StreamEnd 结束——第 4 周 FastAPI SSE 只需把事件逐个转发。
 """
 
+import asyncio
 import json
+import math
 import os
 from collections.abc import AsyncIterator, Sequence
 from dataclasses import dataclass, field
@@ -124,19 +126,19 @@ class LLMConfig:
     def from_env(cls) -> "LLMConfig":
         """按 LLM_PROVIDER 选供应商预设（默认 zhipu），base_url / model 可用 env 覆盖。
 
-        key 从该供应商对应的环境变量读取（zhipu→ZHIPU_API_KEY，
-        deepseek→DEEPSEEK_API_KEY，qwen→DASHSCOPE_API_KEY）。默认 provider 下行为
-        与旧版完全一致。
+        LLM_API_KEY 可覆盖供应商密钥，方便同一中转端点切换模型；未设置时从供应商
+        对应变量读取（zhipu→ZHIPU_API_KEY，deepseek→DEEPSEEK_API_KEY，
+        qwen→DASHSCOPE_API_KEY）。默认 provider 下行为与旧版一致。
         """
         provider = os.environ.get("LLM_PROVIDER", DEFAULT_PROVIDER).lower()
         profile = PROVIDERS.get(provider)
         if profile is None:
             known = "、".join(sorted(PROVIDERS))
             raise RuntimeError(f"未知 LLM_PROVIDER={provider!r}：可选 {known}")
-        api_key = os.environ.get(profile.api_key_env, "")
+        api_key = os.environ.get("LLM_API_KEY") or os.environ.get(profile.api_key_env, "")
         if not api_key:
             raise RuntimeError(
-                f"缺少 {profile.api_key_env}（LLM_PROVIDER={provider}）："
+                f"缺少 LLM_API_KEY 或 {profile.api_key_env}（LLM_PROVIDER={provider}）："
                 "请在 .env 中填入该供应商的 API key"
             )
         return cls(
@@ -172,9 +174,23 @@ def _strip_json_fence(text: str) -> str:
 class LLMClient:
     """对 AsyncOpenAI 的最小封装：流式补全 + usage 计量 + 工具调用 + 结构化输出。"""
 
-    def __init__(self, config: LLMConfig, client: AsyncOpenAI | None = None) -> None:
+    def __init__(
+        self, config: LLMConfig, client: AsyncOpenAI | None = None, *,
+        request_timeout: float | None = None,
+    ) -> None:
+        if request_timeout is not None and (
+            isinstance(request_timeout, bool) or not math.isfinite(request_timeout)
+            or request_timeout <= 0
+        ):
+            raise ValueError("request_timeout 须为有限正数")
         self._config = config
         self._client = client or AsyncOpenAI(api_key=config.api_key, base_url=config.base_url)
+        self._request_timeout = request_timeout
+
+    @property
+    def request_timeout(self) -> float | None:
+        """连接与整个流共享的总截止时间；None 保持调用方原有超时策略。"""
+        return self._request_timeout
 
     @property
     def config(self) -> LLMConfig:
@@ -187,6 +203,14 @@ class LLMClient:
         tools: Sequence[dict[str, Any]] | None = None,
     ) -> AsyncIterator[StreamEvent]:
         """流式补全：逐段产出 TextDelta / ReasoningDelta / ToolCall，最后恰好产出一个 StreamEnd。"""
+        async with asyncio.timeout(self._request_timeout):
+            async for event in self._stream_chat(messages, tools):
+                yield event
+
+    async def _stream_chat(
+        self, messages: Sequence[ChatCompletionMessageParam],
+        tools: Sequence[dict[str, Any]] | None = None,
+    ) -> AsyncIterator[StreamEvent]:
         extra: dict[str, Any] = {"tools": list(tools)} if tools else {}
         stream = await self._client.chat.completions.create(
             model=self._config.model,

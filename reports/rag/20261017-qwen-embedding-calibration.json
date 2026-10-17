@@ -1,0 +1,139 @@
+{
+  "embedding_model": "qwen3.7-text-embedding-flash",
+  "embedding_endpoint": "https://maas.qianwenaiapi.com/compatible-mode/v1",
+  "dimensions": 1024,
+  "chunks": 18,
+  "index_build_usage": {
+    "requests": 2,
+    "tokens": 1055
+  },
+  "calibration_usage": {
+    "requests": 2,
+    "tokens": 288
+  },
+  "fixed_query_usage": {
+    "requests": 1,
+    "tokens": 19
+  },
+  "embedding_cost": "unknown; pricing not provided",
+  "old_index_sha256": "b5b5c47d9e6d29a116afd971087fbe82c5df477e7ae66c6ea225a8863813d776",
+  "candidate_index_sha256": "2bfab2cd9255872c49dd102752a3424690e19ff6cb0fe4c5b7980df25137444a",
+  "calibration": [
+    {
+      "kind": "positive",
+      "query": "签收后几天内可以无理由退货？",
+      "expected_source": "return-policy.md",
+      "top_score": 0.8222634464886893,
+      "top_source": "return-policy.md",
+      "top_title": "七天无理由退货",
+      "expectation_met": true
+    },
+    {
+      "kind": "positive",
+      "query": "商品有质量问题，签收后多久能申请换货？",
+      "expected_source": "return-policy.md",
+      "top_score": 0.7491752363635513,
+      "top_source": "return-policy.md",
+      "top_title": "质量问题退换",
+      "expectation_met": true
+    },
+    {
+      "kind": "positive",
+      "query": "买50件商品能打几折？",
+      "expected_source": "pricing-policy.md",
+      "top_score": 0.6171841079913906,
+      "top_source": "pricing-policy.md",
+      "top_title": "数量梯度折扣",
+      "expectation_met": true
+    },
+    {
+      "kind": "positive",
+      "query": "买200件的报价是几折？",
+      "expected_source": "pricing-policy.md",
+      "top_score": 0.6042547204807651,
+      "top_source": "pricing-policy.md",
+      "top_title": "数量梯度折扣",
+      "expectation_met": true
+    },
+    {
+      "kind": "positive",
+      "query": "已经发货的订单可以直接取消吗？",
+      "expected_source": "order-policy.md",
+      "top_score": 0.7969631007586098,
+      "top_source": "order-policy.md",
+      "top_title": "已发货或已签收的订单",
+      "expectation_met": true
+    },
+    {
+      "kind": "positive",
+      "query": "订单取消后商品库存会怎么处理？",
+      "expected_source": "order-policy.md",
+      "top_score": 0.7899700407308395,
+      "top_source": "order-policy.md",
+      "top_title": "可取消的订单",
+      "expectation_met": true
+    },
+    {
+      "kind": "negative",
+      "query": "店铺每天几点营业？",
+      "expected_source": null,
+      "top_score": 0.3930305395400771,
+      "top_source": "pricing-policy.md",
+      "top_title": "价格与报价政策",
+      "expectation_met": true
+    },
+    {
+      "kind": "negative",
+      "query": "可以用哪些支付方式付款？",
+      "expected_source": null,
+      "top_score": 0.4205396378579029,
+      "top_source": "order-policy.md",
+      "top_title": "订单状态",
+      "expectation_met": true
+    },
+    {
+      "kind": "negative",
+      "query": "买家如何开发票，发票税率是多少？",
+      "expected_source": null,
+      "top_score": 0.38568531218692775,
+      "top_source": "pricing-policy.md",
+      "top_title": "下单快照价与现价的区别",
+      "expectation_met": true
+    },
+    {
+      "kind": "negative",
+      "query": "商品配送需要几天，支持哪些快递？",
+      "expected_source": null,
+      "top_score": 0.5396798687372937,
+      "top_source": "return-policy.md",
+      "top_title": "七天无理由退货",
+      "expectation_met": true
+    },
+    {
+      "kind": "negative",
+      "query": "客服电话和人工客服工作时间是什么？",
+      "expected_source": null,
+      "top_score": 0.3220973633784759,
+      "top_source": "return-policy.md",
+      "top_title": "不支持退换的情形",
+      "expectation_met": true
+    },
+    {
+      "kind": "negative",
+      "query": "会员积分怎么累计和兑换？",
+      "expected_source": null,
+      "top_score": 0.34173596767588404,
+      "top_source": "return-policy.md",
+      "top_title": "退换货政策",
+      "expectation_met": true
+    }
+  ],
+  "positive_min": 0.6042547204807651,
+  "negative_max": 0.5396798687372937,
+  "b5_cancellation_query_score": 0.6332695361306043,
+  "existing_threshold": 0.66,
+  "promoted": true,
+  "selected_threshold": 0.57,
+  "calibration_separated": true,
+  "active_index_sha256": "2bfab2cd9255872c49dd102752a3424690e19ff6cb0fe4c5b7980df25137444a"
+}
