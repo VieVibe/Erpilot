@@ -9,13 +9,16 @@ from sqlalchemy.engine import Engine
 from evals.model import StateExpectation
 
 
-def snapshot(engine: Engine) -> dict[str, list[dict]]:
+def snapshot(engine: Engine, *, all_tables: bool = False) -> dict[str, list[dict]]:
+    names = sorted(Base.metadata.tables) if all_tables else (
+        "products", "stocks", "orders", "order_items"
+    )
     with engine.connect() as connection:
         return {
             name: [dict(row) for row in connection.execute(
                 select(Base.metadata.tables[name]).order_by(*Base.metadata.tables[name].primary_key)
             ).mappings()]
-            for name in ("products", "stocks", "orders", "order_items")
+            for name in names
         }
 
 

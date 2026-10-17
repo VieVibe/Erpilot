@@ -294,6 +294,7 @@ export function phaseLabel(turn: AssistantTurn): string {
 }
 
 const TOOL_TITLES: Record<string, string> = {
+  suggest_replenishment: "生成补货建议",
   get_order_status: "查询订单",
   get_order: "查询订单",
   list_orders: "查询订单列表",
@@ -305,8 +306,15 @@ const TOOL_TITLES: Record<string, string> = {
   compute_quote: "计算报价",
   adjust_stock: "调整库存",
   create_order: "创建订单",
+  prepare_order_draft: "准备订单草稿",
+  get_order_task: "查询当前草稿任务",
+  get_order_draft: "查询订单草稿",
+  revise_order_draft: "更新订单草稿",
+  revise_order_draft_quantity: "修改草稿数量",
+  submit_order_draft: "提交订单草稿",
   cancel_order: "取消订单",
   assess_order_cancellation: "查询取消条件",
+  search_policy: "检索政策依据",
   prepare_cancel_order: "预览订单取消",
   prepare_stock_adjustment: "预览库存调整",
   set_product_status: "商品上下架",
@@ -325,6 +333,14 @@ export function toolSummary(entity: ToolEntity): string {
     return "";
   }
   if (!args || typeof args !== "object" || Array.isArray(args)) return "";
+  if (entity.name === 'revise_order_draft_quantity') {
+    const line = args.item_number, quantity = args.quantity;
+    if (typeof line === 'number' && Number.isSafeInteger(line) && line > 0 &&
+        typeof quantity === 'number' && Number.isSafeInteger(quantity) && quantity > 0) {
+      return `第 ${line} 行改为 ${quantity} 件`;
+    }
+    return '';
+  }
   const parts: string[] = [];
   const sku = args.sku;
   if (typeof sku === "string" && sku) parts.push(sku);

@@ -11,6 +11,7 @@ from openai import AsyncOpenAI
 from evals.baseline import BASELINE_CASES, run_baseline
 from evals.billing import BudgetedClient, CurrencyBudget, endpoint_rate
 from evals.policy_cases import POLICY_CASES
+from evals.replenishment_cases import REPLENISHMENT_CASES
 from evals.runner import Budget
 from evals.task_cases import TASK_CASES
 from evals.task_reference_cases import REFERENCE_CASES
@@ -26,13 +27,14 @@ def main() -> None:
                         help="按原币种计费预算运行（缺省保留旧 CNY cost 预算路径）")
     parser.add_argument("--case", action="append", default=[], help="case id，可重复；缺省完整集")
     parser.add_argument("--suite", default="baseline",
-                        choices=["baseline", "b4", "b4-reference", "b5"],
-                        help="case 集：既有基线 / b4 原 7 场景 / b4-reference 新指代 3 场景 / b5")
+                        choices=["baseline", "b4", "b4-reference", "b5", "b6"],
+                        help="case 集：baseline / b4 / b4-reference / b5 / b6 补货建议")
     parser.add_argument("--timeout", type=float, default=30,
                         help="单次请求总截止秒数，包含连接和整个流")
     args = parser.parse_args()
     suite_cases = {"baseline": BASELINE_CASES, "b4": TASK_CASES,
-                   "b4-reference": REFERENCE_CASES, "b5": POLICY_CASES}[args.suite]
+                   "b4-reference": REFERENCE_CASES, "b5": POLICY_CASES,
+                   "b6": REPLENISHMENT_CASES}[args.suite]
     cases = [c for c in suite_cases if not args.case or c.id in args.case]
     unknown = set(args.case) - {c.id for c in cases}
     if unknown or args.budget <= 0 or args.timeout <= 0:

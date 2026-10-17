@@ -36,6 +36,7 @@ def repo(seeded_db) -> ErpRepository:
 # ---- MCP server 工具面 ----
 
 EXPECTED_TOOLS = {
+    "suggest_replenishment",
     "get_order",
     "list_orders",
     "get_orders_by_sku",
@@ -63,7 +64,7 @@ async def test_server_exposes_all_readonly_tools(seeded_db) -> None:
     async with Client(create_server(seeded_db)) as client:
         tools = {t.name for t in await client.list_tools()}
     assert tools == EXPECTED_TOOLS
-    assert len(EXPECTED_TOOLS) == 18  # §4 冻结线 15~20 区间内（含政策检索）
+    assert len(EXPECTED_TOOLS) == 19  # 含政策判断与只读补货建议
 
 
 async def test_get_order_error_contract_v1(seeded_db) -> None:
@@ -343,7 +344,7 @@ async def test_write_server_exposes_full_surface(seeded_db) -> None:
     async with Client(create_server(seeded_db, include_writes=True)) as client:
         tools = {t.name for t in await client.list_tools()}
     assert tools == EXPECTED_TOOLS | WRITE_TOOLS
-    assert len(tools) == 22  # 18 只读（含政策检索）+ 4 写 区间内
+    assert len(tools) == 23  # 19 只读（含补货建议）+ 4 写
 
 
 async def test_write_error_contract_via_mcp(seeded_db, repo) -> None:

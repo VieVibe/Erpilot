@@ -65,6 +65,21 @@ export interface OrderCreationDisplay extends BusinessDisplayBase {
   total_amount?: number;
 }
 
+export interface PolicyReference {
+  source: string; title: string; text: string; score: number;
+  policy_id: string; version: string; effective_from: string; effective_until: string | null;
+}
+
+export interface PolicySearchDisplay extends BusinessDisplayBase {
+  kind: 'policy_search';
+  query: string;
+  search?: {
+    schema_version: 1; query: string; queried_at: string;
+    policy_state: 'matched' | 'no_match' | 'unavailable' | 'inactive' | 'conflict';
+    matches: PolicyReference[]; note: string;
+  };
+}
+
 export interface CancellationAssessment {
   schema_version: 1;
   assessed_at: string;
@@ -74,8 +89,7 @@ export interface CancellationAssessment {
   policy_state: 'matched' | 'no_match' | 'unavailable' | 'inactive' | 'conflict';
   decision: 'eligible' | 'ineligible' | 'needs_review';
   message: string;
-  references: {source: string; title: string; text: string; score: number;
-    policy_id: string; version: string; effective_from: string; effective_until: string | null}[];
+  references: PolicyReference[];
 }
 
 export interface CancellationAssessmentDisplay extends BusinessDisplayBase {
@@ -84,12 +98,55 @@ export interface CancellationAssessmentDisplay extends BusinessDisplayBase {
 }
 
 export type BusinessDisplay =
+  | PolicySearchDisplay
+  | ReplenishmentDisplay
   | CancellationAssessmentDisplay
   | (Omit<OrderCreationDisplay, 'kind'> & {kind: 'order_cancellation'})
   | StockQueryDisplay
   | StockAdjustmentDisplay
   | OrderCreationDisplay
   | (BusinessDisplayBase & { kind: string; [key: string]: unknown });
+
+export interface ReplenishmentItem {
+  sku: string;
+  name: string;
+  product_status: string;
+  stock_quantity: number | null;
+  sold_quantity: number | null;
+  daily_sales: number | null;
+  estimated_days_remaining: number | null;
+  target_quantity: number | null;
+  suggested_quantity: number | null;
+  stockout_before_arrival: boolean | null;
+  decision: 'reorder' | 'sufficient' | 'no_sales' | 'off_sale' | 'data_issue';
+  reason: string;
+}
+
+export interface ReplenishmentSuggestion {
+  schema_version: 1;
+  assessed_at: string;
+  window_start: string;
+  window_end: string;
+  timezone: 'Asia/Shanghai';
+  days: number;
+  coverage_days: number;
+  lead_time_days: number | null;
+  sales_basis: string;
+  formula: string;
+  assumptions: string[];
+  limitations: string[];
+  total: number;
+  returned: number;
+  offset: number;
+  limit: number;
+  has_more: boolean;
+  items: ReplenishmentItem[];
+}
+
+export interface ReplenishmentDisplay extends BusinessDisplayBase {
+  kind: 'replenishment_suggestion';
+  suggestion: ReplenishmentSuggestion;
+}
 
 export interface UsagePayload {
   prompt_tokens: number;

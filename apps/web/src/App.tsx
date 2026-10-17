@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
-import { Alert, Button, Empty, Input, Tabs, Tag, type GetProps } from "antd";
+import { Alert, Button, Empty, Input, Space, Tabs, Tag, type GetProps } from "antd";
 import { Bubble, Prompts, Sender } from "@ant-design/x";
 import { ArrowDownOutlined, ArrowUpOutlined, CheckCircleOutlined, InboxOutlined, FileTextOutlined, ShoppingOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import { WorkspaceShell } from "./components/WorkspaceShell";
@@ -47,6 +47,15 @@ const SENDER_COMPONENTS = { input: MessageInput };
 
 const SESSION_KEY = "erpilot-session-id";
 const FRESH_SESSION_KEY = "erpilot-fresh-session-id";
+const DEMO_PROMPTS: Record<string, string> = {
+  draft: '给演示客户创建草稿：A1001 10 件、B2001 20 件，备注分箱发货',
+  revise: '把当前版本的第二行改成 50 件',
+  submit: '提交当前草稿',
+  policy: '查询数量梯度折扣政策',
+  policyMiss: '查询火星移民政策',
+  cancellation: '查询 DEMO-CANCEL-001 的取消资格',
+  replenishment: '按最近 30 天销量、采购周期 7 天、到货后覆盖 14 天，给 R3001 补货建议',
+};
 
 function newSessionId(): string {
   return crypto.randomUUID?.() ?? Math.random().toString(36).slice(2);
@@ -82,6 +91,7 @@ export default function App() {
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<string>("");
   const [runtimeLabel, setRuntimeLabel] = useState("数据源未确认");
+  const [scriptedDemo, setScriptedDemo] = useState(false);
   const [error, setError] = useState<string>("");
   const [busy, setBusy] = useState(false);
   const [restoreState, setRestoreState] = useState<RestoreState>("loading");
@@ -92,6 +102,7 @@ export default function App() {
   const [activeRunId, setActiveRunId] = useState<string | null>(null);
   const lastSeqByRun = useRef(new Map<string, number>());
   const liveConnection = useRef(false);
+  const replayConnection = useRef<AbortController | null>(null);
 
   const [submittingApprovals, setSubmittingApprovals] = useState<Set<string>>(new Set());
   const approvalInFlight = useRef(new Set<string>());
@@ -256,6 +267,7 @@ export default function App() {
           updateLastAssistant(t => applyTurnEvent(t, ev));
           break;
         case "done":
+          setActiveRunId(null);
           void refreshDrafts();
           updateLastAssistant(t => applyTurnEvent(t, ev));
           setStatus("");
@@ -347,7 +359,8 @@ export default function App() {
       if (!response.ok) throw new Error("runtime unavailable");
       const runtime = await response.json();
       if (controller.signal.aborted) return;
-      const source = runtime.data_source === "mcp" ? "真实 ERP" :
+      setScriptedDemo(runtime.scripted_demo === true);
+      const source = runtime.scripted_demo === true ? "离线演示 · 临时数据" : runtime.data_source === "mcp" ? "真实 ERP" :
         runtime.data_source === "demo" ? "演示数据" : "数据源未确认";
       setRuntimeLabel(`${source} · ${runtime.writes_enabled ? "写入需审批" : "只读"}`);
       setDraftsEnabled(runtime.drafts_enabled === true);
@@ -415,8 +428,9 @@ export default function App() {
   }, [refreshSession]);
 
   useEffect(() => {
-    if (restoreState !== "ready" || !activeRunId || sessionStatus === "completed") return;
+    if (liveConnection.current || restoreState !== "ready" || !activeRunId || sessionStatus === "completed") return;
     const controller = new AbortController();
+    replayConnection.current = controller;
     const ticket = sessionRequests.current.capture();
     void consumeEvents(streamRunEvents(
       activeRunId, lastSeqByRun.current.get(activeRunId) ?? 0, controller.signal,
@@ -425,7 +439,10 @@ export default function App() {
         setError(error instanceof Error ? error.message : String(error));
       }
     });
-    return () => controller.abort();
+    return () => {
+      controller.abort();
+      if (replayConnection.current === controller) replayConnection.current = null;
+    };
   }, [restoreState, activeRunId, sessionStatus, consumeEvents]);
 
   useEffect(() => {
@@ -461,6 +478,7 @@ export default function App() {
           await submitApproval(pendingId, approved);
         } else {
           setBusy(true);
+          replayConnection.current?.abort();
           liveConnection.current = true;
           try {
             await consumeEvents(streamApprovalResume(sessionIdRef.current, pendingId, approved));
@@ -490,6 +508,7 @@ export default function App() {
     setBusy(true);
     setError("");
     setStatus("正在恢复未完成任务…");
+    replayConnection.current?.abort();
     liveConnection.current = true;
     try {
       await consumeEvents(streamInterruptedResume(sessionIdRef.current));
@@ -572,6 +591,7 @@ export default function App() {
     setError("");
     setBusy(true);
     setSessionStatus("running");
+    setActiveRunId(null);
     setTurns(prev => [
       ...prev,
       { role: "user", text: message },
@@ -581,6 +601,7 @@ export default function App() {
     scrollToEnd(true);
 
     let streamFailure: string | null = null;
+    replayConnection.current?.abort();
     liveConnection.current = true;
     try {
       await consumeEvents(streamChat(message, sessionIdRef.current));
@@ -696,14 +717,25 @@ export default function App() {
     onHistoryOpen={setHistoryOpen} onBusinessOpen={setBusinessOpen} onNewSession={startNewSession}>
     <div className="chat" ref={listRef} onScroll={onScroll}>
       <div className="conversation-content">
+        {scriptedDemo && <Alert className="demo-notice" type="info" showIcon title="离线脚本化演示"
+          description={<>使用固定指令和临时数据，重启后会话清空。政策使用关键词演示向量；此模式用于查看业务流程，不代表真实模型表现。
+            <Space wrap style={{ marginTop: 8 }}>
+              {Object.entries({draft: '创建草稿', revise: '修改第二行', submit: '提交草稿', policy: '政策证据',
+                policyMiss: '无依据拒答', cancellation: '取消资格', replenishment: '补货建议'}).map(([key, label]) =>
+                <Button key={key} size="small" disabled={inputLocked} onClick={() => setInput(DEMO_PROMPTS[key])}>{label}</Button>)}
+            </Space></>} />}
         {turns.length === 0 && restoreState !== 'recovery_failed' && <div className="welcome">
           <div className="welcome-symbol"><ThunderboltOutlined /></div>
           <h2>今天，想处理什么业务？</h2><p>查询订单、核对库存、整理报价。<br />把需求告诉我，我们一步步完成。</p>
-          <Prompts className="welcome-prompts" items={[
+          <Prompts className="welcome-prompts" items={scriptedDemo ? [
+            { key: 'draft', icon: <ShoppingOutlined />, label: '草稿到审批', description: '创建、修改，再批准建单' },
+            { key: 'policy', icon: <FileTextOutlined />, label: '查看政策证据', description: '核对来源、版本与原文' },
+            { key: 'replenishment', icon: <InboxOutlined />, label: '补货建议', description: '查看销量、库存和测算假设' },
+          ] : [
             { key: 'order', icon: <ShoppingOutlined />, label: '查询订单', description: '查看商品与订单明细' },
             { key: 'stock', icon: <InboxOutlined />, label: '核对库存', description: '确认可售数量' },
             { key: 'quote', icon: <FileTextOutlined />, label: '整理报价', description: '核对价格与商品数量' },
-          ]} onItemClick={({ data }) => setInput(data.key === 'order' ? '帮我查询订单：' : data.key === 'stock' ? '帮我查询商品库存，SKU：' : '帮我整理商品报价，商品与数量：')} />
+          ]} onItemClick={({ data }) => setInput(scriptedDemo ? DEMO_PROMPTS[String(data.key)] : data.key === 'order' ? '帮我查询订单：' : data.key === 'stock' ? '帮我查询商品库存，SKU：' : '帮我整理商品报价，商品与数量：')} />
         </div>}
         {turns.map((turn, i) => turn.role === 'user' ? <Bubble key={i} className="user-message" placement="end" content={turn.text} /> :
           <AssistantMessage key={i} turn={turn} now={now} live={busy} stalled={stalled}

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "query": "签收后多久可以申请退货？",
+  "queried_at": "2026-10-17T08:00:00Z",
+  "policy_state": "matched",
+  "note": "",
+  "matches": [
+    {
+      "source": "return-policy.md",
+      "title": "七天无理由退货",
+      "text": "签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。",
+      "score": 0.8512,
+      "policy_id": "return-policy",
+      "version": "2026-10-12.1",
+      "effective_from": "2026-10-11T16:00:00Z",
+      "effective_until": null
+    },
+    {
+      "source": "return-policy.md",
+      "title": "质量问题退换",
+      "text": "商品存在质量问题的，自签收起 15 天内可申请退换，运费由本店承担，并优先换货或全额退款。",
+      "score": 0.6315,
+      "policy_id": "return-policy",
+      "version": "2026-10-12.1",
+      "effective_from": "2026-10-11T16:00:00Z",
+      "effective_until": null
+    }
+  ]
+}

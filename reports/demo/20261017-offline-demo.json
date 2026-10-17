@@ -1,0 +1,442 @@
+{
+  "kind": "offline-scripted-demo",
+  "date": "2026-10-17",
+  "provenance": {
+    "revision": "ac5ced179c7d167af92cf50237bb22237cba6127",
+    "working_tree_dirty": true,
+    "source_sha256": "1111138a397794deeea78b9bd5423ddb2ef7b289149492c7a21567d87c74ca96"
+  },
+  "additional_source_sha256": {
+    "apps/web/package.json": "b0ba8c260f68bc1c8316a6f99a59ae8e8d6c30c1e7400b7ac4599acd5ad239c2",
+    "apps/web/package-lock.json": "c5799bf01fd984fcf77c82876fd759c9153fc34c6333cc7013759fd856a3b06f"
+  },
+  "full_python_regression": {
+    "tests": 868,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 21,
+    "passed": 847
+  },
+  "scenarios": [
+    {
+      "scenario": "quote",
+      "source": "scripted-demo",
+      "verified": true,
+      "checks": {
+        "completed": true,
+        "mutation_scope": true,
+        "tool_sequence": true,
+        "read_only": true,
+        "no_approval": true,
+        "quote": true
+      },
+      "before": 1000,
+      "after": 1000,
+      "tools": [
+        "compute_quote"
+      ],
+      "approvals": 0,
+      "turns": [
+        {
+          "prompt": "报价",
+          "completed": true,
+          "stock": {
+            "A1001": 1000,
+            "B2001": 300
+          }
+        }
+      ],
+      "trace": "traces/demo/20261017-174226-e05a89/quote/20261017-174226-69fca361.jsonl",
+      "traces": [
+        "traces/demo/20261017-174226-e05a89/quote/20261017-174226-69fca361.jsonl"
+      ],
+      "changed_tables": [],
+      "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+    },
+    {
+      "scenario": "approve",
+      "source": "scripted-demo",
+      "verified": true,
+      "checks": {
+        "completed": true,
+        "mutation_scope": true,
+        "tool_sequence": true,
+        "approval": true,
+        "inventory": true
+      },
+      "before": 1000,
+      "after": 1005,
+      "tools": [
+        "prepare_stock_adjustment",
+        "adjust_stock"
+      ],
+      "approvals": 1,
+      "turns": [
+        {
+          "prompt": "批准",
+          "completed": true,
+          "stock": {
+            "A1001": 1005,
+            "B2001": 300
+          }
+        }
+      ],
+      "trace": "traces/demo/20261017-174226-e05a89/approve/20261017-174227-282afd72.jsonl",
+      "traces": [
+        "traces/demo/20261017-174226-e05a89/approve/20261017-174227-282afd72.jsonl",
+        "traces/demo/20261017-174226-e05a89/approve/20261017-174227-82c94898.jsonl"
+      ],
+      "changed_tables": [
+        "stocks",
+        "mutation_requests",
+        "business_operations"
+      ],
+      "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+    },
+    {
+      "scenario": "deny",
+      "source": "scripted-demo",
+      "verified": true,
+      "checks": {
+        "completed": true,
+        "mutation_scope": true,
+        "tool_sequence": true,
+        "approval": true,
+        "inventory": true
+      },
+      "before": 1000,
+      "after": 1000,
+      "tools": [
+        "prepare_stock_adjustment",
+        "adjust_stock"
+      ],
+      "approvals": 1,
+      "turns": [
+        {
+          "prompt": "拒绝",
+          "completed": true,
+          "stock": {
+            "A1001": 1000,
+            "B2001": 300
+          }
+        }
+      ],
+      "trace": "traces/demo/20261017-174226-e05a89/deny/20261017-174227-e1f17d4b.jsonl",
+      "traces": [
+        "traces/demo/20261017-174226-e05a89/deny/20261017-174227-e1f17d4b.jsonl",
+        "traces/demo/20261017-174226-e05a89/deny/20261017-174227-764975af.jsonl"
+      ],
+      "changed_tables": [
+        "business_operations"
+      ],
+      "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+    },
+    {
+      "scenario": "recover",
+      "source": "scripted-demo",
+      "verified": true,
+      "checks": {
+        "completed": true,
+        "mutation_scope": true,
+        "tool_sequence": true,
+        "approval": true,
+        "inventory": true,
+        "error_recovery": true
+      },
+      "before": 1000,
+      "after": 1000,
+      "tools": [
+        "prepare_stock_adjustment",
+        "get_stock"
+      ],
+      "approvals": 0,
+      "turns": [
+        {
+          "prompt": "恢复",
+          "completed": true,
+          "stock": {
+            "A1001": 1000,
+            "B2001": 300
+          }
+        }
+      ],
+      "trace": "traces/demo/20261017-174226-e05a89/recover/20261017-174227-2bc03a5d.jsonl",
+      "traces": [
+        "traces/demo/20261017-174226-e05a89/recover/20261017-174227-2bc03a5d.jsonl"
+      ],
+      "changed_tables": [],
+      "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+    },
+    {
+      "scenario": "order",
+      "source": "scripted-demo",
+      "verified": true,
+      "checks": {
+        "completed": true,
+        "mutation_scope": true,
+        "tool_sequence": true,
+        "revision_and_total": true,
+        "draft_does_not_reserve": true,
+        "approved_version": true,
+        "orders": true,
+        "inventory": true,
+        "draft_status": true
+      },
+      "before": 1000,
+      "after": 990,
+      "tools": [
+        "prepare_order_draft",
+        "get_order_task",
+        "revise_order_draft_quantity",
+        "get_order_task",
+        "submit_order_draft"
+      ],
+      "approvals": 1,
+      "turns": [
+        {
+          "prompt": "给演示客户创建草稿：A1001 10 件、B2001 20 件，备注分箱发货",
+          "completed": true,
+          "stock": {
+            "A1001": 1000,
+            "B2001": 300
+          }
+        },
+        {
+          "prompt": "把当前版本的第二行改成 50 件",
+          "completed": true,
+          "stock": {
+            "A1001": 1000,
+            "B2001": 300
+          }
+        },
+        {
+          "prompt": "提交当前草稿",
+          "completed": true,
+          "stock": {
+            "A1001": 990,
+            "B2001": 250
+          }
+        }
+      ],
+      "trace": "traces/demo/20261017-174226-e05a89/order/20261017-174228-50193397.jsonl",
+      "traces": [
+        "traces/demo/20261017-174226-e05a89/order/20261017-174228-50193397.jsonl",
+        "traces/demo/20261017-174226-e05a89/order/20261017-174228-cbd621fb.jsonl",
+        "traces/demo/20261017-174226-e05a89/order/20261017-174228-a2245432.jsonl",
+        "traces/demo/20261017-174226-e05a89/order/20261017-174228-54b5d0ae.jsonl"
+      ],
+      "changed_tables": [
+        "stocks",
+        "orders",
+        "mutation_requests",
+        "order_drafts",
+        "order_items"
+      ],
+      "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+    },
+    {
+      "scenario": "order_denied",
+      "source": "scripted-demo",
+      "verified": true,
+      "checks": {
+        "completed": true,
+        "mutation_scope": true,
+        "tool_sequence": true,
+        "revision_and_total": true,
+        "draft_does_not_reserve": true,
+        "approved_version": true,
+        "orders": true,
+        "inventory": true,
+        "draft_status": true
+      },
+      "before": 1000,
+      "after": 1000,
+      "tools": [
+        "prepare_order_draft",
+        "get_order_task",
+        "revise_order_draft_quantity",
+        "get_order_task",
+        "submit_order_draft"
+      ],
+      "approvals": 1,
+      "turns": [
+        {
+          "prompt": "给演示客户创建草稿：A1001 10 件、B2001 20 件，备注分箱发货",
+          "completed": true,
+          "stock": {
+            "A1001": 1000,
+            "B2001": 300
+          }
+        },
+        {
+          "prompt": "把当前版本的第二行改成 50 件",
+          "completed": true,
+          "stock": {
+            "A1001": 1000,
+            "B2001": 300
+          }
+        },
+        {
+          "prompt": "提交当前草稿",
+          "completed": true,
+          "stock": {
+            "A1001": 1000,
+            "B2001": 300
+          }
+        }
+      ],
+      "trace": "traces/demo/20261017-174226-e05a89/order_denied/20261017-174228-47aed9d9.jsonl",
+      "traces": [
+        "traces/demo/20261017-174226-e05a89/order_denied/20261017-174228-47aed9d9.jsonl",
+        "traces/demo/20261017-174226-e05a89/order_denied/20261017-174229-de518cac.jsonl",
+        "traces/demo/20261017-174226-e05a89/order_denied/20261017-174229-24ffed06.jsonl",
+        "traces/demo/20261017-174226-e05a89/order_denied/20261017-174229-ed0c2ff5.jsonl"
+      ],
+      "changed_tables": [
+        "order_drafts"
+      ],
+      "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+    },
+    {
+      "scenario": "policy",
+      "source": "scripted-demo",
+      "verified": true,
+      "checks": {
+        "completed": true,
+        "mutation_scope": true,
+        "tool_sequence": true,
+        "read_only": true,
+        "no_approval": true,
+        "evidence": true
+      },
+      "before": 1000,
+      "after": 1000,
+      "tools": [
+        "search_policy"
+      ],
+      "approvals": 0,
+      "turns": [
+        {
+          "prompt": "查询数量梯度折扣政策",
+          "completed": true,
+          "stock": {
+            "A1001": 1000,
+            "B2001": 300
+          }
+        }
+      ],
+      "trace": "traces/demo/20261017-174226-e05a89/policy/20261017-174229-87705908.jsonl",
+      "traces": [
+        "traces/demo/20261017-174226-e05a89/policy/20261017-174229-87705908.jsonl"
+      ],
+      "changed_tables": [],
+      "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+    },
+    {
+      "scenario": "policy_miss",
+      "source": "scripted-demo",
+      "verified": true,
+      "checks": {
+        "completed": true,
+        "mutation_scope": true,
+        "tool_sequence": true,
+        "read_only": true,
+        "no_approval": true,
+        "evidence": true
+      },
+      "before": 1000,
+      "after": 1000,
+      "tools": [
+        "search_policy"
+      ],
+      "approvals": 0,
+      "turns": [
+        {
+          "prompt": "查询火星移民政策",
+          "completed": true,
+          "stock": {
+            "A1001": 1000,
+            "B2001": 300
+          }
+        }
+      ],
+      "trace": "traces/demo/20261017-174226-e05a89/policy_miss/20261017-174229-1878b8b3.jsonl",
+      "traces": [
+        "traces/demo/20261017-174226-e05a89/policy_miss/20261017-174229-1878b8b3.jsonl"
+      ],
+      "changed_tables": [],
+      "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+    },
+    {
+      "scenario": "cancellation",
+      "source": "scripted-demo",
+      "verified": true,
+      "checks": {
+        "completed": true,
+        "mutation_scope": true,
+        "tool_sequence": true,
+        "read_only": true,
+        "no_approval": true,
+        "eligible": true
+      },
+      "before": 1000,
+      "after": 1000,
+      "tools": [
+        "assess_order_cancellation"
+      ],
+      "approvals": 0,
+      "turns": [
+        {
+          "prompt": "查询 DEMO-CANCEL-001 的取消资格",
+          "completed": true,
+          "stock": {
+            "A1001": 1000,
+            "B2001": 300
+          }
+        }
+      ],
+      "trace": "traces/demo/20261017-174226-e05a89/cancellation/20261017-174230-c29a6652.jsonl",
+      "traces": [
+        "traces/demo/20261017-174226-e05a89/cancellation/20261017-174230-c29a6652.jsonl"
+      ],
+      "changed_tables": [],
+      "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+    },
+    {
+      "scenario": "replenishment",
+      "source": "scripted-demo",
+      "verified": true,
+      "checks": {
+        "completed": true,
+        "mutation_scope": true,
+        "tool_sequence": true,
+        "read_only": true,
+        "no_approval": true,
+        "calculation": true
+      },
+      "before": 1000,
+      "after": 1000,
+      "tools": [
+        "suggest_replenishment"
+      ],
+      "approvals": 0,
+      "turns": [
+        {
+          "prompt": "按最近 30 天销量、采购周期 7 天、到货后覆盖 14 天，给 R3001 补货建议",
+          "completed": true,
+          "stock": {
+            "A1001": 1000,
+            "B2001": 300
+          }
+        }
+      ],
+      "trace": "traces/demo/20261017-174226-e05a89/replenishment/20261017-174230-25099961.jsonl",
+      "traces": [
+        "traces/demo/20261017-174226-e05a89/replenishment/20261017-174230-25099961.jsonl"
+      ],
+      "changed_tables": [],
+      "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+    }
+  ],
+  "note": "Scripted model and keyword vectors; these are engineering checks, not live-model evaluation results."
+}

@@ -15,7 +15,8 @@ import json
 import logging
 from typing import Any
 
-from agent_core.policy_display import assessment_fields
+from agent_core.policy_display import assessment_fields, policy_search_fields
+from agent_core.replenishment_display import replenishment_fields
 
 logger = logging.getLogger("agent_core.display")
 
@@ -75,6 +76,8 @@ def build_display(
 
 def _display(kind: str, outcome: str, args: dict, **fields: Any) -> dict[str, Any]:
     out: dict[str, Any] = {"version": DISPLAY_VERSION, "kind": kind, "outcome": outcome}
+    if kind == "policy_search" and isinstance(args.get("query"), str) and args["query"].strip():
+        out["query"] = args["query"].strip()
     sku = args.get("sku")
     if isinstance(sku, str) and sku:
         out["sku"] = sku
@@ -132,6 +135,8 @@ def _order_cancellation_fields(args: dict, result: dict) -> dict[str, Any] | Non
 
 
 _BUILDERS = {
+    "search_policy": {"kind": "policy_search", "fields": policy_search_fields},
+    "suggest_replenishment": {"kind": "replenishment_suggestion", "fields": replenishment_fields},
     "assess_order_cancellation": {"kind": "cancellation_assessment", "fields": assessment_fields},
     "check_stock": {"kind": "stock_query", "fields": _stock_query_fields},
     "get_stock": {"kind": "stock_query", "fields": _stock_query_fields},

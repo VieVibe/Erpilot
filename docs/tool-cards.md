@@ -12,6 +12,13 @@
 
 ## 错误契约 v1
 
+### suggest_replenishment
+- 用途：只读补货建议，不采购、不调整库存、不申请审批
+- 参数：`days=30`（1–365）、`coverage_days=14`（到货后覆盖 1–180 天）、`lead_time_days=null`（未知采购周期，提供时 0–180）、`skus=null`（最多 50 个明确 SKU）、`limit=20`（1–50）、`offset=0`
+- 返回：北京时间半开统计窗口、有效销量口径、计算公式、假设和限制；`total/returned/has_more/items`。每行含当前库存、销量、日均销量、预计可售天数、目标量、建议量、到货前断货风险与原因
+- 计算：目标量向上取整；采购周期未知时只按覆盖天数计算，明确未计采购等待需求。零销量/下架/数据异常的建议量为 null，不能解读为 0。状态为 `reorder/sufficient/no_sales/off_sale/data_issue`
+- 错误：`invalid_argument`、`not_found`；统计当前有效订单状态，不计待付款、取消和退款；结果不是历史库存回测或需求预测
+
 所有业务错误统一为：
 
 ```json
@@ -215,7 +222,8 @@ API 的 MCP 组合层绑定可信会话标识，不在工具参数中接受 `ses
 ### search_policy
 - 用途：检索店铺政策片段，依据返回内容作答并注明来源（不臆造政策）
 - 参数：`query`（政策问题/关键词）、`k`（返回片段数 1~5，默认 3）
-- 返回：`{"matches": [{"source", "title", "text", "score"}]}`；无命中时 `matches` 为空并附拒答提示
+- 返回：`schema_version=1`、规范化 `query`、带时区的 `queried_at`、`policy_state`、`matches` 和 `note`；每条引用含 `source/title/text/score`、`policy_id/version` 和生效区间。无命中时 `matches` 为空并附拒答提示。
+- 网页：默认展开检索证据卡，按编号展示原文、版本和检索相似度，高亮查询在原文中的字面匹配；相似度不作为置信度。会话恢复保留原查询时间和引用，不重新检索。旧版或非法展示契约回退原始详情，不补造时间或证据。见 [回显验收](../reports/acceptance/2026-10-17-rag-evidence.md)。
 - 错误：`invalid_argument`（空 query / k 越界）、`policy_unavailable`（索引未构建、政策内容与索引不一致或嵌入 key 未配置，hint 指向 `uv run --env-file .env --package rag python -m rag build`）
 
 ## 写操作（include_writes=True 才注册；ADR-0005）

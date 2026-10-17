@@ -4,6 +4,8 @@
 
 **一句话**：运行在 mini-ERP（商品 / 库存 / 订单）上的业务智能体：FastMCP 工具层 + 分级人工审批（HITL）+ 全程评测驱动；前端提供流式对话、工具时间线与审批卡片。
 
+**求职演示入口**：[三分钟本地演示指南](docs/demo-guide.md)。无需模型密钥或 PostgreSQL，使用临时数据库展示草稿修改 → 指定版本审批 → 建单，以及政策证据、无依据拒答和补货建议。脚本化模型与关键词向量仅用于流程演示；真实模型结果见下方独立验收记录。
+
 ## 为什么叫 Erpilot
 
 ERP + (co)pilot。产品隐喻是一位**掌柜**：掌柜打理店铺日常——查库存、对订单、算报价，样样精通；但**动账动货的事，必须请示东家**。
@@ -69,15 +71,18 @@ uv run python -m evals --budget 0.02 --case app-01 --case app-02  # 定点报告
 ### 无密钥演示与写入可靠性
 
 ```bash
-uv run python scripts/demo.py                  # 报价 / 批准 / 拒绝 / 错误恢复
+uv run python scripts/demo.py                  # 十个离线场景，逐项断言并保存 trace
+uv run python scripts/demo.py --scenario order --scenario replenishment
 # 浏览器演示：先在 apps/web 中 npm ci && npm run build，再回到仓库根目录
 uv run python scripts/demo.py --serve --port 8765
-# 打开 http://127.0.0.1:8765；输入“报价”“批准”“拒绝”“恢复”并点击审批按钮
+# 打开 http://127.0.0.1:8765；使用页面演示按钮填入指令并发送
+# 草稿 → 修改第二行 → 提交草稿 → 核对版本后批准/拒绝；另有政策证据与补货建议
 ```
 
-该演示使用脚本化模型，执行真实 loop → MCP → 审批 → 临时 SQLite；
-不消耗模型 token，不改业务库，也不代表真实模型成功率。trace 与断言结果落
-`traces/demo/`，浏览器 trace 落 `traces/browser-demo/`。
+该演示使用脚本化模型和关键词演示向量，执行正式 API → LangGraph → MCP → 审批 → 临时 SQLite；
+不消耗模型 token，不改已有业务与会话库，也不代表真实模型成功率或嵌入质量。trace 与逐项断言结果落
+`traces/demo/`，浏览器 trace 落 `traces/browser-demo/`。刷新页面可恢复当前进程内的历史与审批；重启后清空。
+`npm --prefix apps/web run test:demo` 对构建产物和真实离线 API 运行浏览器验收。完整命令与讲解顺序见[演示指南](docs/demo-guide.md)。
 
 四个写工具支持 `client_token`：同键同参数返回原结果，同键不同参数报
 `idempotency_conflict`；bridge 自动为单次调用生成并复用 token。业务变更与
@@ -101,6 +106,8 @@ M1 各周验收入口：第 1–3 周为 `python -m agent_core`（最简演示�
 
 ## 下一阶段规划
 
+B6 已实现第一版只读补货建议。设置 `ERPILOT_TOOLS=mcp` 后可问「按最近 30 天销量、采购周期 7 天、到货后覆盖 14 天，哪些商品需要补货？」；工具按当前库存和有效订单件数计算目标量、建议量及预计可售天数，网页展示统计窗口、假设和限制。采购周期未知时明确未计入采购等待需求；零销量、下架及异常库存不伪造建议数量。不会采购或调整库存。独立 `--suite b6` 七场景已接入固定时点/临时库、全表零变更和原币种预算；此次仅完成离线工程验收，真实模型表现仍待单独验证。见 [B6 设计](docs/superpowers/specs/2026-10-17-replenishment-design.md)与[验收记录](reports/acceptance/2026-10-17-replenishment.md)。B4 真实复测及未知用量预算继续独立保留。
+
 功能深化路线见 [业务里程碑与后续路径](docs/business-roadmap.md)：计价一致 → 订单草稿与审批闭环 → 业务审批摘要 → 多轮任务与历史会话 → 业务 RAG → 补货建议。本阶段暂不考虑部署。B1 计价一致已完成；B2 支持会话草稿、多商品编辑和固定版本审批，提交时重新校验报价与库存，同一草稿重复提交只建一单。实现和验收入口见 [B2 订单草稿计划](docs/superpowers/plans/2026-10-11-order-draft.md)。
 
 使用订单草稿页面需设置 `ERPILOT_TOOLS=mcp`；保存草稿不扣库存。`ERPILOT_WRITES=true` 且审批启用时才可提交建单。草稿每版有效 30 分钟，价格或库存变化后需刷新并重新确认；跨会话草稿不可读取或提交。直接调用独立 MCP 的原始 `create_order` 仍按执行时现价建单，审批由调用方负责。
@@ -114,6 +121,8 @@ B4 新增独立多轮模型评测入口：`uv run python -m evals --suite b4 --b
 2026-10-17 草稿增量区分明确当前行号与旧展示歧义，数量修改可绑定 `expected_sku`；草稿响应及页面明确库存是报价时预计值，保存不预留、不扣减。独立 `--suite b4-reference` 三场景七轮保留旧 B4 原判分；首轮 GLM 1/3、DeepSeek 2/3，修复后 GLM 诊断遇到新连接错误、usage 未知，预算已冻结，最终源码的完整真实验收仍待补。离线全仓 765 项、前端 77 项和浏览器 13 项通过。评测 `--timeout` 已补为连接与整个流的总截止时间，超时缺用量后停止后续请求。详见[草稿增量验收](reports/acceptance/2026-10-17-draft-reference-contract.md)。
 
 B5 已接通只读取消资格查询：`assess_order_cancellation` 返回订单事实、有效政策版本和证据缺口，网页可展开引用；查询不取消订单、不申请审批。明确取消仍使用原预览与审批流程。首次[模型对照验收](reports/acceptance/2026-10-12-model-comparison.md)中，GLM 完整基线 35/35（≈¥0.033）、DeepSeek 34/35（≈$0.021，multi-06 步数超限），B5 七用例 GLM 5/7、DeepSeek 6/7，原失败保留。2026-10-17 的本轮 B5 复测两模型均 7/7，见下文；原 35 条 baseline 未在本轮重跑。对照入口 `uv run python -m evals.compare --strict <报告A> <报告B>`（币种各自列示）。仅补元数据且片段完全一致时可运行 `uv run --package rag python -m rag refresh` 复用原向量；正文或嵌入模型变化须重新 build。
+
+政策问答的 `search_policy` 现以证据卡直接回显查询时间、编号原文、来源、版本、生效区间与检索分数，并高亮查询词的字面匹配；取消资格引用共用相同展示。历史恢复保留原快照，无命中或检索不可用时明确显示证据缺口。此次完成离线工程与浏览器验证，未新增真实模型或嵌入请求。见 [RAG 证据回显验收](reports/acceptance/2026-10-17-rag-evidence.md)。
 
 2026-10-17 补强 B5 选单与回答规则：多笔订单先由用户确认目标，等待选单时不检索 / 概述政策；资格答复说明审批与未执行边界。新评测 JSON 保存 `visible_text`，支持直接复核回答与中断片段。用户提供新嵌入配置后，已重建 `qwen3.7-text-embedding-flash` 索引并校准阈值至 0.57（12/12），配置示例见 `.env.example`。完整 B5 **GLM 7/7、DeepSeek 7/7**，strict 对照通过，零写入尝试；一次完整通过不代表长期稳定率。见[B5 修复验收](reports/acceptance/2026-10-17-b5-response-reliability.md)与[嵌入校准](reports/rag/20261017-qwen-embedding-calibration.md)。
 

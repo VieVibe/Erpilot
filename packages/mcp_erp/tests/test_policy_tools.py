@@ -1,4 +1,4 @@
-from datetime import timedelta, timezone
+from datetime import datetime, timedelta, timezone
 
 import pytest
 from erp_store.seed import seed_database
@@ -26,7 +26,10 @@ async def test_search_policy_metadata(seeded_db):
     async with Client(
         create_server(seeded_db, policy_resolver=lambda: (index, embedder))
     ) as client:
-        result = (await client.call_tool("search_policy", {"query": "政策"})).data
+        result = (await client.call_tool("search_policy", {"query": " 政策 "})).data
+    assert result["schema_version"] == 1
+    assert result["query"] == "政策"
+    assert datetime.fromisoformat(result["queried_at"]).utcoffset() == timedelta(0)
     assert result["matches"][0]["version"] == "2026-10-12.1"
     assert result["matches"][0]["effective_from"].endswith("Z")
     assert result["matches"][0]["policy_id"]

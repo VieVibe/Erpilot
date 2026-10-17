@@ -8,6 +8,8 @@ import type { AssistantTurn, ToolEntity } from "../session";
 import { toolStatusLabel, toolSummary, toolTitle } from "../session";
 import { BusinessResultCard, isUsableDisplay } from "./BusinessResultCard";
 import { isUsableAssessmentDisplay } from './CancellationAssessmentCard';
+import { isUsableReplenishmentDisplay } from './ReplenishmentCard';
+import { isUsablePolicySearchDisplay } from './PolicySearchCard';
 import { MarkdownContent } from "./MarkdownContent";
 import { ReasoningPanel } from "./ReasoningPanel";
 import { WorkTimeline } from "./WorkTimeline";
@@ -44,7 +46,7 @@ function ToolCard({
 }) {
   const summary = toolSummary(entity);
   return (
-    <details className="tool" open={!isSettled(entity) || isUsableAssessmentDisplay(entity.display)}>
+    <details className="tool" open={!isSettled(entity) || isUsableAssessmentDisplay(entity.display) || isUsableReplenishmentDisplay(entity.display) || isUsablePolicySearchDisplay(entity.display)}>
       <summary>
         <span className={`tool-icon ${entity.status}`}>{STATUS_ICON[entity.status]}</span>
         <span className="tool-name">{toolTitle(entity.name)}</span>
