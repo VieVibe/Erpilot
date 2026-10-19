@@ -4,7 +4,15 @@
 
 **一句话**：运行在 mini-ERP（商品 / 库存 / 订单）上的业务智能体：FastMCP 工具层 + 分级人工审批（HITL）+ 全程评测驱动；前端提供流式对话、工具时间线与审批卡片。
 
+**当前入口（2026-10-19）**：[项目状态](docs/project-status.md) · [作品与可复现源码包](docs/portfolio-overview.md) · [三个案例讲解](docs/interview-cases.md) · [上下文工程实验](docs/context-experiment.md)。当前推进长历史 / 大工具响应对照和求职展示整理；政策问答最新严格结果仍为两模型各 11/13。
+
 **求职演示入口**：[三分钟本地演示指南](docs/demo-guide.md)。无需模型密钥或 PostgreSQL，使用临时数据库展示草稿修改 → 指定版本审批 → 建单，以及政策证据、无依据拒答和补货建议。脚本化模型与关键词向量仅用于流程演示；真实模型结果见下方独立验收记录。
+
+**岗位对齐（2026-10-19）**：[近期岗位要求与项目证据](docs/job-readiness-2026-10-19.md)。新增[评测质量门槛](docs/eval-quality-gates.md)：固定用例覆盖、逐轮完整性、危险工具请求、未知计量与同模型跨版本回退检查，支持独立离线审查与 CI。[B6 真实验收](reports/acceptance/2026-10-19-live-model-validation.md)最终 GLM / DeepSeek 同源码各 7/7；[B4 指代专项最终验收](reports/acceptance/2026-10-19-b4-final-validation.md)两模型各 3/3 场景、7/7 轮，gate 与 strict 对照均通过，原失败保留。旧 B4 本地账目复核完成，供应商核销按用户要求跳过，未知费用与冻结预算保留。
+
+**检索实验**：[36 条冻结问答与 BM25/RRF 对照](docs/retrieval-experiment.md)。12 条 dev 校准、24 条 test 评估，记录召回、证据精度、语料外拒答与本地排名延迟。已完成真实查询向量采集（4 请求 / 1,038 token）与完整对照：当前向量策略 test Recall@3 96.9%、语料外空返回 87.5%，RRF 未超过当前策略，默认检索保留；这是片段检索结果，不是 36 条模型回答成功率。
+
+**回答可靠性**：[最新结构化答复与续跑验收](reports/acceptance/2026-10-19-structured-policy-and-resume.md)已实现本轮引用绑定、原文 / 版本 / 哈希校验和程序渲染；两模型完整十三例均严格 11/13，门槛仍未达成。剩余为检索受阻后的结束协议和背景条件分项；旧无观测事实声明、超时与冻结费用保留在[早期验收](reports/acceptance/2026-10-19-rag-answer-reliability.md)，不与最新结果混算。
 
 ## 为什么叫 Erpilot
 
@@ -106,7 +114,9 @@ M1 各周验收入口：第 1–3 周为 `python -m agent_core`（最简演示�
 
 ## 下一阶段规划
 
-B6 已实现第一版只读补货建议。设置 `ERPILOT_TOOLS=mcp` 后可问「按最近 30 天销量、采购周期 7 天、到货后覆盖 14 天，哪些商品需要补货？」；工具按当前库存和有效订单件数计算目标量、建议量及预计可售天数，网页展示统计窗口、假设和限制。采购周期未知时明确未计入采购等待需求；零销量、下架及异常库存不伪造建议数量。不会采购或调整库存。独立 `--suite b6` 七场景已接入固定时点/临时库、全表零变更和原币种预算；此次仅完成离线工程验收，真实模型表现仍待单独验证。见 [B6 设计](docs/superpowers/specs/2026-10-17-replenishment-design.md)与[验收记录](reports/acceptance/2026-10-17-replenishment.md)。B4 真实复测及未知用量预算继续独立保留。
+当前主线是[长对话与大工具响应上下文实验](docs/context-experiment.md)和[作品整理](docs/portfolio-overview.md)。候选策略仅显式启用，保留完整原始历史，真实用量和本地估算分别报告；本阶段沿用本地演示范围。下述 B1–B6 段落是已实施能力及历史批次入口，最新总状态以[项目状态页](docs/project-status.md)为准。
+
+B6 已实现第一版只读补货建议。设置 `ERPILOT_TOOLS=mcp` 后可问「按最近 30 天销量、采购周期 7 天、到货后覆盖 14 天，哪些商品需要补货？」；工具按当前库存和有效订单件数计算目标量、建议量及预计可售天数，网页展示统计窗口、假设和限制。采购周期未知时明确未计入采购等待需求；零销量、下架及异常库存不伪造建议数量。不会采购或调整库存。独立 `--suite b6` 七场景使用固定时点/临时库、全表零变更和原币种预算；2026-10-19 真实验收最终 GLM / DeepSeek 同源码各 7/7，gate 与 strict 通过。下架时明确不建议补货、不推演假设数量，所有分支统一说明未采购、未调整库存；原始失败和措辞敏感失败均保留。见 [B6 设计](docs/superpowers/specs/2026-10-17-replenishment-design.md)、[工程验收](reports/acceptance/2026-10-17-replenishment.md)与[真实验收](reports/acceptance/2026-10-19-live-model-validation.md)。一组通过不代表长期稳定率。B4 指代专项已独立完成最终真实验收，旧未知用量与冻结预算保留。
 
 功能深化路线见 [业务里程碑与后续路径](docs/business-roadmap.md)：计价一致 → 订单草稿与审批闭环 → 业务审批摘要 → 多轮任务与历史会话 → 业务 RAG → 补货建议。本阶段暂不考虑部署。B1 计价一致已完成；B2 支持会话草稿、多商品编辑和固定版本审批，提交时重新校验报价与库存，同一草稿重复提交只建一单。实现和验收入口见 [B2 订单草稿计划](docs/superpowers/plans/2026-10-11-order-draft.md)。
 
@@ -118,7 +128,7 @@ B4 支持从持久化草稿继续多轮任务：单份未提交草稿可找回�
 
 B4 新增独立多轮模型评测入口：`uv run python -m evals --suite b4 --budget 0.05 --budget-currency CNY --timeout 60`。七个场景共十五轮覆盖行号指代、连续修改、多草稿澄清、指定目标、丢失聊天后的恢复、旧版本商品顺序及会话隔离；报告逐轮记录可见原文、工具、草稿状态和 trace。2026-10-17 新批次 **GLM 7/7、DeepSeek 6/7，均十五轮完整执行**，同源码 strict 对照通过；DeepSeek 在商品顺序变化后先澄清而未修改，原门槛未通过。旧 GLM 超时已完成本地计量审计，用户补充费用 USD 0.000222，原缺失 usage 保留。见[本轮计量与对照验收](reports/acceptance/2026-10-17-b4-model-comparison.md)；[2026-10-16 原始失败与 DeepSeek 7/7 记录](reports/acceptance/2026-10-16-task-model-evaluation.md)不合并成功率。DeepSeek 运行须使用 USD 预算。
 
-2026-10-17 草稿增量区分明确当前行号与旧展示歧义，数量修改可绑定 `expected_sku`；草稿响应及页面明确库存是报价时预计值，保存不预留、不扣减。独立 `--suite b4-reference` 三场景七轮保留旧 B4 原判分；首轮 GLM 1/3、DeepSeek 2/3，修复后 GLM 诊断遇到新连接错误、usage 未知，预算已冻结，最终源码的完整真实验收仍待补。离线全仓 765 项、前端 77 项和浏览器 13 项通过。评测 `--timeout` 已补为连接与整个流的总截止时间，超时缺用量后停止后续请求。详见[草稿增量验收](reports/acceptance/2026-10-17-draft-reference-contract.md)。
+2026-10-17 草稿增量区分明确当前行号与旧展示歧义，数量修改可绑定 `expected_sku`；草稿响应及页面明确库存是报价时预计值，保存不预留、不扣减。独立 `--suite b4-reference` 三场景七轮保留旧 B4 原判分；首轮 GLM 1/3、DeepSeek 2/3，修复后 GLM 诊断遇到连接错误、usage 未知，原预算冻结。2026-10-19 独立批次的[最终真实验收](reports/acceptance/2026-10-19-b4-final-validation.md)两模型同源码均 **3/3 场景、7/7 轮**，gate 与 strict 通过，共 32 次请求且 usage 完整，估价分别 CNY 0.011127 / USD 0.005503。旧账单本地证据复核一致，用户选择跳过供应商核销，原未知金额继续保留。评测 `--timeout` 约束连接与整个流，缺用量后停止后续请求。原实现与失败见[草稿增量验收](reports/acceptance/2026-10-17-draft-reference-contract.md)。
 
 B5 已接通只读取消资格查询：`assess_order_cancellation` 返回订单事实、有效政策版本和证据缺口，网页可展开引用；查询不取消订单、不申请审批。明确取消仍使用原预览与审批流程。首次[模型对照验收](reports/acceptance/2026-10-12-model-comparison.md)中，GLM 完整基线 35/35（≈¥0.033）、DeepSeek 34/35（≈$0.021，multi-06 步数超限），B5 七用例 GLM 5/7、DeepSeek 6/7，原失败保留。2026-10-17 的本轮 B5 复测两模型均 7/7，见下文；原 35 条 baseline 未在本轮重跑。对照入口 `uv run python -m evals.compare --strict <报告A> <报告B>`（币种各自列示）。仅补元数据且片段完全一致时可运行 `uv run --package rag python -m rag refresh` 复用原向量；正文或嵌入模型变化须重新 build。
 
@@ -147,6 +157,8 @@ M6–8 的 LangGraph + PostgreSQL HITL 已实施。基线验收见[2026-10-07 �
 - 系列文章发布于个人站点 [Vie](https://vie-vibe.cn)，文稿随仓库维护：
   1. 《手写 Agent Loop：从一次 API 调用到多步任务》—— [`docs/articles/01-handwritten-agent-loop.md`](docs/articles/01-handwritten-agent-loop.md)
 - 撰写规则见 [`docs/articles/writing-rules.md`](docs/articles/writing-rules.md)（禁虚构、客观口吻、技术正确性、发布前核对清单）
+
+政策答复现支持本轮证据绑定的结构化选证与程序原文渲染；真实验收可按用例分段续跑，上游中断与模型失败分别留证，未知费用保留。最新完整两模型均严格 **11/13**，质量门槛未达成；实现、费用和剩余失败见[结构化答复与续跑验收](reports/acceptance/2026-10-19-structured-policy-and-resume.md)，操作方式见[运行契约](docs/resumable-grounding-evaluation.md)。
 
 ## 崩溃恢复与对账
 

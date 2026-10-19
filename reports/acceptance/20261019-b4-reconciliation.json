@@ -1,0 +1,854 @@
+{
+  "audit_id": "20261019-b4-reconciliation",
+  "recorded_at": "2026-10-19T02:24:15.649539+00:00",
+  "method": "Rehash original audits/reports/traces; pair each step_start with same trace/run_id/step step_end; quote only step_end usage once; do not count run_end rollups. Assert exact match to original per-request records and budget spent. Missing usage remains unknown.",
+  "status": "local_evidence_verified_provider_reconciliation_skipped_by_user",
+  "records": [
+    {
+      "original_audit": "reports/acceptance/2026-10-17-b4-old-usage-audit.json",
+      "original_audit_sha256": "b8905a18d09f1cbdcba6995a4d48becac5f194a27775299cc1228f9f7445db58",
+      "source_report": "reports/evals/20261016-171156-422cd2.json",
+      "source_report_sha256": "079c5c577335113ab69134d5edac4374bd9060cfca16fa71479cc81eb0d84a1c",
+      "originals_verified": true,
+      "request_count": 22,
+      "metered_requests": 21,
+      "unmetered_requests": 1,
+      "known_estimate": {
+        "amount": "0.013707",
+        "currency": "CNY",
+        "basis": "sum of per-request Decimal estimates, not provider bill"
+      },
+      "prompt_tokens": 106002,
+      "completion_tokens": 10386,
+      "missing_requests": [
+        {
+          "trace": "20261016-171715-5a061b97.jsonl",
+          "run_id": "de4fb45602c3",
+          "step": 2,
+          "start": "2026-10-16T17:17:19.042+08:00",
+          "end": null,
+          "usage": null
+        }
+      ],
+      "traces": [
+        {
+          "path": "F:/VIE/Erpilot/traces/evals/20261016-171156-f539abc6.jsonl",
+          "sha256": "daf35fb88d7ea71d9e30791e055dea1929024a534d8c0ec24f9083ae1935074f"
+        },
+        {
+          "path": "F:/VIE/Erpilot/traces/evals/20261016-171249-0b8842f9.jsonl",
+          "sha256": "ad4a5554513d4d296c398344c542fd6cf4908d864168b064725ba1d56a7c1c5e"
+        },
+        {
+          "path": "F:/VIE/Erpilot/traces/evals/20261016-171315-eac2bce0.jsonl",
+          "sha256": "cbc55231cc0d0dca38f0030e4a6c5f45d05bd18fdd7ea0dc2a07e84bdb678805"
+        },
+        {
+          "path": "F:/VIE/Erpilot/traces/evals/20261016-171332-209d7a63.jsonl",
+          "sha256": "a5c91e597ac58144253ba9914470eff252ced03160c0387966d8790c59f79f31"
+        },
+        {
+          "path": "F:/VIE/Erpilot/traces/evals/20261016-171514-1228129c.jsonl",
+          "sha256": "50627c3911b08c93a00d637c70504d5306826242098d449e9cc01f70b916a165"
+        },
+        {
+          "path": "F:/VIE/Erpilot/traces/evals/20261016-171605-50449a17.jsonl",
+          "sha256": "22a268df9d10b5d64ea57ea69b1c41ed4da9a41e20d2c00e0f8c2d5339462b9f"
+        },
+        {
+          "path": "F:/VIE/Erpilot/traces/evals/20261016-171655-d595dabe.jsonl",
+          "sha256": "e7db602d14237e79dce0e9a41e83283a3ec642c7c4199ed4973b9caa611ffafd"
+        },
+        {
+          "path": "F:/VIE/Erpilot/traces/evals/20261016-171702-e1431e8d.jsonl",
+          "sha256": "b42b6526750b9b877bbcee9fc3f4983a530a84f2a6239403b8a63f9485e7bc46"
+        },
+        {
+          "path": "F:/VIE/Erpilot/traces/evals/20261016-171715-5a061b97.jsonl",
+          "sha256": "3ed462f25c7eea06f1337792b112ad6718004e89b77b35ffc8ee2629c4c85247"
+        }
+      ],
+      "metered_records": [
+        {
+          "trace": "20261016-171156-f539abc6.jsonl",
+          "run_id": "bd2608340961",
+          "step": 1,
+          "start": "2026-10-16T17:11:56.842+08:00",
+          "end": "2026-10-16T17:12:36.059+08:00",
+          "usage": {
+            "prompt_tokens": 4765,
+            "completion_tokens": 1761,
+            "total_tokens": 6526
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.001056",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171156-f539abc6.jsonl",
+          "run_id": "bd2608340961",
+          "step": 2,
+          "start": "2026-10-16T17:12:36.186+08:00",
+          "end": "2026-10-16T17:12:49.069+08:00",
+          "usage": {
+            "prompt_tokens": 4890,
+            "completion_tokens": 292,
+            "total_tokens": 5182
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000569",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171249-0b8842f9.jsonl",
+          "run_id": "a0b0f8f284d7",
+          "step": 1,
+          "start": "2026-10-16T17:12:49.651+08:00",
+          "end": "2026-10-16T17:13:04.566+08:00",
+          "usage": {
+            "prompt_tokens": 4588,
+            "completion_tokens": 740,
+            "total_tokens": 5328
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000692",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171249-0b8842f9.jsonl",
+          "run_id": "a0b0f8f284d7",
+          "step": 2,
+          "start": "2026-10-16T17:13:04.637+08:00",
+          "end": "2026-10-16T17:13:14.575+08:00",
+          "usage": {
+            "prompt_tokens": 4925,
+            "completion_tokens": 256,
+            "total_tokens": 5181
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000560",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171315-eac2bce0.jsonl",
+          "run_id": "6c95845ea3c3",
+          "step": 1,
+          "start": "2026-10-16T17:13:15.036+08:00",
+          "end": "2026-10-16T17:13:23.038+08:00",
+          "usage": {
+            "prompt_tokens": 4548,
+            "completion_tokens": 7,
+            "total_tokens": 4555
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000439",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171315-eac2bce0.jsonl",
+          "run_id": "6c95845ea3c3",
+          "step": 2,
+          "start": "2026-10-16T17:13:23.212+08:00",
+          "end": "2026-10-16T17:13:32.040+08:00",
+          "usage": {
+            "prompt_tokens": 4621,
+            "completion_tokens": 188,
+            "total_tokens": 4809
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000508",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171332-209d7a63.jsonl",
+          "run_id": "b771d0047323",
+          "step": 1,
+          "start": "2026-10-16T17:13:32.145+08:00",
+          "end": "2026-10-16T17:14:11.239+08:00",
+          "usage": {
+            "prompt_tokens": 4790,
+            "completion_tokens": 1409,
+            "total_tokens": 6199
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000939",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171332-209d7a63.jsonl",
+          "run_id": "b771d0047323",
+          "step": 2,
+          "start": "2026-10-16T17:14:11.336+08:00",
+          "end": "2026-10-16T17:14:41.705+08:00",
+          "usage": {
+            "prompt_tokens": 5446,
+            "completion_tokens": 1968,
+            "total_tokens": 7414
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.001192",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171332-209d7a63.jsonl",
+          "run_id": "b771d0047323",
+          "step": 3,
+          "start": "2026-10-16T17:14:41.769+08:00",
+          "end": "2026-10-16T17:15:14.059+08:00",
+          "usage": {
+            "prompt_tokens": 5540,
+            "completion_tokens": 1046,
+            "total_tokens": 6586
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000887",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171514-1228129c.jsonl",
+          "run_id": "8f19824a2c5e",
+          "step": 1,
+          "start": "2026-10-16T17:15:14.525+08:00",
+          "end": "2026-10-16T17:15:24.847+08:00",
+          "usage": {
+            "prompt_tokens": 4548,
+            "completion_tokens": 14,
+            "total_tokens": 4562
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000441",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171514-1228129c.jsonl",
+          "run_id": "8f19824a2c5e",
+          "step": 2,
+          "start": "2026-10-16T17:15:24.905+08:00",
+          "end": "2026-10-16T17:15:36.988+08:00",
+          "usage": {
+            "prompt_tokens": 4675,
+            "completion_tokens": 116,
+            "total_tokens": 4791
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000488",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171514-1228129c.jsonl",
+          "run_id": "8f19824a2c5e",
+          "step": 3,
+          "start": "2026-10-16T17:15:37.215+08:00",
+          "end": "2026-10-16T17:16:05.085+08:00",
+          "usage": {
+            "prompt_tokens": 5462,
+            "completion_tokens": 432,
+            "total_tokens": 5894
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000671",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171605-50449a17.jsonl",
+          "run_id": "d7ee3d07d8a0",
+          "step": 1,
+          "start": "2026-10-16T17:16:05.193+08:00",
+          "end": "2026-10-16T17:16:35.820+08:00",
+          "usage": {
+            "prompt_tokens": 5597,
+            "completion_tokens": 1100,
+            "total_tokens": 6697
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000911",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171605-50449a17.jsonl",
+          "run_id": "d7ee3d07d8a0",
+          "step": 2,
+          "start": "2026-10-16T17:16:35.920+08:00",
+          "end": "2026-10-16T17:16:42.456+08:00",
+          "usage": {
+            "prompt_tokens": 6134,
+            "completion_tokens": 130,
+            "total_tokens": 6264
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000633",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171605-50449a17.jsonl",
+          "run_id": "d7ee3d07d8a0",
+          "step": 3,
+          "start": "2026-10-16T17:16:42.527+08:00",
+          "end": "2026-10-16T17:16:55.330+08:00",
+          "usage": {
+            "prompt_tokens": 6441,
+            "completion_tokens": 289,
+            "total_tokens": 6730
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000717",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171655-d595dabe.jsonl",
+          "run_id": "aca7285e23c7",
+          "step": 1,
+          "start": "2026-10-16T17:16:55.630+08:00",
+          "end": "2026-10-16T17:16:57.956+08:00",
+          "usage": {
+            "prompt_tokens": 4724,
+            "completion_tokens": 52,
+            "total_tokens": 4776
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000471",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171655-d595dabe.jsonl",
+          "run_id": "aca7285e23c7",
+          "step": 2,
+          "start": "2026-10-16T17:16:58.007+08:00",
+          "end": "2026-10-16T17:17:02.026+08:00",
+          "usage": {
+            "prompt_tokens": 5068,
+            "completion_tokens": 283,
+            "total_tokens": 5351
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000583",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171702-e1431e8d.jsonl",
+          "run_id": "80784e086fe3",
+          "step": 1,
+          "start": "2026-10-16T17:17:02.082+08:00",
+          "end": "2026-10-16T17:17:06.598+08:00",
+          "usage": {
+            "prompt_tokens": 4559,
+            "completion_tokens": 15,
+            "total_tokens": 4574
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000443",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171702-e1431e8d.jsonl",
+          "run_id": "80784e086fe3",
+          "step": 2,
+          "start": "2026-10-16T17:17:06.726+08:00",
+          "end": "2026-10-16T17:17:10.412+08:00",
+          "usage": {
+            "prompt_tokens": 4903,
+            "completion_tokens": 80,
+            "total_tokens": 4983
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000498",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171702-e1431e8d.jsonl",
+          "run_id": "80784e086fe3",
+          "step": 3,
+          "start": "2026-10-16T17:17:10.472+08:00",
+          "end": "2026-10-16T17:17:15.662+08:00",
+          "usage": {
+            "prompt_tokens": 5230,
+            "completion_tokens": 201,
+            "total_tokens": 5431
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000570",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261016-171715-5a061b97.jsonl",
+          "run_id": "de4fb45602c3",
+          "step": 1,
+          "start": "2026-10-16T17:17:15.971+08:00",
+          "end": "2026-10-16T17:17:18.997+08:00",
+          "usage": {
+            "prompt_tokens": 4548,
+            "completion_tokens": 7,
+            "total_tokens": 4555
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000439",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        }
+      ],
+      "original_unknown_usage_preserved": true,
+      "original_budget_frozen": true,
+      "actual_batch_total": null,
+      "supplier_annotation": {
+        "amount": "0.000222",
+        "currency": "USD",
+        "source": "user-provided annotation recorded on 2026-10-17",
+        "scope": "2026-10-16 17:17:19.042-17:19:30.394 Asia/Shanghai timeout only",
+        "independently_verified": false
+      },
+      "supplier_annotation_scope": "Only the 2026-10-16 timeout; user-provided, not independently fetched",
+      "original_timeout_records": [
+        {
+          "case_id": "b4-stale-history",
+          "trace": "F:\\VIE\\Erpilot\\traces\\evals\\20261016-171715-5a061b97.jsonl",
+          "run_id": "de4fb45602c3",
+          "step": 2,
+          "started_at": "2026-10-16T17:17:19.042+08:00",
+          "failed_at": "2026-10-16T17:19:30.394+08:00",
+          "error": "APITimeoutError: Request timed out.",
+          "usage": null,
+          "supplier_request_id": null,
+          "actual_charge": {
+            "currency": "USD",
+            "amount": "0.000222",
+            "source": "user_provided_supplier_charge",
+            "reported_on": "2026-10-17",
+            "usage_recovered": false
+          }
+        }
+      ],
+      "interrupted_turns": [
+        {
+          "case_id": "b4-stale-history:turn-1",
+          "error": "APITimeoutError: Request timed out.",
+          "before_sha256": "3e05ac19a2c338979e97c7f803a3c342e726656bc40e89defa326c42d664b39a",
+          "after_sha256": "3e05ac19a2c338979e97c7f803a3c342e726656bc40e89defa326c42d664b39a",
+          "state_unchanged": true,
+          "tools": [
+            "get_order_task"
+          ]
+        }
+      ]
+    },
+    {
+      "original_audit": "reports/acceptance/2026-10-17-draft-reference-usage-audit.json",
+      "original_audit_sha256": "afecf6ff05c2ed35efe74a2671fa2a0c9bb980a1f41c202ec26f3495394c25b2",
+      "source_report": "reports/evals/20261017-150138-f81491.json",
+      "source_report_sha256": "bc74c73ba23472007e552e0d6deed1da435a321698c89ac12d8c6700ae185684",
+      "originals_verified": true,
+      "request_count": 14,
+      "metered_requests": 13,
+      "unmetered_requests": 1,
+      "known_estimate": {
+        "amount": "0.008320",
+        "currency": "CNY",
+        "basis": "sum of per-request Decimal estimates, not provider bill"
+      },
+      "prompt_tokens": 74087,
+      "completion_tokens": 3547,
+      "missing_requests": [
+        {
+          "trace": "20261017-150243-60b8f7c3.jsonl",
+          "run_id": "8e8395f9f796",
+          "step": 2,
+          "start": "2026-10-17T15:02:48.770+08:00",
+          "end": null,
+          "usage": null
+        }
+      ],
+      "traces": [
+        {
+          "path": "traces/evals/20261017-150138-2bc9c91b.jsonl",
+          "sha256": "5f2a10e77da38ba2245f64cb7f93c9b2233ca3d578570dcc3bc45ab50df807fe"
+        },
+        {
+          "path": "traces/evals/20261017-150200-bc1b2dd2.jsonl",
+          "sha256": "af2f2094c61a352edacb100ae7cd3aba23f1212ba467f02a89d6c504e0847904"
+        },
+        {
+          "path": "traces/evals/20261017-150210-3d7acefa.jsonl",
+          "sha256": "af87f421a438f86a3c316946c4a6f2429aa7ce5fc6dc6448ff67c7b6db10b22e"
+        },
+        {
+          "path": "traces/evals/20261017-150216-2dfea7d0.jsonl",
+          "sha256": "3517d6291e5f7a5415741d81def9df97b646730b7fecb6cc2eabf2a3f8bdb130"
+        },
+        {
+          "path": "traces/evals/20261017-150230-80b4a580.jsonl",
+          "sha256": "fdfd3a33fc8be082bc994381e190bc4376038cf0dc64391d5011bc652a93dad7"
+        },
+        {
+          "path": "traces/evals/20261017-150243-60b8f7c3.jsonl",
+          "sha256": "a16c0089892a0746b32e4d9ee2b0fa2c847d0c3c28bb5a0ef82231eafc8d7f4f"
+        }
+      ],
+      "metered_records": [
+        {
+          "trace": "20261017-150138-2bc9c91b.jsonl",
+          "run_id": "865a7b435fb5",
+          "step": 1,
+          "start": "2026-10-17T15:01:38.635+08:00",
+          "end": "2026-10-17T15:01:41.642+08:00",
+          "usage": {
+            "prompt_tokens": 5253,
+            "completion_tokens": 51,
+            "total_tokens": 5304
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000522",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261017-150138-2bc9c91b.jsonl",
+          "run_id": "865a7b435fb5",
+          "step": 2,
+          "start": "2026-10-17T15:01:41.716+08:00",
+          "end": "2026-10-17T15:02:00.647+08:00",
+          "usage": {
+            "prompt_tokens": 5649,
+            "completion_tokens": 312,
+            "total_tokens": 5961
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000648",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261017-150200-bc1b2dd2.jsonl",
+          "run_id": "d93f9aa8e2d9",
+          "step": 1,
+          "start": "2026-10-17T15:02:00.769+08:00",
+          "end": "2026-10-17T15:02:03.497+08:00",
+          "usage": {
+            "prompt_tokens": 5798,
+            "completion_tokens": 195,
+            "total_tokens": 5993
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000623",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261017-150200-bc1b2dd2.jsonl",
+          "run_id": "d93f9aa8e2d9",
+          "step": 2,
+          "start": "2026-10-17T15:02:03.558+08:00",
+          "end": "2026-10-17T15:02:06.712+08:00",
+          "usage": {
+            "prompt_tokens": 6192,
+            "completion_tokens": 239,
+            "total_tokens": 6431
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000676",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261017-150200-bc1b2dd2.jsonl",
+          "run_id": "d93f9aa8e2d9",
+          "step": 3,
+          "start": "2026-10-17T15:02:06.785+08:00",
+          "end": "2026-10-17T15:02:10.167+08:00",
+          "usage": {
+            "prompt_tokens": 6615,
+            "completion_tokens": 423,
+            "total_tokens": 7038
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000779",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261017-150210-3d7acefa.jsonl",
+          "run_id": "360d3ce88f20",
+          "step": 1,
+          "start": "2026-10-17T15:02:10.734+08:00",
+          "end": "2026-10-17T15:02:12.796+08:00",
+          "usage": {
+            "prompt_tokens": 5076,
+            "completion_tokens": 44,
+            "total_tokens": 5120
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000502",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261017-150210-3d7acefa.jsonl",
+          "run_id": "360d3ce88f20",
+          "step": 2,
+          "start": "2026-10-17T15:02:12.859+08:00",
+          "end": "2026-10-17T15:02:16.644+08:00",
+          "usage": {
+            "prompt_tokens": 5467,
+            "completion_tokens": 332,
+            "total_tokens": 5799
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000638",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261017-150216-2dfea7d0.jsonl",
+          "run_id": "23b18add9719",
+          "step": 1,
+          "start": "2026-10-17T15:02:16.767+08:00",
+          "end": "2026-10-17T15:02:20.643+08:00",
+          "usage": {
+            "prompt_tokens": 5779,
+            "completion_tokens": 91,
+            "total_tokens": 5870
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000586",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261017-150216-2dfea7d0.jsonl",
+          "run_id": "23b18add9719",
+          "step": 2,
+          "start": "2026-10-17T15:02:20.702+08:00",
+          "end": "2026-10-17T15:02:23.694+08:00",
+          "usage": {
+            "prompt_tokens": 5891,
+            "completion_tokens": 233,
+            "total_tokens": 6124
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000645",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261017-150216-2dfea7d0.jsonl",
+          "run_id": "23b18add9719",
+          "step": 3,
+          "start": "2026-10-17T15:02:23.753+08:00",
+          "end": "2026-10-17T15:02:29.777+08:00",
+          "usage": {
+            "prompt_tokens": 6312,
+            "completion_tokens": 851,
+            "total_tokens": 7163
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000895",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261017-150230-80b4a580.jsonl",
+          "run_id": "e9a08e1b9bf8",
+          "step": 1,
+          "start": "2026-10-17T15:02:30.361+08:00",
+          "end": "2026-10-17T15:02:34.429+08:00",
+          "usage": {
+            "prompt_tokens": 5294,
+            "completion_tokens": 451,
+            "total_tokens": 5745
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000662",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261017-150230-80b4a580.jsonl",
+          "run_id": "e9a08e1b9bf8",
+          "step": 2,
+          "start": "2026-10-17T15:02:34.497+08:00",
+          "end": "2026-10-17T15:02:43.535+08:00",
+          "usage": {
+            "prompt_tokens": 5670,
+            "completion_tokens": 213,
+            "total_tokens": 5883
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000617",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        },
+        {
+          "trace": "20261017-150243-60b8f7c3.jsonl",
+          "run_id": "8e8395f9f796",
+          "step": 1,
+          "start": "2026-10-17T15:02:43.645+08:00",
+          "end": "2026-10-17T15:02:48.703+08:00",
+          "usage": {
+            "prompt_tokens": 5091,
+            "completion_tokens": 112,
+            "total_tokens": 5203
+          },
+          "estimate": {
+            "currency": "CNY",
+            "estimated_amount": "0.000527",
+            "pricing_source": "agent_core.prices",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          }
+        }
+      ],
+      "original_unknown_usage_preserved": true,
+      "original_budget_frozen": true,
+      "actual_batch_total": null,
+      "supplier_annotation": null,
+      "reconciliation_status": "skipped_by_user; actual charge remains unknown",
+      "original_timeout_records": [
+        {
+          "trace": "20261017-150243-60b8f7c3.jsonl",
+          "run_id": "8e8395f9f796",
+          "step": 2,
+          "start": "2026-10-17T15:02:48.770+08:00",
+          "end": "2026-10-17T15:11:05.703+08:00",
+          "error": "APIConnectionError: Connection error.",
+          "usage": null,
+          "actual_charge": null
+        }
+      ],
+      "interrupted_turns": [
+        {
+          "case_id": "b4-reference-inventory:turn-2",
+          "error": "APIConnectionError: Connection error.",
+          "before_sha256": "b1d20a86f47f7f93ca1002cc89f5edc7cf26aaed15f22eb48211ad2b8797067a",
+          "after_sha256": "b1d20a86f47f7f93ca1002cc89f5edc7cf26aaed15f22eb48211ad2b8797067a",
+          "state_unchanged": true,
+          "tools": [
+            "get_order_task"
+          ]
+        }
+      ]
+    }
+  ],
+  "currency_policy": "CNY estimates and actual USD annotations are neither summed nor converted",
+  "user_instruction": {
+    "recorded_at": "2026-10-19T02:27:27.464768+00:00",
+    "text": "跳过这个吧",
+    "scope": "Skip supplying/reconciling 2026-10-17 provider bill; do not alter missing usage or infer zero charge"
+  }
+}

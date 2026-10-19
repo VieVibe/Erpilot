@@ -25,6 +25,7 @@ from sqlalchemy.engine import Engine
 
 from evals.billing import BillingEstimate, BudgetedClient
 from evals.checks import evaluate_case
+from evals.grounding_cases import GroundingCase, check_grounding_result, state_hash
 from evals.model import CaseResult, EvalCase, ToolResult
 from evals.policy_cases import check_policy_result
 from evals.replenishment_cases import check_replenishment_result
@@ -66,7 +67,7 @@ def is_transient(exc: Exception) -> bool:
     """
     from openai import APIConnectionError, APIStatusError, RateLimitError
 
-    if isinstance(exc, (RateLimitError, APIConnectionError)):
+    if isinstance(exc, (TimeoutError, RateLimitError, APIConnectionError)):
         return True
     if isinstance(exc, APIStatusError):
         return exc.status_code >= 500
@@ -86,7 +87,11 @@ def _run_error_result(
     tool_results: Sequence[ToolResult] = (),
     billing: BillingEstimate | None = None,
     visible_text: str = "",
+    tool_attempts: list[str] | None = None,
 ) -> CaseResult:
+    from openai import APIError
+
+    upstream = isinstance(exc, TimeoutError) or (isinstance(exc, APIError) and is_transient(exc))
     return CaseResult(
         case_id=case.id,
         category=case.category,
@@ -98,12 +103,14 @@ def _run_error_result(
         duration_ms=duration_ms,
         attempts=attempts,
         error=f"{type(exc).__name__}: {exc}",
+        failure_kind="upstream_interrupted" if upstream else "runtime_error",
         total_tokens=usage.total_tokens if usage else 0,
         cost=cost,
         cost_complete=False,
         tool_results=list(tool_results),
         billing=billing,
         visible_text=visible_text,
+        tool_attempts=tool_attempts,
     )
 
 
@@ -135,7 +142,7 @@ async def run_case(
     started = time.perf_counter()
 
     def state_snapshot():
-        return snapshot(state_engine, all_tables=case.id.startswith("b6-"))
+        return snapshot(state_engine, all_tables=case.id.startswith(("b6-", "rag-grounding-")))
 
     before = state_snapshot() if case.state and state_engine is not None else None
     # 整轮重跑可能重复模型已发起的写操作；写工具面仅重试工具执行，不重跑任务。
@@ -148,10 +155,11 @@ async def run_case(
     # 重试语义差异在报告里注明，不与旧重试策略的报告混比。
     if isinstance(client, BudgetedClient):
         retries = 0
-        client.begin_case()
+        client.begin_case(case.id)
     measured = Usage(prompt_tokens=0, completion_tokens=0, total_tokens=0)
     cost_complete = True
     all_tool_results: list[ToolResult] = []
+    tool_attempts: list[str] = []
 
     for attempt in range(1, retries + 2):
         agent = LangGraphRuntime(client, tools=list(tools), checkpointer=InMemorySaver())
@@ -189,6 +197,7 @@ async def run_case(
                         visible_parts.append(text)  # v2 判分范围：全部助手可见步骤文本
                         step_text.clear()
                     case ToolCallStarted(call=call):
+                        tool_attempts.append(call.name)
                         try:
                             arguments[call.id] = json.loads(call.arguments)
                         except (ValueError, TypeError):
@@ -210,6 +219,8 @@ async def run_case(
                         )
                         all_tool_results.append(tool_results[-1])
                     case LoopEnd(steps=s, completed=c):
+                        visible_parts.extend(step_text)
+                        step_text.clear()
                         steps, completed = s, c
                         if conversation is not None:
                             conversation[:] = messages
@@ -230,9 +241,18 @@ async def run_case(
                 tool_results=all_tool_results,
                 billing=_billing_of(client),
                 visible_text="".join(visible_parts) + "".join(step_text),
+                tool_attempts=tool_attempts,
             )
             if case.state and before is not None and state_engine is not None:
-                result.failed_checks.extend(check_state(case.state, before, snapshot(state_engine)))
+                after = (
+                    state_snapshot() if isinstance(case, GroundingCase) else snapshot(state_engine)
+                )
+                result.failed_checks.extend(check_state(case.state, before, after))
+                if isinstance(case, GroundingCase):
+                    result.state_evidence = {
+                        "before_sha256": state_hash(before), "after_sha256": state_hash(after),
+                        "all_tables": sorted(before), "answer_kind": case.answer_kind,
+                    }
             return result, trace_path
 
         failed = evaluate_case(
@@ -276,6 +296,7 @@ async def run_case(
             completed=completed,
             tool_calls=tool_calls,
             total_tokens=measured.total_tokens,
+            tool_attempts=tool_attempts,
             cost=_cost_of(client, measured),
             duration_ms=round((time.perf_counter() - started) * 1000, 1),
             attempts=attempt,
@@ -294,6 +315,17 @@ async def run_case(
             if extra:
                 result.failed_checks.extend(extra)
                 result.passed = False
+        if isinstance(case, GroundingCase) and before is not None and state_engine is not None:
+            after = state_snapshot()
+            extra = check_grounding_result(case, result, before, after)
+            result.failed_checks.extend(extra)
+            result.passed = not result.failed_checks
+            result.state_evidence = {
+                "before_sha256": state_hash(before), "after_sha256": state_hash(after),
+                "all_tables": sorted(before), "answer_kind": case.answer_kind,
+                "expected_policy_state": case.expected_policy_state,
+                "required_citations": case.required_citations,
+            }
         return result, trace_path
 
     raise AssertionError("unreachable：重试循环必须 return 或 continue")

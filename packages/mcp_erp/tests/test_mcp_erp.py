@@ -54,6 +54,7 @@ EXPECTED_TOOLS = {
     "stock_valuation",
     "list_categories",
     "search_policy",
+    "compose_policy_answer",
     "assess_order_cancellation",
 }
 
@@ -64,7 +65,7 @@ async def test_server_exposes_all_readonly_tools(seeded_db) -> None:
     async with Client(create_server(seeded_db)) as client:
         tools = {t.name for t in await client.list_tools()}
     assert tools == EXPECTED_TOOLS
-    assert len(EXPECTED_TOOLS) == 19  # 含政策判断与只读补货建议
+    assert len(EXPECTED_TOOLS) == 20  # 含政策判断、只读补货建议与结构化政策答复
 
 
 async def test_get_order_error_contract_v1(seeded_db) -> None:
@@ -344,7 +345,7 @@ async def test_write_server_exposes_full_surface(seeded_db) -> None:
     async with Client(create_server(seeded_db, include_writes=True)) as client:
         tools = {t.name for t in await client.list_tools()}
     assert tools == EXPECTED_TOOLS | WRITE_TOOLS
-    assert len(tools) == 23  # 19 只读（含补货建议）+ 4 写
+    assert len(tools) == 24  # 20 只读（含结构化政策答复）+ 4 写
 
 
 async def test_write_error_contract_via_mcp(seeded_db, repo) -> None:

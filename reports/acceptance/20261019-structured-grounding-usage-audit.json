@@ -1,0 +1,1414 @@
+{
+  "status": "closed_no_further_paid_calls",
+  "campaigns": [
+    {
+      "path": "reports/acceptance/20261019-structured-glm-campaign-01.json",
+      "sha256": "ccd4a7bede2ad828c87e023425148428f9c19deda7f59a1507b8c95036c19b2e",
+      "source_sha256": "0b37cb6e793590f0bc64e59e1a0a6b62f12a5388eb02859d971489d56cc29358",
+      "scorers": [
+        "rag-grounding-structured-1"
+      ],
+      "finished": 4,
+      "passed": 0,
+      "requests": 14,
+      "known_spent": "0.011312",
+      "currency": "CNY",
+      "unknown_requests": 0,
+      "duplicate_completed_cases": false
+    },
+    {
+      "path": "reports/acceptance/20261019-structured-glm-campaign-02.json",
+      "sha256": "d44d5a1c83c38d60fe9c7df476968e968610ba7565ccacbbd92b7048f94787e1",
+      "source_sha256": "4b832e94d8d645132f00fb83e47805b90fe569150f39556963f063c1e7d99ded",
+      "scorers": [
+        "rag-grounding-structured-2"
+      ],
+      "finished": 4,
+      "passed": 3,
+      "requests": 8,
+      "known_spent": "0.005558",
+      "currency": "CNY",
+      "unknown_requests": 0,
+      "duplicate_completed_cases": false
+    },
+    {
+      "path": "reports/acceptance/20261019-structured-glm-campaign-03.json",
+      "sha256": "cc785e3e4a74faf298ac9256fc5e172e78568f85f333df1e11d7e664de3592f6",
+      "source_sha256": "0f230ed609ed4d9990927f4a86ed576a0bc99351fb263ed495fe2b97b6ef52aa",
+      "scorers": [
+        "rag-grounding-structured-3"
+      ],
+      "finished": 13,
+      "passed": 11,
+      "requests": 26,
+      "known_spent": "0.017575",
+      "currency": "CNY",
+      "unknown_requests": 0,
+      "duplicate_completed_cases": false
+    },
+    {
+      "path": "reports/acceptance/20261019-structured-deepseek-campaign-01.json",
+      "sha256": "e35b90be17f0dac66df992201f757ea62b551275508aa58d1835cd67874a2010",
+      "source_sha256": "0f230ed609ed4d9990927f4a86ed576a0bc99351fb263ed495fe2b97b6ef52aa",
+      "scorers": [
+        "rag-grounding-structured-3"
+      ],
+      "finished": 13,
+      "passed": 11,
+      "requests": 26,
+      "known_spent": "0.008225",
+      "currency": "USD",
+      "unknown_requests": 0,
+      "duplicate_completed_cases": false
+    }
+  ],
+  "requests": [
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "trace": "traces/evals/20261019-114950-07ce71de.jsonl",
+      "trace_sha256": "e17432d50600a58c934f07ee54f50c4ef939b9b23e82ab73dd492772c48383dc",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5664,
+        "completion_tokens": 33,
+        "total_tokens": 5697
+      },
+      "estimated_amount": "0.000555",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-01.json",
+      "segment": "001-d036c5",
+      "request": 1,
+      "started_at": "2026-10-19T03:49:51.009719+00:00",
+      "settled_at": "2026-10-19T03:49:56.480611+00:00"
+    },
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "trace": "traces/evals/20261019-114950-07ce71de.jsonl",
+      "trace_sha256": "e17432d50600a58c934f07ee54f50c4ef939b9b23e82ab73dd492772c48383dc",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6039,
+        "completion_tokens": 704,
+        "total_tokens": 6743
+      },
+      "estimated_amount": "0.000819",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-01.json",
+      "segment": "001-d036c5",
+      "request": 2,
+      "started_at": "2026-10-19T03:49:56.603264+00:00",
+      "settled_at": "2026-10-19T03:50:06.081419+00:00"
+    },
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "trace": "traces/evals/20261019-114950-07ce71de.jsonl",
+      "trace_sha256": "e17432d50600a58c934f07ee54f50c4ef939b9b23e82ab73dd492772c48383dc",
+      "step": 3,
+      "usage": {
+        "prompt_tokens": 6172,
+        "completion_tokens": 147,
+        "total_tokens": 6319
+      },
+      "estimated_amount": "0.000642",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-01.json",
+      "segment": "001-d036c5",
+      "request": 3,
+      "started_at": "2026-10-19T03:50:06.093685+00:00",
+      "settled_at": "2026-10-19T03:50:13.248892+00:00"
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "trace": "traces/evals/20261019-115013-7a5af55a.jsonl",
+      "trace_sha256": "3cf63483a36a0190d49647123b85f26771d448c02a5005a0eb8f4842a2aeb1c6",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5666,
+        "completion_tokens": 624,
+        "total_tokens": 6290
+      },
+      "estimated_amount": "0.000756",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-01.json",
+      "segment": "001-d036c5",
+      "request": 4,
+      "started_at": "2026-10-19T03:50:13.805736+00:00",
+      "settled_at": "2026-10-19T03:50:18.995074+00:00"
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "trace": "traces/evals/20261019-115013-7a5af55a.jsonl",
+      "trace_sha256": "3cf63483a36a0190d49647123b85f26771d448c02a5005a0eb8f4842a2aeb1c6",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6404,
+        "completion_tokens": 600,
+        "total_tokens": 7004
+      },
+      "estimated_amount": "0.000819",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-01.json",
+      "segment": "001-d036c5",
+      "request": 5,
+      "started_at": "2026-10-19T03:50:19.092593+00:00",
+      "settled_at": "2026-10-19T03:50:28.673133+00:00"
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "trace": "traces/evals/20261019-115013-7a5af55a.jsonl",
+      "trace_sha256": "3cf63483a36a0190d49647123b85f26771d448c02a5005a0eb8f4842a2aeb1c6",
+      "step": 3,
+      "usage": {
+        "prompt_tokens": 6603,
+        "completion_tokens": 223,
+        "total_tokens": 6826
+      },
+      "estimated_amount": "0.000710",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-01.json",
+      "segment": "001-d036c5",
+      "request": 6,
+      "started_at": "2026-10-19T03:50:28.689134+00:00",
+      "settled_at": "2026-10-19T03:50:31.863842+00:00"
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "trace": "traces/evals/20261019-115032-47248a21.jsonl",
+      "trace_sha256": "616df6e292ee46857866e608115a107f2cb9c9b7ba219a001ed0e0d91b164651",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5663,
+        "completion_tokens": 721,
+        "total_tokens": 6384
+      },
+      "estimated_amount": "0.000789",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-01.json",
+      "segment": "001-d036c5",
+      "request": 7,
+      "started_at": "2026-10-19T03:50:32.421767+00:00",
+      "settled_at": "2026-10-19T03:50:42.693478+00:00"
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "trace": "traces/evals/20261019-115032-47248a21.jsonl",
+      "trace_sha256": "616df6e292ee46857866e608115a107f2cb9c9b7ba219a001ed0e0d91b164651",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6415,
+        "completion_tokens": 160,
+        "total_tokens": 6575
+      },
+      "estimated_amount": "0.000670",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-01.json",
+      "segment": "001-d036c5",
+      "request": 8,
+      "started_at": "2026-10-19T03:50:42.792610+00:00",
+      "settled_at": "2026-10-19T03:50:48.457782+00:00"
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "trace": "traces/evals/20261019-115032-47248a21.jsonl",
+      "trace_sha256": "616df6e292ee46857866e608115a107f2cb9c9b7ba219a001ed0e0d91b164651",
+      "step": 3,
+      "usage": {
+        "prompt_tokens": 6550,
+        "completion_tokens": 434,
+        "total_tokens": 6984
+      },
+      "estimated_amount": "0.000776",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-01.json",
+      "segment": "001-d036c5",
+      "request": 9,
+      "started_at": "2026-10-19T03:50:48.478165+00:00",
+      "settled_at": "2026-10-19T03:50:52.220146+00:00"
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "trace": "traces/evals/20261019-115032-47248a21.jsonl",
+      "trace_sha256": "616df6e292ee46857866e608115a107f2cb9c9b7ba219a001ed0e0d91b164651",
+      "step": 4,
+      "usage": {
+        "prompt_tokens": 6685,
+        "completion_tokens": 611,
+        "total_tokens": 7296
+      },
+      "estimated_amount": "0.000850",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-01.json",
+      "segment": "001-d036c5",
+      "request": 10,
+      "started_at": "2026-10-19T03:50:52.237226+00:00",
+      "settled_at": "2026-10-19T03:51:01.515939+00:00"
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "trace": "traces/evals/20261019-115101-cb593d98.jsonl",
+      "trace_sha256": "ddd665599aac77577d221863fd7abdfd39c1accce1f793d9fa0ab2e7a54cf59f",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5672,
+        "completion_tokens": 340,
+        "total_tokens": 6012
+      },
+      "estimated_amount": "0.000660",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-01.json",
+      "segment": "001-d036c5",
+      "request": 11,
+      "started_at": "2026-10-19T03:51:02.096369+00:00",
+      "settled_at": "2026-10-19T03:51:05.979673+00:00"
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "trace": "traces/evals/20261019-115101-cb593d98.jsonl",
+      "trace_sha256": "ddd665599aac77577d221863fd7abdfd39c1accce1f793d9fa0ab2e7a54cf59f",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6794,
+        "completion_tokens": 677,
+        "total_tokens": 7471
+      },
+      "estimated_amount": "0.000882",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-01.json",
+      "segment": "001-d036c5",
+      "request": 12,
+      "started_at": "2026-10-19T03:51:06.081407+00:00",
+      "settled_at": "2026-10-19T03:51:10.541048+00:00"
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "trace": "traces/evals/20261019-115101-cb593d98.jsonl",
+      "trace_sha256": "ddd665599aac77577d221863fd7abdfd39c1accce1f793d9fa0ab2e7a54cf59f",
+      "step": 3,
+      "usage": {
+        "prompt_tokens": 7187,
+        "completion_tokens": 613,
+        "total_tokens": 7800
+      },
+      "estimated_amount": "0.000898",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-01.json",
+      "segment": "001-d036c5",
+      "request": 13,
+      "started_at": "2026-10-19T03:51:10.555394+00:00",
+      "settled_at": "2026-10-19T03:51:14.890062+00:00"
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "trace": "traces/evals/20261019-115101-cb593d98.jsonl",
+      "trace_sha256": "ddd665599aac77577d221863fd7abdfd39c1accce1f793d9fa0ab2e7a54cf59f",
+      "step": 4,
+      "usage": {
+        "prompt_tokens": 7580,
+        "completion_tokens": 2231,
+        "total_tokens": 9811
+      },
+      "estimated_amount": "0.001486",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-01.json",
+      "segment": "001-d036c5",
+      "request": 14,
+      "started_at": "2026-10-19T03:51:14.904064+00:00",
+      "settled_at": "2026-10-19T03:51:29.618246+00:00"
+    },
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "trace": "traces/evals/20261019-115439-1f8fa90e.jsonl",
+      "trace_sha256": "2d93c8967ae529a695eca55ea8e01e9a9480332d52e63923a627109196737d29",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5774,
+        "completion_tokens": 23,
+        "total_tokens": 5797
+      },
+      "estimated_amount": "0.000562",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-02.json",
+      "segment": "001-14cb97",
+      "request": 1,
+      "started_at": "2026-10-19T03:54:40.002429+00:00",
+      "settled_at": "2026-10-19T03:54:44.798615+00:00"
+    },
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "trace": "traces/evals/20261019-115439-1f8fa90e.jsonl",
+      "trace_sha256": "2d93c8967ae529a695eca55ea8e01e9a9480332d52e63923a627109196737d29",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6150,
+        "completion_tokens": 854,
+        "total_tokens": 7004
+      },
+      "estimated_amount": "0.000881",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-02.json",
+      "segment": "001-14cb97",
+      "request": 2,
+      "started_at": "2026-10-19T03:54:44.875123+00:00",
+      "settled_at": "2026-10-19T03:54:58.485148+00:00"
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "trace": "traces/evals/20261019-115459-9617671f.jsonl",
+      "trace_sha256": "c31bfca37d8c92248686c0bd546b9247687812fd27fac4f27cf7892d7f52ad56",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5776,
+        "completion_tokens": 21,
+        "total_tokens": 5797
+      },
+      "estimated_amount": "0.000562",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-02.json",
+      "segment": "001-14cb97",
+      "request": 3,
+      "started_at": "2026-10-19T03:54:59.051802+00:00",
+      "settled_at": "2026-10-19T03:55:00.615642+00:00"
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "trace": "traces/evals/20261019-115459-9617671f.jsonl",
+      "trace_sha256": "c31bfca37d8c92248686c0bd546b9247687812fd27fac4f27cf7892d7f52ad56",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6141,
+        "completion_tokens": 426,
+        "total_tokens": 6567
+      },
+      "estimated_amount": "0.000734",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-02.json",
+      "segment": "001-14cb97",
+      "request": 4,
+      "started_at": "2026-10-19T03:55:00.671393+00:00",
+      "settled_at": "2026-10-19T03:55:04.455201+00:00"
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "trace": "traces/evals/20261019-115504-4c3ff6bc.jsonl",
+      "trace_sha256": "b6fc2d4576d867b4db491f2fc34afb7e0401ffcf44e276e640c31200554c03e6",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5773,
+        "completion_tokens": 22,
+        "total_tokens": 5795
+      },
+      "estimated_amount": "0.000562",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-02.json",
+      "segment": "001-14cb97",
+      "request": 5,
+      "started_at": "2026-10-19T03:55:04.908615+00:00",
+      "settled_at": "2026-10-19T03:55:08.707265+00:00"
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "trace": "traces/evals/20261019-115504-4c3ff6bc.jsonl",
+      "trace_sha256": "b6fc2d4576d867b4db491f2fc34afb7e0401ffcf44e276e640c31200554c03e6",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6153,
+        "completion_tokens": 65,
+        "total_tokens": 6218
+      },
+      "estimated_amount": "0.000613",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-02.json",
+      "segment": "001-14cb97",
+      "request": 6,
+      "started_at": "2026-10-19T03:55:08.764536+00:00",
+      "settled_at": "2026-10-19T03:55:11.287648+00:00"
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "trace": "traces/evals/20261019-115511-c429d5c5.jsonl",
+      "trace_sha256": "60b23f05dc91823327a9379a7db349a80c2b9336b9043e4579ac4212a81c5b79",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5782,
+        "completion_tokens": 808,
+        "total_tokens": 6590
+      },
+      "estimated_amount": "0.000830",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-02.json",
+      "segment": "001-14cb97",
+      "request": 7,
+      "started_at": "2026-10-19T03:55:11.899142+00:00",
+      "settled_at": "2026-10-19T03:55:18.135524+00:00"
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "trace": "traces/evals/20261019-115511-c429d5c5.jsonl",
+      "trace_sha256": "60b23f05dc91823327a9379a7db349a80c2b9336b9043e4579ac4212a81c5b79",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6910,
+        "completion_tokens": 442,
+        "total_tokens": 7352
+      },
+      "estimated_amount": "0.000814",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-02.json",
+      "segment": "001-14cb97",
+      "request": 8,
+      "started_at": "2026-10-19T03:55:18.238707+00:00",
+      "settled_at": "2026-10-19T03:55:21.917763+00:00"
+    },
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "trace": "traces/evals/20261019-115853-9fd13c7d.jsonl",
+      "trace_sha256": "dd9d340905e7280a23cc274a70240928693d4207d710779d3072024e37b5c193",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5774,
+        "completion_tokens": 29,
+        "total_tokens": 5803
+      },
+      "estimated_amount": "0.000564",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "001-ec3a9a",
+      "request": 1,
+      "started_at": "2026-10-19T03:58:53.756442+00:00",
+      "settled_at": "2026-10-19T03:58:55.879629+00:00"
+    },
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "trace": "traces/evals/20261019-115853-9fd13c7d.jsonl",
+      "trace_sha256": "dd9d340905e7280a23cc274a70240928693d4207d710779d3072024e37b5c193",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6157,
+        "completion_tokens": 367,
+        "total_tokens": 6524
+      },
+      "estimated_amount": "0.000716",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "001-ec3a9a",
+      "request": 2,
+      "started_at": "2026-10-19T03:58:55.963581+00:00",
+      "settled_at": "2026-10-19T03:58:59.262298+00:00"
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "trace": "traces/evals/20261019-115859-d6cc1a0d.jsonl",
+      "trace_sha256": "8dd522020421f106adb952f49b302c21d16f626e2264ca8c6c8bbc943c71913a",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5776,
+        "completion_tokens": 89,
+        "total_tokens": 5865
+      },
+      "estimated_amount": "0.000585",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "001-ec3a9a",
+      "request": 3,
+      "started_at": "2026-10-19T03:58:59.611831+00:00",
+      "settled_at": "2026-10-19T03:59:02.407805+00:00"
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "trace": "traces/evals/20261019-115859-d6cc1a0d.jsonl",
+      "trace_sha256": "8dd522020421f106adb952f49b302c21d16f626e2264ca8c6c8bbc943c71913a",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6157,
+        "completion_tokens": 103,
+        "total_tokens": 6260
+      },
+      "estimated_amount": "0.000626",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "001-ec3a9a",
+      "request": 4,
+      "started_at": "2026-10-19T03:59:02.442313+00:00",
+      "settled_at": "2026-10-19T03:59:07.184492+00:00"
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "trace": "traces/evals/20261019-115907-800379d4.jsonl",
+      "trace_sha256": "16a052e73e283cb7579672b1294b9a239d000315cb66bb59c2f87d2f180c2456",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5773,
+        "completion_tokens": 97,
+        "total_tokens": 5870
+      },
+      "estimated_amount": "0.000587",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "001-ec3a9a",
+      "request": 5,
+      "started_at": "2026-10-19T03:59:07.461420+00:00",
+      "settled_at": "2026-10-19T03:59:10.469263+00:00"
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "trace": "traces/evals/20261019-115907-800379d4.jsonl",
+      "trace_sha256": "16a052e73e283cb7579672b1294b9a239d000315cb66bb59c2f87d2f180c2456",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6169,
+        "completion_tokens": 1114,
+        "total_tokens": 7283
+      },
+      "estimated_amount": "0.000971",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "001-ec3a9a",
+      "request": 6,
+      "started_at": "2026-10-19T03:59:10.508564+00:00",
+      "settled_at": "2026-10-19T03:59:18.217976+00:00"
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "trace": "traces/evals/20261019-115918-599ca4cf.jsonl",
+      "trace_sha256": "05f36e9bfd4139dedfb46770bd1663136fa26c8d8a663691a688f379f6f24fb2",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5782,
+        "completion_tokens": 204,
+        "total_tokens": 5986
+      },
+      "estimated_amount": "0.000624",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "001-ec3a9a",
+      "request": 7,
+      "started_at": "2026-10-19T03:59:18.574953+00:00",
+      "settled_at": "2026-10-19T03:59:25.502770+00:00"
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "trace": "traces/evals/20261019-115918-599ca4cf.jsonl",
+      "trace_sha256": "05f36e9bfd4139dedfb46770bd1663136fa26c8d8a663691a688f379f6f24fb2",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6903,
+        "completion_tokens": 114,
+        "total_tokens": 7017
+      },
+      "estimated_amount": "0.000701",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "001-ec3a9a",
+      "request": 8,
+      "started_at": "2026-10-19T03:59:25.563275+00:00",
+      "settled_at": "2026-10-19T03:59:29.118500+00:00"
+    },
+    {
+      "case_id": "rag-grounding-custom-exception",
+      "trace": "traces/evals/20261019-115929-233a2de1.jsonl",
+      "trace_sha256": "b26a843b287fe346d6dec8a28129c976ef6d5d85b433c56af94f517468ddd9d8",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5781,
+        "completion_tokens": 898,
+        "total_tokens": 6679
+      },
+      "estimated_amount": "0.000860",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "001-ec3a9a",
+      "request": 9,
+      "started_at": "2026-10-19T03:59:29.464021+00:00",
+      "settled_at": "2026-10-19T03:59:36.264523+00:00"
+    },
+    {
+      "case_id": "rag-grounding-custom-exception",
+      "trace": "traces/evals/20261019-115929-233a2de1.jsonl",
+      "trace_sha256": "b26a843b287fe346d6dec8a28129c976ef6d5d85b433c56af94f517468ddd9d8",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6541,
+        "completion_tokens": 257,
+        "total_tokens": 6798
+      },
+      "estimated_amount": "0.000715",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "001-ec3a9a",
+      "request": 10,
+      "started_at": "2026-10-19T03:59:36.328508+00:00",
+      "settled_at": "2026-10-19T03:59:42.667579+00:00"
+    },
+    {
+      "case_id": "rag-grounding-partial",
+      "trace": "traces/evals/20261019-115943-15100e79.jsonl",
+      "trace_sha256": "3c964f767069773e0df39122f35417e7f621d7a685483eb31d5c7cbf3a5e02d9",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5777,
+        "completion_tokens": 253,
+        "total_tokens": 6030
+      },
+      "estimated_amount": "0.000641",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "001-ec3a9a",
+      "request": 11,
+      "started_at": "2026-10-19T03:59:43.028628+00:00",
+      "settled_at": "2026-10-19T03:59:47.696284+00:00"
+    },
+    {
+      "case_id": "rag-grounding-partial",
+      "trace": "traces/evals/20261019-115943-15100e79.jsonl",
+      "trace_sha256": "3c964f767069773e0df39122f35417e7f621d7a685483eb31d5c7cbf3a5e02d9",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6507,
+        "completion_tokens": 80,
+        "total_tokens": 6587
+      },
+      "estimated_amount": "0.000652",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "001-ec3a9a",
+      "request": 12,
+      "started_at": "2026-10-19T03:59:47.758587+00:00",
+      "settled_at": "2026-10-19T03:59:52.403121+00:00"
+    },
+    {
+      "case_id": "rag-grounding-contact-gap",
+      "trace": "traces/evals/20261019-140223-4c0b9f7d.jsonl",
+      "trace_sha256": "87cef1ac05796643a4e4c262d8a78872f3eeed0551585c8115d704c9dcdfb596",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5776,
+        "completion_tokens": 246,
+        "total_tokens": 6022
+      },
+      "estimated_amount": "0.000638",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "002-637a70",
+      "request": 1,
+      "started_at": "2026-10-19T06:02:23.803741+00:00",
+      "settled_at": "2026-10-19T06:02:26.943004+00:00"
+    },
+    {
+      "case_id": "rag-grounding-contact-gap",
+      "trace": "traces/evals/20261019-140223-4c0b9f7d.jsonl",
+      "trace_sha256": "87cef1ac05796643a4e4c262d8a78872f3eeed0551585c8115d704c9dcdfb596",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6154,
+        "completion_tokens": 461,
+        "total_tokens": 6615
+      },
+      "estimated_amount": "0.000748",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "002-637a70",
+      "request": 2,
+      "started_at": "2026-10-19T06:02:27.041630+00:00",
+      "settled_at": "2026-10-19T06:02:31.380946+00:00"
+    },
+    {
+      "case_id": "rag-grounding-freight-gap",
+      "trace": "traces/evals/20261019-140231-a886e7fa.jsonl",
+      "trace_sha256": "0bc88b7ae1e5bbc0e50a66992031621ca4aefe5dbde9c8aa056d7debfee75875",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5778,
+        "completion_tokens": 149,
+        "total_tokens": 5927
+      },
+      "estimated_amount": "0.000605",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "002-637a70",
+      "request": 3,
+      "started_at": "2026-10-19T06:02:31.757873+00:00",
+      "settled_at": "2026-10-19T06:02:34.766512+00:00"
+    },
+    {
+      "case_id": "rag-grounding-freight-gap",
+      "trace": "traces/evals/20261019-140231-a886e7fa.jsonl",
+      "trace_sha256": "0bc88b7ae1e5bbc0e50a66992031621ca4aefe5dbde9c8aa056d7debfee75875",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6398,
+        "completion_tokens": 474,
+        "total_tokens": 6872
+      },
+      "estimated_amount": "0.000775",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "002-637a70",
+      "request": 4,
+      "started_at": "2026-10-19T06:02:34.823694+00:00",
+      "settled_at": "2026-10-19T06:02:39.366080+00:00"
+    },
+    {
+      "case_id": "rag-grounding-warranty-gap",
+      "trace": "traces/evals/20261019-140239-557e3cd5.jsonl",
+      "trace_sha256": "772f98b4073b0629b5616b044f355d0db891132a4ac3b3b8492079006a8223e4",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5777,
+        "completion_tokens": 81,
+        "total_tokens": 5858
+      },
+      "estimated_amount": "0.000582",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "002-637a70",
+      "request": 5,
+      "started_at": "2026-10-19T06:02:39.675326+00:00",
+      "settled_at": "2026-10-19T06:02:42.356674+00:00"
+    },
+    {
+      "case_id": "rag-grounding-warranty-gap",
+      "trace": "traces/evals/20261019-140239-557e3cd5.jsonl",
+      "trace_sha256": "772f98b4073b0629b5616b044f355d0db891132a4ac3b3b8492079006a8223e4",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6393,
+        "completion_tokens": 66,
+        "total_tokens": 6459
+      },
+      "estimated_amount": "0.000636",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "002-637a70",
+      "request": 6,
+      "started_at": "2026-10-19T06:02:42.418794+00:00",
+      "settled_at": "2026-10-19T06:02:45.319817+00:00"
+    },
+    {
+      "case_id": "rag-grounding-conflict",
+      "trace": "traces/evals/20261019-140245-0e7d7a17.jsonl",
+      "trace_sha256": "6df8c557d6ac8dae6acd459d0a18728a26dc298a31e2a6fb45ab877009cfb130",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5772,
+        "completion_tokens": 973,
+        "total_tokens": 6745
+      },
+      "estimated_amount": "0.000885",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "002-637a70",
+      "request": 7,
+      "started_at": "2026-10-19T06:02:45.687929+00:00",
+      "settled_at": "2026-10-19T06:02:52.786592+00:00"
+    },
+    {
+      "case_id": "rag-grounding-conflict",
+      "trace": "traces/evals/20261019-140245-0e7d7a17.jsonl",
+      "trace_sha256": "6df8c557d6ac8dae6acd459d0a18728a26dc298a31e2a6fb45ab877009cfb130",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6015,
+        "completion_tokens": 542,
+        "total_tokens": 6557
+      },
+      "estimated_amount": "0.000762",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "002-637a70",
+      "request": 8,
+      "started_at": "2026-10-19T06:02:52.858597+00:00",
+      "settled_at": "2026-10-19T06:02:59.031022+00:00"
+    },
+    {
+      "case_id": "rag-grounding-unavailable",
+      "trace": "traces/evals/20261019-140259-596759b8.jsonl",
+      "trace_sha256": "bd791e2e6196d59cb74ecef4af6e08624508612836c109430a299a76e8cd4e09",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5772,
+        "completion_tokens": 352,
+        "total_tokens": 6124
+      },
+      "estimated_amount": "0.000674",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "002-637a70",
+      "request": 9,
+      "started_at": "2026-10-19T06:02:59.398390+00:00",
+      "settled_at": "2026-10-19T06:03:05.053203+00:00"
+    },
+    {
+      "case_id": "rag-grounding-unavailable",
+      "trace": "traces/evals/20261019-140259-596759b8.jsonl",
+      "trace_sha256": "bd791e2e6196d59cb74ecef4af6e08624508612836c109430a299a76e8cd4e09",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 5909,
+        "completion_tokens": 288,
+        "total_tokens": 6197
+      },
+      "estimated_amount": "0.000665",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "002-637a70",
+      "request": 10,
+      "started_at": "2026-10-19T06:03:05.143198+00:00",
+      "settled_at": "2026-10-19T06:03:08.543281+00:00"
+    },
+    {
+      "case_id": "rag-grounding-inactive",
+      "trace": "traces/evals/20261019-140308-1eaacc36.jsonl",
+      "trace_sha256": "734575b588afc0a28ad1c38c7756f4a73afbb8758939831d5fb111c2e5f6c64f",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5769,
+        "completion_tokens": 117,
+        "total_tokens": 5886
+      },
+      "estimated_amount": "0.000594",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "002-637a70",
+      "request": 11,
+      "started_at": "2026-10-19T06:03:08.912458+00:00",
+      "settled_at": "2026-10-19T06:03:10.971563+00:00"
+    },
+    {
+      "case_id": "rag-grounding-inactive",
+      "trace": "traces/evals/20261019-140308-1eaacc36.jsonl",
+      "trace_sha256": "734575b588afc0a28ad1c38c7756f4a73afbb8758939831d5fb111c2e5f6c64f",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 5877,
+        "completion_tokens": 77,
+        "total_tokens": 5954
+      },
+      "estimated_amount": "0.000590",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "002-637a70",
+      "request": 12,
+      "started_at": "2026-10-19T06:03:11.035459+00:00",
+      "settled_at": "2026-10-19T06:03:17.256400+00:00"
+    },
+    {
+      "case_id": "rag-grounding-no-match",
+      "trace": "traces/evals/20261019-140317-bf8cab5b.jsonl",
+      "trace_sha256": "4b6f3db4d9d859d058393ffd24d3b0e83c5700d235ae64c2b5c77eb5719adee3",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 5769,
+        "completion_tokens": 61,
+        "total_tokens": 5830
+      },
+      "estimated_amount": "0.000575",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "002-637a70",
+      "request": 13,
+      "started_at": "2026-10-19T06:03:17.547915+00:00",
+      "settled_at": "2026-10-19T06:03:19.692933+00:00"
+    },
+    {
+      "case_id": "rag-grounding-no-match",
+      "trace": "traces/evals/20261019-140317-bf8cab5b.jsonl",
+      "trace_sha256": "4b6f3db4d9d859d058393ffd24d3b0e83c5700d235ae64c2b5c77eb5719adee3",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 5872,
+        "completion_tokens": 119,
+        "total_tokens": 5991
+      },
+      "estimated_amount": "0.000604",
+      "currency": "CNY",
+      "campaign": "20261019-structured-glm-campaign-03.json",
+      "segment": "002-637a70",
+      "request": 14,
+      "started_at": "2026-10-19T06:03:19.758828+00:00",
+      "settled_at": "2026-10-19T06:03:25.145684+00:00"
+    },
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "trace": "traces/evals/20261019-120009-de33aecf.jsonl",
+      "trace_sha256": "b804399ee468fda7867134451a272492c6a08b98b4f87cb45d7b7b2af0c99619",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 6131,
+        "completion_tokens": 77,
+        "total_tokens": 6208
+      },
+      "estimated_amount": "0.000290",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "001-28da79",
+      "request": 1,
+      "started_at": "2026-10-19T04:00:09.714934+00:00",
+      "settled_at": "2026-10-19T04:00:12.415606+00:00"
+    },
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "trace": "traces/evals/20261019-120009-de33aecf.jsonl",
+      "trace_sha256": "b804399ee468fda7867134451a272492c6a08b98b4f87cb45d7b7b2af0c99619",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6562,
+        "completion_tokens": 417,
+        "total_tokens": 6979
+      },
+      "estimated_amount": "0.000370",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "001-28da79",
+      "request": 2,
+      "started_at": "2026-10-19T04:00:12.497399+00:00",
+      "settled_at": "2026-10-19T04:00:16.765453+00:00"
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "trace": "traces/evals/20261019-120017-2f2c5c37.jsonl",
+      "trace_sha256": "0c391f0b4b4b4fc7f60029c94bf7ca200012794c5899de6d3d2dc96906800f9c",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 6129,
+        "completion_tokens": 129,
+        "total_tokens": 6258
+      },
+      "estimated_amount": "0.000299",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "001-28da79",
+      "request": 3,
+      "started_at": "2026-10-19T04:00:17.156118+00:00",
+      "settled_at": "2026-10-19T04:00:19.440742+00:00"
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "trace": "traces/evals/20261019-120017-2f2c5c37.jsonl",
+      "trace_sha256": "0c391f0b4b4b4fc7f60029c94bf7ca200012794c5899de6d3d2dc96906800f9c",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6552,
+        "completion_tokens": 184,
+        "total_tokens": 6736
+      },
+      "estimated_amount": "0.000328",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "001-28da79",
+      "request": 4,
+      "started_at": "2026-10-19T04:00:19.481248+00:00",
+      "settled_at": "2026-10-19T04:00:22.289564+00:00"
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "trace": "traces/evals/20261019-120022-2d356850.jsonl",
+      "trace_sha256": "6ace9010b15a217934377ef4aa5460df1559a7b7f294e09f3ece498f0a13f6e3",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 6130,
+        "completion_tokens": 98,
+        "total_tokens": 6228
+      },
+      "estimated_amount": "0.000293",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "001-28da79",
+      "request": 5,
+      "started_at": "2026-10-19T04:00:22.582313+00:00",
+      "settled_at": "2026-10-19T04:00:25.239151+00:00"
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "trace": "traces/evals/20261019-120022-2d356850.jsonl",
+      "trace_sha256": "6ace9010b15a217934377ef4aa5460df1559a7b7f294e09f3ece498f0a13f6e3",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6541,
+        "completion_tokens": 207,
+        "total_tokens": 6748
+      },
+      "estimated_amount": "0.000332",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "001-28da79",
+      "request": 6,
+      "started_at": "2026-10-19T04:00:25.279659+00:00",
+      "settled_at": "2026-10-19T04:00:27.947433+00:00"
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "trace": "traces/evals/20261019-120028-7152972b.jsonl",
+      "trace_sha256": "51a7acb08d7080808dc5e0a5ba197ac70895e13d2d269c17ee0419c61ea6c195",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 6138,
+        "completion_tokens": 144,
+        "total_tokens": 6282
+      },
+      "estimated_amount": "0.000302",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "001-28da79",
+      "request": 7,
+      "started_at": "2026-10-19T04:00:28.294762+00:00",
+      "settled_at": "2026-10-19T04:00:31.345523+00:00"
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "trace": "traces/evals/20261019-120028-7152972b.jsonl",
+      "trace_sha256": "51a7acb08d7080808dc5e0a5ba197ac70895e13d2d269c17ee0419c61ea6c195",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 7315,
+        "completion_tokens": 163,
+        "total_tokens": 7478
+      },
+      "estimated_amount": "0.000359",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "001-28da79",
+      "request": 8,
+      "started_at": "2026-10-19T04:00:31.429668+00:00",
+      "settled_at": "2026-10-19T04:00:34.335797+00:00"
+    },
+    {
+      "case_id": "rag-grounding-custom-exception",
+      "trace": "traces/evals/20261019-120034-4d9dfead.jsonl",
+      "trace_sha256": "4db80fc6d72881cd7735d7bafed48f6003bedbbecd3c0a68dba85c5dd9381dc3",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 6137,
+        "completion_tokens": 135,
+        "total_tokens": 6272
+      },
+      "estimated_amount": "0.000300",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "001-28da79",
+      "request": 9,
+      "started_at": "2026-10-19T04:00:34.680502+00:00",
+      "settled_at": "2026-10-19T04:00:37.448747+00:00"
+    },
+    {
+      "case_id": "rag-grounding-custom-exception",
+      "trace": "traces/evals/20261019-120034-4d9dfead.jsonl",
+      "trace_sha256": "4db80fc6d72881cd7735d7bafed48f6003bedbbecd3c0a68dba85c5dd9381dc3",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6572,
+        "completion_tokens": 180,
+        "total_tokens": 6752
+      },
+      "estimated_amount": "0.000328",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "001-28da79",
+      "request": 10,
+      "started_at": "2026-10-19T04:00:37.496871+00:00",
+      "settled_at": "2026-10-19T04:00:41.588727+00:00"
+    },
+    {
+      "case_id": "rag-grounding-partial",
+      "trace": "traces/evals/20261019-120041-f16ee6fb.jsonl",
+      "trace_sha256": "514181b6dbf285a7df683efe88fc4e16a2cadb658a87883cc4d779fbc33fcad4",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 6130,
+        "completion_tokens": 189,
+        "total_tokens": 6319
+      },
+      "estimated_amount": "0.000310",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "001-28da79",
+      "request": 11,
+      "started_at": "2026-10-19T04:00:41.938802+00:00",
+      "settled_at": "2026-10-19T04:00:44.278372+00:00"
+    },
+    {
+      "case_id": "rag-grounding-partial",
+      "trace": "traces/evals/20261019-120041-f16ee6fb.jsonl",
+      "trace_sha256": "514181b6dbf285a7df683efe88fc4e16a2cadb658a87883cc4d779fbc33fcad4",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6954,
+        "completion_tokens": 124,
+        "total_tokens": 7078
+      },
+      "estimated_amount": "0.000335",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "001-28da79",
+      "request": 12,
+      "started_at": "2026-10-19T04:00:44.357258+00:00",
+      "settled_at": "2026-10-19T04:00:47.771353+00:00"
+    },
+    {
+      "case_id": "rag-grounding-contact-gap",
+      "trace": "traces/evals/20261019-140416-9e819de1.jsonl",
+      "trace_sha256": "e3002797cab96192ad0522b6f6b2b41ac0e8c32eed6f71e8ad48f9888639a472",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 6129,
+        "completion_tokens": 94,
+        "total_tokens": 6223
+      },
+      "estimated_amount": "0.000293",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "002-3b8eab",
+      "request": 1,
+      "started_at": "2026-10-19T06:04:16.046807+00:00",
+      "settled_at": "2026-10-19T06:04:18.554869+00:00"
+    },
+    {
+      "case_id": "rag-grounding-contact-gap",
+      "trace": "traces/evals/20261019-140416-9e819de1.jsonl",
+      "trace_sha256": "e3002797cab96192ad0522b6f6b2b41ac0e8c32eed6f71e8ad48f9888639a472",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6539,
+        "completion_tokens": 290,
+        "total_tokens": 6829
+      },
+      "estimated_amount": "0.000346",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "002-3b8eab",
+      "request": 2,
+      "started_at": "2026-10-19T06:04:18.661115+00:00",
+      "settled_at": "2026-10-19T06:04:22.130656+00:00"
+    },
+    {
+      "case_id": "rag-grounding-freight-gap",
+      "trace": "traces/evals/20261019-140422-1290b3bf.jsonl",
+      "trace_sha256": "e6b839a311928b3fbbff38b5eeb9a786c46b84db46fa152a4c1da8a2b42129a3",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 6131,
+        "completion_tokens": 117,
+        "total_tokens": 6248
+      },
+      "estimated_amount": "0.000297",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "002-3b8eab",
+      "request": 3,
+      "started_at": "2026-10-19T06:04:22.489539+00:00",
+      "settled_at": "2026-10-19T06:04:25.388360+00:00"
+    },
+    {
+      "case_id": "rag-grounding-freight-gap",
+      "trace": "traces/evals/20261019-140422-1290b3bf.jsonl",
+      "trace_sha256": "e6b839a311928b3fbbff38b5eeb9a786c46b84db46fa152a4c1da8a2b42129a3",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6799,
+        "completion_tokens": 353,
+        "total_tokens": 7152
+      },
+      "estimated_amount": "0.000369",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "002-3b8eab",
+      "request": 4,
+      "started_at": "2026-10-19T06:04:25.455969+00:00",
+      "settled_at": "2026-10-19T06:04:28.141749+00:00"
+    },
+    {
+      "case_id": "rag-grounding-warranty-gap",
+      "trace": "traces/evals/20261019-140428-bfbea1b8.jsonl",
+      "trace_sha256": "643c99b491037a3d0a264ce17b1a1a30b97b753143c0f2923b5c0af41bf928b1",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 6130,
+        "completion_tokens": 85,
+        "total_tokens": 6215
+      },
+      "estimated_amount": "0.000291",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "002-3b8eab",
+      "request": 5,
+      "started_at": "2026-10-19T06:04:28.438006+00:00",
+      "settled_at": "2026-10-19T06:04:31.558635+00:00"
+    },
+    {
+      "case_id": "rag-grounding-warranty-gap",
+      "trace": "traces/evals/20261019-140428-bfbea1b8.jsonl",
+      "trace_sha256": "643c99b491037a3d0a264ce17b1a1a30b97b753143c0f2923b5c0af41bf928b1",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6790,
+        "completion_tokens": 111,
+        "total_tokens": 6901
+      },
+      "estimated_amount": "0.000326",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "002-3b8eab",
+      "request": 6,
+      "started_at": "2026-10-19T06:04:31.619134+00:00",
+      "settled_at": "2026-10-19T06:04:34.424944+00:00"
+    },
+    {
+      "case_id": "rag-grounding-conflict",
+      "trace": "traces/evals/20261019-140434-a8d6bc14.jsonl",
+      "trace_sha256": "618a8314aacea004b8721be922cbca95410d856ebd238e4baaf2c2f0d859888b",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 6125,
+        "completion_tokens": 75,
+        "total_tokens": 6200
+      },
+      "estimated_amount": "0.000289",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "002-3b8eab",
+      "request": 7,
+      "started_at": "2026-10-19T06:04:34.794701+00:00",
+      "settled_at": "2026-10-19T06:04:38.257066+00:00"
+    },
+    {
+      "case_id": "rag-grounding-conflict",
+      "trace": "traces/evals/20261019-140434-a8d6bc14.jsonl",
+      "trace_sha256": "618a8314aacea004b8721be922cbca95410d856ebd238e4baaf2c2f0d859888b",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6289,
+        "completion_tokens": 259,
+        "total_tokens": 6548
+      },
+      "estimated_amount": "0.000330",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "002-3b8eab",
+      "request": 8,
+      "started_at": "2026-10-19T06:04:38.308078+00:00",
+      "settled_at": "2026-10-19T06:04:51.160650+00:00"
+    },
+    {
+      "case_id": "rag-grounding-unavailable",
+      "trace": "traces/evals/20261019-140451-c22d2c29.jsonl",
+      "trace_sha256": "73c8718b6284ac00cd10bc4f47b8ab505895cb68315215f502fb2509c835faa1",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 6125,
+        "completion_tokens": 86,
+        "total_tokens": 6211
+      },
+      "estimated_amount": "0.000291",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "002-3b8eab",
+      "request": 9,
+      "started_at": "2026-10-19T06:04:51.535701+00:00",
+      "settled_at": "2026-10-19T06:04:53.919721+00:00"
+    },
+    {
+      "case_id": "rag-grounding-unavailable",
+      "trace": "traces/evals/20261019-140451-c22d2c29.jsonl",
+      "trace_sha256": "73c8718b6284ac00cd10bc4f47b8ab505895cb68315215f502fb2509c835faa1",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6253,
+        "completion_tokens": 372,
+        "total_tokens": 6625
+      },
+      "estimated_amount": "0.000348",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "002-3b8eab",
+      "request": 10,
+      "started_at": "2026-10-19T06:04:53.988270+00:00",
+      "settled_at": "2026-10-19T06:04:57.814567+00:00"
+    },
+    {
+      "case_id": "rag-grounding-inactive",
+      "trace": "traces/evals/20261019-140458-fcf97ac1.jsonl",
+      "trace_sha256": "e94db89048e750f83d0ffade4c0dccf1af6e0deb7baf2a0d7d797160d71cd941",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 6123,
+        "completion_tokens": 42,
+        "total_tokens": 6165
+      },
+      "estimated_amount": "0.000283",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "002-3b8eab",
+      "request": 11,
+      "started_at": "2026-10-19T06:04:58.169819+00:00",
+      "settled_at": "2026-10-19T06:05:00.563204+00:00"
+    },
+    {
+      "case_id": "rag-grounding-inactive",
+      "trace": "traces/evals/20261019-140458-fcf97ac1.jsonl",
+      "trace_sha256": "e94db89048e750f83d0ffade4c0dccf1af6e0deb7baf2a0d7d797160d71cd941",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6262,
+        "completion_tokens": 139,
+        "total_tokens": 6401
+      },
+      "estimated_amount": "0.000307",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "002-3b8eab",
+      "request": 12,
+      "started_at": "2026-10-19T06:05:00.618954+00:00",
+      "settled_at": "2026-10-19T06:05:04.821776+00:00"
+    },
+    {
+      "case_id": "rag-grounding-no-match",
+      "trace": "traces/evals/20261019-140505-b89260a9.jsonl",
+      "trace_sha256": "71b6a05c018025719ad012634c38df6444f0f68d207d0c94128443526e3cd460",
+      "step": 1,
+      "usage": {
+        "prompt_tokens": 6126,
+        "completion_tokens": 79,
+        "total_tokens": 6205
+      },
+      "estimated_amount": "0.000290",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "002-3b8eab",
+      "request": 13,
+      "started_at": "2026-10-19T06:05:05.132769+00:00",
+      "settled_at": "2026-10-19T06:05:15.408850+00:00"
+    },
+    {
+      "case_id": "rag-grounding-no-match",
+      "trace": "traces/evals/20261019-140505-b89260a9.jsonl",
+      "trace_sha256": "71b6a05c018025719ad012634c38df6444f0f68d207d0c94128443526e3cd460",
+      "step": 2,
+      "usage": {
+        "prompt_tokens": 6278,
+        "completion_tokens": 205,
+        "total_tokens": 6483
+      },
+      "estimated_amount": "0.000319",
+      "currency": "USD",
+      "campaign": "20261019-structured-deepseek-campaign-01.json",
+      "segment": "002-3b8eab",
+      "request": 14,
+      "started_at": "2026-10-19T06:05:15.468757+00:00",
+      "settled_at": "2026-10-19T06:05:18.316187+00:00"
+    }
+  ],
+  "request_count": 74,
+  "usage_count": 74,
+  "known_estimates": {
+    "CNY": "0.034445",
+    "USD": "0.008225"
+  },
+  "requests_by_currency": {
+    "CNY": 48,
+    "USD": 26
+  },
+  "unknown_requests": 0,
+  "final_source_sha256": "0f230ed609ed4d9990927f4a86ed576a0bc99351fb263ed495fe2b97b6ef52aa",
+  "final_case_sha256": "9ec9ad5f2bb03902a706152f2ceafdb4e0b4f0c839f701d7996fb1eadfecba0f",
+  "document_index_sha256": "2bfab2cd9255872c49dd102752a3424690e19ff6cb0fe4c5b7980df25137444a",
+  "note": "All current-phase requests reconciled to local usage and configured price estimates, not supplier invoices. Earlier frozen unknown charges remain separate."
+}

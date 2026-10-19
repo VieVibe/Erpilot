@@ -1,0 +1,77 @@
+{
+  "status": "closed_final_gates_failed",
+  "source": {
+    "revision": "4a0289f362025380f765434ee4c043abf2676d5e",
+    "working_tree_dirty": true,
+    "source_sha256": "0b37cb6e793590f0bc64e59e1a0a6b62f12a5388eb02859d971489d56cc29358"
+  },
+  "suite": "rag-grounding-structured",
+  "scorer": "rag-grounding-structured-1",
+  "case_count": 13,
+  "models": {
+    "glm-5.3-flash": {
+      "currency": "CNY",
+      "campaign_cap": "0.04",
+      "first_segment_cases": 4,
+      "first_segment_cap": "0.015"
+    },
+    "deepseek-v4.1-flash": {
+      "currency": "USD",
+      "campaign_cap": "0.02",
+      "first_segment_cases": 4,
+      "first_segment_cap": "0.008"
+    }
+  },
+  "request_timeout_seconds": 60,
+  "sdk_max_retries": 0,
+  "policy": "Explicit case-level segments; completed failures retained; unknown usage freezes segment; previous frozen ledgers remain separate.",
+  "v1_diagnostic": {
+    "campaign": "reports/acceptance/20261019-structured-glm-campaign-01.json",
+    "requests": 14,
+    "known_CNY": "0.011312",
+    "unknown_requests": 0,
+    "raw_result": "0/4, question coverage false positives; original results preserved"
+  },
+  "v2": {
+    "source": {
+      "revision": "4a0289f362025380f765434ee4c043abf2676d5e",
+      "working_tree_dirty": true,
+      "source_sha256": "4b832e94d8d645132f00fb83e47805b90fe569150f39556963f063c1e7d99ded"
+    },
+    "suite": "rag-grounding-structured-v2",
+    "glm_remaining_cap_CNY": "0.028688",
+    "deepseek_remaining_cap_USD": "0.02",
+    "case_sha256": "4ac0aeac4acfbcb2d0628d49a74fb0a77c0432be99b03ec9e803320675ed6f9c"
+  },
+  "v2_diagnostic": {
+    "campaign": "reports/acceptance/20261019-structured-glm-campaign-02.json",
+    "requests": 8,
+    "known_CNY": "0.005558",
+    "unknown_requests": 0,
+    "raw_result": "3/4; remaining conjunction coverage false positive; original results preserved"
+  },
+  "v3": {
+    "source": {
+      "revision": "4a0289f362025380f765434ee4c043abf2676d5e",
+      "working_tree_dirty": true,
+      "source_sha256": "0f230ed609ed4d9990927f4a86ed576a0bc99351fb263ed495fe2b97b6ef52aa"
+    },
+    "suite": "rag-grounding-structured-v3",
+    "glm_remaining_cap_CNY": "0.023130",
+    "deepseek_remaining_cap_USD": "0.02",
+    "case_sha256": "9ec9ad5f2bb03902a706152f2ceafdb4e0b4f0c839f701d7996fb1eadfecba0f"
+  },
+  "no_further_paid_calls": true,
+  "request_count": 74,
+  "known_estimates": {
+    "CNY": "0.034445",
+    "USD": "0.008225"
+  },
+  "unknown_requests": 0,
+  "final_results": {
+    "glm": "11/13",
+    "deepseek": "11/13",
+    "strict_comparison": "comparable; not quality-gate acceptance"
+  },
+  "audit": "reports/acceptance/20261019-structured-grounding-usage-audit.json"
+}

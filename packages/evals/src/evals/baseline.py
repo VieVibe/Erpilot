@@ -3,7 +3,7 @@
 import hashlib
 import tempfile
 import time
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -23,6 +23,10 @@ from evals.billing import BudgetedClient, CurrencyBudget, format_amount
 from evals.cases import ALL_CASES
 from evals.checks import SCORER_VERSION
 from evals.context import resolve
+from evals.grounding_cases import (
+    GROUNDING_FIXTURE_VERSION,
+    GroundingCase,
+)
 from evals.model import CaseResult, EvalCase
 from evals.policy_cases import (
     B5_SCORER_VERSION,
@@ -53,6 +57,7 @@ async def run_baseline(
     budget: Budget | None = None, currency_budget: CurrencyBudget | None = None,
     case_harness: "B5Harness | None" = None,
     report_dir: Path, trace_dir: Path,
+    progress: Callable[[Path], None] | None = None,
 ) -> tuple[list[CaseResult], Path]:
     """跑基线。旧路径传 CNY `Budget`；计费包装路径传 `currency_budget`，二者只选其一。
 
@@ -78,6 +83,10 @@ async def run_baseline(
     write_ids |= b5_ids
     b6_ids = {c.id for c in cases if c.id.startswith("b6-")}
     write_ids |= b6_ids
+    grounding_ids = {c.id for c in cases if isinstance(c, GroundingCase)}
+    write_ids |= grounding_ids
+    if grounding_ids and case_harness is None:
+        raise ValueError("rag-grounding requires the explicit controlled-retrieval harness")
     b4_ids = {c.id for c in cases if isinstance(c, TaskCase)}
     write_ids |= b4_ids
     provenance = source_provenance()
@@ -102,6 +111,13 @@ async def run_baseline(
     }
     if b5_ids:
         metadata["b5_scorer_version"] = B5_SCORER_VERSION
+    if grounding_ids:
+        versions = {c.scorer_version for c in cases if isinstance(c, GroundingCase)}
+        if len(versions) != 1:
+            raise ValueError("Cannot mix grounding scorer versions in one report")
+        metadata["grounding_scorer_version"] = next(iter(versions))
+        metadata["grounding_fixture_version"] = GROUNDING_FIXTURE_VERSION
+        metadata["retrieval_mode"] = "controlled-retrieval"
     if b6_ids:
         metadata["b6_scorer_version"] = B6_SCORER_VERSION
         metadata["b6_fixture"] = {"version": B6_FIXTURE_VERSION, "as_of": B6_AT.isoformat()}
@@ -123,7 +139,7 @@ async def run_baseline(
         metadata["executed"] = sum(
             not any(f.startswith("budget:") for f in r.failed_checks) for r in results
         )
-        metadata["complete"] = len(results) == len(cases)
+        metadata["complete"] = len(results) == len(cases) == metadata["executed"]
         if b4_ids:
             metadata["turns_executed"] = sum(len(r.turn_traces) for r in results)
             metadata["case_turn_traces"] = {r.case_id: r.turn_traces for r in results}
@@ -146,12 +162,15 @@ async def run_baseline(
                 metadata["case_harness"] = {
                     k: dict(v) for k, v in case_harness.poison_records.items()
                 }
-        return write_report(
+        report = write_report(
             report_dir, [*results, *pending], model=client.config.model,
             budget_limit_cny=budget.limit_cny if budget is not None else None,
             elapsed_s=time.monotonic() - started,
             metadata=metadata, provenance=provenance, report_path=path,
         )
+        if progress is not None:
+            progress(report)
+        return report
 
     path = checkpoint()
     with tempfile.TemporaryDirectory(prefix="erpilot-baseline-") as directory:
@@ -184,7 +203,7 @@ async def run_baseline(
                         case.id, case_harness.policy_resolver
                     )
                 session_options = {"session_id": f"eval:{case.id}"} \
-                    if isinstance(case, TaskCase) or case.id in b6_ids else {}
+                    if isinstance(case, (TaskCase, GroundingCase)) or case.id in b6_ids else {}
                 if case.id in b6_ids:
                     session_options["replenishment_at"] = B6_AT
                 tools = await build_agent_tools_async(

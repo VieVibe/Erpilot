@@ -4,6 +4,7 @@ from datetime import UTC, datetime
 from typing import Annotated
 
 from pydantic import Field
+from rag.citations import citation_label, text_digest
 from rag.evidence import PolicyEvidence, query_policy
 from rag.index import Hit
 
@@ -38,7 +39,7 @@ def reference(hit: Hit) -> dict:
     for key in ("effective_from", "effective_until"):
         value = getattr(metadata, key)
         data[key] = value.astimezone(UTC).isoformat().replace("+00:00", "Z") if value else None
-    return {
+    result = {
         "source": hit.chunk.source,
         "title": hit.chunk.title,
         "text": hit.chunk.text,
@@ -53,10 +54,35 @@ def reference(hit: Hit) -> dict:
             )
         },
     }
+    result["citation"] = citation_label(result)
+    result["quoted_citation"] = result["citation"] + "「" + " ".join(result["text"].split()) + "」"
+    result["text_sha256"] = text_digest(result["text"])
+    return result
 
 
 def register_policy_tools(mcp, repo, resolver, threshold):
     from mcp_erp.server import _err
+
+    @mcp.tool
+    def compose_policy_answer(
+        parts: Annotated[list[dict], Field(description=(
+            "逐问选择证据或缺口。每项严格为 question_quote（当前用户原话的连续子串）、"
+            "status（evidence 或 gap）、citations（search_policy 实际返回的 citation 标签数组）。"
+            "evidence 必须选适用原文；gap 必须空 citations。不得添加自由回答文本。"
+            "覆盖完整提问，可将整个用户问题作为一项；部分有据时拆项。"
+        ))],
+    ) -> dict:
+        """检索后单独调用，提交结构化政策答复；程序核对本轮证据并输出原文与缺口。
+
+        必须先等待 search_policy 返回，不能并行调用。命中不等于足以回答；
+        判断每个问题的条件、例外和费用适用范围。未覆盖的问题用 gap，
+        不得将质量问题运费条款用于无理由退货。完成后无需再生成文字。
+        """
+        from mcp_erp.policy_answer import PolicyAnswerProposal
+
+        proposal = PolicyAnswerProposal.model_validate({"parts": parts})
+        # External MCP callers receive a proposal, never a claim of validated provenance.
+        return {"status": "requires_runtime_binding", **proposal.model_dump()}
 
     @mcp.tool
     def assess_order_cancellation(
@@ -98,7 +124,12 @@ def register_policy_tools(mcp, repo, resolver, threshold):
         query: Annotated[str, Field(description="政策相关问题或关键词，如退货、折扣、取消")],
         k: Annotated[int, Field(description="返回片段数（1~5）")] = 3,
     ) -> dict:
-        """检索有效政策片段及来源、版本、生效时间；无命中时如实说明未覆盖，不要臆造。"""
+        """检索有效政策片段；命中仅表示相关，不表示足以回答。
+
+        逐个核对用户问题的条件和结论；未覆盖部分明确拒答，不套用相邻政策。
+        返回后单独调用 compose_policy_answer 选择逐问证据与缺口，
+        由程序校验、引用和输出；不要自行生成政策结论。
+        """
         if not query.strip():
             return _err("invalid_argument", "查询不能为空", "例如：满多少件有折扣、几天内可退货")
         if not 1 <= k <= 5:
@@ -123,7 +154,11 @@ def register_policy_tools(mcp, repo, resolver, threshold):
             "query": query,
             "queried_at": at.isoformat().replace("+00:00", "Z"),
             "policy_state": evidence.state,
+            "answerability": "not_assessed" if evidence.matches else "insufficient",
             "matches": [reference(hit) for hit in evidence.matches],
             "note": evidence.reason
-            + ("；请如实说明，不要臆造政策" if not evidence.matches else ""),
+            + (
+                "；请如实说明，不要臆造政策" if not evidence.matches
+                else "命中只代表主题相关；须逐问核对原文，部分有据则部分回答，缺少依据则明确未覆盖"
+            ),
         }

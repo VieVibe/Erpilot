@@ -1,0 +1,122 @@
+{
+  "report": "reports/evals/20261019-105612-7aac03.json",
+  "reviewer": "Codex development agent reading actual outputs; not an independent human or blind second-model judge",
+  "status": "complete",
+  "semantic_passed": 11,
+  "total": 13,
+  "cases": [
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "automatic_passed": true,
+      "semantic_review_passed": false,
+      "issues": [
+        {
+          "kind": "timezone_omitted",
+          "excerpt": "自 2026-10-11 起生效",
+          "reason": "Returned effective_from is 2026-10-11T16:00:00Z (=2026-10-12 00:00 Asia/Shanghai). Rendering only the UTC date without timezone is ambiguous for this user."
+        }
+      ],
+      "note": "Reviewed actual question, full visible text, returned references and metadata. Valid references alone are not a semantic proof."
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": [],
+      "note": "Reviewed actual question, full visible text, returned references and metadata. Valid references alone are not a semantic proof."
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": [],
+      "note": "Reviewed actual question, full visible text, returned references and metadata. Valid references alone are not a semantic proof."
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "automatic_passed": true,
+      "semantic_review_passed": false,
+      "issues": [
+        {
+          "kind": "unsupported_numeric_detail",
+          "excerpt": "≥10/50/200 件档位",
+          "reason": "These tier thresholds do exist elsewhere in the corpus/tool context, but are absent from this case actual returned snapshot section. The nearby valid quote does not support these additional numerical claims."
+        },
+        {
+          "kind": "timezone_omitted",
+          "excerpt": "自 2026-10-11 起生效",
+          "reason": "Unrequested effective date drops UTC time/offset."
+        }
+      ],
+      "note": "Reviewed actual question, full visible text, returned references and metadata. Valid references alone are not a semantic proof."
+    },
+    {
+      "case_id": "rag-grounding-custom-exception",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": [],
+      "note": "Reviewed actual question, full visible text, returned references and metadata. Valid references alone are not a semantic proof."
+    },
+    {
+      "case_id": "rag-grounding-partial",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": [],
+      "note": "Reviewed actual question, full visible text, returned references and metadata. Valid references alone are not a semantic proof."
+    },
+    {
+      "case_id": "rag-grounding-contact-gap",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": [],
+      "note": "Reviewed actual question, full visible text, returned references and metadata. Valid references alone are not a semantic proof."
+    },
+    {
+      "case_id": "rag-grounding-freight-gap",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": [],
+      "note": "Reviewed actual question, full visible text, returned references and metadata. Valid references alone are not a semantic proof."
+    },
+    {
+      "case_id": "rag-grounding-warranty-gap",
+      "automatic_passed": false,
+      "semantic_review_passed": true,
+      "issues": [],
+      "note": "Reviewed actual question, full visible text, returned references and metadata. Valid references alone are not a semantic proof."
+    },
+    {
+      "case_id": "rag-grounding-conflict",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": [],
+      "note": "Reviewed actual question, full visible text, returned references and metadata. Valid references alone are not a semantic proof."
+    },
+    {
+      "case_id": "rag-grounding-unavailable",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": [],
+      "note": "Reviewed actual question, full visible text, returned references and metadata. Valid references alone are not a semantic proof."
+    },
+    {
+      "case_id": "rag-grounding-inactive",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": [],
+      "note": "Reviewed actual question, full visible text, returned references and metadata. Valid references alone are not a semantic proof."
+    },
+    {
+      "case_id": "rag-grounding-no-match",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": [],
+      "note": "Reviewed actual question, full visible text, returned references and metadata. Valid references alone are not a semantic proof."
+    }
+  ],
+  "automatic_false_positive_note": {
+    "case_id": "rag-grounding-warranty-gap",
+    "matched_text": "无法从店铺有效政策确认保修是一年还是两年",
+    "classification": "Negated uncertainty was matched by the frozen unsupported-year regex. The answer correctly declined to infer a warranty. Original FAIL preserved; scorer not changed."
+  }
+}

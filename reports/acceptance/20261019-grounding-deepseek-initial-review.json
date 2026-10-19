@@ -1,0 +1,98 @@
+{
+  "report": "reports/evals/20261019-105901-168c5c.json",
+  "reviewer": "Codex development agent reading actual outputs; not an independent human or blind second-model judge",
+  "status": "complete",
+  "semantic_passed": 12,
+  "total": 13,
+  "cases": [
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-custom-exception",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-partial",
+      "automatic_passed": true,
+      "semantic_review_passed": false,
+      "issues": [
+        {
+          "kind": "unsupported_process_suggestion",
+          "excerpt": "这类收件信息通常随退货申请通过后由店铺单独告知",
+          "reason": "Introduces a typical post-approval process absent from retrieved evidence. Asking the shop is appropriate; this extra workflow detail is unverified."
+        }
+      ]
+    },
+    {
+      "case_id": "rag-grounding-contact-gap",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-freight-gap",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-warranty-gap",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-conflict",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-unavailable",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-inactive",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-no-match",
+      "automatic_passed": false,
+      "semantic_review_passed": true,
+      "issues": []
+    }
+  ],
+  "automatic_false_positive_note": {
+    "case_id": "rag-grounding-no-match",
+    "matched_text": "无法从有效政策确认进口关税的承担方",
+    "classification": "Correct refusal does not contain a contiguous configured refusal synonym. Original FAIL preserved; scorer unchanged."
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "report": "reports/evals/20261019-110239-593aac.json",
+  "reviewer": "Codex development agent, not independent human or blind judge",
+  "content_support_passed": 13,
+  "total": 13,
+  "overall_acceptance": false,
+  "notes": "All requested policy answers/gaps supported in reviewed outputs. Exact citation contract failed in three cases; original 10/13 automatic result preserved.",
+  "cases": [
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "automatic_passed": false,
+      "content_support_passed": true,
+      "automatic_failures": [
+        "citation_format",
+        "grounding_missing_citation: return-policy.md / 七天无理由退货"
+      ]
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "automatic_passed": false,
+      "content_support_passed": true,
+      "automatic_failures": [
+        "citation_format",
+        "grounding_missing_citation: return-policy.md / 退款流程与时效"
+      ]
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-custom-exception",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-partial",
+      "automatic_passed": false,
+      "content_support_passed": true,
+      "automatic_failures": [
+        "citation_not_verbatim",
+        "grounding_missing_citation: return-policy.md / 七天无理由退货"
+      ]
+    },
+    {
+      "case_id": "rag-grounding-contact-gap",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-freight-gap",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-warranty-gap",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-conflict",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-unavailable",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-inactive",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-no-match",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    }
+  ]
+}

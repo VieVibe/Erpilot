@@ -1,0 +1,93 @@
+{
+  "report": "reports/evals/20261019-110735-51a7fd.json",
+  "reviewer": "Codex development agent reading outputs, not independent human or blind judge",
+  "content_support_passed": 13,
+  "total": 13,
+  "overall_acceptance": false,
+  "notes": "Policy content/gaps supported. Original auto 11/13 preserved: snapshot blockquote inserts Markdown > inside exact quote; correct warranty refusal hits v1 numerical regex.",
+  "cases": [
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "automatic_passed": false,
+      "content_support_passed": true,
+      "automatic_failures": [
+        "citation_not_verbatim",
+        "grounding_missing_citation: pricing-policy.md / 下单快照价与现价的区别"
+      ]
+    },
+    {
+      "case_id": "rag-grounding-custom-exception",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-partial",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-contact-gap",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-freight-gap",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-warranty-gap",
+      "automatic_passed": false,
+      "content_support_passed": true,
+      "automatic_failures": [
+        "must_not_match: 回答匹配了受限模式「保修(?:期|期限)?(?:为|是|：|:)\\s*(?:一|二|两|1|2)年」"
+      ]
+    },
+    {
+      "case_id": "rag-grounding-conflict",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-unavailable",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-inactive",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    },
+    {
+      "case_id": "rag-grounding-no-match",
+      "automatic_passed": true,
+      "content_support_passed": true,
+      "automatic_failures": []
+    }
+  ]
+}

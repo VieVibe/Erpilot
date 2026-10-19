@@ -4,6 +4,7 @@ import pytest
 from erp_store.seed import seed_database
 from fastmcp import Client
 from mcp_erp.server import create_server
+from rag.citations import citation_label, text_digest
 from rag.corpus import load_corpus
 from rag.index import PolicyIndex
 
@@ -33,6 +34,12 @@ async def test_search_policy_metadata(seeded_db):
     assert result["matches"][0]["version"] == "2026-10-12.1"
     assert result["matches"][0]["effective_from"].endswith("Z")
     assert result["matches"][0]["policy_id"]
+    assert result["answerability"] == "not_assessed"
+    for ref in result["matches"]:
+        assert ref["citation"] == citation_label(ref)
+        expected_quote = ref["citation"] + "「" + " ".join(ref["text"].split()) + "」"
+        assert ref["quoted_citation"] == expected_quote
+        assert ref["text_sha256"] == text_digest(ref["text"])
 
 
 async def test_embedding_failure_is_sanitized(seeded_db):

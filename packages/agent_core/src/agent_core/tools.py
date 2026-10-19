@@ -11,6 +11,8 @@ from typing import Any
 
 from pydantic import BaseModel
 
+from agent_core.response_contract import ResponseContract
+
 
 def _strip_titles(node: Any) -> Any:
     """递归去掉 JSON Schema 里的 title 键——对注入请求是纯噪音。"""
@@ -34,6 +36,7 @@ class Tool:
     # Graph composition can execute the original handler only after its durable interrupt.
     approved_handler: Callable[[BaseModel], Awaitable[object]] | None = None
     approval_gate: object | None = None
+    response_contract: ResponseContract | None = None
 
     def openai_schema(self) -> dict[str, Any]:
         """OpenAI tools 参数格式：{"type": "function", "function": {...}}。"""
