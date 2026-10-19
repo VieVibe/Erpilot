@@ -250,6 +250,7 @@ async def test_wrapper_case_window_reports_increment_and_resets():
 @pytest.mark.parametrize("stage", ["connect", "stream"])
 async def test_request_deadline_stops_stalls_and_freezes_unknown_budget(stage):
     requests = 0
+    warming_up = True
     closed = False
     waiting = asyncio.Event()
 
@@ -264,6 +265,8 @@ async def test_request_deadline_stops_stalls_and_freezes_unknown_budget(stage):
 
     async def handler(request):
         nonlocal requests
+        if warming_up:
+            return httpx2.Response(200, headers=SSE_HEADERS, content=b"data: [DONE]\n\n")
         requests += 1
         if stage == "connect":
             await waiting.wait()
@@ -277,8 +280,15 @@ async def test_request_deadline_stops_stalls_and_freezes_unknown_budget(stage):
     budget = CurrencyBudget(Decimal("1"), "USD", max_requests=40)
     wrapper = BudgetedClient(client, _rate(), budget)
     events = []
-    started = asyncio.get_running_loop().time()
     try:
+        # SDK lazy imports/serialization can exceed 50ms on a cold process. Warm
+        # those using the same in-memory transport before timing the stalled I/O.
+        stream = await sdk.chat.completions.create(model="test", messages=[], stream=True)
+        async for _ in stream:
+            pass
+        await stream.close()
+        warming_up = False
+        started = asyncio.get_running_loop().time()
         with pytest.raises(TimeoutError):
             async with asyncio.timeout(2):
                 async for event in wrapper.stream_chat([]):

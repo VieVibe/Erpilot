@@ -18,16 +18,17 @@ class PolicyEvidence:
     reason: str = ""
 
 
-def query_policy(
-    index: PolicyIndex,
-    embedder: Embedder,
-    query: str,
-    *,
-    at: datetime,
-    k: int = 3,
-    threshold: float = 0.57,
-    rule_id: str | None = None,
-) -> PolicyEvidence:
+@dataclass
+class PolicySelection:
+    state: PolicyState
+    index: PolicyIndex | None
+    reason: str = ""
+
+
+def select_policy_scope(
+    index: PolicyIndex, *, at: datetime, rule_id: str | None = None,
+) -> PolicySelection:
+    """Validate policy versions and select eligible chunks before any ranking."""
     if at.tzinfo is None or at.utcoffset() is None:
         raise ValueError("查询时间必须带时区")
     documents = []
@@ -41,13 +42,13 @@ def query_policy(
         relevant = [m for m in documents if rule_id is None or rule_id in m.rules]
         active = [m for m in relevant if m.active_at(at)]
     except (ValueError, TypeError, AttributeError):
-        return PolicyEvidence("unavailable", [], "索引元数据无效，请核对政策目录并刷新索引")
+        return PolicySelection("unavailable", None, "索引元数据无效，请核对政策目录并刷新索引")
     if not relevant:
-        return PolicyEvidence("no_match", [], "政策文档未覆盖所需规则")
+        return PolicySelection("no_match", None, "政策文档未覆盖所需规则")
     if not active:
-        return PolicyEvidence("inactive", [], "没有在查询时点生效的相关政策")
+        return PolicySelection("inactive", None, "没有在查询时点生效的相关政策")
     if len({m.policy_id for m in active}) != len(active):
-        return PolicyEvidence("conflict", [], "相关政策存在重叠生效版本或同版本不一致内容")
+        return PolicySelection("conflict", None, "相关政策存在重叠生效版本或同版本不一致内容")
     pairs = [
         (chunk, vector)
         for chunk, vector in zip(index.chunks, index.vectors, strict=True)
@@ -55,10 +56,19 @@ def query_policy(
         and (rule_id is None or chunk.title in chunk.metadata.rules[rule_id].titles)
     ]
     if not pairs:
-        return PolicyEvidence("no_match", [], "未检索到对应规则的小节")
+        return PolicySelection("no_match", None, "未检索到对应规则的小节")
+    return PolicySelection("matched", PolicyIndex([c for c, _ in pairs], [v for _, v in pairs]))
+
+
+def query_policy(
+    index: PolicyIndex, embedder: Embedder, query: str, *, at: datetime,
+    k: int = 3, threshold: float = 0.57, rule_id: str | None = None,
+) -> PolicyEvidence:
+    selection = select_policy_scope(index, at=at, rule_id=rule_id)
+    if selection.index is None:
+        return PolicyEvidence(selection.state, [], selection.reason)
     try:
-        selected = PolicyIndex([c for c, _ in pairs], [v for _, v in pairs])
-        hits = selected.search(query, embedder, k=k, threshold=threshold)
+        hits = selection.index.search(query, embedder, k=k, threshold=threshold)
     except Exception:
         return PolicyEvidence("unavailable", [], "政策检索暂不可用，请核对索引或稍后重试")
     if not hits:

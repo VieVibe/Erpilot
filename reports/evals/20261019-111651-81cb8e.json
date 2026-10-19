@@ -1,0 +1,1033 @@
+{
+  "model": "deepseek-v4.1-flash",
+  "ts": "20261019-111858",
+  "provenance": {
+    "revision": "4a0289f362025380f765434ee4c043abf2676d5e",
+    "working_tree_dirty": true,
+    "source_sha256": "2c709e5230d59ea575d0e23e51e3563e9873a3934eafb0f5d93f8066c1b7f2f4"
+  },
+  "suite": {
+    "kind": "targeted",
+    "planned": 13,
+    "executed": 9,
+    "case_ids": [
+      "rag-grounding-return-conditions",
+      "rag-grounding-quality",
+      "rag-grounding-refund",
+      "rag-grounding-snapshot",
+      "rag-grounding-custom-exception",
+      "rag-grounding-partial",
+      "rag-grounding-contact-gap",
+      "rag-grounding-freight-gap",
+      "rag-grounding-warranty-gap",
+      "rag-grounding-conflict",
+      "rag-grounding-unavailable",
+      "rag-grounding-inactive",
+      "rag-grounding-no-match"
+    ],
+    "scorer_version": "v2.6",
+    "retry_policy": "wrapper-no-rerun",
+    "request_timeout_seconds": 60.0,
+    "case_sha256": "b48b39a31894124a7642797b3e627b9bbe22751aa2688dabae7c4c56488fad29",
+    "seed": {
+      "value": 20260930,
+      "now": "2026-10-07T12:00:00+08:00",
+      "fresh_database_per_case": true
+    },
+    "case_traces": {
+      "rag-grounding-return-conditions": "traces/evals/20261019-111652-f8cab0db.jsonl",
+      "rag-grounding-quality": "traces/evals/20261019-111700-34644be8.jsonl",
+      "rag-grounding-refund": "traces/evals/20261019-111708-ca5ff958.jsonl",
+      "rag-grounding-snapshot": "traces/evals/20261019-111717-7e96d7dd.jsonl",
+      "rag-grounding-custom-exception": "traces/evals/20261019-111724-e97bfe6e.jsonl",
+      "rag-grounding-partial": "traces/evals/20261019-111735-8be89302.jsonl",
+      "rag-grounding-contact-gap": "traces/evals/20261019-111741-6b259335.jsonl",
+      "rag-grounding-freight-gap": "traces/evals/20261019-111750-04ce2822.jsonl",
+      "rag-grounding-warranty-gap": "traces/evals/20261019-111758-eb56f8d1.jsonl"
+    },
+    "state_checks": 13,
+    "complete": true,
+    "grounding_scorer_version": "rag-grounding-2",
+    "grounding_fixture_version": "policy-answer-support-1",
+    "retrieval_mode": "controlled-retrieval",
+    "budget_limit_cny": null,
+    "billing_budget": {
+      "currency": "USD",
+      "limit": "0.020515",
+      "spent": "0.005005",
+      "requests": 17,
+      "unknown_usage": true
+    },
+    "embedding_usage": {
+      "requests": 0,
+      "tokens": 0,
+      "mode": "controlled-retrieval",
+      "fixture_version": "policy-answer-support-1",
+      "fixture_sha256": "4048fd63666bffd2234af41ec339af7a28402dc4e911fbffdff2e3845a3b90ba",
+      "note": "Real corpus text, controlled ranking/faults; no embedding model"
+    },
+    "policy_corpus_sha256": "8f37c52eedf2bb49a76599023d2458fa8ca3039b4e517b113b60787f24d3224e",
+    "policy_index_sha256": "4048fd63666bffd2234af41ec339af7a28402dc4e911fbffdff2e3845a3b90ba",
+    "source_changed_during_run": false
+  },
+  "results": [
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "category": "multi",
+      "passed": true,
+      "failed_checks": [],
+      "steps": 2,
+      "completed": true,
+      "tool_calls": [
+        "search_policy"
+      ],
+      "tool_attempts": [
+        "search_policy"
+      ],
+      "total_tokens": 12175,
+      "cost": null,
+      "duration_ms": 8061.8,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [
+        {
+          "call_id": "call_00_dr08tz1w1i2l9lc3rtah62ct",
+          "name": "search_policy",
+          "arguments": {
+            "query": "无理由退货 期限 起算点 商品条件",
+            "k": 5
+          },
+          "content": {
+            "schema_version": 1,
+            "query": "无理由退货 期限 起算点 商品条件",
+            "queried_at": "2026-10-19T03:16:54.879419Z",
+            "policy_state": "matched",
+            "answerability": "not_assessed",
+            "matches": [
+              {
+                "source": "return-policy.md",
+                "title": "七天无理由退货",
+                "text": "签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。",
+                "score": 1.0,
+                "policy_id": "return-policy",
+                "version": "2026-10-12.1",
+                "effective_from": "2026-10-11T16:00:00Z",
+                "effective_until": null,
+                "citation": "【return-policy.md｜七天无理由退货｜2026-10-12.1】",
+                "quoted_citation": "【return-policy.md｜七天无理由退货｜2026-10-12.1】「签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。」",
+                "text_sha256": "baa60b752694db16e2f5857bf1c67bd5507ac3e39f46efb19ff74c6c39e319f1"
+              }
+            ],
+            "note": "命中只代表主题相关；须逐问核对原文，部分有据则部分回答，缺少依据则明确未覆盖"
+          },
+          "ok": true
+        }
+      ],
+      "visible_text": "已查到店铺有效政策，逐项答复如下（本轮仅检索政策，未执行任何业务操作）：\n\n**1. 期限与起算点：签收后 7 天内**\n政策原文为：签收后 7 天内可申请无理由退货。起算点是**签收**，不是下单或发货。\n\n**2. 商品条件：完好、不影响二次销售、包装与赠品齐全**\n即商品需保持完好、不影响二次销售，包装与赠品齐全。\n\n**3. 例外：定制类商品不适用无理由退货。**\n\n以上三条依据同一段原文：\n【return-policy.md｜七天无理由退货｜2026-10-12.1】「签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。」\n\n补充说明：您本次未询问的其他事项（如退货运费由谁承担、具体办理流程等），本轮检索片段未覆盖，无法确认，建议联系店铺人工核对。\n\n如需我进一步核查某笔具体订单是否符合上述条件，请提供订单号；涉及取消/退货的执行类操作需要人工审批，我可以在您明确指定订单后先做只读判断。",
+      "cost_complete": false,
+      "billing": {
+        "currency": "USD",
+        "estimated_amount": "0.000607",
+        "pricing_source": "user-confirmed-2026-10-12",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "turn_results": [],
+      "turn_traces": [],
+      "state_evidence": {
+        "before_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "after_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "all_tables": [
+          "business_operations",
+          "mutation_requests",
+          "order_drafts",
+          "order_items",
+          "orders",
+          "products",
+          "stocks"
+        ],
+        "answer_kind": "supported",
+        "expected_policy_state": "matched",
+        "required_citations": [
+          [
+            "return-policy.md",
+            "七天无理由退货"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "category": "multi",
+      "passed": true,
+      "failed_checks": [],
+      "steps": 2,
+      "completed": true,
+      "tool_calls": [
+        "search_policy",
+        "search_policy"
+      ],
+      "tool_attempts": [
+        "search_policy",
+        "search_policy"
+      ],
+      "total_tokens": 12548,
+      "cost": null,
+      "duration_ms": 7689.3,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [
+        {
+          "call_id": "call_00_hwld1g1cvuwhnypzxuqm3juc",
+          "name": "search_policy",
+          "arguments": {
+            "query": "质量问题 退换货 期限 起算 运费承担",
+            "k": 5
+          },
+          "content": {
+            "schema_version": 1,
+            "query": "质量问题 退换货 期限 起算 运费承担",
+            "queried_at": "2026-10-19T03:17:04.234190Z",
+            "policy_state": "matched",
+            "answerability": "not_assessed",
+            "matches": [
+              {
+                "source": "return-policy.md",
+                "title": "质量问题退换",
+                "text": "商品存在质量问题的，自签收起 15 天内可申请退换，运费由本店承担，并优先换货或全额退款。",
+                "score": 1.0,
+                "policy_id": "return-policy",
+                "version": "2026-10-12.1",
+                "effective_from": "2026-10-11T16:00:00Z",
+                "effective_until": null,
+                "citation": "【return-policy.md｜质量问题退换｜2026-10-12.1】",
+                "quoted_citation": "【return-policy.md｜质量问题退换｜2026-10-12.1】「商品存在质量问题的，自签收起 15 天内可申请退换，运费由本店承担，并优先换货或全额退款。」",
+                "text_sha256": "75567fb1ff7e665d901a92f18a7f6e79899e5e7bb613e521ee7d2da1ac27855f"
+              }
+            ],
+            "note": "命中只代表主题相关；须逐问核对原文，部分有据则部分回答，缺少依据则明确未覆盖"
+          },
+          "ok": true
+        },
+        {
+          "call_id": "call_01_rml3q3igb4xy258wch61tagt",
+          "name": "search_policy",
+          "arguments": {
+            "query": "退货 运费 谁承担 质量问题",
+            "k": 5
+          },
+          "content": {
+            "schema_version": 1,
+            "query": "退货 运费 谁承担 质量问题",
+            "queried_at": "2026-10-19T03:17:04.234190Z",
+            "policy_state": "matched",
+            "answerability": "not_assessed",
+            "matches": [
+              {
+                "source": "return-policy.md",
+                "title": "质量问题退换",
+                "text": "商品存在质量问题的，自签收起 15 天内可申请退换，运费由本店承担，并优先换货或全额退款。",
+                "score": 1.0,
+                "policy_id": "return-policy",
+                "version": "2026-10-12.1",
+                "effective_from": "2026-10-11T16:00:00Z",
+                "effective_until": null,
+                "citation": "【return-policy.md｜质量问题退换｜2026-10-12.1】",
+                "quoted_citation": "【return-policy.md｜质量问题退换｜2026-10-12.1】「商品存在质量问题的，自签收起 15 天内可申请退换，运费由本店承担，并优先换货或全额退款。」",
+                "text_sha256": "75567fb1ff7e665d901a92f18a7f6e79899e5e7bb613e521ee7d2da1ac27855f"
+              }
+            ],
+            "note": "命中只代表主题相关；须逐问核对原文，部分有据则部分回答，缺少依据则明确未覆盖"
+          },
+          "ok": true
+        }
+      ],
+      "visible_text": "我先检索店铺有效政策中关于「质量问题退换」的条款。**质量问题退换——政策检索结果（仅查询，未执行业务操作）**\n\n- **期限起算点**：自**签收**起 **15 天**内可申请退换。\n- **运费承担方**：由**本店**（店铺）承担。\n- 同一片段还提到处理方式为「优先换货或全额退款」，供参考。\n\n依据：\n【return-policy.md｜质量问题退换｜2026-10-12.1】「商品存在质量问题的，自签收起 15 天内可申请退换，运费由本店承担，并优先换货或全额退款。」\n\n说明：本次检索仅覆盖「质量问题」退换这一条，命中即以上原文；该片段未涉及非质量问题的无理由退货期限与运费规则，如您需要那部分，请另行告知，我再单独检索确认。本次仅政策查询，未做任何取消、退款或库存操作。",
+      "cost_complete": false,
+      "billing": {
+        "currency": "USD",
+        "estimated_amount": "0.000620",
+        "pricing_source": "user-confirmed-2026-10-12",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "turn_results": [],
+      "turn_traces": [],
+      "state_evidence": {
+        "before_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "after_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "all_tables": [
+          "business_operations",
+          "mutation_requests",
+          "order_drafts",
+          "order_items",
+          "orders",
+          "products",
+          "stocks"
+        ],
+        "answer_kind": "supported",
+        "expected_policy_state": "matched",
+        "required_citations": [
+          [
+            "return-policy.md",
+            "质量问题退换"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "category": "multi",
+      "passed": true,
+      "failed_checks": [],
+      "steps": 2,
+      "completed": true,
+      "tool_calls": [
+        "search_policy"
+      ],
+      "tool_attempts": [
+        "search_policy"
+      ],
+      "total_tokens": 12266,
+      "cost": null,
+      "duration_ms": 8570.2,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [
+        {
+          "call_id": "call_00_6gfh9unwcv6mb5o8uz1t4kvh",
+          "name": "search_policy",
+          "arguments": {
+            "query": "退款到账时限 从何时起算 退到哪里",
+            "k": 5
+          },
+          "content": {
+            "schema_version": 1,
+            "query": "退款到账时限 从何时起算 退到哪里",
+            "queried_at": "2026-10-19T03:17:12.070812Z",
+            "policy_state": "matched",
+            "answerability": "not_assessed",
+            "matches": [
+              {
+                "source": "return-policy.md",
+                "title": "退款流程与时效",
+                "text": "已发货或已签收的订单不能直接取消，需发起退款流程：核验商品状态后办理退款，退款在审核通过后 3 个工作日内原路退回。",
+                "score": 1.0,
+                "policy_id": "return-policy",
+                "version": "2026-10-12.1",
+                "effective_from": "2026-10-11T16:00:00Z",
+                "effective_until": null,
+                "citation": "【return-policy.md｜退款流程与时效｜2026-10-12.1】",
+                "quoted_citation": "【return-policy.md｜退款流程与时效｜2026-10-12.1】「已发货或已签收的订单不能直接取消，需发起退款流程：核验商品状态后办理退款，退款在审核通过后 3 个工作日内原路退回。」",
+                "text_sha256": "b30ae4ca9e571e9ebe70a10fc89c018395116e9438eb73af4aa7edf7033391b3"
+              }
+            ],
+            "note": "命中只代表主题相关；须逐问核对原文，部分有据则部分回答，缺少依据则明确未覆盖"
+          },
+          "ok": true
+        }
+      ],
+      "visible_text": "根据本轮检索到的店铺政策，回答如下：\n\n**退款到账时限的起算点**：从**审核通过后**开始计算，**3 个工作日内**退回。\n\n**退到哪里**：**原路退回**（即退回原支付路径）。\n\n政策原文引用：\n\n【return-policy.md｜退款流程与时效｜2026-10-12.1】「已发货或已签收的订单不能直接取消，需发起退款流程：核验商品状态后办理退款，退款在审核通过后 3 个工作日内原路退回。」\n\n需要说明的边界：\n- 本轮检索命中的片段语境是**已发货或已签收订单**的退款流程；政策未说明\"审核通过\"的具体办理环节与时长，也未列出原路退回对应的具体支付渠道明细，这些部分本轮检索未覆盖，无法确认。\n- 如需确认具体退款渠道到账（如银行卡、第三方支付的各自清算时间），建议联系店铺核对。\n\n本次仅做政策查询，**未执行任何退款或订单操作**。",
+      "cost_complete": false,
+      "billing": {
+        "currency": "USD",
+        "estimated_amount": "0.000623",
+        "pricing_source": "user-confirmed-2026-10-12",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "turn_results": [],
+      "turn_traces": [],
+      "state_evidence": {
+        "before_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "after_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "all_tables": [
+          "business_operations",
+          "mutation_requests",
+          "order_drafts",
+          "order_items",
+          "orders",
+          "products",
+          "stocks"
+        ],
+        "answer_kind": "supported",
+        "expected_policy_state": "matched",
+        "required_citations": [
+          [
+            "return-policy.md",
+            "退款流程与时效"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "category": "multi",
+      "passed": true,
+      "failed_checks": [],
+      "steps": 2,
+      "completed": true,
+      "tool_calls": [
+        "search_policy",
+        "search_policy"
+      ],
+      "tool_attempts": [
+        "search_policy",
+        "search_policy"
+      ],
+      "total_tokens": 13167,
+      "cost": null,
+      "duration_ms": 6664.2,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [
+        {
+          "call_id": "call_00_xtd0xq4jij565pzy4u3qjp2q",
+          "name": "search_policy",
+          "arguments": {
+            "query": "商品改价 历史订单 成交价 重新计算 下单快照价",
+            "k": 5
+          },
+          "content": {
+            "schema_version": 1,
+            "query": "商品改价 历史订单 成交价 重新计算 下单快照价",
+            "queried_at": "2026-10-19T03:17:20.614943Z",
+            "policy_state": "matched",
+            "answerability": "not_assessed",
+            "matches": [
+              {
+                "source": "pricing-policy.md",
+                "title": "下单快照价与现价的区别",
+                "text": "新订单先合并同一 SKU 的数量，再按**下单时现价与数量梯度折扣**计算成交单价，将该单价作为快照长期保留。报价与新订单使用同一计价口径；历史订单保留原成交价，不因现价或折扣规则变化重算。\n\n报价仅供参考，不锁定价格或预留库存。执行建单时复核商品在售状态与库存，并按当时现价计价；现价变化后应重新报价。原请求的幂等重放返回首次提交结果，不按新现价重复建单。",
+                "score": 1.0,
+                "policy_id": "pricing-policy",
+                "version": "2026-10-12.1",
+                "effective_from": "2026-10-11T16:00:00Z",
+                "effective_until": null,
+                "citation": "【pricing-policy.md｜下单快照价与现价的区别｜2026-10-12.1】",
+                "quoted_citation": "【pricing-policy.md｜下单快照价与现价的区别｜2026-10-12.1】「新订单先合并同一 SKU 的数量，再按**下单时现价与数量梯度折扣**计算成交单价，将该单价作为快照长期保留。报价与新订单使用同一计价口径；历史订单保留原成交价，不因现价或折扣规则变化重算。 报价仅供参考，不锁定价格或预留库存。执行建单时复核商品在售状态与库存，并按当时现价计价；现价变化后应重新报价。原请求的幂等重放返回首次提交结果，不按新现价重复建单。」",
+                "text_sha256": "c849327734a23861d6d8fdf8db1cf9967243c2369ca0477ed76e3ee94a08322f"
+              }
+            ],
+            "note": "命中只代表主题相关；须逐问核对原文，部分有据则部分回答，缺少依据则明确未覆盖"
+          },
+          "ok": true
+        },
+        {
+          "call_id": "call_01_9y03gk3kiuixhtk6vz7bb92n",
+          "name": "search_policy",
+          "arguments": {
+            "query": "新订单 计价 现价 改价生效时间",
+            "k": 5
+          },
+          "content": {
+            "schema_version": 1,
+            "query": "新订单 计价 现价 改价生效时间",
+            "queried_at": "2026-10-19T03:17:20.615456Z",
+            "policy_state": "matched",
+            "answerability": "not_assessed",
+            "matches": [
+              {
+                "source": "pricing-policy.md",
+                "title": "下单快照价与现价的区别",
+                "text": "新订单先合并同一 SKU 的数量，再按**下单时现价与数量梯度折扣**计算成交单价，将该单价作为快照长期保留。报价与新订单使用同一计价口径；历史订单保留原成交价，不因现价或折扣规则变化重算。\n\n报价仅供参考，不锁定价格或预留库存。执行建单时复核商品在售状态与库存，并按当时现价计价；现价变化后应重新报价。原请求的幂等重放返回首次提交结果，不按新现价重复建单。",
+                "score": 1.0,
+                "policy_id": "pricing-policy",
+                "version": "2026-10-12.1",
+                "effective_from": "2026-10-11T16:00:00Z",
+                "effective_until": null,
+                "citation": "【pricing-policy.md｜下单快照价与现价的区别｜2026-10-12.1】",
+                "quoted_citation": "【pricing-policy.md｜下单快照价与现价的区别｜2026-10-12.1】「新订单先合并同一 SKU 的数量，再按**下单时现价与数量梯度折扣**计算成交单价，将该单价作为快照长期保留。报价与新订单使用同一计价口径；历史订单保留原成交价，不因现价或折扣规则变化重算。 报价仅供参考，不锁定价格或预留库存。执行建单时复核商品在售状态与库存，并按当时现价计价；现价变化后应重新报价。原请求的幂等重放返回首次提交结果，不按新现价重复建单。」",
+                "text_sha256": "c849327734a23861d6d8fdf8db1cf9967243c2369ca0477ed76e3ee94a08322f"
+              }
+            ],
+            "note": "命中只代表主题相关；须逐问核对原文，部分有据则部分回答，缺少依据则明确未覆盖"
+          },
+          "ok": true
+        }
+      ],
+      "visible_text": "我先检索店铺政策中关于价格/改价与订单计价的规定。两个问题都在定价政策中有明确规定，依据如下（本次仅检索政策，未做任何业务操作）：\n\n**1. 历史订单成交价不会跟着重算**\n\n历史订单按下单时的单价作为快照长期保留，改价不影响已成交的订单。\n\n**2. 新订单的计价方式**\n\n- 先把同一 SKU 的数量合并，再按**下单时的现价 + 数量梯度折扣**计算成交单价，该单价作为快照保留；\n- 报价与新订单使用同一计价口径；\n- 报价仅供参考，不锁定价格、不预留库存；实际建单时会复核在售状态与库存，并按**当时现价**计价，所以现价变化后需要重新报价；\n- 原请求的幂等重放返回首次提交结果，不会按新现价重复建单。\n\n依据原文：\n\n> 【pricing-policy.md｜下单快照价与现价的区别｜2026-10-12.1】「新订单先合并同一 SKU 的数量，再按**下单时现价与数量梯度折扣**计算成交单价，将该单价作为快照长期保留。报价与新订单使用同一计价口径；历史订单保留原成交价，不因现价或折扣规则变化重算。 报价仅供参考，不锁定价格或预留库存。执行建单时复核商品在售状态与库存，并按当时现价计价；现价变化后应重新报价。原请求的幂等重放返回首次提交结果，不按新现价重复建单。」\n\n补充说明：本段政策只覆盖“计价与快照口径”，未涉及改价的审批流程、生效时间点或对外通知方式——这些内容本轮检索未覆盖，无法确认；如需了解，建议直接向店铺核对。若你要针对某个 SKU 或某笔具体订单核对价格，把 SKU/订单号给我，我再查。",
+      "cost_complete": false,
+      "billing": {
+        "currency": "USD",
+        "estimated_amount": "0.000676",
+        "pricing_source": "user-confirmed-2026-10-12",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "turn_results": [],
+      "turn_traces": [],
+      "state_evidence": {
+        "before_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "after_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "all_tables": [
+          "business_operations",
+          "mutation_requests",
+          "order_drafts",
+          "order_items",
+          "orders",
+          "products",
+          "stocks"
+        ],
+        "answer_kind": "supported",
+        "expected_policy_state": "matched",
+        "required_citations": [
+          [
+            "pricing-policy.md",
+            "下单快照价与现价的区别"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "rag-grounding-custom-exception",
+      "category": "multi",
+      "passed": true,
+      "failed_checks": [],
+      "steps": 2,
+      "completed": true,
+      "tool_calls": [
+        "search_policy",
+        "search_policy"
+      ],
+      "tool_attempts": [
+        "search_policy",
+        "search_policy"
+      ],
+      "total_tokens": 12857,
+      "cost": null,
+      "duration_ms": 9709.3,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [
+        {
+          "call_id": "call_00_tju22dpprgb0xd1ujmg5jwsa",
+          "name": "search_policy",
+          "arguments": {
+            "query": "无理由退货 申请条件 时限 签收",
+            "k": 5
+          },
+          "content": {
+            "schema_version": 1,
+            "query": "无理由退货 申请条件 时限 签收",
+            "queried_at": "2026-10-19T03:17:31.232246Z",
+            "policy_state": "matched",
+            "answerability": "not_assessed",
+            "matches": [
+              {
+                "source": "return-policy.md",
+                "title": "七天无理由退货",
+                "text": "签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。",
+                "score": 1.0,
+                "policy_id": "return-policy",
+                "version": "2026-10-12.1",
+                "effective_from": "2026-10-11T16:00:00Z",
+                "effective_until": null,
+                "citation": "【return-policy.md｜七天无理由退货｜2026-10-12.1】",
+                "quoted_citation": "【return-policy.md｜七天无理由退货｜2026-10-12.1】「签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。」",
+                "text_sha256": "baa60b752694db16e2f5857bf1c67bd5507ac3e39f46efb19ff74c6c39e319f1"
+              }
+            ],
+            "note": "命中只代表主题相关；须逐问核对原文，部分有据则部分回答，缺少依据则明确未覆盖"
+          },
+          "ok": true
+        },
+        {
+          "call_id": "call_01_oepfemo2uvclwgwwr3mtaeyr",
+          "name": "search_policy",
+          "arguments": {
+            "query": "定制商品 退货 包装 赠品 完好",
+            "k": 5
+          },
+          "content": {
+            "schema_version": 1,
+            "query": "定制商品 退货 包装 赠品 完好",
+            "queried_at": "2026-10-19T03:17:31.232246Z",
+            "policy_state": "matched",
+            "answerability": "not_assessed",
+            "matches": [
+              {
+                "source": "return-policy.md",
+                "title": "七天无理由退货",
+                "text": "签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。",
+                "score": 1.0,
+                "policy_id": "return-policy",
+                "version": "2026-10-12.1",
+                "effective_from": "2026-10-11T16:00:00Z",
+                "effective_until": null,
+                "citation": "【return-policy.md｜七天无理由退货｜2026-10-12.1】",
+                "quoted_citation": "【return-policy.md｜七天无理由退货｜2026-10-12.1】「签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。」",
+                "text_sha256": "baa60b752694db16e2f5857bf1c67bd5507ac3e39f46efb19ff74c6c39e319f1"
+              }
+            ],
+            "note": "命中只代表主题相关；须逐问核对原文，部分有据则部分回答，缺少依据则明确未覆盖"
+          },
+          "ok": true
+        }
+      ],
+      "visible_text": "我先检索店铺政策。**结论：不能。** 定制类商品不适用无理由退货；即使签收第三天（仍在 7 天内），且包装、赠品齐全、商品完好，也不满足这一条件。\n\n依据：\n【return-policy.md｜七天无理由退货｜2026-10-12.1】「签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。」\n\n逐项核对：\n- 时限：签收后 7 天内 → 第三天在时限内，**这一条件符合**；\n- 商品完好、不影响二次销售、包装与赠品齐全 → 从你的描述看**符合**；\n- 主体商品属性：定制类商品 → **明确排除在无理由退货之外**，这一项独立构成否决。\n\n补充缺口说明：本轮检索只命中上述“七天无理由退货”片段，**未覆盖**以下问题，因此无法确认：定制商品在什么情形下（例如质量问题、错发损坏）可以退换、由谁承担运费、办理流程如何。如涉及这类情况，建议直接联系店铺核对。\n\n本次仅查询政策，未做任何业务操作（未查订单、未提交退货或取消申请）。",
+      "cost_complete": false,
+      "billing": {
+        "currency": "USD",
+        "estimated_amount": "0.000672",
+        "pricing_source": "user-confirmed-2026-10-12",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "turn_results": [],
+      "turn_traces": [],
+      "state_evidence": {
+        "before_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "after_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "all_tables": [
+          "business_operations",
+          "mutation_requests",
+          "order_drafts",
+          "order_items",
+          "orders",
+          "products",
+          "stocks"
+        ],
+        "answer_kind": "exception",
+        "expected_policy_state": "matched",
+        "required_citations": [
+          [
+            "return-policy.md",
+            "七天无理由退货"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "rag-grounding-partial",
+      "category": "multi",
+      "passed": true,
+      "failed_checks": [],
+      "steps": 2,
+      "completed": true,
+      "tool_calls": [
+        "search_policy",
+        "search_policy"
+      ],
+      "tool_attempts": [
+        "search_policy",
+        "search_policy"
+      ],
+      "total_tokens": 12503,
+      "cost": null,
+      "duration_ms": 6010.1,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [
+        {
+          "call_id": "call_01_iMBHpk9j8fmdsNRiIAFi3143",
+          "name": "search_policy",
+          "arguments": {
+            "query": "退货寄回仓库地址 联系电话",
+            "k": 4
+          },
+          "content": {
+            "schema_version": 1,
+            "query": "退货寄回仓库地址 联系电话",
+            "queried_at": "2026-10-19T03:17:37.464860Z",
+            "policy_state": "matched",
+            "answerability": "not_assessed",
+            "matches": [
+              {
+                "source": "return-policy.md",
+                "title": "七天无理由退货",
+                "text": "签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。",
+                "score": 1.0,
+                "policy_id": "return-policy",
+                "version": "2026-10-12.1",
+                "effective_from": "2026-10-11T16:00:00Z",
+                "effective_until": null,
+                "citation": "【return-policy.md｜七天无理由退货｜2026-10-12.1】",
+                "quoted_citation": "【return-policy.md｜七天无理由退货｜2026-10-12.1】「签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。」",
+                "text_sha256": "baa60b752694db16e2f5857bf1c67bd5507ac3e39f46efb19ff74c6c39e319f1"
+              }
+            ],
+            "note": "命中只代表主题相关；须逐问核对原文，部分有据则部分回答，缺少依据则明确未覆盖"
+          },
+          "ok": true
+        },
+        {
+          "call_id": "call_00_m3ILaumKXnIdomzzz4G83274",
+          "name": "search_policy",
+          "arguments": {
+            "query": "无理由退货 期限 天数",
+            "k": 4
+          },
+          "content": {
+            "schema_version": 1,
+            "query": "无理由退货 期限 天数",
+            "queried_at": "2026-10-19T03:17:37.464860Z",
+            "policy_state": "matched",
+            "answerability": "not_assessed",
+            "matches": [
+              {
+                "source": "return-policy.md",
+                "title": "七天无理由退货",
+                "text": "签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。",
+                "score": 1.0,
+                "policy_id": "return-policy",
+                "version": "2026-10-12.1",
+                "effective_from": "2026-10-11T16:00:00Z",
+                "effective_until": null,
+                "citation": "【return-policy.md｜七天无理由退货｜2026-10-12.1】",
+                "quoted_citation": "【return-policy.md｜七天无理由退货｜2026-10-12.1】「签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。」",
+                "text_sha256": "baa60b752694db16e2f5857bf1c67bd5507ac3e39f46efb19ff74c6c39e319f1"
+              }
+            ],
+            "note": "命中只代表主题相关；须逐问核对原文，部分有据则部分回答，缺少依据则明确未覆盖"
+          },
+          "ok": true
+        }
+      ],
+      "visible_text": "关于您问的两项，分开说明：\n\n**1. 无理由退货期限 —— 政策有明确依据**\n\n签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全；定制类商品不适用无理由退货。\n\n> 【return-policy.md｜七天无理由退货｜2026-10-12.1】「签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。」\n\n**2. 寄回仓库地址与联系电话 —— 本轮检索未覆盖，无法确认**\n\n政策片段中没有出现退货寄回地址、收件仓库或联系电话的任何内容，我不能凭常识补充。建议直接联系店铺客服核对准确的寄回地址与联系方式后再寄回。\n\n本次仅做政策查询，未执行任何业务操作。",
+      "cost_complete": false,
+      "billing": {
+        "currency": "USD",
+        "estimated_amount": "0.000612",
+        "pricing_source": "user-confirmed-2026-10-12",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "turn_results": [],
+      "turn_traces": [],
+      "state_evidence": {
+        "before_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "after_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "all_tables": [
+          "business_operations",
+          "mutation_requests",
+          "order_drafts",
+          "order_items",
+          "orders",
+          "products",
+          "stocks"
+        ],
+        "answer_kind": "partial",
+        "expected_policy_state": "matched",
+        "required_citations": [
+          [
+            "return-policy.md",
+            "七天无理由退货"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "rag-grounding-contact-gap",
+      "category": "multi",
+      "passed": true,
+      "failed_checks": [],
+      "steps": 2,
+      "completed": true,
+      "tool_calls": [
+        "search_policy"
+      ],
+      "tool_attempts": [
+        "search_policy"
+      ],
+      "total_tokens": 12040,
+      "cost": null,
+      "duration_ms": 8491.2,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [
+        {
+          "call_id": "call_00_cjgv7vib803pr8eoz5d8ydow",
+          "name": "search_policy",
+          "arguments": {
+            "query": "质量问题退货 寄回仓库 收货地址 联系电话",
+            "k": 5
+          },
+          "content": {
+            "schema_version": 1,
+            "query": "质量问题退货 寄回仓库 收货地址 联系电话",
+            "queried_at": "2026-10-19T03:17:45.247770Z",
+            "policy_state": "matched",
+            "answerability": "not_assessed",
+            "matches": [
+              {
+                "source": "return-policy.md",
+                "title": "质量问题退换",
+                "text": "商品存在质量问题的，自签收起 15 天内可申请退换，运费由本店承担，并优先换货或全额退款。",
+                "score": 1.0,
+                "policy_id": "return-policy",
+                "version": "2026-10-12.1",
+                "effective_from": "2026-10-11T16:00:00Z",
+                "effective_until": null,
+                "citation": "【return-policy.md｜质量问题退换｜2026-10-12.1】",
+                "quoted_citation": "【return-policy.md｜质量问题退换｜2026-10-12.1】「商品存在质量问题的，自签收起 15 天内可申请退换，运费由本店承担，并优先换货或全额退款。」",
+                "text_sha256": "75567fb1ff7e665d901a92f18a7f6e79899e5e7bb613e521ee7d2da1ac27855f"
+              }
+            ],
+            "note": "命中只代表主题相关；须逐问核对原文，部分有据则部分回答，缺少依据则明确未覆盖"
+          },
+          "ok": true
+        }
+      ],
+      "visible_text": "**关于质量问题退货**：本轮检索到的政策片段只覆盖了申请条件与费用承担：\n\n【return-policy.md｜质量问题退换｜2026-10-12.1】「商品存在质量问题的，自签收起 15 天内可申请退换，运费由本店承担，并优先换货或全额退款。」\n\n**关于你问的退货仓库、具体收货地址与联系电话**：本轮检索未覆盖这一问题，无法确认。政策片段中没有提到任何仓库名称、收货地址或联系电话，我不能凭常识补写或猜测。建议直接联系店铺客服核对最新的退货收件信息。\n\n本次仅做政策查询，未执行任何业务操作。",
+      "cost_complete": false,
+      "billing": {
+        "currency": "USD",
+        "estimated_amount": "0.000585",
+        "pricing_source": "user-confirmed-2026-10-12",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "turn_results": [],
+      "turn_traces": [],
+      "state_evidence": {
+        "before_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "after_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "all_tables": [
+          "business_operations",
+          "mutation_requests",
+          "order_drafts",
+          "order_items",
+          "orders",
+          "products",
+          "stocks"
+        ],
+        "answer_kind": "insufficient",
+        "expected_policy_state": "matched",
+        "required_citations": []
+      }
+    },
+    {
+      "case_id": "rag-grounding-freight-gap",
+      "category": "multi",
+      "passed": true,
+      "failed_checks": [],
+      "steps": 2,
+      "completed": true,
+      "tool_calls": [
+        "search_policy"
+      ],
+      "tool_attempts": [
+        "search_policy"
+      ],
+      "total_tokens": 12377,
+      "cost": null,
+      "duration_ms": 7099.1,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [
+        {
+          "call_id": "call_00_m4o17tln7k7mcrx31x09v8px",
+          "name": "search_policy",
+          "arguments": {
+            "query": "七天无理由退货 寄回运费 谁承担",
+            "k": 5
+          },
+          "content": {
+            "schema_version": 1,
+            "query": "七天无理由退货 寄回运费 谁承担",
+            "queried_at": "2026-10-19T03:17:53.867194Z",
+            "policy_state": "matched",
+            "answerability": "not_assessed",
+            "matches": [
+              {
+                "source": "return-policy.md",
+                "title": "七天无理由退货",
+                "text": "签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。",
+                "score": 1.0,
+                "policy_id": "return-policy",
+                "version": "2026-10-12.1",
+                "effective_from": "2026-10-11T16:00:00Z",
+                "effective_until": null,
+                "citation": "【return-policy.md｜七天无理由退货｜2026-10-12.1】",
+                "quoted_citation": "【return-policy.md｜七天无理由退货｜2026-10-12.1】「签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。」",
+                "text_sha256": "baa60b752694db16e2f5857bf1c67bd5507ac3e39f46efb19ff74c6c39e319f1"
+              },
+              {
+                "source": "return-policy.md",
+                "title": "质量问题退换",
+                "text": "商品存在质量问题的，自签收起 15 天内可申请退换，运费由本店承担，并优先换货或全额退款。",
+                "score": 1.0,
+                "policy_id": "return-policy",
+                "version": "2026-10-12.1",
+                "effective_from": "2026-10-11T16:00:00Z",
+                "effective_until": null,
+                "citation": "【return-policy.md｜质量问题退换｜2026-10-12.1】",
+                "quoted_citation": "【return-policy.md｜质量问题退换｜2026-10-12.1】「商品存在质量问题的，自签收起 15 天内可申请退换，运费由本店承担，并优先换货或全额退款。」",
+                "text_sha256": "75567fb1ff7e665d901a92f18a7f6e79899e5e7bb613e521ee7d2da1ac27855f"
+              }
+            ],
+            "note": "命中只代表主题相关；须逐问核对原文，部分有据则部分回答，缺少依据则明确未覆盖"
+          },
+          "ok": true
+        }
+      ],
+      "visible_text": "**本轮检索未覆盖「七天无理由退货的寄回运费由谁承担」这一问题，无法确认。**\n\n检索到的有效片段只说明了七天无理由退货的适用条件，其中并未提及寄回运费的承担方：\n\n【return-policy.md｜七天无理由退货｜2026-10-12.1】「签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。」\n\n另有一条关于运费的片段，但它针对的是**质量问题退换**，其结论（运费由本店承担）不能套用到无理由退货场景：\n\n【return-policy.md｜质量问题退换｜2026-10-12.1】「商品存在质量问题的，自签收起 15 天内可申请退换，运费由本店承担，并优先换货或全额退款。」\n\n因此，就您问的「完好商品七天无理由退货」这一情形，本轮政策原文未规定运费归属，我无法给出结论，建议直接联系店铺客服核对。\n\n本次仅查询政策，未执行任何退换货或其他业务操作。",
+      "cost_complete": false,
+      "billing": {
+        "currency": "USD",
+        "estimated_amount": "0.000610",
+        "pricing_source": "user-confirmed-2026-10-12",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "turn_results": [],
+      "turn_traces": [],
+      "state_evidence": {
+        "before_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "after_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "all_tables": [
+          "business_operations",
+          "mutation_requests",
+          "order_drafts",
+          "order_items",
+          "orders",
+          "products",
+          "stocks"
+        ],
+        "answer_kind": "insufficient",
+        "expected_policy_state": "matched",
+        "required_citations": []
+      }
+    },
+    {
+      "case_id": "rag-grounding-warranty-gap",
+      "category": "multi",
+      "passed": false,
+      "failed_checks": [
+        "run_error: TimeoutError: "
+      ],
+      "steps": 0,
+      "completed": false,
+      "tool_calls": [],
+      "tool_attempts": [],
+      "total_tokens": 0,
+      "cost": null,
+      "duration_ms": 60053.5,
+      "attempts": 1,
+      "error": "TimeoutError: ",
+      "tool_results": [],
+      "visible_text": "",
+      "cost_complete": false,
+      "billing": {
+        "currency": "USD",
+        "estimated_amount": null,
+        "pricing_source": "user-confirmed-2026-10-12",
+        "cache_assumption": "unknown_usage",
+        "complete": false
+      },
+      "turn_results": [],
+      "turn_traces": [],
+      "state_evidence": {
+        "before_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "after_sha256": "b4a21346253cebcbb5f9181dbe1bc074632b8c75525ec255c5a535387806fead",
+        "all_tables": [
+          "business_operations",
+          "mutation_requests",
+          "order_drafts",
+          "order_items",
+          "orders",
+          "products",
+          "stocks"
+        ],
+        "answer_kind": "insufficient"
+      }
+    },
+    {
+      "case_id": "rag-grounding-conflict",
+      "category": "multi",
+      "passed": false,
+      "failed_checks": [
+        "budget: 计费预算熔断（存在计量未知的请求（缺失 usage 已按可能计费处理），已停止后续请求），本条未执行"
+      ],
+      "steps": 0,
+      "completed": false,
+      "tool_calls": [],
+      "tool_attempts": null,
+      "total_tokens": 0,
+      "cost": null,
+      "duration_ms": 0.0,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [],
+      "visible_text": "",
+      "cost_complete": true,
+      "billing": null,
+      "turn_results": [],
+      "turn_traces": [],
+      "state_evidence": null
+    },
+    {
+      "case_id": "rag-grounding-unavailable",
+      "category": "multi",
+      "passed": false,
+      "failed_checks": [
+        "budget: 计费预算熔断（存在计量未知的请求（缺失 usage 已按可能计费处理），已停止后续请求），本条未执行"
+      ],
+      "steps": 0,
+      "completed": false,
+      "tool_calls": [],
+      "tool_attempts": null,
+      "total_tokens": 0,
+      "cost": null,
+      "duration_ms": 0.0,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [],
+      "visible_text": "",
+      "cost_complete": true,
+      "billing": null,
+      "turn_results": [],
+      "turn_traces": [],
+      "state_evidence": null
+    },
+    {
+      "case_id": "rag-grounding-inactive",
+      "category": "multi",
+      "passed": false,
+      "failed_checks": [
+        "budget: 计费预算熔断（存在计量未知的请求（缺失 usage 已按可能计费处理），已停止后续请求），本条未执行"
+      ],
+      "steps": 0,
+      "completed": false,
+      "tool_calls": [],
+      "tool_attempts": null,
+      "total_tokens": 0,
+      "cost": null,
+      "duration_ms": 0.0,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [],
+      "visible_text": "",
+      "cost_complete": true,
+      "billing": null,
+      "turn_results": [],
+      "turn_traces": [],
+      "state_evidence": null
+    },
+    {
+      "case_id": "rag-grounding-no-match",
+      "category": "multi",
+      "passed": false,
+      "failed_checks": [
+        "budget: 计费预算熔断（存在计量未知的请求（缺失 usage 已按可能计费处理），已停止后续请求），本条未执行"
+      ],
+      "steps": 0,
+      "completed": false,
+      "tool_calls": [],
+      "tool_attempts": null,
+      "total_tokens": 0,
+      "cost": null,
+      "duration_ms": 0.0,
+      "attempts": 1,
+      "error": null,
+      "tool_results": [],
+      "visible_text": "",
+      "cost_complete": true,
+      "billing": null,
+      "turn_results": [],
+      "turn_traces": [],
+      "state_evidence": null
+    }
+  ]
+}

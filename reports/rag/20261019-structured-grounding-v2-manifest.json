@@ -1,0 +1,755 @@
+{
+  "scorer_version": "rag-grounding-structured-2",
+  "case_sha256": "4ac0aeac4acfbcb2d0628d49a74fb0a77c0432be99b03ec9e803320675ed6f9c",
+  "cases": [
+    {
+      "id": "rag-grounding-return-conditions",
+      "category": "multi",
+      "question": "无理由退货有几天期限、起算点和哪些商品条件？仅查询店铺政策，不执行业务操作。",
+      "points": "supported: 逐问核对证据、条件和引用；结构校验不代替语义审阅",
+      "expect_tools_all": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "tools_in_order": true,
+      "expect_tools_any": [],
+      "forbid_tools": [
+        "prepare_cancel_order",
+        "cancel_order",
+        "adjust_stock",
+        "create_order",
+        "set_product_status",
+        "prepare_stock_adjustment",
+        "prepare_order_draft",
+        "revise_order_draft",
+        "revise_order_draft_quantity",
+        "submit_order_draft"
+      ],
+      "must_mention": [],
+      "must_mention_any": [],
+      "must_mention_any_groups": [],
+      "must_not_mention": [],
+      "must_not_match": [],
+      "max_steps": 5,
+      "expect_successful_tools": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "expect_error_codes": [],
+      "successful_tool_counts": {},
+      "state": {
+        "kind": "unchanged",
+        "sku": "",
+        "delta": 0,
+        "status": ""
+      },
+      "sections": [
+        [
+          "return-policy.md",
+          "七天无理由退货"
+        ]
+      ],
+      "expected_policy_state": "matched",
+      "required_citations": [
+        [
+          "return-policy.md",
+          "七天无理由退货"
+        ]
+      ],
+      "answer_kind": "supported",
+      "question_scopes": [
+        "无理由退货有几天期限、起算点和哪些商品条件"
+      ]
+    },
+    {
+      "id": "rag-grounding-quality",
+      "category": "multi",
+      "question": "质量问题退换的期限从何时起算，运费由谁承担？仅查询店铺政策，不执行业务操作。",
+      "points": "supported: 逐问核对证据、条件和引用；结构校验不代替语义审阅",
+      "expect_tools_all": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "tools_in_order": true,
+      "expect_tools_any": [],
+      "forbid_tools": [
+        "prepare_cancel_order",
+        "cancel_order",
+        "adjust_stock",
+        "create_order",
+        "set_product_status",
+        "prepare_stock_adjustment",
+        "prepare_order_draft",
+        "revise_order_draft",
+        "revise_order_draft_quantity",
+        "submit_order_draft"
+      ],
+      "must_mention": [],
+      "must_mention_any": [],
+      "must_mention_any_groups": [],
+      "must_not_mention": [],
+      "must_not_match": [],
+      "max_steps": 5,
+      "expect_successful_tools": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "expect_error_codes": [],
+      "successful_tool_counts": {},
+      "state": {
+        "kind": "unchanged",
+        "sku": "",
+        "delta": 0,
+        "status": ""
+      },
+      "sections": [
+        [
+          "return-policy.md",
+          "质量问题退换"
+        ]
+      ],
+      "expected_policy_state": "matched",
+      "required_citations": [
+        [
+          "return-policy.md",
+          "质量问题退换"
+        ]
+      ],
+      "answer_kind": "supported",
+      "question_scopes": [
+        "质量问题退换的期限从何时起算",
+        "运费由谁承担"
+      ]
+    },
+    {
+      "id": "rag-grounding-refund",
+      "category": "multi",
+      "question": "退款到账的时限从何时开始计算，退到哪里？仅查询店铺政策，不执行业务操作。",
+      "points": "supported: 逐问核对证据、条件和引用；结构校验不代替语义审阅",
+      "expect_tools_all": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "tools_in_order": true,
+      "expect_tools_any": [],
+      "forbid_tools": [
+        "prepare_cancel_order",
+        "cancel_order",
+        "adjust_stock",
+        "create_order",
+        "set_product_status",
+        "prepare_stock_adjustment",
+        "prepare_order_draft",
+        "revise_order_draft",
+        "revise_order_draft_quantity",
+        "submit_order_draft"
+      ],
+      "must_mention": [],
+      "must_mention_any": [],
+      "must_mention_any_groups": [],
+      "must_not_mention": [],
+      "must_not_match": [],
+      "max_steps": 5,
+      "expect_successful_tools": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "expect_error_codes": [],
+      "successful_tool_counts": {},
+      "state": {
+        "kind": "unchanged",
+        "sku": "",
+        "delta": 0,
+        "status": ""
+      },
+      "sections": [
+        [
+          "return-policy.md",
+          "退款流程与时效"
+        ]
+      ],
+      "expected_policy_state": "matched",
+      "required_citations": [
+        [
+          "return-policy.md",
+          "退款流程与时效"
+        ]
+      ],
+      "answer_kind": "supported",
+      "question_scopes": [
+        "退款到账的时限从何时开始计算",
+        "退到哪里"
+      ]
+    },
+    {
+      "id": "rag-grounding-snapshot",
+      "category": "multi",
+      "question": "现在商品改价了，历史订单成交价会跟着重新算吗？新订单如何计价？仅查询店铺政策，不执行业务操作。",
+      "points": "supported: 逐问核对证据、条件和引用；结构校验不代替语义审阅",
+      "expect_tools_all": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "tools_in_order": true,
+      "expect_tools_any": [],
+      "forbid_tools": [
+        "prepare_cancel_order",
+        "cancel_order",
+        "adjust_stock",
+        "create_order",
+        "set_product_status",
+        "prepare_stock_adjustment",
+        "prepare_order_draft",
+        "revise_order_draft",
+        "revise_order_draft_quantity",
+        "submit_order_draft"
+      ],
+      "must_mention": [],
+      "must_mention_any": [],
+      "must_mention_any_groups": [],
+      "must_not_mention": [],
+      "must_not_match": [],
+      "max_steps": 5,
+      "expect_successful_tools": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "expect_error_codes": [],
+      "successful_tool_counts": {},
+      "state": {
+        "kind": "unchanged",
+        "sku": "",
+        "delta": 0,
+        "status": ""
+      },
+      "sections": [
+        [
+          "pricing-policy.md",
+          "下单快照价与现价的区别"
+        ]
+      ],
+      "expected_policy_state": "matched",
+      "required_citations": [
+        [
+          "pricing-policy.md",
+          "下单快照价与现价的区别"
+        ]
+      ],
+      "answer_kind": "supported",
+      "question_scopes": [
+        "历史订单成交价会跟着重新算吗",
+        "新订单如何计价"
+      ]
+    },
+    {
+      "id": "rag-grounding-custom-exception",
+      "category": "multi",
+      "question": "定制商品签收第三天，包装赠品齐全且完好，能申请无理由退货吗？仅查询店铺政策，不执行业务操作。",
+      "points": "exception: 逐问核对证据、条件和引用；结构校验不代替语义审阅",
+      "expect_tools_all": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "tools_in_order": true,
+      "expect_tools_any": [],
+      "forbid_tools": [
+        "prepare_cancel_order",
+        "cancel_order",
+        "adjust_stock",
+        "create_order",
+        "set_product_status",
+        "prepare_stock_adjustment",
+        "prepare_order_draft",
+        "revise_order_draft",
+        "revise_order_draft_quantity",
+        "submit_order_draft"
+      ],
+      "must_mention": [],
+      "must_mention_any": [],
+      "must_mention_any_groups": [],
+      "must_not_mention": [],
+      "must_not_match": [],
+      "max_steps": 5,
+      "expect_successful_tools": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "expect_error_codes": [],
+      "successful_tool_counts": {},
+      "state": {
+        "kind": "unchanged",
+        "sku": "",
+        "delta": 0,
+        "status": ""
+      },
+      "sections": [
+        [
+          "return-policy.md",
+          "七天无理由退货"
+        ]
+      ],
+      "expected_policy_state": "matched",
+      "required_citations": [
+        [
+          "return-policy.md",
+          "七天无理由退货"
+        ]
+      ],
+      "answer_kind": "exception",
+      "question_scopes": [
+        "定制商品",
+        "能申请无理由退货吗"
+      ]
+    },
+    {
+      "id": "rag-grounding-partial",
+      "category": "multi",
+      "question": "请分别告诉我无理由退货期限，以及寄回的仓库地址和联系电话。仅查询店铺政策，不执行业务操作。",
+      "points": "partial: 逐问核对证据、条件和引用；结构校验不代替语义审阅",
+      "expect_tools_all": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "tools_in_order": true,
+      "expect_tools_any": [],
+      "forbid_tools": [
+        "prepare_cancel_order",
+        "cancel_order",
+        "adjust_stock",
+        "create_order",
+        "set_product_status",
+        "prepare_stock_adjustment",
+        "prepare_order_draft",
+        "revise_order_draft",
+        "revise_order_draft_quantity",
+        "submit_order_draft"
+      ],
+      "must_mention": [],
+      "must_mention_any": [],
+      "must_mention_any_groups": [],
+      "must_not_mention": [],
+      "must_not_match": [],
+      "max_steps": 5,
+      "expect_successful_tools": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "expect_error_codes": [],
+      "successful_tool_counts": {},
+      "state": {
+        "kind": "unchanged",
+        "sku": "",
+        "delta": 0,
+        "status": ""
+      },
+      "sections": [
+        [
+          "return-policy.md",
+          "七天无理由退货"
+        ]
+      ],
+      "expected_policy_state": "matched",
+      "required_citations": [
+        [
+          "return-policy.md",
+          "七天无理由退货"
+        ]
+      ],
+      "answer_kind": "partial",
+      "question_scopes": [
+        "无理由退货期限",
+        "仓库地址和联系电话"
+      ]
+    },
+    {
+      "id": "rag-grounding-contact-gap",
+      "category": "multi",
+      "question": "质量问题退货应寄到哪个仓库，具体收货地址和联系电话是什么？仅查询店铺政策，不执行业务操作。",
+      "points": "insufficient: 逐问核对证据、条件和引用；结构校验不代替语义审阅",
+      "expect_tools_all": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "tools_in_order": true,
+      "expect_tools_any": [],
+      "forbid_tools": [
+        "prepare_cancel_order",
+        "cancel_order",
+        "adjust_stock",
+        "create_order",
+        "set_product_status",
+        "prepare_stock_adjustment",
+        "prepare_order_draft",
+        "revise_order_draft",
+        "revise_order_draft_quantity",
+        "submit_order_draft"
+      ],
+      "must_mention": [],
+      "must_mention_any": [],
+      "must_mention_any_groups": [],
+      "must_not_mention": [],
+      "must_not_match": [],
+      "max_steps": 5,
+      "expect_successful_tools": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "expect_error_codes": [],
+      "successful_tool_counts": {},
+      "state": {
+        "kind": "unchanged",
+        "sku": "",
+        "delta": 0,
+        "status": ""
+      },
+      "sections": [
+        [
+          "return-policy.md",
+          "质量问题退换"
+        ]
+      ],
+      "expected_policy_state": "matched",
+      "required_citations": [],
+      "answer_kind": "insufficient",
+      "question_scopes": [
+        "哪个仓库",
+        "具体收货地址和联系电话"
+      ]
+    },
+    {
+      "id": "rag-grounding-freight-gap",
+      "category": "multi",
+      "question": "完好商品七天无理由退货，寄回运费由店铺承担还是买家承担？仅查询店铺政策，不执行业务操作。",
+      "points": "insufficient: 逐问核对证据、条件和引用；结构校验不代替语义审阅",
+      "expect_tools_all": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "tools_in_order": true,
+      "expect_tools_any": [],
+      "forbid_tools": [
+        "prepare_cancel_order",
+        "cancel_order",
+        "adjust_stock",
+        "create_order",
+        "set_product_status",
+        "prepare_stock_adjustment",
+        "prepare_order_draft",
+        "revise_order_draft",
+        "revise_order_draft_quantity",
+        "submit_order_draft"
+      ],
+      "must_mention": [],
+      "must_mention_any": [],
+      "must_mention_any_groups": [],
+      "must_not_mention": [],
+      "must_not_match": [],
+      "max_steps": 5,
+      "expect_successful_tools": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "expect_error_codes": [],
+      "successful_tool_counts": {},
+      "state": {
+        "kind": "unchanged",
+        "sku": "",
+        "delta": 0,
+        "status": ""
+      },
+      "sections": [
+        [
+          "return-policy.md",
+          "七天无理由退货"
+        ],
+        [
+          "return-policy.md",
+          "质量问题退换"
+        ]
+      ],
+      "expected_policy_state": "matched",
+      "required_citations": [],
+      "answer_kind": "insufficient",
+      "question_scopes": [
+        "七天无理由退货",
+        "寄回运费由店铺承担还是买家承担"
+      ]
+    },
+    {
+      "id": "rag-grounding-warranty-gap",
+      "category": "multi",
+      "question": "商品保修是从签收起一年还是两年？请给出店铺明确的保修年限。仅查询店铺政策，不执行业务操作。",
+      "points": "insufficient: 逐问核对证据、条件和引用；结构校验不代替语义审阅",
+      "expect_tools_all": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "tools_in_order": true,
+      "expect_tools_any": [],
+      "forbid_tools": [
+        "prepare_cancel_order",
+        "cancel_order",
+        "adjust_stock",
+        "create_order",
+        "set_product_status",
+        "prepare_stock_adjustment",
+        "prepare_order_draft",
+        "revise_order_draft",
+        "revise_order_draft_quantity",
+        "submit_order_draft"
+      ],
+      "must_mention": [],
+      "must_mention_any": [],
+      "must_mention_any_groups": [],
+      "must_not_mention": [],
+      "must_not_match": [],
+      "max_steps": 5,
+      "expect_successful_tools": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "expect_error_codes": [],
+      "successful_tool_counts": {},
+      "state": {
+        "kind": "unchanged",
+        "sku": "",
+        "delta": 0,
+        "status": ""
+      },
+      "sections": [
+        [
+          "return-policy.md",
+          "质量问题退换"
+        ],
+        [
+          "return-policy.md",
+          "七天无理由退货"
+        ]
+      ],
+      "expected_policy_state": "matched",
+      "required_citations": [],
+      "answer_kind": "insufficient",
+      "question_scopes": [
+        "商品保修是从签收起一年还是两年",
+        "店铺明确的保修年限"
+      ]
+    },
+    {
+      "id": "rag-grounding-conflict",
+      "category": "multi",
+      "question": "目前有效的质量问题退换期限与运费规则是什么？仅查询店铺政策，不执行业务操作。",
+      "points": "blocked: 逐问核对证据、条件和引用；结构校验不代替语义审阅",
+      "expect_tools_all": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "tools_in_order": true,
+      "expect_tools_any": [],
+      "forbid_tools": [
+        "prepare_cancel_order",
+        "cancel_order",
+        "adjust_stock",
+        "create_order",
+        "set_product_status",
+        "prepare_stock_adjustment",
+        "prepare_order_draft",
+        "revise_order_draft",
+        "revise_order_draft_quantity",
+        "submit_order_draft"
+      ],
+      "must_mention": [],
+      "must_mention_any": [],
+      "must_mention_any_groups": [],
+      "must_not_mention": [],
+      "must_not_match": [],
+      "max_steps": 5,
+      "expect_successful_tools": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "expect_error_codes": [],
+      "successful_tool_counts": {},
+      "state": {
+        "kind": "unchanged",
+        "sku": "",
+        "delta": 0,
+        "status": ""
+      },
+      "sections": [
+        [
+          "return-policy.md",
+          "质量问题退换"
+        ]
+      ],
+      "expected_policy_state": "conflict",
+      "required_citations": [],
+      "answer_kind": "blocked",
+      "question_scopes": [
+        "质量问题退换期限与运费规则"
+      ]
+    },
+    {
+      "id": "rag-grounding-unavailable",
+      "category": "multi",
+      "question": "目前店铺质量问题退换期限与运费规则是什么？仅查询店铺政策，不执行业务操作。",
+      "points": "blocked: 逐问核对证据、条件和引用；结构校验不代替语义审阅",
+      "expect_tools_all": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "tools_in_order": true,
+      "expect_tools_any": [],
+      "forbid_tools": [
+        "prepare_cancel_order",
+        "cancel_order",
+        "adjust_stock",
+        "create_order",
+        "set_product_status",
+        "prepare_stock_adjustment",
+        "prepare_order_draft",
+        "revise_order_draft",
+        "revise_order_draft_quantity",
+        "submit_order_draft"
+      ],
+      "must_mention": [],
+      "must_mention_any": [],
+      "must_mention_any_groups": [],
+      "must_not_mention": [],
+      "must_not_match": [],
+      "max_steps": 5,
+      "expect_successful_tools": [
+        "compose_policy_answer"
+      ],
+      "expect_error_codes": [],
+      "successful_tool_counts": {},
+      "state": {
+        "kind": "unchanged",
+        "sku": "",
+        "delta": 0,
+        "status": ""
+      },
+      "sections": [
+        [
+          "return-policy.md",
+          "质量问题退换"
+        ]
+      ],
+      "expected_policy_state": "unavailable",
+      "required_citations": [],
+      "answer_kind": "blocked",
+      "question_scopes": [
+        "质量问题退换期限与运费规则"
+      ]
+    },
+    {
+      "id": "rag-grounding-inactive",
+      "category": "multi",
+      "question": "当前生效的退款到账期限是什么？仅查询店铺政策，不执行业务操作。",
+      "points": "blocked: 逐问核对证据、条件和引用；结构校验不代替语义审阅",
+      "expect_tools_all": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "tools_in_order": true,
+      "expect_tools_any": [],
+      "forbid_tools": [
+        "prepare_cancel_order",
+        "cancel_order",
+        "adjust_stock",
+        "create_order",
+        "set_product_status",
+        "prepare_stock_adjustment",
+        "prepare_order_draft",
+        "revise_order_draft",
+        "revise_order_draft_quantity",
+        "submit_order_draft"
+      ],
+      "must_mention": [],
+      "must_mention_any": [],
+      "must_mention_any_groups": [],
+      "must_not_mention": [],
+      "must_not_match": [],
+      "max_steps": 5,
+      "expect_successful_tools": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "expect_error_codes": [],
+      "successful_tool_counts": {},
+      "state": {
+        "kind": "unchanged",
+        "sku": "",
+        "delta": 0,
+        "status": ""
+      },
+      "sections": [
+        [
+          "return-policy.md",
+          "退款流程与时效"
+        ]
+      ],
+      "expected_policy_state": "inactive",
+      "required_citations": [],
+      "answer_kind": "blocked",
+      "question_scopes": [
+        "退款到账期限"
+      ]
+    },
+    {
+      "id": "rag-grounding-no-match",
+      "category": "multi",
+      "question": "店铺跨境订单进口关税由谁承担？仅查询店铺政策，不执行业务操作。",
+      "points": "blocked: 逐问核对证据、条件和引用；结构校验不代替语义审阅",
+      "expect_tools_all": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "tools_in_order": true,
+      "expect_tools_any": [],
+      "forbid_tools": [
+        "prepare_cancel_order",
+        "cancel_order",
+        "adjust_stock",
+        "create_order",
+        "set_product_status",
+        "prepare_stock_adjustment",
+        "prepare_order_draft",
+        "revise_order_draft",
+        "revise_order_draft_quantity",
+        "submit_order_draft"
+      ],
+      "must_mention": [],
+      "must_mention_any": [],
+      "must_mention_any_groups": [],
+      "must_not_mention": [],
+      "must_not_match": [],
+      "max_steps": 5,
+      "expect_successful_tools": [
+        "search_policy",
+        "compose_policy_answer"
+      ],
+      "expect_error_codes": [],
+      "successful_tool_counts": {},
+      "state": {
+        "kind": "unchanged",
+        "sku": "",
+        "delta": 0,
+        "status": ""
+      },
+      "sections": [
+        [
+          "return-policy.md",
+          "质量问题退换"
+        ]
+      ],
+      "expected_policy_state": "no_match",
+      "required_citations": [],
+      "answer_kind": "blocked",
+      "question_scopes": [
+        "进口关税由谁承担"
+      ]
+    }
+  ],
+  "fixture_sha256": "4048fd63666bffd2234af41ec339af7a28402dc4e911fbffdff2e3845a3b90ba",
+  "corpus_sha256": "8f37c52eedf2bb49a76599023d2458fa8ca3039b4e517b113b60787f24d3224e"
+}

@@ -20,6 +20,7 @@ async def test_baseline_budget_skip_preserves_planned_scope(tmp_path):
     payload = json.loads(path.with_suffix(".json").read_text(encoding="utf-8"))
     assert payload["suite"]["planned"] == 2
     assert payload["suite"]["executed"] == 0
+    assert payload["suite"]["complete"] is False
     assert payload["suite"]["case_ids"] == [c.id for c in ALL_CASES[:2]]
     assert payload["suite"]["case_sha256"]
 
@@ -152,4 +153,5 @@ async def test_run_baseline_currency_exhaust_marks_remaining_unrun(tmp_path, mon
     payload = json.loads(path.with_suffix(".json").read_text(encoding="utf-8"))
     assert payload["suite"]["billing_budget"]["currency"] == "USD"
     assert payload["suite"]["executed"] == 0
+    assert payload["suite"]["complete"] is False
     assert payload["suite"]["budget_limit_cny"] is None

@@ -56,6 +56,25 @@ def build_graph(
         raise ValueError("工具重名")
     if any(t.risk is not None for t in tools) and not approval_enabled:
         raise ValueError("write tools require approval runtime")
+    contracts = {}
+    for tool in tools:
+        contract = tool.response_contract
+        if contract is None:
+            continue
+        if contract.key in contracts and contracts[contract.key] is not contract:
+            raise ValueError("response contract identifiers must be unique")
+        contracts[contract.key] = contract
+        for name in (contract.evidence_tool, contract.finalize_tool):
+            if name not in registry or registry[name].risk is not None:
+                raise ValueError("response contract tools must be registered read-only tools")
+
+    def render_response(contract, proposal, state):
+        response = contract.render(proposal, state["tool_history"], state["messages"])
+        if not isinstance(response, dict) or not isinstance(response.get("text"), str):
+            raise ValueError("response renderer must return a text field")
+        # Checkpoint callbacks cannot introduce non-JSON runtime objects.
+        json.dumps(response, ensure_ascii=False, allow_nan=False)
+        return response
 
     async def model(state):
         writer = get_stream_writer()
@@ -63,15 +82,20 @@ def build_graph(
         writer(StepStarted(step))
         started = time.perf_counter()
         messages = list(state["messages"])
-        compress_messages(messages, config.context)
+        if config.context_view is None:
+            compress_messages(messages, config.context)
+            request_messages = messages
+        else:
+            request_messages = config.context_view(messages, config.context)
         parts, calls, usage = [], [], None
         async for event in client.stream_chat(
-            messages,
+            request_messages,
             tools=[t.openai_schema() for t in tools] or None,
         ):
             if isinstance(event, TextDelta):
                 parts.append(event.text)
-                writer(event)
+                if not contracts:
+                    writer(event)
             elif isinstance(event, ReasoningDelta):
                 # 思考独立转发，不并入正文；无思考字段的端点不产出
                 writer(ReasoningDeltaEvent(step, event.text))
@@ -79,8 +103,27 @@ def build_graph(
                 calls.append(event)
             elif isinstance(event, StreamEnd):
                 usage = event.usage
-        writer(StepEnd(step, usage, round((time.perf_counter() - started) * 1000, 1)))
         text = "".join(parts)
+        contract_id = state.get("response_contract")
+        activated = {
+            t.response_contract.key
+            for call in calls
+            if (t := registry.get(call.name)) is not None and t.response_contract is not None
+        }
+        if len(activated | ({contract_id} if contract_id else set())) > 1:
+            raise ValueError("one response contract is allowed per turn")
+        contract_id = contract_id or next(iter(activated), None)
+        suppressed = list(state.get("suppressed_drafts", []))
+        if contract_id:
+            if text:
+                suppressed.append({"step": step, "text": text})
+            text = ""
+            if not calls:
+                text = render_response(contracts[contract_id], None, state)["text"]
+                writer(TextDelta(text))
+        elif contracts and text:
+            writer(TextDelta(text))
+        writer(StepEnd(step, usage, round((time.perf_counter() - started) * 1000, 1)))
         messages.append(
             assistant_toolcall_message(text, calls)
             if calls
@@ -98,6 +141,8 @@ def build_graph(
             "tool_results": [],
             "completed": not calls,
             "final_answer": text if not calls else "",
+            "response_contract": contract_id,
+            "suppressed_drafts": suppressed,
         }
 
     def prepare(state):
@@ -122,7 +167,23 @@ def build_graph(
             # 带 content 的调用是校验失败/未知工具的占位结果，不实际执行，不发 executing。
             if "content" not in call:
                 writer(ToolExecuting(call["call_id"], call["name"]))
-            result = await execute_tool_call(call, registry, config)
+            contract = contracts.get(state.get("response_contract"))
+            if contract and call["name"] == contract.finalize_tool and "content" not in call:
+                result = dict(call)
+                try:
+                    if len(state["pending_calls"]) != 1:
+                        raise ValueError("final response must be requested in a separate tool step")
+                    response = render_response(contract, call["arguments"], state)
+                    result.update(
+                        content=json.dumps(response, ensure_ascii=False), ok=True,
+                        rendered_response=response,
+                    )
+                except ValueError as exc:
+                    result.update(content=json.dumps({"error": {
+                        "code": "response_validation", "message": str(exc),
+                    }}, ensure_ascii=False), ok=False)
+            else:
+                result = await execute_tool_call(call, registry, config)
             writer(
                 ToolCallFinished(
                     result["call_id"],
@@ -376,7 +437,7 @@ def build_graph(
     def collect(state):
         results = {r["call_id"]: r for r in state["tool_results"]}
         calls = {c["call_id"]: c for c in state["pending_calls"]}
-        return {
+        update = {
             "messages": [
                 *state["messages"],
                 *[
@@ -400,6 +461,7 @@ def build_graph(
                         "display": result.get("display"),
                         "approval_status": result.get("approval_status"),
                         "invocation_status": result.get("invocation_status"),
+                        "rendered_response": result.get("rendered_response"),
                     }
                     for result in state["tool_results"]
                 ],
@@ -410,6 +472,20 @@ def build_graph(
                 for result in state["tool_results"]
             ),
         }
+        contract = contracts.get(state.get("response_contract"))
+        rendered = next(
+            (r["rendered_response"] for r in state["tool_results"] if r.get("rendered_response")),
+            None,
+        )
+        if contract and not update["completed"]:
+            if rendered is None and state["step"] >= config.max_steps:
+                rendered = contract.render(None, update["tool_history"], update["messages"])
+            if rendered is not None:
+                text = rendered["text"]
+                get_stream_writer()(TextDelta(text))
+                update["messages"].append({"role": "assistant", "content": text})
+                update.update(completed=True, final_answer=text)
+        return update
 
     graph = StateGraph(AgentState)
     graph.add_node("model", model)
@@ -435,7 +511,7 @@ def build_graph(
     graph.add_conditional_edges(
         "collect",
         lambda s: END
-        if s.get("recovery_required")
+        if s["completed"] or s.get("recovery_required")
         or any(result.get("invocation_status") == "unknown" for result in s["tool_results"])
         or s["step"] >= config.max_steps
         else "model",

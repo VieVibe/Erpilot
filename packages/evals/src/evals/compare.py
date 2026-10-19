@@ -123,10 +123,12 @@ _B5_EXTRA_KEYS: tuple[tuple[str, str], ...] = (
 )
 
 
-def compatibility_key(report: dict) -> str:
-    """strict 对照的兼容键：缺失或空值的必备溯源字段直接拒绝，不做 None==None。"""
+def compatibility_key(report: dict, *, include_source: bool = True) -> str:
+    """strict 兼容键；跨版本 gate 可显式排除源码，其余必备指纹仍拒绝缺值。"""
     parts: list[str] = []
     for section, name in _REQUIRED_KEYS:
+        if not include_source and (section, name) == ("provenance", "source_sha256"):
+            continue
         container = report.get(section)
         if not isinstance(container, dict) or name not in container:
             raise ValueError(f"严格对照需要 {section}.{name}，报告缺失该字段")
@@ -159,6 +161,12 @@ def compatibility_key(report: dict) -> str:
         for name in ("b6_scorer_version", "b6_fixture"):
             if not suite.get(name):
                 raise ValueError(f"严格对照需要 B6 指纹 {name}")
+            parts.append(f"suite.{name}={suite[name]}")
+    if any(str(cid).startswith("rag-grounding-") for cid in suite.get("case_ids", [])):
+        for name in ("grounding_scorer_version", "grounding_fixture_version", "retrieval_mode",
+                     "policy_corpus_sha256", "policy_index_sha256"):
+            if not suite.get(name):
+                raise ValueError(f"strict grounding comparison requires {name}")
             parts.append(f"suite.{name}={suite[name]}")
     budget = report.get("suite", {}).get("billing_budget")
     if isinstance(budget, dict) and budget.get("currency"):
@@ -221,6 +229,27 @@ def _collect_paths(inputs: Sequence[str]) -> list[Path]:
     return paths
 
 
+def _complete_scope(report: dict) -> bool:
+    """Validate actual coverage; a legacy complete=True flag alone is insufficient."""
+    suite = report.get("suite", {})
+    rows = report.get("results", [])
+    ids = suite.get("case_ids", [])
+    observed = [row for row in rows if not _skipped(row)]
+    row_ids = [row.get("case_id") for row in rows]
+    if (suite.get("complete") is not True
+            or suite.get("source_changed_during_run", False) is not False
+            or not ids or len(set(ids)) != len(ids)
+            or len(set(row_ids)) != len(row_ids) or set(row_ids) != set(ids)
+            or not (suite.get("planned") == suite.get("executed")
+                    == len(ids) == len(rows) == len(observed))):
+        return False
+    if (suite.get("turns_planned") is not None
+            and suite.get("turns_executed") != suite["turns_planned"]):
+        return False
+    budget = suite.get("billing_budget")
+    return not (isinstance(budget, dict) and budget.get("unknown_usage") is True)
+
+
 def main(argv: Sequence[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="跨模型评测报告对照")
     parser.add_argument("paths", nargs="*", default=["reports/evals"],
@@ -248,11 +277,11 @@ def main(argv: Sequence[str] | None = None) -> None:
             raise SystemExit(1)
         partial = [
             p.name for p, r in zip(paths, reports, strict=True)
-            if r.get("suite", {}).get("complete") is not True
+            if not _complete_scope(r)
         ]
         if partial:
             sys.stderr.write(
-                "严格对照拒绝：未完整执行范围的报告不可宣称完整对比："
+                "严格对照拒绝：覆盖、执行计数、计量或源码稳定性不完整："
                 + ", ".join(partial) + "\n"
             )
             raise SystemExit(1)

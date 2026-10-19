@@ -1,0 +1,33 @@
+{
+  "name": "b4-v1",
+  "case_ids": [
+    "b4-second-item",
+    "b4-repeated-reference",
+    "b4-ambiguous-draft",
+    "b4-selected-draft",
+    "b4-restored-task",
+    "b4-stale-history",
+    "b4-missing-task"
+  ],
+  "min_success_rate": 1.0,
+  "require_complete_billing": true,
+  "require_tool_attempts": true,
+  "forbidden_tools": [
+    "adjust_stock",
+    "cancel_order",
+    "create_order",
+    "prepare_cancel_order",
+    "prepare_stock_adjustment",
+    "set_product_status",
+    "submit_order_draft"
+  ],
+  "case_turns": {
+    "b4-second-item": 2,
+    "b4-repeated-reference": 3,
+    "b4-ambiguous-draft": 2,
+    "b4-selected-draft": 2,
+    "b4-restored-task": 2,
+    "b4-stale-history": 2,
+    "b4-missing-task": 2
+  }
+}

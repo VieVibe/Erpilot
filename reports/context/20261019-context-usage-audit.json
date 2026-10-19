@@ -1,0 +1,76 @@
+{
+  "verified": true,
+  "requests": 120,
+  "unknown_usage": 0,
+  "batches": [
+    {
+      "path": "reports/context/20261019-context-glm-live-01.json",
+      "version": "context-retention-1",
+      "model": "glm-5.3-flash",
+      "currency": "CNY",
+      "requests": 30,
+      "known_cost": "0.026129",
+      "cases_sha256": "d113f287c65e4b4bf6f742eb09e2246bdf07c26f0432aa576cd6d2e71951238d",
+      "source_sha256": "0ed9c21a2f3d7654383b43eed217f47de509364757a7c711f68d8ded367615f3",
+      "files_sha256": {
+        "20261019-context-glm-live-01.json": "1ccf916eb99cc833ea74e8b3df9ad266120d3a478ac9f4532f5555b9b97b77c7",
+        "20261019-context-glm-live-01-requests.jsonl": "539769b36f54e5a983c03792609f50bceaf314a0e5cf2a605e52166a51a83521",
+        "20261019-context-glm-live-01-inputs.json": "fd92387fb3b04e4a95b3ad495e2f5035b4c512ea5407887d57774ab6302671be"
+      }
+    },
+    {
+      "path": "reports/context/20261019-context-deepseek-live-01.json",
+      "version": "context-retention-1",
+      "model": "deepseek-v4.1-flash",
+      "currency": "USD",
+      "requests": 30,
+      "known_cost": "0.011327",
+      "cases_sha256": "d113f287c65e4b4bf6f742eb09e2246bdf07c26f0432aa576cd6d2e71951238d",
+      "source_sha256": "0ed9c21a2f3d7654383b43eed217f47de509364757a7c711f68d8ded367615f3",
+      "files_sha256": {
+        "20261019-context-deepseek-live-01.json": "4af22c2674aa38f44eedf822e5f8facc7d527a945bafe77e5286e4f3c1c12e0d",
+        "20261019-context-deepseek-live-01-requests.jsonl": "fa0fde9eb2310f619c639fcd44581c5b8bdc2a4b6393474a50154f19bf2041c3",
+        "20261019-context-deepseek-live-01-inputs.json": "fd92387fb3b04e4a95b3ad495e2f5035b4c512ea5407887d57774ab6302671be"
+      }
+    },
+    {
+      "path": "reports/context/20261019-context-glm-live-02.json",
+      "version": "context-retention-2",
+      "model": "glm-5.3-flash",
+      "currency": "CNY",
+      "requests": 30,
+      "known_cost": "0.028319",
+      "cases_sha256": "abb945849e8a256bc86d586a189c004fdb47b0b784bebbe2a949d9ab719dbc7b",
+      "source_sha256": "54b14d0607c3b2ee7ea6ff86a2f6fc357fb9d29546dad20f3507faff1ac7c175",
+      "files_sha256": {
+        "20261019-context-glm-live-02.json": "7a3222dd9a0cb15e1ba92ec88f3acb0bcd011aa3ecbe58ba2771d138a75cb72f",
+        "20261019-context-glm-live-02-requests.jsonl": "24d60674ed4d7c75cea42a356aa72ae55bbcdec9aa5e8e60d3b7945390fcb3e3",
+        "20261019-context-glm-live-02-inputs.json": "e161f9251a93bfb0b5476f88b8aadc9ed4e0f78d988b937278b7bff6f06ab87e"
+      }
+    },
+    {
+      "path": "reports/context/20261019-context-deepseek-live-02.json",
+      "version": "context-retention-2",
+      "model": "deepseek-v4.1-flash",
+      "currency": "USD",
+      "requests": 30,
+      "known_cost": "0.011351",
+      "cases_sha256": "abb945849e8a256bc86d586a189c004fdb47b0b784bebbe2a949d9ab719dbc7b",
+      "source_sha256": "54b14d0607c3b2ee7ea6ff86a2f6fc357fb9d29546dad20f3507faff1ac7c175",
+      "files_sha256": {
+        "20261019-context-deepseek-live-02.json": "e736091dd5961e52cadeeabc6885f8a33175470309aaaf12f4a8620d6ff60a7c",
+        "20261019-context-deepseek-live-02-requests.jsonl": "3fe7e0c8ff1d2c9c7485df7383c402335f5b67ce186da2714626203e25bdec83",
+        "20261019-context-deepseek-live-02-inputs.json": "e161f9251a93bfb0b5476f88b8aadc9ed4e0f78d988b937278b7bff6f06ab87e"
+      }
+    }
+  ],
+  "known_costs": {
+    "CNY": "0.054448",
+    "USD": "0.022678"
+  },
+  "authorized_limits": {
+    "CNY": "0.10",
+    "USD": "0.05"
+  },
+  "scope": "provided batches only; no reconciliation of prior unknown charges"
+}

@@ -7,7 +7,9 @@ CNY，也不与人民币直接比较数值）；缺失 usage 不当作 0 费用�
 旧 CNY 成本口径在 agent_core.prices，本模块不迁移也不改动它。
 """
 
+from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from decimal import Decimal
 from urllib.parse import urlsplit
 
@@ -246,7 +248,10 @@ class BudgetedClient:
     baseline 不得在 case 之外重复累加。
     """
 
-    def __init__(self, client: object, rate: EndpointRate, budget: CurrencyBudget) -> None:
+    def __init__(
+        self, client: object, rate: EndpointRate, budget: CurrencyBudget, *,
+        request_observer: Callable[[dict], None] | None = None,
+    ) -> None:
         if rate.currency != budget.currency:
             raise ValueError(
                 f"预算币种 {budget.currency} 与价目币种 {rate.currency} 不同，拒绝混算"
@@ -255,6 +260,8 @@ class BudgetedClient:
         self._rate = rate
         self._budget = budget
         self._case_estimates: list[BillingEstimate] = []
+        self._request_observer = request_observer
+        self._case_id = None
 
     @property
     def config(self) -> object:
@@ -268,9 +275,18 @@ class BudgetedClient:
     def request_timeout(self) -> float | None:
         return getattr(self._client, "request_timeout", None)
 
-    def begin_case(self) -> None:
+    def begin_case(self, case_id: str | None = None) -> None:
         """run_case 开头复位增量窗口。"""
         self._case_estimates = []
+        self._case_id = case_id
+
+    def _observe(self, request_number, status, estimate=None):
+        if self._request_observer is not None:
+            self._request_observer({
+                "request": request_number, "case_id": self._case_id,
+                "status": status, "ts": datetime.now(UTC).isoformat(),
+                "billing": estimate.model_dump() if estimate is not None else None,
+            })
 
     def case_billing(self) -> BillingEstimate | None:
         """本 case 的计费增量（含该 case 全部请求）；无请求时返回 None。"""
@@ -280,6 +296,8 @@ class BudgetedClient:
 
     async def stream_chat(self, messages, tools=None):  # noqa: ANN001
         self._budget.before_request()  # 预算已尽：请求根本不发出去
+        request_number = self._budget.requests
+        self._observe(request_number, "started")
         usage: Usage | None = None
         settled = False
         try:
@@ -292,8 +310,10 @@ class BudgetedClient:
             self._budget.record(estimate)
             self._case_estimates.append(estimate)
             settled = True
+            self._observe(request_number, "settled", estimate)
         finally:
             if not settled:
                 # 流中断：请求可能已计费但用量未知——按未知处理并停止后续请求。
                 self._budget.record(None)
                 self._case_estimates.append(quote_usage(self._rate, None))
+                self._observe(request_number, "unknown", self._case_estimates[-1])

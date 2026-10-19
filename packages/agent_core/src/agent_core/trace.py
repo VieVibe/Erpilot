@@ -146,6 +146,7 @@ class JsonlTraceRecorder:
                                     "duration_ms": ms,
                                 }
                             )
+                            step_text.clear()
                         case ToolCallStarted(call=call):
                             pending[call.id] = (time.perf_counter(), call)
                         case ToolExecuting(call_id=cid, name=name):
@@ -211,6 +212,12 @@ class JsonlTraceRecorder:
                                 }
                             )
                         case LoopEnd(steps=steps, usage=usage, completed=completed):
+                            if step_text:
+                                write({
+                                    "type": "rendered_answer", "run_id": run_id,
+                                    "step": step, "ts": _now(), "text": "".join(step_text),
+                                })
+                                step_text.clear()
                             write(
                                 {
                                     "type": "run_end",
@@ -282,6 +289,8 @@ def format_transcript(records: Sequence[dict], *, max_chars: int = 600) -> str:
             )
             if r.get("text"):
                 lines.append(f"[模型] {_shorten(r['text'], max_chars)}")
+        elif kind == "rendered_answer":
+            lines.append(f"[程序答复] {_shorten(r['text'], max_chars)}")
         elif kind == "tool_call":
             mark = "✓" if r.get("ok") else "✗"
             lines.append(

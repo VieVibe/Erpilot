@@ -3,6 +3,7 @@
 from dataclasses import dataclass, field
 
 from agent_core.context import ContextPolicy
+from agent_core.context_view import ContextView
 
 
 @dataclass(frozen=True, slots=True)
@@ -20,3 +21,4 @@ class LoopConfig:
     tool_timeout: float = 30.0
     retry: ToolRetryPolicy = field(default_factory=ToolRetryPolicy)
     context: ContextPolicy = field(default_factory=ContextPolicy)
+    context_view: ContextView | None = None

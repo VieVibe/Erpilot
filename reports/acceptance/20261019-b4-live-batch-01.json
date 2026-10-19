@@ -1,0 +1,367 @@
+{
+  "batch_id": "20261019-b4-live-acceptance-01",
+  "recorded_at": "2026-10-19T02:24:15.650539+00:00",
+  "authorization": "User requested B4 old unknown bill audit and final real acceptance; prior authorization for real model testing persists",
+  "status": "complete",
+  "suite": "b4-reference",
+  "planned_cases": 3,
+  "planned_turns_per_model": 7,
+  "source_provenance": {
+    "revision": "4a0289f362025380f765434ee4c043abf2676d5e",
+    "working_tree_dirty": true,
+    "source_sha256": "ed379a4fa35ad72122e0108cb4d884092c4a1825aa0a189de615babb352e1b36"
+  },
+  "chat_estimate_limits": {
+    "CNY": "0.03",
+    "USD": "0.02"
+  },
+  "timeout_seconds": 60,
+  "sdk_retries": 0,
+  "whole_run_retries": 0,
+  "stop_on_unknown_usage": true,
+  "historical_frozen_budgets": "preserved; never reopened or charged to this independent batch",
+  "old_bill_reconciliation": "reports/acceptance/20261019-b4-reconciliation.json",
+  "runs": [
+    {
+      "suite": "b4-reference",
+      "model": "glm-5.3-flash",
+      "report": "reports/evals/20261019-102442-15b3bd.json",
+      "report_sha256": "b102e1eabed2a5cd0865da766321070b14f6eee083ccec2eb26172aa1e30bd19",
+      "gate": "reports/gates/20261019-102442-15b3bd.json",
+      "currency": "CNY",
+      "spent": "0.011127",
+      "requests": 16,
+      "usage_responses": 16,
+      "unknown_usage": false,
+      "passed": 3,
+      "turns_executed": 7,
+      "tokens": 104261,
+      "duration_ms": 58765.3,
+      "source_sha256": "ed379a4fa35ad72122e0108cb4d884092c4a1825aa0a189de615babb352e1b36",
+      "exit_code": 0,
+      "traces": [
+        {
+          "path": "traces/evals/20261019-102442-a239aba8.jsonl",
+          "sha256": "ea0d98923c0f469fe8359b59532e09ff2fd7fecd0fff0ed9627748336d0a611d"
+        },
+        {
+          "path": "traces/evals/20261019-102447-650a6fde.jsonl",
+          "sha256": "255816ca4dd2a982974cdc7f0f97582f8a6863d2c0aba4bcda24cac1ff218475"
+        },
+        {
+          "path": "traces/evals/20261019-102506-6bff48c2.jsonl",
+          "sha256": "4ab86599c872262e9a04bd73bcf3d0424d8cfb597123562432e0e55d50679ccf"
+        },
+        {
+          "path": "traces/evals/20261019-102511-08dc9866.jsonl",
+          "sha256": "e996f5e0cc7f4b321bc7e7a7f755ac3eb190400331fb4b29b24f07ef289be6ca"
+        },
+        {
+          "path": "traces/evals/20261019-102520-26318ce3.jsonl",
+          "sha256": "de63b9ea042c4f06c5199b1b8936b937b4e9607cc59dd986e35cb86b2f664a88"
+        },
+        {
+          "path": "traces/evals/20261019-102528-eca4b56a.jsonl",
+          "sha256": "43a975de74ebb804bccaa66864eb35d60e65d6540b226329d047aa060e1b7051"
+        },
+        {
+          "path": "traces/evals/20261019-102535-60c906fb.jsonl",
+          "sha256": "e6b74a479f06dc234f3736c9508f27556b5cf94538fd75a385f8c0306f7e414d"
+        }
+      ],
+      "turn_evidence": [
+        {
+          "case_id": "b4-reference-current:turn-1",
+          "passed": true,
+          "tool_attempts": [
+            "get_order_task"
+          ],
+          "state_unchanged": true,
+          "before_sha256": "7b89ed6f3fb3bb1ec4db55f5bb3ebe49b6266cbfd3abbf1acb899de67f998357",
+          "after_sha256": "7b89ed6f3fb3bb1ec4db55f5bb3ebe49b6266cbfd3abbf1acb899de67f998357",
+          "history_reset": false,
+          "external_revision": false,
+          "guards": []
+        },
+        {
+          "case_id": "b4-reference-current:turn-2",
+          "passed": true,
+          "tool_attempts": [
+            "get_order_task",
+            "revise_order_draft_quantity"
+          ],
+          "state_unchanged": false,
+          "before_sha256": "975a5223d647b77528f38084285e294841e4dc4ac90b3fe6a9f7052c2cb9101c",
+          "after_sha256": "0ad8d9de3558065e1486f53ae1022f7d304e911122d13f9ba97c2cee91959202",
+          "history_reset": false,
+          "external_revision": true,
+          "guards": [
+            {
+              "expected_revision": 2,
+              "expected_sku": "A1004",
+              "item_number": 2,
+              "quantity": 50,
+              "returned_revision": 3
+            }
+          ]
+        },
+        {
+          "case_id": "b4-reference-confirmed:turn-1",
+          "passed": true,
+          "tool_attempts": [
+            "get_order_task"
+          ],
+          "state_unchanged": true,
+          "before_sha256": "82953edf4baa96fb4adebd1487ca0677197f5773d8d9105f17962b0b480b7173",
+          "after_sha256": "82953edf4baa96fb4adebd1487ca0677197f5773d8d9105f17962b0b480b7173",
+          "history_reset": false,
+          "external_revision": false,
+          "guards": []
+        },
+        {
+          "case_id": "b4-reference-confirmed:turn-2",
+          "passed": true,
+          "tool_attempts": [
+            "get_order_task"
+          ],
+          "state_unchanged": true,
+          "before_sha256": "c5742e0ea923d183f7e30988a0a1fea1f23459e814f18a9994c1605b0f991c8d",
+          "after_sha256": "c5742e0ea923d183f7e30988a0a1fea1f23459e814f18a9994c1605b0f991c8d",
+          "history_reset": false,
+          "external_revision": true,
+          "guards": []
+        },
+        {
+          "case_id": "b4-reference-confirmed:turn-3",
+          "passed": true,
+          "tool_attempts": [
+            "get_order_task",
+            "revise_order_draft_quantity"
+          ],
+          "state_unchanged": false,
+          "before_sha256": "c5742e0ea923d183f7e30988a0a1fea1f23459e814f18a9994c1605b0f991c8d",
+          "after_sha256": "f1b97a7cedf6db703ba6e6244a418229c433e0ded0e86033c3dc0cdfa3841162",
+          "history_reset": false,
+          "external_revision": false,
+          "guards": [
+            {
+              "expected_revision": 2,
+              "expected_sku": "A1005",
+              "item_number": 1,
+              "quantity": 50,
+              "returned_revision": 3
+            }
+          ]
+        },
+        {
+          "case_id": "b4-reference-inventory:turn-1",
+          "passed": true,
+          "tool_attempts": [
+            "prepare_order_draft"
+          ],
+          "state_unchanged": false,
+          "before_sha256": "16280bcf2e20e4af5bb781f5af8131bc0e1384e16062348adceffaa8ff9e5155",
+          "after_sha256": "1aa761913aaf95c72769671306137d8f238aac5d12cfcb6090a8371541055b11",
+          "history_reset": false,
+          "external_revision": false,
+          "guards": []
+        },
+        {
+          "case_id": "b4-reference-inventory:turn-2",
+          "passed": true,
+          "tool_attempts": [
+            "get_order_task"
+          ],
+          "state_unchanged": true,
+          "before_sha256": "1aa761913aaf95c72769671306137d8f238aac5d12cfcb6090a8371541055b11",
+          "after_sha256": "1aa761913aaf95c72769671306137d8f238aac5d12cfcb6090a8371541055b11",
+          "history_reset": true,
+          "external_revision": false,
+          "guards": []
+        }
+      ]
+    },
+    {
+      "suite": "b4-reference",
+      "model": "deepseek-v4.1-flash",
+      "report": "reports/evals/20261019-102623-1ad1f6.json",
+      "report_sha256": "ea16b1d7497fce7152fb00aacd3a409f3a79b7dc9c2a35aa92d49711d88e2cca",
+      "gate": "reports/gates/20261019-102623-1ad1f6.json",
+      "currency": "USD",
+      "spent": "0.005503",
+      "requests": 16,
+      "usage_responses": 16,
+      "unknown_usage": false,
+      "passed": 3,
+      "turns_executed": 7,
+      "tokens": 110210,
+      "duration_ms": 58509.9,
+      "source_sha256": "ed379a4fa35ad72122e0108cb4d884092c4a1825aa0a189de615babb352e1b36",
+      "exit_code": 0,
+      "traces": [
+        {
+          "path": "traces/evals/20261019-102623-c74e3dee.jsonl",
+          "sha256": "c0bd311867ea216367332069f8710fbf97146b4a2a76ab74d1ad3513d38a9884"
+        },
+        {
+          "path": "traces/evals/20261019-102629-e284c934.jsonl",
+          "sha256": "bc2ebbebb12d4c9aded60d02effd3cd57e657ec980e12639c057c4912c41cfb6"
+        },
+        {
+          "path": "traces/evals/20261019-102641-2750e0bb.jsonl",
+          "sha256": "44c52917b25730c7c6e1b5f889ae87e7a53c9d383156971a9b7200c9b2d0347e"
+        },
+        {
+          "path": "traces/evals/20261019-102646-bf5d72b4.jsonl",
+          "sha256": "8cfdde0e82ea50b2386fccc95fddba218169a899f94c7059faebec678b15bbdc"
+        },
+        {
+          "path": "traces/evals/20261019-102654-116b6e31.jsonl",
+          "sha256": "143336044da3c19de603b41174c6c43685a1474c0ee46ba201e3039edffa1baa"
+        },
+        {
+          "path": "traces/evals/20261019-102703-c70065e7.jsonl",
+          "sha256": "5fd0a50d76ae175777dbb6b64d0987f091938a04c5678e85d14626d1ffb01056"
+        },
+        {
+          "path": "traces/evals/20261019-102710-b5fc6e8a.jsonl",
+          "sha256": "867012badce7f7322fb3e601cd0ef46d50619c2cee0440460d7f0e48f2ef51db"
+        }
+      ],
+      "turn_evidence": [
+        {
+          "case_id": "b4-reference-current:turn-1",
+          "passed": true,
+          "tool_attempts": [
+            "get_order_task"
+          ],
+          "state_unchanged": true,
+          "before_sha256": "eecefff77516b937ccfd59ebcd17f20989c6c94f80016bf90cb5f9b15c82de48",
+          "after_sha256": "eecefff77516b937ccfd59ebcd17f20989c6c94f80016bf90cb5f9b15c82de48",
+          "history_reset": false,
+          "external_revision": false,
+          "guards": []
+        },
+        {
+          "case_id": "b4-reference-current:turn-2",
+          "passed": true,
+          "tool_attempts": [
+            "get_order_task",
+            "revise_order_draft_quantity"
+          ],
+          "state_unchanged": false,
+          "before_sha256": "3ba2343a4e1ad01c7021708fa8846d08188c43fb093f48fdb4680798ce76c802",
+          "after_sha256": "aff6f8486d35bd16d959488b0516d5b5d29a74b12c9c59fe5a1bc1d6af80da2a",
+          "history_reset": false,
+          "external_revision": true,
+          "guards": [
+            {
+              "expected_revision": 2,
+              "expected_sku": "A1004",
+              "item_number": 2,
+              "quantity": 50,
+              "returned_revision": 3
+            }
+          ]
+        },
+        {
+          "case_id": "b4-reference-confirmed:turn-1",
+          "passed": true,
+          "tool_attempts": [
+            "get_order_task"
+          ],
+          "state_unchanged": true,
+          "before_sha256": "b3bd3a958944bb44b517571692cf4b3ca8350646d115077b9e6ee99a6c440da5",
+          "after_sha256": "b3bd3a958944bb44b517571692cf4b3ca8350646d115077b9e6ee99a6c440da5",
+          "history_reset": false,
+          "external_revision": false,
+          "guards": []
+        },
+        {
+          "case_id": "b4-reference-confirmed:turn-2",
+          "passed": true,
+          "tool_attempts": [
+            "get_order_task"
+          ],
+          "state_unchanged": true,
+          "before_sha256": "b43a24b936cb2d2d781f62e789e057f6a9f40833e33e004e3899716b921a8fc1",
+          "after_sha256": "b43a24b936cb2d2d781f62e789e057f6a9f40833e33e004e3899716b921a8fc1",
+          "history_reset": false,
+          "external_revision": true,
+          "guards": []
+        },
+        {
+          "case_id": "b4-reference-confirmed:turn-3",
+          "passed": true,
+          "tool_attempts": [
+            "get_order_task",
+            "revise_order_draft_quantity"
+          ],
+          "state_unchanged": false,
+          "before_sha256": "b43a24b936cb2d2d781f62e789e057f6a9f40833e33e004e3899716b921a8fc1",
+          "after_sha256": "a603276df591f2f927b376e3892bf2ef39bafcb1807da4ec7458f2035f6b9dd1",
+          "history_reset": false,
+          "external_revision": false,
+          "guards": [
+            {
+              "expected_revision": 2,
+              "expected_sku": "A1005",
+              "item_number": 1,
+              "quantity": 50,
+              "returned_revision": 3
+            }
+          ]
+        },
+        {
+          "case_id": "b4-reference-inventory:turn-1",
+          "passed": true,
+          "tool_attempts": [
+            "prepare_order_draft"
+          ],
+          "state_unchanged": false,
+          "before_sha256": "a953df123380ca48b30c9aa1ef0abf69d63504c9daf0692806ce737609c12806",
+          "after_sha256": "260f2b5263484094ed9d2251b5d8e88ddbb3b33dd33bcb166487c987b17db063",
+          "history_reset": false,
+          "external_revision": false,
+          "guards": []
+        },
+        {
+          "case_id": "b4-reference-inventory:turn-2",
+          "passed": true,
+          "tool_attempts": [
+            "get_order_task"
+          ],
+          "state_unchanged": true,
+          "before_sha256": "260f2b5263484094ed9d2251b5d8e88ddbb3b33dd33bcb166487c987b17db063",
+          "after_sha256": "260f2b5263484094ed9d2251b5d8e88ddbb3b33dd33bcb166487c987b17db063",
+          "history_reset": true,
+          "external_revision": false,
+          "guards": []
+        }
+      ]
+    }
+  ],
+  "preflight": {
+    "focused_pytest": "110 passed, exit code 0",
+    "suites": [
+      "test_task_references",
+      "test_task_runtime",
+      "test_billing",
+      "test_gate"
+    ]
+  },
+  "old_bill_status": "Local evidence verified; supplier bill reconciliation skipped by user; original unknown usage and frozen budgets preserved",
+  "completed_at": "2026-10-19T02:28:07.759570+00:00",
+  "totals": {
+    "requests": 32,
+    "usage_responses": 32,
+    "CNY_estimate": "0.011127",
+    "USD_estimate": "0.005503",
+    "actual_provider_bill": null
+  },
+  "strict_comparison": {
+    "report": "reports/evals/20261019-b4-reference-final-comparison.md",
+    "exit_code": 0
+  },
+  "note": "New independent B4-reference acceptance passed. Original B4 seven-case/fifteen-turn scores not changed. User skipped old supplier bill reconciliation; old unknown usage remains."
+}

@@ -1,10 +1,13 @@
 import copy
 import json
+from decimal import Decimal
+from pathlib import Path
 
 import pytest
 from agent_core.testing import USAGE, chunk, make_client, sse_response, tool_call_chunks
 from evals.baseline import BASELINE_CASES, run_baseline
 from evals.compare import compatibility_key
+from evals.gate import evaluate_gate, load_policy
 from evals.model import CaseCategory, CaseResult, ToolResult
 from evals.replenishment_cases import (
     B6_AT,
@@ -52,6 +55,12 @@ async def test_scripted_b6_suite_runs_real_mcp_with_fixed_clock_and_reports(tmp_
     assert report["suite"]["b6_fixture"]["as_of"] == B6_AT.isoformat()
     assert len(BASELINE_CASES) == 35
     assert all("suggest_replenishment" in result.tool_calls for result in results)
+    policy = load_policy(Path(__file__).resolve().parents[3] / "configs/evals/b6.json")
+    decision = evaluate_gate(report, policy)
+    assert decision["passed"], decision["checks"]
+    assert decision["metrics"]["estimated_costs"]["CNY"] == str(
+        sum(Decimal(str(result.cost)) for result in results)
+    )
 
 
 def test_scorer_rejects_wrong_product_facts_and_mutation_attempt(tmp_path):

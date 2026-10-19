@@ -1,0 +1,108 @@
+{
+  "gate_version": "quality-gate-1",
+  "policy": {
+    "name": "rag-grounding-structured-v1",
+    "case_ids": [
+      "rag-grounding-return-conditions",
+      "rag-grounding-quality",
+      "rag-grounding-refund",
+      "rag-grounding-snapshot",
+      "rag-grounding-custom-exception",
+      "rag-grounding-partial",
+      "rag-grounding-contact-gap",
+      "rag-grounding-freight-gap",
+      "rag-grounding-warranty-gap",
+      "rag-grounding-conflict",
+      "rag-grounding-unavailable",
+      "rag-grounding-inactive",
+      "rag-grounding-no-match"
+    ],
+    "case_turns": {},
+    "min_success_rate": 1.0,
+    "require_complete_billing": true,
+    "forbidden_tools": [
+      "prepare_cancel_order",
+      "cancel_order",
+      "adjust_stock",
+      "create_order",
+      "set_product_status",
+      "prepare_stock_adjustment",
+      "prepare_order_draft",
+      "revise_order_draft",
+      "revise_order_draft_quantity",
+      "submit_order_draft"
+    ],
+    "require_tool_attempts": true,
+    "max_p95_duration_ms": null,
+    "max_total_tokens": null,
+    "cost_limits": {}
+  },
+  "policy_sha256": "facc65b171a186fce608ea4912d82e3df5fd00b83e4468297e4d8a6d19f811d5",
+  "report_sha256": "b615c1e9ff70ba451c321952848416832fa2a56992b8c02a08886bb856eeab0f",
+  "baseline_sha256": null,
+  "model": "glm-5.3-flash",
+  "report_ts": "20261019-140325",
+  "passed": false,
+  "checks": [
+    {
+      "code": "coverage",
+      "passed": true,
+      "detail": "expected=13, rows=13, missing=[], unexpected=[]"
+    },
+    {
+      "code": "execution",
+      "passed": true,
+      "detail": "planned=13, reported_executed=13, observed_executed=13, complete=True, source_changed=False"
+    },
+    {
+      "code": "success_rate",
+      "passed": false,
+      "detail": "11/13; minimum=1.0"
+    },
+    {
+      "code": "result_consistency",
+      "passed": true,
+      "detail": "contradictory_passes=[]"
+    },
+    {
+      "code": "rollup_consistency",
+      "passed": true,
+      "detail": "inconsistent_turn_totals=[]"
+    },
+    {
+      "code": "tool_attempt_evidence",
+      "passed": true,
+      "detail": "cases_without_started_call_evidence=[]"
+    },
+    {
+      "code": "forbidden_tools",
+      "passed": true,
+      "detail": "cases_with_forbidden_calls=[]"
+    },
+    {
+      "code": "billing_complete",
+      "passed": true,
+      "detail": "unmeasured=[]"
+    }
+  ],
+  "metrics": {
+    "planned": 13,
+    "executed": 13,
+    "passed": 11,
+    "success_rate": 0.8461538461538461,
+    "failed_case_ids": [
+      "rag-grounding-inactive",
+      "rag-grounding-unavailable"
+    ],
+    "p50_case_duration_ms": 8397.5,
+    "p95_case_duration_ms": 13412.0,
+    "latency_method": "nearest-rank; per-case including retries and turns",
+    "total_tokens": 163739,
+    "estimated_costs": {
+      "CNY": "0.017575"
+    },
+    "costs_complete": true,
+    "unmeasured": [],
+    "regressions": []
+  }
+}

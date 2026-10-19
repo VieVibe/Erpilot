@@ -1,0 +1,52 @@
+{
+  "report": "reports/evals/20261019-111651-81cb8e.json",
+  "reviewer": "Codex development agent; not independent human or blind judge",
+  "status": "incomplete",
+  "reviewed": 8,
+  "semantic_passed": 8,
+  "planned": 13,
+  "cases": [
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "semantic_review_passed": true,
+      "note": "Reviewed question, full visible answer, actual references and tool calls; policy conditions/gaps supported."
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "semantic_review_passed": true,
+      "note": "Reviewed question, full visible answer, actual references and tool calls; policy conditions/gaps supported."
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "semantic_review_passed": true,
+      "note": "Reviewed question, full visible answer, actual references and tool calls; policy conditions/gaps supported."
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "semantic_review_passed": true,
+      "note": "Reviewed question, full visible answer, actual references and tool calls; policy conditions/gaps supported."
+    },
+    {
+      "case_id": "rag-grounding-custom-exception",
+      "semantic_review_passed": true,
+      "note": "Reviewed question, full visible answer, actual references and tool calls; policy conditions/gaps supported."
+    },
+    {
+      "case_id": "rag-grounding-partial",
+      "semantic_review_passed": true,
+      "note": "Reviewed question, full visible answer, actual references and tool calls; policy conditions/gaps supported."
+    },
+    {
+      "case_id": "rag-grounding-contact-gap",
+      "semantic_review_passed": true,
+      "note": "Reviewed question, full visible answer, actual references and tool calls; policy conditions/gaps supported."
+    },
+    {
+      "case_id": "rag-grounding-freight-gap",
+      "semantic_review_passed": true,
+      "note": "Reviewed question, full visible answer, actual references and tool calls; policy conditions/gaps supported."
+    }
+  ],
+  "incomplete_cases": 5,
+  "note": "Eight completed cases passed content review. Ninth timed out before any visible text/tools; four budget skips. Do not extrapolate 8/8 to 13/13."
+}

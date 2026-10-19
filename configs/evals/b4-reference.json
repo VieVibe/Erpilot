@@ -1,0 +1,25 @@
+{
+  "name": "b4-reference-v1",
+  "case_ids": [
+    "b4-reference-current",
+    "b4-reference-confirmed",
+    "b4-reference-inventory"
+  ],
+  "min_success_rate": 1.0,
+  "require_complete_billing": true,
+  "require_tool_attempts": true,
+  "forbidden_tools": [
+    "adjust_stock",
+    "cancel_order",
+    "create_order",
+    "prepare_cancel_order",
+    "prepare_stock_adjustment",
+    "set_product_status",
+    "submit_order_draft"
+  ],
+  "case_turns": {
+    "b4-reference-current": 2,
+    "b4-reference-confirmed": 3,
+    "b4-reference-inventory": 2
+  }
+}

@@ -113,6 +113,7 @@ async def run_task_case(
         case_id=case.id, category=case.category, passed=not failed, failed_checks=failed,
         completed=len(traces) == len(case.turns) and all(r.completed for r in turns),
         steps=sum(r.steps for r in turns), tool_calls=[n for r in turns for n in r.tool_calls],
+        tool_attempts=[n for r in turns for n in (r.tool_attempts or [])],
         tool_results=[t for r in turns for t in r.tool_results],
         total_tokens=sum(r.total_tokens for r in turns), cost=sum(costs) if costs else None,
         cost_complete=all(r.cost_complete for r in turns),

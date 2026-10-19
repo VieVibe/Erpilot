@@ -1,0 +1,99 @@
+{
+  "gate_version": "quality-gate-1",
+  "policy": {
+    "name": "b6-v1",
+    "case_ids": [
+      "b6-known-lead",
+      "b6-unknown-lead",
+      "b6-no-sales",
+      "b6-missing-stock",
+      "b6-off-sale",
+      "b6-purchase-boundary",
+      "b6-pagination"
+    ],
+    "case_turns": {},
+    "min_success_rate": 1.0,
+    "require_complete_billing": true,
+    "forbidden_tools": [
+      "adjust_stock",
+      "cancel_order",
+      "create_order",
+      "prepare_cancel_order",
+      "prepare_order_draft",
+      "prepare_stock_adjustment",
+      "revise_order_draft",
+      "revise_order_draft_quantity",
+      "set_product_status",
+      "submit_order_draft"
+    ],
+    "require_tool_attempts": true,
+    "max_p95_duration_ms": null,
+    "max_total_tokens": null,
+    "cost_limits": {}
+  },
+  "policy_sha256": "fb39af5d7ed6e3923f8e413ad1e2067735defedba0008be36db1a66ede70d651",
+  "report_sha256": "e4933c949b4c777453af83db1571a236e6bdf780cba48f60ccc7aadc36391bc0",
+  "baseline_sha256": null,
+  "model": "glm-5.3-flash",
+  "report_ts": "20261019-101119",
+  "passed": true,
+  "checks": [
+    {
+      "code": "coverage",
+      "passed": true,
+      "detail": "expected=7, rows=7, missing=[], unexpected=[]"
+    },
+    {
+      "code": "execution",
+      "passed": true,
+      "detail": "planned=7, reported_executed=7, observed_executed=7, complete=True, source_changed=False"
+    },
+    {
+      "code": "success_rate",
+      "passed": true,
+      "detail": "7/7; minimum=1.0"
+    },
+    {
+      "code": "result_consistency",
+      "passed": true,
+      "detail": "contradictory_passes=[]"
+    },
+    {
+      "code": "rollup_consistency",
+      "passed": true,
+      "detail": "inconsistent_turn_totals=[]"
+    },
+    {
+      "code": "tool_attempt_evidence",
+      "passed": true,
+      "detail": "cases_without_started_call_evidence=[]"
+    },
+    {
+      "code": "forbidden_tools",
+      "passed": true,
+      "detail": "cases_with_forbidden_calls=[]"
+    },
+    {
+      "code": "billing_complete",
+      "passed": true,
+      "detail": "unmeasured=[]"
+    }
+  ],
+  "metrics": {
+    "planned": 7,
+    "executed": 7,
+    "passed": 7,
+    "success_rate": 1.0,
+    "failed_case_ids": [],
+    "p50_case_duration_ms": 9931.8,
+    "p95_case_duration_ms": 14022.4,
+    "latency_method": "nearest-rank; per-case including retries and turns",
+    "total_tokens": 81401,
+    "estimated_costs": {
+      "CNY": "0.008891"
+    },
+    "costs_complete": true,
+    "unmeasured": [],
+    "regressions": []
+  }
+}

@@ -212,6 +212,13 @@ async def test_baseline_reports_scope_turns_billing_and_state_evidence(tmp_path)
     assert Decimal(results[0].billing.estimated_amount) == budget.spent
     assert len(payload["results"][0]["turn_results"]) == 2
     assert "多轮任务明细" in path.read_text(encoding="utf-8")
+    from evals.gate import GatePolicy, evaluate_gate
+
+    rules = GatePolicy(name="scripted-b4-integration", case_ids=[TASK_CASES[0].id],
+                       case_turns={TASK_CASES[0].id: 2})
+    decision = evaluate_gate(payload, rules)
+    assert decision["passed"], decision["checks"]
+    assert Decimal(decision["metrics"]["estimated_costs"]["USD"]) == budget.spent
 
 
 async def test_single_turn_scoring_does_not_reuse_previous_visible_text(tmp_path):

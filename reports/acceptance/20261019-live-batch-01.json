@@ -1,0 +1,94 @@
+{
+  "batch_id": "20261019-live-acceptance-01",
+  "recorded_at": "2026-10-19T02:04:55.208232+00:00",
+  "authorization": "2026-10-19 user explicitly allowed real model acceptance testing",
+  "historical_frozen_budget": "preserved; not reopened, reset, or charged to this batch",
+  "chat_estimate_limits": {
+    "CNY": "0.03",
+    "USD": "0.02"
+  },
+  "stop_on_unknown_usage": true,
+  "embedding_audit": "reports/rag/20261019-retrieval-v1-collection-audit.json",
+  "embedding_requests": 4,
+  "embedding_tokens": 1038,
+  "embedding_cost": null,
+  "embedding_cost_note": "endpoint price not confirmed; not mixed into chat currency budgets",
+  "runs": [
+    {
+      "suite": "b6",
+      "model": "glm-5.3-flash",
+      "report": "reports/evals/20261019-100216-d0f560.json",
+      "currency": "CNY",
+      "spent": "0.010156",
+      "requests": 16,
+      "unknown_usage": false
+    },
+    {
+      "suite": "b6",
+      "model": "deepseek-v4.1-flash",
+      "report": "reports/evals/20261019-100417-8074df.json",
+      "currency": "USD",
+      "spent": "0.005799",
+      "requests": 18,
+      "unknown_usage": false,
+      "passed": 6,
+      "source_sha256": "93a428166e1f5e2dc59dca70929e0ffa34028f9b9c5bca9d34bf86bc44d6c72c"
+    },
+    {
+      "suite": "b6",
+      "model": "glm-5.3-flash",
+      "report": "reports/evals/20261019-100729-88b65b.json",
+      "currency": "CNY",
+      "spent": "0.010870",
+      "requests": 17,
+      "unknown_usage": false,
+      "passed": 6,
+      "source_sha256": "c9d091c02983412e3dfa2b32ab0e24b016db7fead389c66f2166fd4f4a256d0c",
+      "classification": "visible text synonym not covered by unchanged scorer"
+    },
+    {
+      "suite": "b6",
+      "model": "glm-5.3-flash",
+      "report": "reports/evals/20261019-101006-8c02e4.json",
+      "currency": "CNY",
+      "spent": "0.008891",
+      "requests": 14,
+      "unknown_usage": false,
+      "passed": 7,
+      "source_sha256": "ed379a4fa35ad72122e0108cb4d884092c4a1825aa0a189de615babb352e1b36"
+    },
+    {
+      "suite": "b6",
+      "model": "deepseek-v4.1-flash",
+      "report": "reports/evals/20261019-101219-c7a3fe.json",
+      "currency": "USD",
+      "spent": "0.006820",
+      "requests": 22,
+      "unknown_usage": false,
+      "passed": 7,
+      "source_sha256": "ed379a4fa35ad72122e0108cb4d884092c4a1825aa0a189de615babb352e1b36"
+    }
+  ],
+  "status": "complete",
+  "source_sha256": "93a428166e1f5e2dc59dca70929e0ffa34028f9b9c5bca9d34bf86bc44d6c72c",
+  "limit_amendments": [
+    {
+      "recorded_at": "2026-10-19T02:07:01.832478+00:00",
+      "currency": "USD",
+      "previous_limit": "0.01",
+      "new_limit": "0.02",
+      "reason": "repair and full paired verification within user authorization for real model acceptance; announced before further requests"
+    }
+  ],
+  "chat_estimated_spent": {
+    "CNY": "0.029917",
+    "USD": "0.012619"
+  },
+  "chat_requests": 87,
+  "unknown_usage": false,
+  "final_reports": [
+    "reports/evals/20261019-101006-8c02e4.json",
+    "reports/evals/20261019-101219-c7a3fe.json"
+  ],
+  "final_source_sha256": "ed379a4fa35ad72122e0108cb4d884092c4a1825aa0a189de615babb352e1b36"
+}

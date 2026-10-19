@@ -30,3 +30,7 @@ apps/web/.test-build/
 
 # Playwright MCP 临时产物（页面快照 / 控制台日志 / 本地验收临时库）
 .playwright-mcp/
+reports/**/*.json.lock
+
+# Local reproducible snapshots and recorded portfolio media
+artifacts/

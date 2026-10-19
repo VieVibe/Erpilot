@@ -36,6 +36,7 @@ from fastmcp import Client
 from fastmcp.client.client import CallToolResult
 from pydantic import BaseModel, Field, create_model
 
+from mcp_erp.policy_answer import bind_policy_response
 from mcp_erp.server import PolicyResolver, create_server
 
 _TYPE_MAP: dict[str, type] = {
@@ -181,7 +182,7 @@ async def build_agent_tools_async(
     ]
     if writes:
         tools = [_with_risk_and_gate(t, approval_gate) for t in tools]  # type: ignore[arg-type]
-    return tools
+    return bind_policy_response(tools)
 
 
 def _with_risk_and_gate(tool: Tool, gate: ApprovalGate | None) -> Tool:

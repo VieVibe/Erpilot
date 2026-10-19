@@ -13,7 +13,10 @@
       "policy_id": "return-policy",
       "version": "2026-10-12.1",
       "effective_from": "2026-10-11T16:00:00Z",
-      "effective_until": null
+      "effective_until": null,
+      "citation": "【return-policy.md｜七天无理由退货｜2026-10-12.1】",
+      "quoted_citation": "【return-policy.md｜七天无理由退货｜2026-10-12.1】「签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。」",
+      "text_sha256": "baa60b752694db16e2f5857bf1c67bd5507ac3e39f46efb19ff74c6c39e319f1"
     },
     {
       "source": "return-policy.md",
@@ -23,7 +26,11 @@
       "policy_id": "return-policy",
       "version": "2026-10-12.1",
       "effective_from": "2026-10-11T16:00:00Z",
-      "effective_until": null
+      "effective_until": null,
+      "citation": "【return-policy.md｜质量问题退换｜2026-10-12.1】",
+      "quoted_citation": "【return-policy.md｜质量问题退换｜2026-10-12.1】「商品存在质量问题的，自签收起 15 天内可申请退换，运费由本店承担，并优先换货或全额退款。」",
+      "text_sha256": "75567fb1ff7e665d901a92f18a7f6e79899e5e7bb613e521ee7d2da1ac27855f"
     }
-  ]
+  ],
+  "answerability": "not_assessed"
 }

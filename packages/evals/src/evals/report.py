@@ -7,6 +7,7 @@
 
 import hashlib
 import json
+import os
 import subprocess
 import time
 from collections.abc import Sequence
@@ -183,7 +184,7 @@ def write_report(
     path = report_path or report_dir / f"{stamp}-{uuid4().hex[:6]}.md"
     provenance = provenance or source_provenance()
     suite = metadata or {}
-    path.write_text(
+    _atomic_text(path,
         render_report(
             results, model=model, budget_limit_cny=budget_limit_cny, elapsed_s=elapsed_s,
             billing_budget=suite.get("billing_budget"),
@@ -192,10 +193,9 @@ def write_report(
         + json.dumps({"provenance": provenance, "suite": suite},
                      ensure_ascii=False, indent=2)
         + "\n```\n",
-        encoding="utf-8",
     )
     # 机器可读版本供曲线聚合（M9 起画成功率趋势）
-    path.with_suffix(".json").write_text(
+    _atomic_text(path.with_suffix(".json"),
         json.dumps(
             {
                 "model": model,
@@ -207,9 +207,17 @@ def write_report(
             ensure_ascii=False,
             indent=2,
         ),
-        encoding="utf-8",
     )
     return path
+
+
+def _atomic_text(path: Path, text: str) -> None:
+    temporary = path.with_name(path.name + ".tmp")
+    with temporary.open("w", encoding="utf-8") as stream:
+        stream.write(text)
+        stream.flush()
+        os.fsync(stream.fileno())
+    os.replace(temporary, path)
 
 
 def source_provenance() -> dict:

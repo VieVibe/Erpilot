@@ -1,0 +1,103 @@
+{
+  "report": "reports/evals/20261019-111322-2a6b81.json",
+  "reviewer": "Codex development agent reading actual outputs; not independent human or blind judge",
+  "status": "complete",
+  "semantic_passed": 11,
+  "total": 13,
+  "cases": [
+    {
+      "case_id": "rag-grounding-return-conditions",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-quality",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-refund",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-snapshot",
+      "automatic_passed": true,
+      "semantic_review_passed": false,
+      "issues": [
+        {
+          "kind": "unobserved_order_query_claim",
+          "excerpt": "本次查询的订单金额也确实是按下单快照价记录的口径",
+          "reason": "Only search_policy was called; no actual order or amount was queried. Cannot present general policy as observed order evidence."
+        }
+      ]
+    },
+    {
+      "case_id": "rag-grounding-custom-exception",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-partial",
+      "automatic_passed": true,
+      "semantic_review_passed": false,
+      "issues": [
+        {
+          "kind": "unrelated_output_fragment",
+          "excerpt": "Federal风险期限",
+          "reason": "Extraneous unexplained words absent from returned policy; underlying deadline/refusal is correct but wording fails clarity review."
+        }
+      ]
+    },
+    {
+      "case_id": "rag-grounding-contact-gap",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-freight-gap",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-warranty-gap",
+      "automatic_passed": false,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-conflict",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-unavailable",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-inactive",
+      "automatic_passed": true,
+      "semantic_review_passed": true,
+      "issues": []
+    },
+    {
+      "case_id": "rag-grounding-no-match",
+      "automatic_passed": false,
+      "semantic_review_passed": true,
+      "issues": []
+    }
+  ],
+  "automatic_failure_notes": {
+    "rag-grounding-warranty-gap": "Actual quotes valid but placed before labels, violating the frozen label-then-quote syntax. Correct refusal; not a positive warranty promise.",
+    "rag-grounding-no-match": "Correct refusal uses non-contiguous synonym; frozen refusal phrase check still rejects. v2 only fixed numerical assertion polarity, not this lexical gap."
+  }
+}

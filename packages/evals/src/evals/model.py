@@ -94,6 +94,10 @@ class CaseResult(BaseModel):
     tool_calls: list[str] = Field(
         default_factory=list, description="工具调用名序列（按完成顺序，含重复）"
     )
+    tool_attempts: list[str] | None = Field(
+        default=None,
+        description="收到完整调用请求的工具名，跨重试累计；None 表示旧报告未记录",
+    )
     total_tokens: int = 0
     cost: float | None = None
     duration_ms: float = 0.0
@@ -103,6 +107,7 @@ class CaseResult(BaseModel):
     error: str | None = Field(
         default=None, description="run 异常（APIError 等）；None = 正常结束"
     )
+    failure_kind: Literal["upstream_interrupted", "runtime_error"] | None = None
     tool_results: list["ToolResult"] = Field(default_factory=list)
     visible_text: str = Field(
         default="",

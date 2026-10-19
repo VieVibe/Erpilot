@@ -1,0 +1,1215 @@
+{
+  "version": "context-retention-2",
+  "mode": "offline-input-inspection",
+  "complete": true,
+  "model_requests": 0,
+  "embedding_requests": 0,
+  "actual_usage": null,
+  "actual_cost": null,
+  "policy": {
+    "max_tokens": 4000,
+    "keep_last_messages": 8,
+    "max_tool_chars": 4000
+  },
+  "cases_sha256": "abb945849e8a256bc86d586a189c004fdb47b0b784bebbe2a949d9ab719dbc7b",
+  "cases": [
+    {
+      "case": {
+        "id": "ctx-short",
+        "rounds": 0,
+        "items": 2,
+        "state": "active",
+        "updated": false,
+        "independent_constraint": false,
+        "long_system": false
+      },
+      "messages_sha256": "2b6cf3fe706e396a69520e9bc0286a41cdc034804f8cbdfd78e756c0fa9de542",
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      }
+    },
+    {
+      "case": {
+        "id": "ctx-long-24",
+        "rounds": 24,
+        "items": 2,
+        "state": "active",
+        "updated": false,
+        "independent_constraint": false,
+        "long_system": false
+      },
+      "messages_sha256": "840206d70353f13c57766fc96d518b87740bab9dc7c27a2c5cc0fa93074d552b",
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      }
+    },
+    {
+      "case": {
+        "id": "ctx-large-middle",
+        "rounds": 0,
+        "items": 60,
+        "state": "active",
+        "updated": false,
+        "independent_constraint": false,
+        "long_system": false
+      },
+      "messages_sha256": "69882fe9f1514a06cf5a370b3a11f1c3b0daa2aaefcec29476d24a6ed3d17c43",
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX18488d3e",
+        "target_quantity": 61,
+        "constraint": null
+      }
+    },
+    {
+      "case": {
+        "id": "ctx-combined-48",
+        "rounds": 48,
+        "items": 60,
+        "state": "active",
+        "updated": false,
+        "independent_constraint": false,
+        "long_system": false
+      },
+      "messages_sha256": "13eee24e9c2b7e23b831ae5a97bec2d52528825c7ddc70b017c15da0ed178e1f",
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX18488d3e",
+        "target_quantity": 61,
+        "constraint": null
+      }
+    },
+    {
+      "case": {
+        "id": "ctx-revision",
+        "rounds": 24,
+        "items": 2,
+        "state": "active",
+        "updated": true,
+        "independent_constraint": false,
+        "long_system": false
+      },
+      "messages_sha256": "0880b1a6e6e345d7cc556308daf5603a7aa8ecc0aefa2645c2e6df718b7cad96",
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      }
+    },
+    {
+      "case": {
+        "id": "ctx-ambiguous",
+        "rounds": 24,
+        "items": 2,
+        "state": "ambiguous",
+        "updated": false,
+        "independent_constraint": false,
+        "long_system": false
+      },
+      "messages_sha256": "ab361630cfa3aaf2f6ad98c93788ee5b12aa0934922213e4661b762cdca6be21",
+      "expected": {
+        "status": "ambiguous",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      }
+    },
+    {
+      "case": {
+        "id": "ctx-none",
+        "rounds": 24,
+        "items": 2,
+        "state": "none",
+        "updated": false,
+        "independent_constraint": false,
+        "long_system": false
+      },
+      "messages_sha256": "c9b7fbc6bc6dd625f9d36f264b8dd1e510fb5d661a702366cfa0eb089fdf02a8",
+      "expected": {
+        "status": "none",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      }
+    },
+    {
+      "case": {
+        "id": "ctx-latest-error",
+        "rounds": 24,
+        "items": 2,
+        "state": "unavailable",
+        "updated": true,
+        "independent_constraint": false,
+        "long_system": false
+      },
+      "messages_sha256": "f77250e5c369f3fce51cfcdcc2d2e7e8e38a61f63879246f63288e54e659c9fd",
+      "expected": {
+        "status": "unavailable",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      }
+    },
+    {
+      "case": {
+        "id": "ctx-unpersisted-constraint",
+        "rounds": 24,
+        "items": 2,
+        "state": "active",
+        "updated": false,
+        "independent_constraint": true,
+        "long_system": false
+      },
+      "messages_sha256": "1cd45de83aca01569ca78d3a67d6592b1f5b64f8638d1d4c96bd1942cc1559c0",
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": "独立发货限制：只能周六上午发货。"
+      }
+    },
+    {
+      "case": {
+        "id": "ctx-protected-overflow",
+        "rounds": 0,
+        "items": 2,
+        "state": "active",
+        "updated": false,
+        "independent_constraint": false,
+        "long_system": true
+      },
+      "messages_sha256": "20691f5ad830be0e6e92a308b87a51b3b79cfcbd243921596b33eadb6f5beecd",
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      }
+    }
+  ],
+  "source": {
+    "sha256": "54b14d0607c3b2ee7ea6ff86a2f6fc357fb9d29546dad20f3507faff1ac7c175",
+    "files": {
+      "packages/agent_core/src/agent_core/__init__.py": "a69d099e1cf6eb220b33c3559cbb407d0bfa7a99f92f6a45d1adfd8654b7364d",
+      "packages/agent_core/src/agent_core/__main__.py": "d38b69abe7b11294b013628e8c6709b8fa6023f4606cb0e6d77ee1ce4807f69b",
+      "packages/agent_core/src/agent_core/approval.py": "126fac9d555103ce3402d045c700a08526cde4a6bc5d2c1d29598ee14e932014",
+      "packages/agent_core/src/agent_core/context.py": "3c9cd120114b6ccbe7a49d9d9c297120e90e4ee8da44aa856cc15b2c18a04357",
+      "packages/agent_core/src/agent_core/context_view.py": "281592875101e1df7b8df258ab6656c1b6770f0b730dfc708baf8ce7bc94322e",
+      "packages/agent_core/src/agent_core/demo_tools.py": "43395a81bf8fb13bec44d6728f8827582fce38997ef75c3f62762c2ad1342cf6",
+      "packages/agent_core/src/agent_core/display.py": "29048028882ba4d8df381c1a5dd0340fa6870d92be7edeb497bee1a1d7d0e6a1",
+      "packages/agent_core/src/agent_core/dotenv.py": "31a41af4917d6c5fb76e45ef002df871a5ed84c69f8de9fb9519f5a340701f38",
+      "packages/agent_core/src/agent_core/events.py": "0fb4a3fa3a45ce6bcb43ea0b8e37b2f0c371e4e86a0246db66c250d276d01982",
+      "packages/agent_core/src/agent_core/graph.py": "385fbb6b3d99a0665f97b122c4ce02046d8371f495c250343ab0d2d5f63fd71e",
+      "packages/agent_core/src/agent_core/graph_approval.py": "9705aa427f4ece9916857339d7e03fb12e2649f99e6dd3352c224fd4fbd4dadc",
+      "packages/agent_core/src/agent_core/graph_helpers.py": "fd9617a51bb577fdeb9753f299e3dec2702e722398be797d2264577418d3dc7b",
+      "packages/agent_core/src/agent_core/graph_runtime.py": "9cd244d3c5f3c9e8e7e95ccd05e334004319632edade05e7885fe6a1a5fa77ba",
+      "packages/agent_core/src/agent_core/graph_state.py": "87d42bf6de377ec15d2e054e9fe52378f09e980524c4ae4acf7dec194390aa9a",
+      "packages/agent_core/src/agent_core/graph_tools.py": "84f93c331bb2da84acb63b1fc85d37f8c684a08d2e04711bd845092814f04fae",
+      "packages/agent_core/src/agent_core/llm.py": "bc183039098de3fb96131eed257e681fce4868f3d232664d2328ad82594a26df",
+      "packages/agent_core/src/agent_core/observability.py": "100b660b6d32c8c265f51e926a08213f5594408c6ee81cd1ea7c211ded2edb45",
+      "packages/agent_core/src/agent_core/policy_display.py": "bce33c20a13291c885ebf703d107254aeaac994be8812101b71d0fbf35743770",
+      "packages/agent_core/src/agent_core/prices.py": "07d9d409878e4c1735ddcfa10eea20049bd5cac46c4a8048c75629e231a9f399",
+      "packages/agent_core/src/agent_core/recovery.py": "41b24d5aafd4b49d3f042f8b8cd4e4315c23555cc0ec9f7cc5e83c1d54395019",
+      "packages/agent_core/src/agent_core/replenishment_display.py": "b5f067cc27e0d93f6087fab051d1e7ec70a54b651961865367b6b1c000000cb3",
+      "packages/agent_core/src/agent_core/response_contract.py": "524a6d8e127b07c650f1dd15426a4716fb3ef3e3ba517088bce6da533a5a0b15",
+      "packages/agent_core/src/agent_core/runtime_config.py": "4cd91229993d45a2a42140e5351777eabc12000cda785cc217f051198f585459",
+      "packages/agent_core/src/agent_core/testing.py": "8c49817bbea7681e44ddcb0d732b70de2abc7bb50bd14ab338845a28643f6a89",
+      "packages/agent_core/src/agent_core/tools.py": "be1194be4d0bded5e92c299a8b32a1c3495c04731fedf1ead37c3edbfc4029d9",
+      "packages/agent_core/src/agent_core/trace.py": "0fc53c15276d647938ca2873dec2ef6fb53cc47e018bf7eaf2132a158cfc9079",
+      "packages/erp_store/src/erp_store/__init__.py": "610ac5166c74583dae35b0e9bad546cea6002d99478dca9da75880c383bccaec",
+      "packages/erp_store/src/erp_store/__main__.py": "7573cb8eacfa61a261cbdbbada466a39b698b5dcf10d7a712832609bfac2e1d7",
+      "packages/erp_store/src/erp_store/db.py": "adebff574bb5f95f133a7ee5dfc2dfe93899e70bde4e6cef2497336122a86a80",
+      "packages/erp_store/src/erp_store/drafts.py": "b4748414a67b14786406b6cbd876ee89c37012ebf706eb41ba021d19984b920d",
+      "packages/erp_store/src/erp_store/models.py": "73227857967011b8b469d8ea980af82892fb9d1dccfe524ce149a777522dc5a1",
+      "packages/erp_store/src/erp_store/mutations.py": "2ff6fbe2dc93ad1ac5955a5d973543a06090215425ea317bf5f1718df6db3fad",
+      "packages/erp_store/src/erp_store/operations.py": "53d572230e640c5cacffa1e8fd80ad00959071a47acaa7e6423dd42d40512620",
+      "packages/erp_store/src/erp_store/pricing.py": "a54d7f3e4b003bebcba8d07245d282451462903bc6d7c952461250dfc6b7a67d",
+      "packages/erp_store/src/erp_store/replenishment.py": "40e469dfbac8f621f143b85e52338231f0fb53697ee805fe0ce72b7a5fb8dd3a",
+      "packages/erp_store/src/erp_store/repository.py": "85bd5cecc3561b93a7532559034cc813c04fd61b867a0f0d5071072afb2558c7",
+      "packages/erp_store/src/erp_store/seed.py": "c85ecc233c0f40954a1f2f50209a5ec1f648bd285108dc488bbb780c590b3939",
+      "packages/evals/src/evals/billing.py": "d99661084b5d8c1bba354d3f68fffb41ee50f092fa4550a27aa2a65ec00a760e",
+      "packages/evals/src/evals/context_experiment.py": "477d5c3c323d5275c03f8c26d4beb9cf6caf00d0c625f150bda51168f87d746d",
+      "packages/evals/src/evals/context_live.py": "85e6ca320fa56f29c85653fc7090e33ad759a8fa5411f6b2a57bf9f0e365095a",
+      "packages/mcp_erp/src/mcp_erp/__init__.py": "2e6317a6b3c3507a71cfcc404ac83b4a5ab19f56c431eececfa06db4221340dc",
+      "packages/mcp_erp/src/mcp_erp/__main__.py": "07cd67396e29ec4a522a2594378c6df419d7dd63a0acc73e2aca0f0eeb2ed58d",
+      "packages/mcp_erp/src/mcp_erp/bridge.py": "0cb4ee25be5b61d0fea08d52d4c8037de9c53e7b7b47f788593e105f052e06a0",
+      "packages/mcp_erp/src/mcp_erp/cancellation_assessment.py": "aebcae4e94853cf0617a6fd1b6efb50e255af8fdbed9b62b6543552ea0956959",
+      "packages/mcp_erp/src/mcp_erp/context_view.py": "a86b6f3357030005a33fb4aa922cedc0325fe25552e45b0322c466655cf8bacc",
+      "packages/mcp_erp/src/mcp_erp/draft_tools.py": "ec1c96f5e8bf585b0685a729b17790a9ef4ff5a7686897d57243fe5605df5fce",
+      "packages/mcp_erp/src/mcp_erp/operation_tools.py": "6882056e6fccecd4d91a0999714b5d9b5b3c593561bef8fc5eb578099565daad",
+      "packages/mcp_erp/src/mcp_erp/policy_answer.py": "34757747812640dbc80af287fbf2724d377013167a9a79ebf9147007edd291ce",
+      "packages/mcp_erp/src/mcp_erp/policy_tools.py": "bcaf24a864a6a5c7f3ddb1a2230d51c699ca43e0c3f4d780195ad11c03fe2ce0",
+      "packages/mcp_erp/src/mcp_erp/replenishment_tools.py": "e3ab0bf49868edf6389dfc303c1a42e320d6838f1e18446e91484dc525843f32",
+      "packages/mcp_erp/src/mcp_erp/server.py": "a95c9e1310fa0721b61623434dc1d6e99e1e365bad1b2e5fc0e89948f4d309e1",
+      "packages/mcp_erp/src/mcp_erp/session_tools.py": "a88bb31c8391b1e63f92ec3ae2b34cdaea18d63788899c1aed8c2cb6f503515f"
+    }
+  },
+  "results": [
+    {
+      "case_id": "ctx-short",
+      "strategy": "full",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 466,
+      "input_chars": 1679,
+      "within_budget": true,
+      "projection_p50_ms": 0.008600007276982069,
+      "projection_p95_ms": 0.01209997572004795,
+      "input_sha256": "2b6cf3fe706e396a69520e9bc0286a41cdc034804f8cbdfd78e756c0fa9de542"
+    },
+    {
+      "case_id": "ctx-short",
+      "strategy": "current",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 466,
+      "input_chars": 1679,
+      "within_budget": true,
+      "projection_p50_ms": 0.01179997343569994,
+      "projection_p95_ms": 0.018400023691356182,
+      "input_sha256": "2b6cf3fe706e396a69520e9bc0286a41cdc034804f8cbdfd78e756c0fa9de542"
+    },
+    {
+      "case_id": "ctx-short",
+      "strategy": "structured",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 292,
+      "input_chars": 1136,
+      "within_budget": true,
+      "projection_p50_ms": 0.04010001430287957,
+      "projection_p95_ms": 0.06689998554065824,
+      "input_sha256": "5fdc860da0712b31bfa155552e14a35ad9da6bbc0ae5e015f44763ec7559cdb5"
+    },
+    {
+      "case_id": "ctx-long-24",
+      "strategy": "full",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 5905,
+      "input_chars": 19598,
+      "within_budget": false,
+      "projection_p50_ms": 0.050799979362636805,
+      "projection_p95_ms": 0.055500015150755644,
+      "input_sha256": "840206d70353f13c57766fc96d518b87740bab9dc7c27a2c5cc0fa93074d552b"
+    },
+    {
+      "case_id": "ctx-long-24",
+      "strategy": "current",
+      "retained": false,
+      "lost_fields": [
+        "status",
+        "customer",
+        "note",
+        "target_sku",
+        "target_quantity"
+      ],
+      "actual": {
+        "status": "unknown",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 3784,
+      "input_chars": 12509,
+      "within_budget": true,
+      "projection_p50_ms": 0.15390000771731138,
+      "projection_p95_ms": 0.16390002565458417,
+      "input_sha256": "8c76b960a44e04d3a756c02dbbb478aebcbce3d36289d47c2cd514fc8eeec174"
+    },
+    {
+      "case_id": "ctx-long-24",
+      "strategy": "structured",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 978,
+      "input_chars": 3428,
+      "within_budget": true,
+      "projection_p50_ms": 0.1351999817416072,
+      "projection_p95_ms": 0.14919997192919254,
+      "input_sha256": "67fc21110792c51be35c73cc04b158ae3a7d45a2999738e2681581bba9ce7e97"
+    },
+    {
+      "case_id": "ctx-large-middle",
+      "strategy": "full",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX18488d3e",
+        "target_quantity": 61,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX18488d3e",
+        "target_quantity": 61,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 5876,
+      "input_chars": 18839,
+      "within_budget": false,
+      "projection_p50_ms": 0.008200004231184721,
+      "projection_p95_ms": 0.009700015652924776,
+      "input_sha256": "69882fe9f1514a06cf5a370b3a11f1c3b0daa2aaefcec29476d24a6ed3d17c43"
+    },
+    {
+      "case_id": "ctx-large-middle",
+      "strategy": "current",
+      "retained": false,
+      "lost_fields": [
+        "status",
+        "customer",
+        "note",
+        "target_sku",
+        "target_quantity"
+      ],
+      "actual": {
+        "status": "unknown",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX18488d3e",
+        "target_quantity": 61,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 1523,
+      "input_chars": 5031,
+      "within_budget": true,
+      "projection_p50_ms": 0.01279998105019331,
+      "projection_p95_ms": 0.01750001683831215,
+      "input_sha256": "cec251ba19bf8120d493ae93f200194332f2195854cc4bfd33c189dff08b7ca4"
+    },
+    {
+      "case_id": "ctx-large-middle",
+      "strategy": "structured",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX18488d3e",
+        "target_quantity": 61,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX18488d3e",
+        "target_quantity": 61,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 985,
+      "input_chars": 3564,
+      "within_budget": true,
+      "projection_p50_ms": 0.10060000931844115,
+      "projection_p95_ms": 0.11310004629194736,
+      "input_sha256": "c2a4cc6edeb962358a185624a6e4e6d5cecd60628f0db15d96e77ffe0b4980f0"
+    },
+    {
+      "case_id": "ctx-combined-48",
+      "strategy": "full",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX18488d3e",
+        "target_quantity": 61,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX18488d3e",
+        "target_quantity": 61,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 16763,
+      "input_chars": 54686,
+      "within_budget": false,
+      "projection_p50_ms": 0.09490002412348986,
+      "projection_p95_ms": 0.172999978531152,
+      "input_sha256": "13eee24e9c2b7e23b831ae5a97bec2d52528825c7ddc70b017c15da0ed178e1f"
+    },
+    {
+      "case_id": "ctx-combined-48",
+      "strategy": "current",
+      "retained": false,
+      "lost_fields": [
+        "status",
+        "customer",
+        "note",
+        "target_sku",
+        "target_quantity"
+      ],
+      "actual": {
+        "status": "unknown",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX18488d3e",
+        "target_quantity": 61,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 3785,
+      "input_chars": 12511,
+      "within_budget": true,
+      "projection_p50_ms": 0.5652999971061945,
+      "projection_p95_ms": 0.5785999819636345,
+      "input_sha256": "c9eedae5dd06e9046a911344fd6d20d2bcc4bf970512f25a65008527dca0d872"
+    },
+    {
+      "case_id": "ctx-combined-48",
+      "strategy": "structured",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX18488d3e",
+        "target_quantity": 61,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX18488d3e",
+        "target_quantity": 61,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 1671,
+      "input_chars": 5856,
+      "within_budget": true,
+      "projection_p50_ms": 0.29880000511184335,
+      "projection_p95_ms": 0.3723000409081578,
+      "input_sha256": "c101344289d956a199557fc913c8666a906870bdad8a488d4b59502810397fcc"
+    },
+    {
+      "case_id": "ctx-revision",
+      "strategy": "full",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 6218,
+      "input_chars": 20751,
+      "within_budget": false,
+      "projection_p50_ms": 0.056299963034689426,
+      "projection_p95_ms": 0.056999968364834785,
+      "input_sha256": "0880b1a6e6e345d7cc556308daf5603a7aa8ecc0aefa2645c2e6df718b7cad96"
+    },
+    {
+      "case_id": "ctx-revision",
+      "strategy": "current",
+      "retained": false,
+      "lost_fields": [
+        "status",
+        "customer",
+        "note",
+        "target_sku",
+        "target_quantity"
+      ],
+      "actual": {
+        "status": "unknown",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 3784,
+      "input_chars": 12509,
+      "within_budget": true,
+      "projection_p50_ms": 0.17499999376013875,
+      "projection_p95_ms": 0.18129998352378607,
+      "input_sha256": "8c76b960a44e04d3a756c02dbbb478aebcbce3d36289d47c2cd514fc8eeec174"
+    },
+    {
+      "case_id": "ctx-revision",
+      "strategy": "structured",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 978,
+      "input_chars": 3428,
+      "within_budget": true,
+      "projection_p50_ms": 0.15460001304745674,
+      "projection_p95_ms": 0.15959999291226268,
+      "input_sha256": "c4b3ddf1cec8c1cebecc4d8ec78e02c41e5d5c0b37dae32c3fe1502ec7c46792"
+    },
+    {
+      "case_id": "ctx-ambiguous",
+      "strategy": "full",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "ambiguous",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "expected": {
+        "status": "ambiguous",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 5686,
+      "input_chars": 18900,
+      "within_budget": false,
+      "projection_p50_ms": 0.05000003147870302,
+      "projection_p95_ms": 0.05069997860118747,
+      "input_sha256": "ab361630cfa3aaf2f6ad98c93788ee5b12aa0934922213e4661b762cdca6be21"
+    },
+    {
+      "case_id": "ctx-ambiguous",
+      "strategy": "current",
+      "retained": false,
+      "lost_fields": [
+        "status"
+      ],
+      "actual": {
+        "status": "unknown",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "expected": {
+        "status": "ambiguous",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 3784,
+      "input_chars": 12509,
+      "within_budget": true,
+      "projection_p50_ms": 0.15300000086426735,
+      "projection_p95_ms": 0.15670002903789282,
+      "input_sha256": "8c76b960a44e04d3a756c02dbbb478aebcbce3d36289d47c2cd514fc8eeec174"
+    },
+    {
+      "case_id": "ctx-ambiguous",
+      "strategy": "structured",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "ambiguous",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "expected": {
+        "status": "ambiguous",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 944,
+      "input_chars": 3312,
+      "within_budget": true,
+      "projection_p50_ms": 0.12989999959245324,
+      "projection_p95_ms": 0.13669999316334724,
+      "input_sha256": "c7db37af7a251af2ba749ef0cac4d4b2b035d5af3384061fb1d3a65a02c3e160"
+    },
+    {
+      "case_id": "ctx-none",
+      "strategy": "full",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "none",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "expected": {
+        "status": "none",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 5648,
+      "input_chars": 18767,
+      "within_budget": false,
+      "projection_p50_ms": 0.04989997250959277,
+      "projection_p95_ms": 0.05089998012408614,
+      "input_sha256": "c9b7fbc6bc6dd625f9d36f264b8dd1e510fb5d661a702366cfa0eb089fdf02a8"
+    },
+    {
+      "case_id": "ctx-none",
+      "strategy": "current",
+      "retained": false,
+      "lost_fields": [
+        "status"
+      ],
+      "actual": {
+        "status": "unknown",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "expected": {
+        "status": "none",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 3784,
+      "input_chars": 12509,
+      "within_budget": true,
+      "projection_p50_ms": 0.15119998715817928,
+      "projection_p95_ms": 0.15629996778443456,
+      "input_sha256": "8c76b960a44e04d3a756c02dbbb478aebcbce3d36289d47c2cd514fc8eeec174"
+    },
+    {
+      "case_id": "ctx-none",
+      "strategy": "structured",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "none",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "expected": {
+        "status": "none",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 899,
+      "input_chars": 3153,
+      "within_budget": true,
+      "projection_p50_ms": 0.12750003952533007,
+      "projection_p95_ms": 0.1314000110141933,
+      "input_sha256": "bee2ab3e5265e3216f7d3a45845df23b0cd780c510388662e3a92d7db1c1a846"
+    },
+    {
+      "case_id": "ctx-latest-error",
+      "strategy": "full",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "unavailable",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "expected": {
+        "status": "unavailable",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 5956,
+      "input_chars": 19904,
+      "within_budget": false,
+      "projection_p50_ms": 0.053099996875971556,
+      "projection_p95_ms": 0.0543000060133636,
+      "input_sha256": "f77250e5c369f3fce51cfcdcc2d2e7e8e38a61f63879246f63288e54e659c9fd"
+    },
+    {
+      "case_id": "ctx-latest-error",
+      "strategy": "current",
+      "retained": false,
+      "lost_fields": [
+        "status"
+      ],
+      "actual": {
+        "status": "unknown",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "expected": {
+        "status": "unavailable",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 3784,
+      "input_chars": 12509,
+      "within_budget": true,
+      "projection_p50_ms": 0.17630000365898013,
+      "projection_p95_ms": 0.17950002802535892,
+      "input_sha256": "8c76b960a44e04d3a756c02dbbb478aebcbce3d36289d47c2cd514fc8eeec174"
+    },
+    {
+      "case_id": "ctx-latest-error",
+      "strategy": "structured",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "unavailable",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "expected": {
+        "status": "unavailable",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 890,
+      "input_chars": 3124,
+      "within_budget": true,
+      "projection_p50_ms": 0.1453000004403293,
+      "projection_p95_ms": 0.1514999894425273,
+      "input_sha256": "c36c96fa7c0338d140377f02ed51e7974dce4bec7148c5a120d148add8675b6a"
+    },
+    {
+      "case_id": "ctx-unpersisted-constraint",
+      "strategy": "full",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": "独立发货限制：只能周六上午发货。"
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": "独立发货限制：只能周六上午发货。"
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 5934,
+      "input_chars": 19751,
+      "within_budget": false,
+      "projection_p50_ms": 0.051799986977130175,
+      "projection_p95_ms": 0.05339999916031957,
+      "input_sha256": "1cd45de83aca01569ca78d3a67d6592b1f5b64f8638d1d4c96bd1942cc1559c0"
+    },
+    {
+      "case_id": "ctx-unpersisted-constraint",
+      "strategy": "current",
+      "retained": false,
+      "lost_fields": [
+        "status",
+        "customer",
+        "note",
+        "target_sku",
+        "target_quantity",
+        "constraint"
+      ],
+      "actual": {
+        "status": "unknown",
+        "customer": null,
+        "note": null,
+        "target_sku": null,
+        "target_quantity": null,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": "独立发货限制：只能周六上午发货。"
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 3803,
+      "input_chars": 12565,
+      "within_budget": true,
+      "projection_p50_ms": 0.16840000171214342,
+      "projection_p95_ms": 0.17479999223724008,
+      "input_sha256": "5a38a5efe620ba443651bc835c54618edf13be51c01860cc231ab03b533553b9"
+    },
+    {
+      "case_id": "ctx-unpersisted-constraint",
+      "strategy": "structured",
+      "retained": false,
+      "lost_fields": [
+        "constraint"
+      ],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": "独立发货限制：只能周六上午发货。"
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 997,
+      "input_chars": 3484,
+      "within_budget": true,
+      "projection_p50_ms": 0.13559998478740454,
+      "projection_p95_ms": 0.1412000274285674,
+      "input_sha256": "70c59911b292d0932b57f2a9c94331a93668a16b733a099a4d7cc05d442ca8f7"
+    },
+    {
+      "case_id": "ctx-protected-overflow",
+      "strategy": "full",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 7400,
+      "input_chars": 22479,
+      "within_budget": false,
+      "projection_p50_ms": 0.007800001185387373,
+      "projection_p95_ms": 0.009600014891475439,
+      "input_sha256": "20691f5ad830be0e6e92a308b87a51b3b79cfcbd243921596b33eadb6f5beecd"
+    },
+    {
+      "case_id": "ctx-protected-overflow",
+      "strategy": "current",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 7400,
+      "input_chars": 22479,
+      "within_budget": false,
+      "projection_p50_ms": 0.013999990187585354,
+      "projection_p95_ms": 0.016600009985268116,
+      "input_sha256": "20691f5ad830be0e6e92a308b87a51b3b79cfcbd243921596b33eadb6f5beecd"
+    },
+    {
+      "case_id": "ctx-protected-overflow",
+      "strategy": "structured",
+      "retained": true,
+      "lost_fields": [],
+      "actual": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "expected": {
+        "status": "active",
+        "customer": "上下文实验客户甲",
+        "note": "分开发票，周五发货；只存草稿",
+        "target_sku": "CTX2c107d00",
+        "target_quantity": 23,
+        "constraint": null
+      },
+      "protocol_valid": true,
+      "source_unchanged": true,
+      "estimated_input_tokens": 7226,
+      "input_chars": 21936,
+      "within_budget": false,
+      "projection_p50_ms": 0.0475000124424696,
+      "projection_p95_ms": 0.05180004518479109,
+      "input_sha256": "1f382492d51bb58faf73a30c67b73bb7df7431d302651af9cf9c079856a31988"
+    }
+  ]
+}

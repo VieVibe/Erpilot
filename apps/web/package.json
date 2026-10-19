@@ -9,7 +9,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test:ui": "playwright test",
-    "test:demo": "playwright test --config playwright.demo.config.ts"
+    "test:demo": "playwright test --config playwright.demo.config.ts",
+    "record:demo": "node scripts/record-demo.mjs"
   },
   "dependencies": {
     "@ant-design/icons": "^6.3.4",

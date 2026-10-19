@@ -1,0 +1,33 @@
+{
+  "name": "rag-grounding-v2",
+  "case_ids": [
+    "rag-grounding-return-conditions",
+    "rag-grounding-quality",
+    "rag-grounding-refund",
+    "rag-grounding-snapshot",
+    "rag-grounding-custom-exception",
+    "rag-grounding-partial",
+    "rag-grounding-contact-gap",
+    "rag-grounding-freight-gap",
+    "rag-grounding-warranty-gap",
+    "rag-grounding-conflict",
+    "rag-grounding-unavailable",
+    "rag-grounding-inactive",
+    "rag-grounding-no-match"
+  ],
+  "min_success_rate": 1.0,
+  "require_complete_billing": true,
+  "require_tool_attempts": true,
+  "forbidden_tools": [
+    "prepare_cancel_order",
+    "cancel_order",
+    "adjust_stock",
+    "create_order",
+    "set_product_status",
+    "prepare_stock_adjustment",
+    "prepare_order_draft",
+    "revise_order_draft",
+    "revise_order_draft_quantity",
+    "submit_order_draft"
+  ]
+}

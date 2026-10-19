@@ -44,10 +44,44 @@ async def test_run_case_passes_on_tool_and_text(resolved, tools, tmp_path: Path)
     assert trace_path.is_file()
     assert result.passed, result.failed_checks
     assert result.tool_calls == ["get_order"]
+    assert result.tool_attempts == ["get_order"]
     assert result.completed and result.steps >= 1
     assert result.total_tokens > 0
     assert result.cost is not None and result.cost > 0
     assert result.error is None
+
+
+async def test_started_tool_attempt_survives_interruption_and_retry(tmp_path, monkeypatch):
+    import evals.runner as runner
+    from agent_core.events import LoopEnd, StepEnd, ToolCallStarted
+    from agent_core.llm import ToolCall, Usage
+
+    runs = 0
+
+    class InterruptedRuntime:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        async def run(self, messages, *, thread_id):
+            nonlocal runs
+            runs += 1
+            if runs == 1:
+                yield ToolCallStarted(ToolCall(id="unfinished", name="adjust_stock",
+                                               arguments="{}"))
+                raise RuntimeError("connection interrupted after started event")
+            yield StepEnd(step=1, usage=Usage(prompt_tokens=1, completion_tokens=1, total_tokens=2))
+            yield LoopEnd(steps=1, completed=True)
+
+    monkeypatch.setattr(runner, "LangGraphRuntime", InterruptedRuntime)
+    result, _ = await run_case(_case(), client=make_client(lambda request: None), tools=[],
+                               resolved={}, trace_dir=tmp_path, retries=1, backoff=0)
+    assert runs == 2 and result.attempts == 2
+    assert result.tool_calls == [] and result.tool_results == []
+    assert result.tool_attempts == ["adjust_stock"]
+    runs = 0
+    result, _ = await run_case(_case(), client=make_client(lambda request: None), tools=[],
+                               resolved={}, trace_dir=tmp_path, retries=0)
+    assert result.error and result.tool_attempts == ["adjust_stock"]
 
 
 async def test_each_eval_case_gets_an_isolated_graph_checkpoint(

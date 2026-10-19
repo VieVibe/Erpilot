@@ -1,0 +1,178 @@
+{
+  "batch_id": "20261019-grounding-live-acceptance-01",
+  "recorded_at": "2026-10-19T02:56:02.654480+00:00",
+  "authorization": "User agreed to proceed with evidence sufficiency and generated-answer reliability; prior real-model testing authorization persists",
+  "status": "frozen_unknown_usage",
+  "suite": "rag-grounding",
+  "retrieval_mode": "controlled-retrieval",
+  "manifest": "reports/rag/20261019-grounding-v1-manifest.json",
+  "manifest_sha256": "cfac186c166672a209c364aaebbc40b472ae3edf80d6d3bb9c8cbab78c449870",
+  "source_provenance": {
+    "revision": "4a0289f362025380f765434ee4c043abf2676d5e",
+    "working_tree_dirty": true,
+    "source_sha256": "fd4d40cdcf0fa3eee20b6cf4363d140d695402bbe100e04925ff95b89985ca26"
+  },
+  "chat_estimate_limits": {
+    "CNY": "0.08",
+    "USD": "0.03"
+  },
+  "sdk_retries": 0,
+  "whole_run_retries": 0,
+  "request_timeout_seconds": 60,
+  "stop_on_unknown_usage": true,
+  "historical_budgets": "not reopened; all historical unknowns preserved",
+  "preflight": {
+    "python": "964 passed / 21 skipped / 47 deselected",
+    "frontend": "84 passed; TypeScript/Vite build passed",
+    "first_full_test_failure": "old browser fixture missed additive citation/hash fields; synchronized before passing rerun"
+  },
+  "runs": [
+    {
+      "phase": "initial",
+      "report": "reports/evals/20261019-105612-7aac03.json",
+      "model": "glm-5.3-flash",
+      "source_sha256": "fd4d40cdcf0fa3eee20b6cf4363d140d695402bbe100e04925ff95b89985ca26",
+      "case_sha256": "6cc2816a9f6dbf10beccab6923172e70534c0c3a8abd9ba95415d2825d9fd588",
+      "currency": "CNY",
+      "spent": "0.020908",
+      "requests": 34,
+      "unknown_usage": false,
+      "auto_passed": 12,
+      "executed": 13,
+      "exit_code": 1,
+      "report_sha256": "4e8b46a5c0a7da4a28da3a6bd5087d361d724cec5ef0d14fb98d48ea8c2c2b1b"
+    },
+    {
+      "phase": "initial",
+      "report": "reports/evals/20261019-105901-168c5c.json",
+      "model": "deepseek-v4.1-flash",
+      "source_sha256": "fd4d40cdcf0fa3eee20b6cf4363d140d695402bbe100e04925ff95b89985ca26",
+      "case_sha256": "6cc2816a9f6dbf10beccab6923172e70534c0c3a8abd9ba95415d2825d9fd588",
+      "currency": "USD",
+      "spent": "0.009485",
+      "requests": 32,
+      "unknown_usage": false,
+      "auto_passed": 12,
+      "executed": 13,
+      "exit_code": 1,
+      "report_sha256": "16eb0f0c19058a4dc852afabb333591b5d1c14bd3d05d9d42ad9d4f83cadd9ca"
+    },
+    {
+      "phase": "guidance-diagnostic",
+      "report": "reports/evals/20261019-110239-593aac.json",
+      "model": "glm-5.3-flash",
+      "source_sha256": "f693585a4084c0280323ab7a45030753e49347590e0ce197a605f4eeda7b696f",
+      "case_sha256": "6cc2816a9f6dbf10beccab6923172e70534c0c3a8abd9ba95415d2825d9fd588",
+      "currency": "CNY",
+      "spent": "0.017536",
+      "requests": 27,
+      "unknown_usage": false,
+      "auto_passed": 10,
+      "executed": 13,
+      "exit_code": 1,
+      "report_sha256": "ce2edfbbef85399ef1da718c9547c65a9fb3e3508448d327d9fd56e46e69cc8e",
+      "failure_classification": "three citation-format failures; content review found prior unsupported-detail issues resolved"
+    },
+    {
+      "phase": "complete-citation-diagnostic",
+      "report": "reports/evals/20261019-110735-51a7fd.json",
+      "model": "glm-5.3-flash",
+      "source_sha256": "9a6e150443643114258a6a15391132c53110df452988f80da16e8c9e4d71629d",
+      "case_sha256": "6cc2816a9f6dbf10beccab6923172e70534c0c3a8abd9ba95415d2825d9fd588",
+      "currency": "CNY",
+      "spent": "0.016936",
+      "requests": 26,
+      "unknown_usage": false,
+      "auto_passed": 11,
+      "executed": 13,
+      "exit_code": 1,
+      "report_sha256": "14752028a9fd536922bcb175b6c6f674ab6a6821df4d454a0d48f8486640ff94",
+      "failure_classification": "one Markdown multiline quote mismatch; one frozen warranty regex false positive"
+    },
+    {
+      "phase": "final-v2",
+      "report": "reports/evals/20261019-111322-2a6b81.json",
+      "model": "glm-5.3-flash",
+      "source_sha256": "2c709e5230d59ea575d0e23e51e3563e9873a3934eafb0f5d93f8066c1b7f2f4",
+      "case_sha256": "b48b39a31894124a7642797b3e627b9bbe22751aa2688dabae7c4c56488fad29",
+      "scorer": "rag-grounding-2",
+      "currency": "CNY",
+      "spent": "0.016668",
+      "requests": 26,
+      "unknown_usage": false,
+      "auto_passed": 11,
+      "executed": 13,
+      "exit_code": 1,
+      "report_sha256": "f7fd46aead49d6f6b6f02c8988e61a959f894449993dc94186e9a0111f76a110"
+    },
+    {
+      "phase": "final-v2",
+      "report": "reports/evals/20261019-111651-81cb8e.json",
+      "model": "deepseek-v4.1-flash",
+      "source_sha256": "2c709e5230d59ea575d0e23e51e3563e9873a3934eafb0f5d93f8066c1b7f2f4",
+      "case_sha256": "b48b39a31894124a7642797b3e627b9bbe22751aa2688dabae7c4c56488fad29",
+      "scorer": "rag-grounding-2",
+      "currency": "USD",
+      "spent": "0.005005",
+      "requests": 17,
+      "unknown_usage": true,
+      "auto_passed": 8,
+      "executed": 9,
+      "completed_cases": 8,
+      "exit_code": 1,
+      "report_sha256": "fa69d827c11a972c2ae8220b5f6c72617245448308b1ae69e288e572bc6bc1a0"
+    }
+  ],
+  "initial_strict_comparison": "reports/evals/20261019-grounding-initial-comparison.md",
+  "final_source_provenance": {
+    "revision": "4a0289f362025380f765434ee4c043abf2676d5e",
+    "working_tree_dirty": true,
+    "source_sha256": "2c709e5230d59ea575d0e23e51e3563e9873a3934eafb0f5d93f8066c1b7f2f4"
+  },
+  "guidance_refinement": "Restrict to current returned evidence, omit unsupported numbers/workflows and unrequested dates; preserve timezone, use direct gap statement and stop blocked-state re-query. Cases, scorer and initial reports unchanged.",
+  "complete_citation_change": "Tool supplies full quoted_citation to copy, preserving exact source label and text. Balanced nested quotes supported; words/numbers/version requirements unchanged. Original cases/scorer/failures preserved.",
+  "amendments": [
+    {
+      "recorded_at": "2026-10-19T03:11:29.287895+00:00",
+      "currency": "CNY",
+      "old_limit": "0.06",
+      "new_limit": "0.08",
+      "reason": "Announced before further paid requests: finish single-line citation formatting and explicitly versioned refusal scorer repair; original reports preserved"
+    }
+  ],
+  "final_manifest": "reports/rag/20261019-grounding-v2-manifest.json",
+  "final_manifest_sha256": "4417c391c55fa184ccf17071d38aad09d00d793df36b4bddf40aedc97f6c202b",
+  "scorer_amendment": "v1 remains reproducible via GROUNDING_CASES_V1 / rag-grounding-v1 CLI and frozen manifest. v2 uses polarity-aware warranty assertion check with contradiction tests; no old report rescored.",
+  "totals": {
+    "requests": 162,
+    "known_CNY_estimate": "0.072048",
+    "known_USD_estimate": "0.014490",
+    "unknown_requests": 1,
+    "actual_total": null,
+    "usage_responses": 161
+  },
+  "final_acceptance": "not_met: GLM automatic/semantic failures; DeepSeek incomplete with unknown usage; strict pair unavailable",
+  "no_further_paid_calls": true,
+  "strict_comparison": {
+    "status": "rejected",
+    "exit_code": 1,
+    "report": "reports/evals/20261019-grounding-final-comparison-rejected.md",
+    "pre_fix_invalid_artifact": "reports/evals/20261019-grounding-final-comparison-pre-fix-invalid.md",
+    "pre_fix_exit_code": 0,
+    "reason": "Legacy complete flag included budget-skipped placeholders; current check independently validates counts/skips/unknown usage",
+    "raw_reports_unchanged": true
+  },
+  "offline_audit_fix_source": {
+    "revision": "4a0289f362025380f765434ee4c043abf2676d5e",
+    "working_tree_dirty": true,
+    "source_sha256": "1d3622ad1962c4bb00891441d45c6a36b1c23df54155c5f615b90bb2e2fa3283"
+  },
+  "usage_audit": "reports/acceptance/20261019-grounding-usage-audit.json",
+  "final_offline_checks": {
+    "python": "981 passed / 21 skipped / 47 deselected",
+    "ruff": "passed",
+    "frontend_tests": "84 passed",
+    "frontend_build": "passed",
+    "source_sha256": "1d3622ad1962c4bb00891441d45c6a36b1c23df54155c5f615b90bb2e2fa3283"
+  }
+}

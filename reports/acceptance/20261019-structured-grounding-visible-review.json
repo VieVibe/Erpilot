@@ -1,0 +1,247 @@
+{
+  "review_type": "assistant_read_of_saved_visible_text",
+  "external_blind_review": false,
+  "scope": "Known 13 diagnostic cases per model; excludes hidden/generalization claims",
+  "source_sha256": "0f230ed609ed4d9990927f4a86ed576a0bc99351fb263ed495fe2b97b6ef52aa",
+  "models": [
+    {
+      "model": "glm-5.3-flash",
+      "campaign": "reports/acceptance/20261019-structured-glm-campaign-03.json",
+      "reviewed": 13,
+      "rows": [
+        {
+          "case_id": "rag-grounding-return-conditions",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-quality",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-refund",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-snapshot",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-custom-exception",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-partial",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-contact-gap",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-freight-gap",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-warranty-gap",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-conflict",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-unavailable",
+          "strict_passed": false,
+          "failed_checks": [
+            "expect_tools_all: 未调用 compose_policy_answer",
+            "tools_in_order: 期望顺序 search_policy → compose_policy_answer，实际 ['search_policy', 'search_policy']",
+            "expect_successful_tools: compose_policy_answer 无成功执行证据",
+            "structured_missing_single_finalizer"
+          ],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-inactive",
+          "strict_passed": false,
+          "failed_checks": [
+            "expect_tools_all: 未调用 compose_policy_answer",
+            "tools_in_order: 期望顺序 search_policy → compose_policy_answer，实际 ['search_policy']",
+            "expect_successful_tools: compose_policy_answer 无成功执行证据",
+            "structured_missing_single_finalizer"
+          ],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-no-match",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        }
+      ]
+    },
+    {
+      "model": "deepseek-v4.1-flash",
+      "campaign": "reports/acceptance/20261019-structured-deepseek-campaign-01.json",
+      "reviewed": 13,
+      "rows": [
+        {
+          "case_id": "rag-grounding-return-conditions",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-quality",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-refund",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-snapshot",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-custom-exception",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-partial",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-contact-gap",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-freight-gap",
+          "strict_passed": false,
+          "failed_checks": [
+            "structured_gap_requires_abstention"
+          ],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-warranty-gap",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-conflict",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-unavailable",
+          "strict_passed": false,
+          "failed_checks": [
+            "expect_tools_all: 未调用 compose_policy_answer",
+            "tools_in_order: 期望顺序 search_policy → compose_policy_answer，实际 ['search_policy']",
+            "expect_successful_tools: compose_policy_answer 无成功执行证据",
+            "structured_missing_single_finalizer"
+          ],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-inactive",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        },
+        {
+          "case_id": "rag-grounding-no-match",
+          "strict_passed": true,
+          "failed_checks": [],
+          "no_unsupported_policy_assertion_seen": true,
+          "no_unobserved_order_fact_claim_seen": true,
+          "source_and_gap_review": "Original policy quotations or explicit refusal; inspect raw saved visible_text in the linked campaign."
+        }
+      ]
+    }
+  ]
+}

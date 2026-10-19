@@ -285,6 +285,38 @@ def test_strict_cli_rejects_single_report_and_reports_value_errors(tmp_path) -> 
         compare_main([str(only), "--strict"])
 
 
+@pytest.mark.parametrize("mutation", [
+    "budget_skip", "execution_count", "duplicate", "missing_row", "source_changed",
+    "missing_turns", "unknown_usage",
+])
+def test_strict_rejects_incomplete_evidence_even_with_complete_flag(tmp_path, mutation):
+    from evals.compare import main as compare_main
+
+    left = _full_report("glm-5.3-flash")
+    right = _full_report("deepseek-v4.1-flash")
+    if mutation == "budget_skip":
+        right["results"][1]["failed_checks"] = ["budget: missing usage stopped later requests"]
+    elif mutation == "execution_count":
+        right["suite"]["executed"] = 1
+    elif mutation == "duplicate":
+        right["results"][1]["case_id"] = right["results"][0]["case_id"]
+    elif mutation == "missing_row":
+        right["results"].pop()
+    elif mutation == "source_changed":
+        right["suite"]["source_changed_during_run"] = True
+    elif mutation == "missing_turns":
+        right["suite"].update(turns_planned=7, turns_executed=6)
+    else:
+        right["suite"]["billing_budget"]["unknown_usage"] = True
+    a, b = tmp_path / "a.json", tmp_path / "b.json"
+    a.write_text(json.dumps(left), encoding="utf-8")
+    b.write_text(json.dumps(right), encoding="utf-8")
+    output = tmp_path / "comparison.md"
+    with pytest.raises(SystemExit) as exc:
+        compare_main([str(a), str(b), "--strict", "--output", str(output)])
+    assert exc.value.code == 1 and not output.exists()
+
+
 def test_compare_rows_show_currency_and_unmeasured() -> None:
     runs = [
         summarize(_full_report("glm-5.3-flash"), report_name="g.json"),

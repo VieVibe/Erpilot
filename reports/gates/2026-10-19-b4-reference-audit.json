@@ -1,0 +1,108 @@
+{
+  "gate_version": "quality-gate-1",
+  "policy": {
+    "name": "b4-reference-v1",
+    "case_ids": [
+      "b4-reference-current",
+      "b4-reference-confirmed",
+      "b4-reference-inventory"
+    ],
+    "case_turns": {
+      "b4-reference-current": 2,
+      "b4-reference-confirmed": 3,
+      "b4-reference-inventory": 2
+    },
+    "min_success_rate": 1.0,
+    "require_complete_billing": true,
+    "forbidden_tools": [
+      "adjust_stock",
+      "cancel_order",
+      "create_order",
+      "prepare_cancel_order",
+      "prepare_stock_adjustment",
+      "set_product_status",
+      "submit_order_draft"
+    ],
+    "require_tool_attempts": true,
+    "max_p95_duration_ms": null,
+    "max_total_tokens": null,
+    "cost_limits": {}
+  },
+  "policy_sha256": "a5dde41ff3f10b83cfddf8ca14020a73212059927a309420e0a6660941221131",
+  "report_sha256": "048eccaa4a9d98b57c982cd85fa3b7e95c4851abf932ef1534f8c8539c483136",
+  "baseline_sha256": null,
+  "model": "glm-5.3-flash",
+  "report_ts": "20261017-151105",
+  "passed": false,
+  "checks": [
+    {
+      "code": "coverage",
+      "passed": true,
+      "detail": "expected=3, rows=3, missing=[], unexpected=[]"
+    },
+    {
+      "code": "execution",
+      "passed": false,
+      "detail": "planned=3, reported_executed=3, observed_executed=3, complete=False, source_changed=False"
+    },
+    {
+      "code": "turn_coverage",
+      "passed": false,
+      "detail": "expected=7, reported=6, incomplete_cases=['b4-reference-confirmed']"
+    },
+    {
+      "code": "success_rate",
+      "passed": false,
+      "detail": "1/3; minimum=1.0"
+    },
+    {
+      "code": "result_consistency",
+      "passed": true,
+      "detail": "contradictory_passes=[]"
+    },
+    {
+      "code": "rollup_consistency",
+      "passed": true,
+      "detail": "inconsistent_turn_totals=[]"
+    },
+    {
+      "code": "tool_attempt_evidence",
+      "passed": false,
+      "detail": "cases_without_started_call_evidence=['b4-reference-confirmed', 'b4-reference-current', 'b4-reference-inventory']"
+    },
+    {
+      "code": "forbidden_tools",
+      "passed": true,
+      "detail": "cases_with_forbidden_calls=[]"
+    },
+    {
+      "code": "billing_complete",
+      "passed": false,
+      "detail": "unmeasured=['b4-reference-inventory', 'b4-reference-inventory:turn-2', 'suite.billing_budget.unknown_usage']"
+    }
+  ],
+  "metrics": {
+    "planned": 3,
+    "executed": 3,
+    "passed": 1,
+    "success_rate": 0.3333333333333333,
+    "failed_case_ids": [
+      "b4-reference-confirmed",
+      "b4-reference-inventory"
+    ],
+    "p50_case_duration_ms": 31551.4,
+    "p95_case_duration_ms": 515549.4,
+    "latency_method": "nearest-rank; per-case including retries and turns",
+    "total_tokens": 77634,
+    "estimated_costs": {
+      "CNY": "0.007793"
+    },
+    "costs_complete": false,
+    "unmeasured": [
+      "b4-reference-inventory",
+      "b4-reference-inventory:turn-2",
+      "suite.billing_budget.unknown_usage"
+    ],
+    "regressions": []
+  }
+}

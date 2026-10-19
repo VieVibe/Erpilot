@@ -38,6 +38,17 @@ jobs:
       - name: Unit tests
         run: uv run pytest
 
+      - name: Offline retrieval experiment (lexical proxy only)
+        run: uv run --package rag python -m rag.benchmark --backend local-tfidf --output reports/rag/retrieval-ci-smoke
+
+      - name: Upload offline retrieval experiment
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: retrieval-proxy-smoke
+          path: reports/rag/retrieval-ci-smoke.*
+          if-no-files-found: ignore
+
   frontend:
     runs-on: ubuntu-latest
     steps:
@@ -101,12 +112,14 @@ jobs:
 
       - name: Regression evals
         if: env.ZHIPU_API_KEY != ''
-        run: uv run python -m evals --budget 0.05
+        run: uv run python -m evals --budget 0.05 --gate configs/evals/baseline.json
 
       - name: Upload eval report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: eval-report
-          path: reports/evals/
+          path: |
+            reports/evals/
+            reports/gates/
           if-no-files-found: ignore

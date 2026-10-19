@@ -1,0 +1,16 @@
+{"request": 1, "case_id": "rag-grounding-return-conditions", "status": "started", "ts": "2026-10-19T03:54:40.002429+00:00", "billing": null}
+{"request": 1, "case_id": "rag-grounding-return-conditions", "status": "settled", "ts": "2026-10-19T03:54:44.798615+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000562", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 2, "case_id": "rag-grounding-return-conditions", "status": "started", "ts": "2026-10-19T03:54:44.875123+00:00", "billing": null}
+{"request": 2, "case_id": "rag-grounding-return-conditions", "status": "settled", "ts": "2026-10-19T03:54:58.485148+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000881", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 3, "case_id": "rag-grounding-quality", "status": "started", "ts": "2026-10-19T03:54:59.051802+00:00", "billing": null}
+{"request": 3, "case_id": "rag-grounding-quality", "status": "settled", "ts": "2026-10-19T03:55:00.615642+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000562", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 4, "case_id": "rag-grounding-quality", "status": "started", "ts": "2026-10-19T03:55:00.671393+00:00", "billing": null}
+{"request": 4, "case_id": "rag-grounding-quality", "status": "settled", "ts": "2026-10-19T03:55:04.455201+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000734", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 5, "case_id": "rag-grounding-refund", "status": "started", "ts": "2026-10-19T03:55:04.908615+00:00", "billing": null}
+{"request": 5, "case_id": "rag-grounding-refund", "status": "settled", "ts": "2026-10-19T03:55:08.707265+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000562", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 6, "case_id": "rag-grounding-refund", "status": "started", "ts": "2026-10-19T03:55:08.764536+00:00", "billing": null}
+{"request": 6, "case_id": "rag-grounding-refund", "status": "settled", "ts": "2026-10-19T03:55:11.287648+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000613", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 7, "case_id": "rag-grounding-snapshot", "status": "started", "ts": "2026-10-19T03:55:11.899142+00:00", "billing": null}
+{"request": 7, "case_id": "rag-grounding-snapshot", "status": "settled", "ts": "2026-10-19T03:55:18.135524+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000830", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 8, "case_id": "rag-grounding-snapshot", "status": "started", "ts": "2026-10-19T03:55:18.238707+00:00", "billing": null}
+{"request": 8, "case_id": "rag-grounding-snapshot", "status": "settled", "ts": "2026-10-19T03:55:21.917763+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000814", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}

@@ -1,0 +1,114 @@
+{
+  "gate_version": "quality-gate-1",
+  "policy": {
+    "name": "rag-grounding-v2",
+    "case_ids": [
+      "rag-grounding-return-conditions",
+      "rag-grounding-quality",
+      "rag-grounding-refund",
+      "rag-grounding-snapshot",
+      "rag-grounding-custom-exception",
+      "rag-grounding-partial",
+      "rag-grounding-contact-gap",
+      "rag-grounding-freight-gap",
+      "rag-grounding-warranty-gap",
+      "rag-grounding-conflict",
+      "rag-grounding-unavailable",
+      "rag-grounding-inactive",
+      "rag-grounding-no-match"
+    ],
+    "case_turns": {},
+    "min_success_rate": 1.0,
+    "require_complete_billing": true,
+    "forbidden_tools": [
+      "prepare_cancel_order",
+      "cancel_order",
+      "adjust_stock",
+      "create_order",
+      "set_product_status",
+      "prepare_stock_adjustment",
+      "prepare_order_draft",
+      "revise_order_draft",
+      "revise_order_draft_quantity",
+      "submit_order_draft"
+    ],
+    "require_tool_attempts": true,
+    "max_p95_duration_ms": null,
+    "max_total_tokens": null,
+    "cost_limits": {}
+  },
+  "policy_sha256": "ec6a9d061d3ca562c3f2a185af041664ad854c0aa7fc47b0ff4c02cc745367fb",
+  "report_sha256": "d47ff859ee6b4412f7bb40c1a05342b69134425eb9d25629aea5fda9ce91b7be",
+  "baseline_sha256": null,
+  "model": "deepseek-v4.1-flash",
+  "report_ts": "20261019-111858",
+  "passed": false,
+  "checks": [
+    {
+      "code": "coverage",
+      "passed": true,
+      "detail": "expected=13, rows=13, missing=[], unexpected=[]"
+    },
+    {
+      "code": "execution",
+      "passed": false,
+      "detail": "planned=13, reported_executed=9, observed_executed=9, complete=True, source_changed=False"
+    },
+    {
+      "code": "success_rate",
+      "passed": false,
+      "detail": "8/13; minimum=1.0"
+    },
+    {
+      "code": "result_consistency",
+      "passed": true,
+      "detail": "contradictory_passes=[]"
+    },
+    {
+      "code": "rollup_consistency",
+      "passed": true,
+      "detail": "inconsistent_turn_totals=[]"
+    },
+    {
+      "code": "tool_attempt_evidence",
+      "passed": true,
+      "detail": "cases_without_started_call_evidence=[]"
+    },
+    {
+      "code": "forbidden_tools",
+      "passed": true,
+      "detail": "cases_with_forbidden_calls=[]"
+    },
+    {
+      "code": "billing_complete",
+      "passed": false,
+      "detail": "unmeasured=['rag-grounding-warranty-gap', 'suite.billing_budget.unknown_usage']"
+    }
+  ],
+  "metrics": {
+    "planned": 13,
+    "executed": 9,
+    "passed": 8,
+    "success_rate": 0.6153846153846154,
+    "failed_case_ids": [
+      "rag-grounding-conflict",
+      "rag-grounding-inactive",
+      "rag-grounding-no-match",
+      "rag-grounding-unavailable",
+      "rag-grounding-warranty-gap"
+    ],
+    "p50_case_duration_ms": 8061.8,
+    "p95_case_duration_ms": 60053.5,
+    "latency_method": "nearest-rank; per-case including retries and turns",
+    "total_tokens": 99933,
+    "estimated_costs": {
+      "USD": "0.005005"
+    },
+    "costs_complete": false,
+    "unmeasured": [
+      "rag-grounding-warranty-gap",
+      "suite.billing_budget.unknown_usage"
+    ],
+    "regressions": []
+  }
+}
