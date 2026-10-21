@@ -1,0 +1,2 @@
+{"request": 1, "case_id": "selection-and-denial", "status": "started", "ts": "2026-10-21T08:14:43.993221+00:00", "billing": null}
+{"request": 1, "case_id": "selection-and-denial", "status": "unknown", "ts": "2026-10-21T08:14:46.582176+00:00", "billing": {"currency": "USD", "estimated_amount": null, "pricing_source": "user-confirmed-2026-10-12", "cache_assumption": "unknown_usage", "complete": false}}

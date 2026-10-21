@@ -1,0 +1,2060 @@
+{
+  "version": "whole-order-1",
+  "model": "deepseek-v4.1-flash",
+  "source": {
+    "sha256": "b1c2ca5ec6da544c274fec574af31e0e866a20a73504211df6c095f259ee1a8a",
+    "files": {
+      "packages/agent_core/src/agent_core/__init__.py": "a69d099e1cf6eb220b33c3559cbb407d0bfa7a99f92f6a45d1adfd8654b7364d",
+      "packages/agent_core/src/agent_core/__main__.py": "d38b69abe7b11294b013628e8c6709b8fa6023f4606cb0e6d77ee1ce4807f69b",
+      "packages/agent_core/src/agent_core/approval.py": "ee351994075c8578b9323fbbf7ee0c916a0fedb5ea4fe75ddb2bec250181aa52",
+      "packages/agent_core/src/agent_core/context.py": "3c9cd120114b6ccbe7a49d9d9c297120e90e4ee8da44aa856cc15b2c18a04357",
+      "packages/agent_core/src/agent_core/context_view.py": "99d0bf77086feb5278bc213b724f3577e31e8ced339a37f50691da52f22c2d6f",
+      "packages/agent_core/src/agent_core/demo_tools.py": "43395a81bf8fb13bec44d6728f8827582fce38997ef75c3f62762c2ad1342cf6",
+      "packages/agent_core/src/agent_core/display.py": "29048028882ba4d8df381c1a5dd0340fa6870d92be7edeb497bee1a1d7d0e6a1",
+      "packages/agent_core/src/agent_core/dotenv.py": "31a41af4917d6c5fb76e45ef002df871a5ed84c69f8de9fb9519f5a340701f38",
+      "packages/agent_core/src/agent_core/events.py": "0fb4a3fa3a45ce6bcb43ea0b8e37b2f0c371e4e86a0246db66c250d276d01982",
+      "packages/agent_core/src/agent_core/graph.py": "4382c29f068080b4f8490e92c269737faabc7205acf2ef4972ac9f7f8b7a6a07",
+      "packages/agent_core/src/agent_core/graph_approval.py": "9705aa427f4ece9916857339d7e03fb12e2649f99e6dd3352c224fd4fbd4dadc",
+      "packages/agent_core/src/agent_core/graph_helpers.py": "fd9617a51bb577fdeb9753f299e3dec2702e722398be797d2264577418d3dc7b",
+      "packages/agent_core/src/agent_core/graph_runtime.py": "b50d7f505ae2a5da5ff0c91f6be113f85c00ff986e67e8ac62b9e1c69b9a1949",
+      "packages/agent_core/src/agent_core/graph_state.py": "8ffa3af723afb9f1097b3ba84aa7080378127f5cd5d0744f1a64dc809089e71b",
+      "packages/agent_core/src/agent_core/graph_tools.py": "44a680af1461874079d12d85517ca53903133281ab338c264d90f431f1993dd4",
+      "packages/agent_core/src/agent_core/llm.py": "bc183039098de3fb96131eed257e681fce4868f3d232664d2328ad82594a26df",
+      "packages/agent_core/src/agent_core/observability.py": "100b660b6d32c8c265f51e926a08213f5594408c6ee81cd1ea7c211ded2edb45",
+      "packages/agent_core/src/agent_core/policy_display.py": "bce33c20a13291c885ebf703d107254aeaac994be8812101b71d0fbf35743770",
+      "packages/agent_core/src/agent_core/prices.py": "07d9d409878e4c1735ddcfa10eea20049bd5cac46c4a8048c75629e231a9f399",
+      "packages/agent_core/src/agent_core/recovery.py": "41b24d5aafd4b49d3f042f8b8cd4e4315c23555cc0ec9f7cc5e83c1d54395019",
+      "packages/agent_core/src/agent_core/replenishment_display.py": "b5f067cc27e0d93f6087fab051d1e7ec70a54b651961865367b6b1c000000cb3",
+      "packages/agent_core/src/agent_core/response_contract.py": "524a6d8e127b07c650f1dd15426a4716fb3ef3e3ba517088bce6da533a5a0b15",
+      "packages/agent_core/src/agent_core/runtime_config.py": "4cd91229993d45a2a42140e5351777eabc12000cda785cc217f051198f585459",
+      "packages/agent_core/src/agent_core/testing.py": "8c49817bbea7681e44ddcb0d732b70de2abc7bb50bd14ab338845a28643f6a89",
+      "packages/agent_core/src/agent_core/tools.py": "12cf1d3d646a5b2dfe2d98309198358cf7f631c0814ee9f44e2762d78928ceea",
+      "packages/agent_core/src/agent_core/trace.py": "0fc53c15276d647938ca2873dec2ef6fb53cc47e018bf7eaf2132a158cfc9079",
+      "packages/erp_store/src/erp_store/__init__.py": "610ac5166c74583dae35b0e9bad546cea6002d99478dca9da75880c383bccaec",
+      "packages/erp_store/src/erp_store/__main__.py": "7573cb8eacfa61a261cbdbbada466a39b698b5dcf10d7a712832609bfac2e1d7",
+      "packages/erp_store/src/erp_store/db.py": "adebff574bb5f95f133a7ee5dfc2dfe93899e70bde4e6cef2497336122a86a80",
+      "packages/erp_store/src/erp_store/draft_audit.py": "409778dc2d7b57e852346aa42174a612bcca876f83efc83fc0c7b86089803c79",
+      "packages/erp_store/src/erp_store/drafts.py": "d5db2aa4c02f88349f360b315295b70c812b40ef2892721ea9dbd02f1289a1b0",
+      "packages/erp_store/src/erp_store/models.py": "73227857967011b8b469d8ea980af82892fb9d1dccfe524ce149a777522dc5a1",
+      "packages/erp_store/src/erp_store/mutations.py": "2ff6fbe2dc93ad1ac5955a5d973543a06090215425ea317bf5f1718df6db3fad",
+      "packages/erp_store/src/erp_store/operations.py": "53d572230e640c5cacffa1e8fd80ad00959071a47acaa7e6423dd42d40512620",
+      "packages/erp_store/src/erp_store/pricing.py": "a54d7f3e4b003bebcba8d07245d282451462903bc6d7c952461250dfc6b7a67d",
+      "packages/erp_store/src/erp_store/replenishment.py": "40e469dfbac8f621f143b85e52338231f0fb53697ee805fe0ce72b7a5fb8dd3a",
+      "packages/erp_store/src/erp_store/repository.py": "85bd5cecc3561b93a7532559034cc813c04fd61b867a0f0d5071072afb2558c7",
+      "packages/erp_store/src/erp_store/seed.py": "c85ecc233c0f40954a1f2f50209a5ec1f648bd285108dc488bbb780c590b3939",
+      "packages/evals/src/evals/__init__.py": "b9ac59369048fa345875b03049503fda9306d72265a178c849c6fd265aa79baf",
+      "packages/evals/src/evals/__main__.py": "411e87515cced545f9b6711c14d87c8fbbdf1804b2f18b6c69ec470989ed1bb7",
+      "packages/evals/src/evals/approval_cases.py": "9db94eeee4b2dccba0be0987bce09c6caa1d518d2cad3d45a761eedc1ad264ea",
+      "packages/evals/src/evals/approval_policy.py": "443ef874d7aaea53b8f92d84417881475825d95f239080daeea329ba28e0dff8",
+      "packages/evals/src/evals/baseline.py": "40dc8e7028015eb8f2a8f850594adfdb12eab2253e7a7b0685b64a9dfaa50b4e",
+      "packages/evals/src/evals/billing.py": "d99661084b5d8c1bba354d3f68fffb41ee50f092fa4550a27aa2a65ec00a760e",
+      "packages/evals/src/evals/campaign.py": "4bb042e6aa5fd97e7f19ebbc2287ccf9c1fb99f06a35bf78921dd42e2d22b778",
+      "packages/evals/src/evals/cases.py": "7c4a99f3cf23872fcb4e646b7d0e10a805d2d8d5b3e094aacce99283f0eff73b",
+      "packages/evals/src/evals/checks.py": "8082f03074362f13855aaf5cae0fb590562396c88f35aa9a2992c60a4e61a21b",
+      "packages/evals/src/evals/compare.py": "87a6587ed0e3b75b41a4c77b2ab75bbd57a2fedb824e6f8d90b8cf8d2490d8b5",
+      "packages/evals/src/evals/context.py": "0468bae23d811f4c8b0f8f986307df566d072319c5905dbfbd4aaa39aa1dc672",
+      "packages/evals/src/evals/context_experiment.py": "477d5c3c323d5275c03f8c26d4beb9cf6caf00d0c625f150bda51168f87d746d",
+      "packages/evals/src/evals/context_live.py": "85e6ca320fa56f29c85653fc7090e33ad759a8fa5411f6b2a57bf9f0e365095a",
+      "packages/evals/src/evals/context_workflow.py": "960abdd6fa572e6326775c94962bc2e1e644e315a7cf4fca8be86c3955a1da48",
+      "packages/evals/src/evals/gate.py": "30ffcbdc11cd059af019b8a82a55a71f6f57c36dc6037796243e4aa3c6decf8a",
+      "packages/evals/src/evals/grounding_cases.py": "4def89dc81c4d62809177766bd8241e3489cd6b9b7921b95baf9d3a2785558e1",
+      "packages/evals/src/evals/grounding_runtime.py": "81ac54d6204e7c9300aceffdd7e5c1f77100fdf9a8fb5cb7fcb021d52256c4e8",
+      "packages/evals/src/evals/injection_compare.py": "1efa49e9454eb5bc9cf15ec52e1fe0019325d052513d2e72e1c844e3aaf71972",
+      "packages/evals/src/evals/injection_support.py": "b0dbbe0d92f682cbc18c1e4de821dba2f72fa4b9835fa59cf18e4f0486bc3110",
+      "packages/evals/src/evals/model.py": "6bee5f0c0530e780d17f9aefccbab44ee084d5553a60d0a2aaab160cc567b306",
+      "packages/evals/src/evals/order_journey.py": "6bfaf3aacd95b82bd098221e37e894d94780b95bf353517826e0907c20a38699",
+      "packages/evals/src/evals/policy_cases.py": "d3c47947e0355cbcd6cb5ffa8fd3d241bd06bb49d32719fd616e2bfa82af93a6",
+      "packages/evals/src/evals/policy_runtime.py": "c0b57b0978ba736facae95e4f39d5dd547c00a4e80d27e388f75ca801c4bbe3c",
+      "packages/evals/src/evals/prompt_injection_cases.py": "e9d1ee8deab864c87d8fc9b10560d2bd37472ac149f67b492b172459955888cb",
+      "packages/evals/src/evals/replenishment_cases.py": "d68665ecb58915037fb66ff4ade784db88188948da9b05c2b7463b9198c4b278",
+      "packages/evals/src/evals/report.py": "2ad131126ebd12d33a3e6099881285b4cafecd2abd2ecb62b30508acfd48656c",
+      "packages/evals/src/evals/runner.py": "11a7d8d6d0f324473687a0e60198ceb4d9ef231194e6015bbb50db31dddcb0a5",
+      "packages/evals/src/evals/state.py": "48d511ea03a068a6d70cc86dbcdd8932827658ab22420b900e5e1bbb7c5cd7e1",
+      "packages/evals/src/evals/task_cases.py": "1ffaab38ae65dc7bfd56c765400c83fd766aac744f8ed0dcb71331ed5b8b0791",
+      "packages/evals/src/evals/task_reference_cases.py": "9e30679c5e4ae91a1ddfd0e93d442d3e7c699ebb59edf6a2365d8bb072d0ebe6",
+      "packages/evals/src/evals/task_runtime.py": "1bb8697b2f36a772ee6df747a849ae240d24c7ef82674452c50c2dd126aa121f",
+      "packages/evals/src/evals/trends.py": "073dc800ee8975d949d4421b5f2683c86434d7dddde4717d4250be5f6cb53461",
+      "packages/evals/src/evals/write_cases.py": "87036fd77e49e517282709efc188babcef0b21bae23b052246b8f8fb0bec4a98",
+      "packages/mcp_erp/src/mcp_erp/__init__.py": "2e6317a6b3c3507a71cfcc404ac83b4a5ab19f56c431eececfa06db4221340dc",
+      "packages/mcp_erp/src/mcp_erp/__main__.py": "07cd67396e29ec4a522a2594378c6df419d7dd63a0acc73e2aca0f0eeb2ed58d",
+      "packages/mcp_erp/src/mcp_erp/bridge.py": "82ee74d6c19ee5a430a87f6779fe7d4cd16f860a6ed00824c325f56bc8f28ba8",
+      "packages/mcp_erp/src/mcp_erp/cancellation_assessment.py": "aebcae4e94853cf0617a6fd1b6efb50e255af8fdbed9b62b6543552ea0956959",
+      "packages/mcp_erp/src/mcp_erp/context_view.py": "0ca6ae33912f3db3983ac4821d2fc229a541cd14ab6388b6339efa3e00634b3d",
+      "packages/mcp_erp/src/mcp_erp/draft_constraints.py": "4538dc9eb3e8373b6e573a5b2eb1b912b2d046d2955e4ee2e960464376c68835",
+      "packages/mcp_erp/src/mcp_erp/draft_tools.py": "418bd8310bd1d8ce75af6c2ad257b479dc741f1bf2765e8d5f508aeba5dabffa",
+      "packages/mcp_erp/src/mcp_erp/operation_tools.py": "6882056e6fccecd4d91a0999714b5d9b5b3c593561bef8fc5eb578099565daad",
+      "packages/mcp_erp/src/mcp_erp/policy_answer.py": "34757747812640dbc80af287fbf2724d377013167a9a79ebf9147007edd291ce",
+      "packages/mcp_erp/src/mcp_erp/policy_tools.py": "bcaf24a864a6a5c7f3ddb1a2230d51c699ca43e0c3f4d780195ad11c03fe2ce0",
+      "packages/mcp_erp/src/mcp_erp/replenishment_tools.py": "e3ab0bf49868edf6389dfc303c1a42e320d6838f1e18446e91484dc525843f32",
+      "packages/mcp_erp/src/mcp_erp/server.py": "16ed046e7d7071d868eea2215d55a22ded9428110beda6cee614b42bc1cb4260",
+      "packages/mcp_erp/src/mcp_erp/session_tools.py": "3857c4de9d590a32038c084abcd9b87639d11243dd8a07892d326a8f7e59ab30",
+      "packages/rag/src/rag/__init__.py": "70a1cb5a3c802109908b1e36e3865e0a0344e230fbb725ec6d0a526c52baf643",
+      "packages/rag/src/rag/__main__.py": "ae763101890105973ec3e3d19e3d50e1e0eb97c5adbda8569505c595f8900f77",
+      "packages/rag/src/rag/benchmark.py": "290eed67ef56232f8611a106304a45918a8a7a4f7eeb26619fcd4232236179be",
+      "packages/rag/src/rag/chunk.py": "f842bd8f338b1692e0ce4218bb9c5f80d8c1c679a6ce147fba0aa7377b9fbae6",
+      "packages/rag/src/rag/citations.py": "5d9f71a6757574a38e6ab671d0381c4dc09808af8cf402efc1bdddc36c2e1d44",
+      "packages/rag/src/rag/collect.py": "5e6be567fb2b51c3afd3fac113c4d4e3e3d6c4de7de0a5fecd44464563e44ac7",
+      "packages/rag/src/rag/corpus.py": "12103e60307ad8850b5e604c6b1405875a5145f371abf7f4911d4ca028be6ff5",
+      "packages/rag/src/rag/embed.py": "ae5b46539d5529084fc2eac720851d927093d5de919fc5cc16b580d28d079607",
+      "packages/rag/src/rag/evidence.py": "270b93eb20e9f2332fa8ff88ec84a4b0711d3eeb9568c7f6ec545060e9438dfe",
+      "packages/rag/src/rag/index.py": "a479c4611594c4aab0e2f8f94166fcf9346041780864e05af5e08d545ac74cc1",
+      "packages/rag/src/rag/lexical.py": "cea6ff7e332042e5c6429872e6e745ccd248047d96ec32a5efdb74375c81143a",
+      "packages/rag/src/rag/openai_embedder.py": "7c9f75b0f33bf47603be68338969cecf2aa336ab316b785431780e77c5f2c441",
+      "packages/rag/src/rag/policy.py": "2350ac2572d8b4dda5a0bff588f049ab152f193bfc644315ad35a37c7133b28b"
+    }
+  },
+  "cases": {
+    "selection-and-denial": [
+      {
+        "action": "user",
+        "question": "给整单验收客户甲保存报价草稿：CW871ca8d8 2件，CW5ddfaf33 3件，按此顺序；备注原文「分开发票，周五发货」。只存草稿，不提交。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": "prepare_order_draft",
+        "error": null
+      },
+      {
+        "action": "user",
+        "question": "给整单验收客户乙保存报价草稿：CW871ca8d8 2件，CW5ddfaf33 3件；备注原文「分开发票，周五发货」。只存草稿。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": true,
+        "ordered": false,
+        "pending": false,
+        "mutation": "prepare_order_draft",
+        "error": null
+      },
+      {
+        "action": "user",
+        "question": "把第二个改成50件，先不要提交。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": true,
+        "ordered": false,
+        "pending": false,
+        "mutation": null,
+        "error": null
+      },
+      {
+        "action": "user",
+        "question": "只修改客户整单验收客户甲的当前版本第二行数量为50件，其他不变。",
+        "revision": 2,
+        "quantities": [
+          2,
+          50
+        ],
+        "other": true,
+        "ordered": false,
+        "pending": false,
+        "mutation": "revise_order_draft_quantity",
+        "error": null
+      },
+      {
+        "action": "user",
+        "question": "只修改客户整单验收客户甲的当前版本第一行数量为12件，其他不变。",
+        "revision": 3,
+        "quantities": [
+          12,
+          50
+        ],
+        "other": true,
+        "ordered": false,
+        "pending": false,
+        "mutation": "revise_order_draft_quantity",
+        "error": null
+      },
+      {
+        "action": "user",
+        "question": "确认客户整单验收客户甲的当前草稿报价，请提交当前版本等待人工审批，不提交其他客户草稿。",
+        "revision": 3,
+        "quantities": [
+          12,
+          50
+        ],
+        "other": true,
+        "ordered": false,
+        "pending": true,
+        "mutation": "submit_order_draft",
+        "error": null
+      },
+      {
+        "action": "deny",
+        "question": "",
+        "revision": 3,
+        "quantities": [
+          12,
+          50
+        ],
+        "other": true,
+        "ordered": false,
+        "pending": false,
+        "mutation": null,
+        "error": null
+      },
+      {
+        "action": "user",
+        "question": "确认客户整单验收客户甲的当前草稿报价，请提交当前版本等待人工审批，不提交其他客户草稿。",
+        "revision": 3,
+        "quantities": [
+          12,
+          50
+        ],
+        "other": true,
+        "ordered": false,
+        "pending": true,
+        "mutation": "submit_order_draft",
+        "error": null
+      },
+      {
+        "action": "approve",
+        "question": "",
+        "revision": 3,
+        "quantities": [
+          12,
+          50
+        ],
+        "other": true,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null
+      },
+      {
+        "action": "verify",
+        "question": "只读查询草稿 {draft_id} 的当前结果，即使已提交也查询这个ID，不修改、不提交。最终只输出JSON对象：customer、note、revision、item_count、first_quantity、second_quantity、total_amount、status、order_id。数量、版本、行数、金额为数字。",
+        "revision": 3,
+        "quantities": [
+          12,
+          50
+        ],
+        "other": true,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null
+      }
+    ],
+    "approval-drift": [
+      {
+        "action": "user",
+        "question": "给整单验收客户甲保存报价草稿：CW871ca8d8 2件，CW5ddfaf33 3件，按此顺序；备注原文「分开发票，周五发货」。只存草稿，不提交。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": "prepare_order_draft",
+        "error": null
+      },
+      {
+        "action": "user",
+        "question": "确认客户整单验收客户甲的当前草稿报价，请提交当前版本等待人工审批，不提交其他客户草稿。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": "submit_order_draft",
+        "error": null
+      },
+      {
+        "action": "external_revision",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": null,
+        "error": null
+      },
+      {
+        "action": "approve",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": null,
+        "error": "draft_changed"
+      },
+      {
+        "action": "user",
+        "question": "确认客户整单验收客户甲的当前草稿报价，请提交当前版本等待人工审批，不提交其他客户草稿。",
+        "revision": 2,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": "submit_order_draft",
+        "error": null
+      },
+      {
+        "action": "external_price",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": null,
+        "error": null
+      },
+      {
+        "action": "approve",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": null,
+        "error": "quote_changed"
+      },
+      {
+        "action": "user",
+        "question": "刷新客户整单验收客户甲当前草稿的报价，客户、商品顺序、数量和备注不变。只刷新，不提交，等我重新确认。",
+        "revision": 3,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": "revise_order_draft",
+        "error": null
+      },
+      {
+        "action": "user",
+        "question": "确认客户整单验收客户甲的当前草稿报价，请提交当前版本等待人工审批，不提交其他客户草稿。",
+        "revision": 3,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": "submit_order_draft",
+        "error": null
+      },
+      {
+        "action": "approve",
+        "question": "",
+        "revision": 3,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null
+      },
+      {
+        "action": "verify",
+        "question": "只读查询草稿 {draft_id} 的当前结果，即使已提交也查询这个ID，不修改、不提交。最终只输出JSON对象：customer、note、revision、item_count、first_quantity、second_quantity、total_amount、status、order_id。数量、版本、行数、金额为数字。",
+        "revision": 3,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null
+      }
+    ],
+    "restore-pending": [
+      {
+        "action": "user",
+        "question": "给整单验收客户甲保存报价草稿：CW871ca8d8 2件，CW5ddfaf33 3件，按此顺序；备注原文「分开发票，周五发货」。只存草稿，不提交。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": "prepare_order_draft",
+        "error": null
+      },
+      {
+        "action": "user",
+        "question": "把当前版本第一行改成12件，其他不变，只改草稿。",
+        "revision": 2,
+        "quantities": [
+          12,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": "revise_order_draft_quantity",
+        "error": null
+      },
+      {
+        "action": "user",
+        "question": "确认客户整单验收客户甲的当前草稿报价，请提交当前版本等待人工审批，不提交其他客户草稿。",
+        "revision": 2,
+        "quantities": [
+          12,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": "submit_order_draft",
+        "error": null
+      },
+      {
+        "action": "restore",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          12,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": null,
+        "error": null
+      },
+      {
+        "action": "approve",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          12,
+          3
+        ],
+        "other": false,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null
+      },
+      {
+        "action": "repeat_decision",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          12,
+          3
+        ],
+        "other": false,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null
+      },
+      {
+        "action": "verify",
+        "question": "只读查询草稿 {draft_id} 的当前结果，即使已提交也查询这个ID，不修改、不提交。最终只输出JSON对象：customer、note、revision、item_count、first_quantity、second_quantity、total_amount、status、order_id。数量、版本、行数、金额为数字。",
+        "revision": 2,
+        "quantities": [
+          12,
+          3
+        ],
+        "other": false,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null
+      }
+    ]
+  },
+  "cases_sha256": "d74d438721a52fcf0f6d11b8c71a8a35fe85a79ad17ee16a526897d3559ed05d",
+  "timeout": 60.0,
+  "sdk_retries": 0,
+  "case_retries": 0,
+  "rate": {
+    "model": "deepseek-v4.1-flash",
+    "endpoint_host": "flashcoding.ai",
+    "currency": "USD",
+    "input_per_m": "0.045",
+    "output_per_m": "0.18",
+    "cached_input_per_m": "0.024",
+    "price_source": "user-confirmed-2026-10-12"
+  },
+  "budget": {
+    "currency": "USD",
+    "limit": "0.05",
+    "known_spent": "0",
+    "unknown_usage": true
+  },
+  "fixture_controls": "Synthetic products; explicit decisions/external edits; shared in-memory saver across new runtime objects, not a hard process crash.",
+  "results": [
+    {
+      "journey": "selection-and-denial",
+      "planned_steps": 10,
+      "steps": [
+        {
+          "step": 1,
+          "control": {
+            "action": "user",
+            "question": "给整单验收客户甲保存报价草稿：CW871ca8d8 2件，CW5ddfaf33 3件，按此顺序；备注原文「分开发票，周五发货」。只存草稿，不提交。",
+            "revision": 1,
+            "quantities": [
+              2,
+              3
+            ],
+            "other": false,
+            "ordered": false,
+            "pending": false,
+            "mutation": "prepare_order_draft",
+            "error": null
+          },
+          "question": "给整单验收客户甲保存报价草稿：CW871ca8d8 2件，CW5ddfaf33 3件，按此顺序；备注原文「分开发票，周五发货」。只存草稿，不提交。",
+          "passed": false,
+          "failed_checks": [
+            "exact_draft_versions",
+            "target_constraints_and_all_items",
+            "verified_origins_preserved",
+            "required_mutation_missing",
+            "run_error: InternalServerError: Error code: 502 - {'error': {'message': 'Upstream service temporarily unavailable', 'type': 'upstream_error'}}"
+          ],
+          "error": "InternalServerError: Error code: 502 - {'error': {'message': 'Upstream service temporarily unavailable', 'type': 'upstream_error'}}",
+          "final_answer": "",
+          "tool_history": [],
+          "pending": null,
+          "trace": "F:\\VIE\\Erpilot\\traces\\order-journey\\20261021-cross-model-order-deepseek-03\\selection-and-denial-1.jsonl",
+          "before": {
+            "business_operations": [],
+            "mutation_requests": [],
+            "order_drafts": [
+              {
+                "draft_id": "f8e9fe43c68240dba273410604904563",
+                "revision": 1,
+                "session_id": "foreign-session",
+                "snapshot": "{\"customer\": \"隔离客户\", \"note\": \"隔离备注\", \"items\": [{\"sku\": \"CW871ca8d8\", \"name\": \"真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明\", \"quantity\": 2, \"base_price\": 10.0, \"discount\": 1.0, \"unit_price\": 10.0, \"line_total\": 20.0, \"stock_before\": 1000, \"stock_after\": 998}], \"total_amount\": 20.0, \"task_constraints\": {\"schema_version\": 1, \"fields\": {\"customer\": {\"value\": \"隔离客户\", \"verified\": false, \"origin\": {\"kind\": \"unverified\", \"revision\": 1}}, \"note\": {\"value\": \"隔离备注\", \"verified\": false, \"origin\": {\"kind\": \"unverified\", \"revision\": 1}}}, \"unverified_fields\": [\"customer\", \"note\", \"items\"]}, \"change_record\": {\"schema_version\": 1, \"revision\": 1, \"previous_revision\": null, \"operation\": \"create\", \"source\": {\"kind\": \"unattributed\"}, \"confirmed_fields\": [], \"changes\": [{\"field\": \"customer\", \"before\": null, \"after\": \"隔离客户\"}, {\"field\": \"note\", \"before\": null, \"after\": \"隔离备注\"}, {\"field\": \"total_amount\", \"before\": null, \"after\": 20.0}, {\"field\": \"item\", \"sku\": \"CW871ca8d8\", \"before\": null, \"after\": {\"sku\": \"CW871ca8d8\", \"name\": \"真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明\", \"quantity\": 2, \"base_price\": 10.0, \"discount\": 1.0, \"unit_price\": 10.0, \"line_total\": 20.0, \"stock_before\": 1000, \"stock_after\": 998}}]}}",
+                "expires_at": "2026-10-21T08:44:43.884046+00:00",
+                "created_at": "2026-10-21T08:14:43.884046+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "order_items": [],
+            "orders": [],
+            "products": [
+              {
+                "sku": "CW12ce8efb",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW26a78253",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW295db516",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW29b41596",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW2e677391",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW35436db7",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW3a79ddc4",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW433e913b",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW44594a6d",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW4ddf22df",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW4ee0c0eb",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW52a533ca",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW55fd7781",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW59b4aec0",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW5d1ef8e3",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW5ddfaf33",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW600ba3ad",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW634499c1",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW63afa7cb",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW65926252",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW6b4b09fa",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW79cd33c2",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW7e3acd95",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW871ca8d8",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW8ea69efc",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW8f8bb980",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW90298164",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW913ab3d3",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW91959886",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW9264ded3",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW933c8ccb",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW94337d0e",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW97780a82",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW97fb0a67",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW9a2e2dfa",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW9e288789",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW9f310104",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWa0230a95",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWabbf44cf",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWaf4371b1",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWbb0476ad",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWbccae0b5",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWc3e1f3cb",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWc87f11c7",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWc97630ee",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWcbb2c504",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWcdf87daf",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWd27348f9",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWd430d84e",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWdb6e8261",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWdeb72e09",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWe02dff01",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWe87010a0",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWecadb496",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWefb6633e",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWf3777d22",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWf61aa675",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWf86f0ac3",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWfa838391",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWff23b917",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              }
+            ],
+            "stocks": [
+              {
+                "sku": "CW12ce8efb",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW26a78253",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW295db516",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW29b41596",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW2e677391",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW35436db7",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW3a79ddc4",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW433e913b",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW44594a6d",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW4ddf22df",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW4ee0c0eb",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW52a533ca",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW55fd7781",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW59b4aec0",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW5d1ef8e3",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW5ddfaf33",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW600ba3ad",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW634499c1",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW63afa7cb",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW65926252",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW6b4b09fa",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW79cd33c2",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW7e3acd95",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW871ca8d8",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW8ea69efc",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW8f8bb980",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW90298164",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW913ab3d3",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW91959886",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW9264ded3",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW933c8ccb",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW94337d0e",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW97780a82",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW97fb0a67",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW9a2e2dfa",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW9e288789",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW9f310104",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWa0230a95",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWabbf44cf",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWaf4371b1",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWbb0476ad",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWbccae0b5",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWc3e1f3cb",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWc87f11c7",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWc97630ee",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWcbb2c504",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWcdf87daf",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWd27348f9",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWd430d84e",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWdb6e8261",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWdeb72e09",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWe02dff01",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWe87010a0",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWecadb496",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWefb6633e",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWf3777d22",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWf61aa675",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWf86f0ac3",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWfa838391",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWff23b917",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              }
+            ]
+          },
+          "after": {
+            "business_operations": [],
+            "mutation_requests": [],
+            "order_drafts": [
+              {
+                "draft_id": "f8e9fe43c68240dba273410604904563",
+                "revision": 1,
+                "session_id": "foreign-session",
+                "snapshot": "{\"customer\": \"隔离客户\", \"note\": \"隔离备注\", \"items\": [{\"sku\": \"CW871ca8d8\", \"name\": \"真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明\", \"quantity\": 2, \"base_price\": 10.0, \"discount\": 1.0, \"unit_price\": 10.0, \"line_total\": 20.0, \"stock_before\": 1000, \"stock_after\": 998}], \"total_amount\": 20.0, \"task_constraints\": {\"schema_version\": 1, \"fields\": {\"customer\": {\"value\": \"隔离客户\", \"verified\": false, \"origin\": {\"kind\": \"unverified\", \"revision\": 1}}, \"note\": {\"value\": \"隔离备注\", \"verified\": false, \"origin\": {\"kind\": \"unverified\", \"revision\": 1}}}, \"unverified_fields\": [\"customer\", \"note\", \"items\"]}, \"change_record\": {\"schema_version\": 1, \"revision\": 1, \"previous_revision\": null, \"operation\": \"create\", \"source\": {\"kind\": \"unattributed\"}, \"confirmed_fields\": [], \"changes\": [{\"field\": \"customer\", \"before\": null, \"after\": \"隔离客户\"}, {\"field\": \"note\", \"before\": null, \"after\": \"隔离备注\"}, {\"field\": \"total_amount\", \"before\": null, \"after\": 20.0}, {\"field\": \"item\", \"sku\": \"CW871ca8d8\", \"before\": null, \"after\": {\"sku\": \"CW871ca8d8\", \"name\": \"真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明\", \"quantity\": 2, \"base_price\": 10.0, \"discount\": 1.0, \"unit_price\": 10.0, \"line_total\": 20.0, \"stock_before\": 1000, \"stock_after\": 998}}]}}",
+                "expires_at": "2026-10-21T08:44:43.884046+00:00",
+                "created_at": "2026-10-21T08:14:43.884046+00:00",
+                "order_id": null,
+                "submission_result": null
+              }
+            ],
+            "order_items": [],
+            "orders": [],
+            "products": [
+              {
+                "sku": "CW12ce8efb",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW26a78253",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW295db516",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW29b41596",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW2e677391",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW35436db7",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW3a79ddc4",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW433e913b",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW44594a6d",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW4ddf22df",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW4ee0c0eb",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW52a533ca",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW55fd7781",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW59b4aec0",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW5d1ef8e3",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW5ddfaf33",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW600ba3ad",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW634499c1",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW63afa7cb",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW65926252",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW6b4b09fa",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW79cd33c2",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW7e3acd95",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW871ca8d8",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW8ea69efc",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW8f8bb980",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW90298164",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW913ab3d3",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW91959886",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW9264ded3",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW933c8ccb",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW94337d0e",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW97780a82",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW97fb0a67",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW9a2e2dfa",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW9e288789",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CW9f310104",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWa0230a95",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWabbf44cf",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWaf4371b1",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWbb0476ad",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWbccae0b5",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWc3e1f3cb",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWc87f11c7",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWc97630ee",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWcbb2c504",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWcdf87daf",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWd27348f9",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWd430d84e",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWdb6e8261",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWdeb72e09",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWe02dff01",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWe87010a0",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWecadb496",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWefb6633e",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWf3777d22",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWf61aa675",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWf86f0ac3",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWfa838391",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              },
+              {
+                "sku": "CWff23b917",
+                "name": "真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明真实临时库商品说明",
+                "category": "上下文验收",
+                "price": 10.0,
+                "status": "在售"
+              }
+            ],
+            "stocks": [
+              {
+                "sku": "CW12ce8efb",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW26a78253",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW295db516",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW29b41596",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW2e677391",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW35436db7",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW3a79ddc4",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW433e913b",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW44594a6d",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW4ddf22df",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW4ee0c0eb",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW52a533ca",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW55fd7781",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW59b4aec0",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW5d1ef8e3",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW5ddfaf33",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW600ba3ad",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW634499c1",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW63afa7cb",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW65926252",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW6b4b09fa",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW79cd33c2",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW7e3acd95",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW871ca8d8",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW8ea69efc",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW8f8bb980",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW90298164",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW913ab3d3",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW91959886",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW9264ded3",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW933c8ccb",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW94337d0e",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW97780a82",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW97fb0a67",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW9a2e2dfa",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW9e288789",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CW9f310104",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWa0230a95",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWabbf44cf",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWaf4371b1",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWbb0476ad",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWbccae0b5",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWc3e1f3cb",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWc87f11c7",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWc97630ee",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWcbb2c504",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWcdf87daf",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWd27348f9",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWd430d84e",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWdb6e8261",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWdeb72e09",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWe02dff01",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWe87010a0",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWecadb496",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWefb6633e",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWf3777d22",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWf61aa675",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWf86f0ac3",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWfa838391",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              },
+              {
+                "sku": "CWff23b917",
+                "quantity": 1000,
+                "warehouse": "验收仓"
+              }
+            ]
+          },
+          "before_sha256": "1bcbfd81720f0a63cf9f2210e39a07e577c3f6c4a47c2696a85e15f51c1052ae",
+          "after_sha256": "1bcbfd81720f0a63cf9f2210e39a07e577c3f6c4a47c2696a85e15f51c1052ae"
+        }
+      ],
+      "complete": false,
+      "passed": false
+    }
+  ],
+  "complete": false,
+  "journal_audit": {
+    "requests": 1,
+    "known_spent": "0",
+    "unknown_requests": 1
+  },
+  "source_consistent": true
+}

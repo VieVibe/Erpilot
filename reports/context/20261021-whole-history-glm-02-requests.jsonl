@@ -1,0 +1,8 @@
+{"request": 1, "case_id": "history-live-pages", "status": "started", "ts": "2026-10-21T04:27:52.784456+00:00", "billing": null}
+{"request": 1, "case_id": "history-live-pages", "status": "settled", "ts": "2026-10-21T04:27:54.979020+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000760", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 2, "case_id": "history-live-pages", "status": "started", "ts": "2026-10-21T04:27:55.025716+00:00", "billing": null}
+{"request": 2, "case_id": "history-live-pages", "status": "settled", "ts": "2026-10-21T04:27:58.454788+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000820", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 3, "case_id": "history-live-pages", "status": "started", "ts": "2026-10-21T04:27:58.497644+00:00", "billing": null}
+{"request": 3, "case_id": "history-live-pages", "status": "settled", "ts": "2026-10-21T04:28:05.428574+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000958", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 4, "case_id": "history-live-foreign", "status": "started", "ts": "2026-10-21T04:28:05.579546+00:00", "billing": null}
+{"request": 4, "case_id": "history-live-foreign", "status": "settled", "ts": "2026-10-21T04:28:08.477686+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000659", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}

@@ -8,6 +8,9 @@ Erpilot 是运行在 mini-ERP 上的审批型业务智能体：模型通过 MCP 
 2. 展示政策原文与无依据拒答、只读补货建议，区分模型判断、工具事实和业务执行。
 3. 从[三个讲解案例](interview-cases.md)进入实现与失败证据，再读[最新状态](project-status.md)。
 
+投递用项目描述、三个技术取舍和面试演练入口见[求职投递材料](application-kit.md)。
+连续多轮真实模型与临时 ERP 的验证另见[业务任务上下文验收](context-workflow.md)。
+
 录屏交付物生成在 `artifacts/portfolio/`：`erpilot-demo.webm`、中文字幕 `erpilot-demo.vtt`、章节时间表 `chapters.json` 与页面截图。录屏调用正式本地 API、真实 MCP 与临时 SQLite，使用脚本模型和演示向量；不发付费请求，也不展示 PostgreSQL 硬崩溃恢复。
 
 ## 证据导航
@@ -23,7 +26,24 @@ Erpilot 是运行在 mini-ERP 上的审批型业务智能体：模型通过 MCP 
 
 ## 可校验源码快照
 
-仓库包含尚未提交的工作区变更。本次使用当前源文件生成独立 ZIP，不改变 Git 的暂存区、分支或提交。快照按显式路径白名单包含源码、锁文件、文档和已有报告；不包含 `.env`、本地业务库、traces、安装依赖或个人工具配置。
+快照按构建时的实际工作区生成，内容身份由逐文件清单确定；Git 提交号只作历史定位。
+构建不改变暂存区、分支或提交。快照按显式路径白名单包含源码、锁文件、文档和已有报告；
+不包含 `.env`、本地业务库、traces、安装依赖或个人工具配置。
+
+## 统一投递包
+
+复用已有视频、字幕、章节和两张业务截图，连同当前源码组成一个交付 ZIP：
+
+```sh
+python scripts/portfolio_delivery.py --output artifacts/erpilot-portfolio-workflows-20261019.zip
+python scripts/portfolio_delivery.py --verify artifacts/erpilot-portfolio-workflows-20261019.zip
+```
+
+交付包以 `START-HERE.md` 为入口，内含 `erpilot-source.zip`、媒体及
+`DELIVERY-MANIFEST.json`。外层清单逐文件记录 SHA-256，核验时同时检查内部源码清单。
+输出已存在时拒绝覆盖。视频为已有脚本化演示，连续多轮真实模型证据在源码报告中分别列示。
+
+下面的命令用于单独生成源码快照：
 
 ```sh
 python scripts/portfolio_release.py --output artifacts/erpilot-portfolio-20261019.zip

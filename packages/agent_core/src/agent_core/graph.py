@@ -3,6 +3,7 @@
 import asyncio
 import json
 import time
+from copy import deepcopy
 from dataclasses import asdict
 from datetime import UTC, datetime
 
@@ -76,7 +77,42 @@ def build_graph(
         json.dumps(response, ensure_ascii=False, allow_nan=False)
         return response
 
+    def terminal_response(result):
+        tool = registry.get(result["name"])
+        if not tool or not tool.terminal_errors or result.get("invocation_status") == "unknown":
+            return None  # Uncertain writes retain the explicit reconciliation path.
+        try:
+            payload = json.loads(result["content"])
+            error = payload.get("error", {})
+            key = error.get("code") or "approval:" + str(payload.get("approval"))
+        except (ValueError, AttributeError, TypeError):
+            return None
+        text = tool.terminal_errors.get(key)
+        return {"text": text, "kind": "terminal_business_result"} if text else None
+
     async def model(state):
+        # Resolve explicit read targets before asking the model to draw conclusions.
+        # These calls are visibly application-selected; they consume no LLM step.
+        required = []
+        for tool in tools:
+            if tool.required_read is None:
+                continue
+            arguments = tool.required_read(
+                deepcopy(state["messages"]), deepcopy(state["tool_history"]),
+            )
+            if arguments is not None:
+                if not isinstance(arguments, dict):
+                    raise ValueError("required read must return arguments or None")
+                required.append(ToolCall(
+                    f"application-read-{len(state['tool_history'])}-{len(required)}",
+                    tool.name, json.dumps(arguments, ensure_ascii=False, allow_nan=False),
+                ))
+        if required:
+            return {
+                "messages": [*state["messages"], assistant_toolcall_message("", required)],
+                "pending_calls": [asdict(call) for call in required],
+                "tool_results": [], "completed": False, "final_answer": "",
+            }
         writer = get_stream_writer()
         step = state["step"] + 1
         writer(StepStarted(step))
@@ -157,6 +193,8 @@ def build_graph(
                 registry,
                 now=now,
                 approval_ttl_seconds=approval_ttl_seconds,
+                messages=state["messages"],
+                tool_history=state["tool_history"],
             )
         }
 
@@ -205,6 +243,8 @@ def build_graph(
         return {"tool_results": results}
 
     def next_write(state):
+        if any(terminal_response(r) for r in state["tool_results"]):
+            return None
         done = {r["call_id"] for r in state["tool_results"]}
         return next((c for c in state["pending_calls"] if c["call_id"] not in done), None)
 
@@ -437,6 +477,24 @@ def build_graph(
     def collect(state):
         results = {r["call_id"]: r for r in state["tool_results"]}
         calls = {c["call_id"]: c for c in state["pending_calls"]}
+        terminal = next((response for r in results.values()
+                         if (response := terminal_response(r)) is not None), None)
+        if terminal:
+            for call in state["pending_calls"]:
+                if call["call_id"] not in results:
+                    content = json.dumps({"error": {"code": "turn_stopped",
+                        "message": "本轮已有受阻的业务操作；后续调用未执行，需新的明确请求"}},
+                        ensure_ascii=False)
+                    results[call["call_id"]] = {
+                        **call, "ok": False, "content": content,
+                        "approval_status": "cancelled", "invocation_status": "cancelled",
+                    }
+                    get_stream_writer()(ToolCallFinished(
+                        call["call_id"], call["name"], content, False,
+                    ))
+            for result in results.values():
+                if response := terminal_response(result):
+                    result["rendered_response"] = response
         update = {
             "messages": [
                 *state["messages"],
@@ -462,11 +520,14 @@ def build_graph(
                         "approval_status": result.get("approval_status"),
                         "invocation_status": result.get("invocation_status"),
                         "rendered_response": result.get("rendered_response"),
+                        **({"argument_evidence": result["argument_evidence"]}
+                           if "argument_evidence" in result else {}),
                     }
-                    for result in state["tool_results"]
+                    for result in results.values()
                 ],
             ],
             "pending_calls": [],
+            "tool_results": list(results.values()),
             "completed": any(
                 result.get("invocation_status") == "unknown"
                 for result in state["tool_results"]
@@ -477,7 +538,20 @@ def build_graph(
             (r["rendered_response"] for r in state["tool_results"] if r.get("rendered_response")),
             None,
         )
-        if contract and not update["completed"]:
+        if state.get("direct_action") and not update["completed"] and not terminal:
+            if len(results) != 1:
+                raise ValueError("direct action requires exactly one result")
+            result = next(iter(results.values()))
+            tool = registry[result["name"]]
+            if tool.direct_response is None:
+                raise ValueError("direct action renderer is unavailable")
+            text = tool.direct_response(deepcopy(result))
+            if not isinstance(text, str) or not text.strip():
+                raise ValueError("direct action renderer must return text")
+            terminal = {"text": text, "kind": "direct_action_result"}
+            update["tool_history"][-1]["rendered_response"] = terminal
+        if (contract or terminal) and not update["completed"]:
+            rendered = terminal or rendered
             if rendered is None and state["step"] >= config.max_steps:
                 rendered = contract.render(None, update["tool_history"], update["messages"])
             if rendered is not None:
@@ -494,7 +568,7 @@ def build_graph(
     graph.add_node("write", write)
     graph.add_node("reconcile_unknown", reconcile_unknown)
     graph.add_node("collect", collect)
-    graph.add_edge(START, "model")
+    graph.add_conditional_edges(START, lambda s: "prepare" if s.get("direct_action") else "model")
     graph.add_conditional_edges("model", lambda s: END if s["completed"] else "prepare")
     graph.add_edge("prepare", "reads")
     graph.add_conditional_edges("reads", lambda s: "write" if next_write(s) else "collect")

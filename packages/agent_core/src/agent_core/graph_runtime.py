@@ -1,7 +1,7 @@
 """Checkpointed runtime and adapter to Erpilot's existing event protocol."""
 
 from contextlib import aclosing
-from dataclasses import replace
+from dataclasses import asdict, replace
 from uuid import uuid4
 
 from langgraph.types import Command
@@ -10,8 +10,9 @@ from agent_core.approval import ApprovalRequest
 from agent_core.events import ApprovalPending, LoopEnd, ReconciliationPending
 from agent_core.graph import build_graph
 from agent_core.graph_approval import ResumeDecision
+from agent_core.graph_helpers import assistant_toolcall_message
 from agent_core.graph_state import initial_state
-from agent_core.llm import Usage
+from agent_core.llm import ToolCall, Usage
 from agent_core.runtime_config import LoopConfig
 
 
@@ -24,6 +25,7 @@ class LangGraphRuntime:
         if checkpointer is None:
             raise ValueError("explicit checkpointer is required")
         self._config = config or LoopConfig()
+        self._direct_tools = {t.name for t in tools if t.risk and t.direct_response is not None}
         self._gates = {t.name: t.approval_gate for t in tools if t.approval_gate is not None}
         approval_enabled = approval_enabled or all(
             t.risk is None or t.approval_gate is not None for t in tools
@@ -63,6 +65,20 @@ class LangGraphRuntime:
         async with aclosing(
             self._stream(Command(resume=decision.model_dump()), thread_id)
         ) as events:
+            async for event in events:
+                yield event
+
+    async def stream_call(self, messages, call: ToolCall, *, thread_id):
+        """Trusted host entry for one explicit human action; normal approval still applies."""
+        if call.name not in self._direct_tools:
+            raise ValueError("direct action requires an approved tool and a trusted renderer")
+        snapshot = await self.get_state(thread_id)
+        if snapshot.next:
+            raise ValueError("thread has unfinished execution; resume it before a new action")
+        state = initial_state(messages)
+        state["messages"].append(assistant_toolcall_message("", [call]))
+        state.update(direct_action=True, pending_calls=[asdict(call)])
+        async with aclosing(self._stream(state, thread_id)) as events:
             async for event in events:
                 yield event
 

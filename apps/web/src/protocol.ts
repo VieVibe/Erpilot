@@ -9,6 +9,7 @@ import type { BusinessOperation } from './operations';
 export interface StartPayload {
   session_id: string;
   model: string;
+  execution_mode?: 'confirmed_action';
 }
 
 export interface ToolStartedPayload {
@@ -393,6 +394,15 @@ export async function* streamChat(
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ message, session_id: sessionId }),
     signal,
+  });
+  yield* readSSE(resp);
+}
+
+export async function* streamConfirmedDraft(sessionId: string, draftId: string, revision: number): AsyncGenerator<SSEEvent> {
+  if (!Number.isSafeInteger(revision) || revision < 1) throw new Error('确认版本无效');
+  const resp = await fetch(`/api/sessions/${encodeURIComponent(sessionId)}/order-drafts/${encodeURIComponent(draftId)}/confirm/stream`, {
+    method: 'POST', headers: {'content-type': 'application/json'},
+    body: JSON.stringify({expected_revision: revision}),
   });
   yield* readSSE(resp);
 }

@@ -7,10 +7,32 @@ import {
   streamApprovalResume,
   streamInterruptedResume,
   streamRunEvents,
+  streamConfirmedDraft,
 } from "../.test-build/protocol.js";
 
 const originalFetch = globalThis.fetch;
 afterEach(() => { globalThis.fetch = originalFetch; });
+
+test('reviewed draft confirmation sends only the exact revision and retains SSE mode', async () => {
+  globalThis.fetch = async (url, options) => {
+    assert.equal(url, '/api/sessions/s%2Fa/order-drafts/d%2Fa/confirm/stream');
+    assert.deepEqual(JSON.parse(options.body), {expected_revision: 3});
+    return new Response('event: start\ndata: {"session_id":"s/a","model":"configured","execution_mode":"confirmed_action"}\n\nevent: done\ndata: {"steps":0,"completed":true,"usage":null,"cost":null}\n\n', {headers:{'content-type':'text/event-stream'}});
+  };
+  const events = [];
+  for await (const event of streamConfirmedDraft('s/a', 'd/a', 3)) events.push(event);
+  assert.equal(events[0].data.execution_mode, 'confirmed_action');
+  assert.equal(events.at(-1).data.usage, null);
+});
+
+test('confirmation conflicts are surfaced once without silently choosing a new version', async () => {
+  let requests = 0;
+  globalThis.fetch = async () => {requests++; return Response.json({error:{code:'draft_changed',message:'请重新核对'}}, {status:409});};
+  await assert.rejects(async () => {for await (const _ of streamConfirmedDraft('s','d',2)) {}}, error => error.code === 'draft_changed');
+  assert.equal(requests, 1);
+  await assert.rejects(async () => {for await (const _ of streamConfirmedDraft('s','d',true)) {}}, /确认版本无效/);
+  assert.equal(requests, 1);
+});
 
 test("approval decision sends the pending id and boolean", async () => {
   globalThis.fetch = async (url, options) => {

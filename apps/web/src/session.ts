@@ -309,6 +309,7 @@ const TOOL_TITLES: Record<string, string> = {
   prepare_order_draft: "准备订单草稿",
   get_order_task: "查询当前草稿任务",
   get_order_draft: "查询订单草稿",
+  get_order_draft_history: "查看草稿修改记录",
   revise_order_draft: "更新订单草稿",
   revise_order_draft_quantity: "修改草稿数量",
   submit_order_draft: "提交订单草稿",

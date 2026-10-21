@@ -1,0 +1,51 @@
+{
+  "version": "order-budget-live-evidence-1",
+  "checks": {
+    "source_matches_plan_and_workspace": true,
+    "api_matches_plan_and_workspace": true,
+    "harness_matches_plan": true,
+    "scope_matches_plan": true,
+    "all_ten_stages_passed": true,
+    "audit_passed": true,
+    "within_estimate_limit": true
+  },
+  "artifacts_sha256": {
+    "reports/acceptance/20261021-budget-live-plan.json": "c6f7168e3b00084440f11d6003f247b1d55d1e219f8a23573195a5169585f181",
+    "reports/context/20261021-budget-live-glm-01.json": "2843866c46cc95a6521ab34f1e7a072188eb6b4cdc422ea9b373e3fd0cc5f635",
+    "reports/context/20261021-budget-live-glm-audit-01.json": "76da8e9c53e1f28d553f3f8eba6046c86de5355cff9914884ae4b94c6805be23",
+    "reports/context/20261021-budget-live-glm-01-requests.jsonl": "8229f2377f8d5d2291cd3ca5d8f68bc2a5f187c278e3bb6944efbb9830714d08",
+    "reports/context/20261021-budget-live-glm-01-inputs.jsonl": "51b8c317e274b6463cceac9d7ca549456f5dffccfec6ad874c77cf56756dea72",
+    "reports/acceptance/20261021-budget-live-preflight-tests.xml": "aaeca1237aa9ea5789a9623855110d35169b122c86565e5189e5128338e0c1f0",
+    "scripts/validate_order_budget_live.py": "552c40f3f12218d2d71835326963058ccd5c61e3b2091e8e5f78b276b02e5336",
+    "packages/evals/tests/test_budget_live_validation.py": "70fa6b907346c76651f6bc32ebefd13a0512b9616f468eb2e210556f02cf1b69",
+    "traces/budget-live/20261021-budget-live-glm-01/step-1.jsonl": "a011075eb61f4674a44df62ce52304a30f7b0c7333892f3f174121b6f57b9820",
+    "traces/budget-live/20261021-budget-live-glm-01/step-2.jsonl": "29d6a4bc831accf9b9d107fc30afda858ee71902f78f41b1c8e593a99beb0d45",
+    "traces/budget-live/20261021-budget-live-glm-01/step-3.jsonl": "9bf47f0bdca195790f29d0b5d31dbc0a6bacf7f8b192057da16478d7dbcd1cfa",
+    "traces/budget-live/20261021-budget-live-glm-01/step-5.jsonl": "116b5eaf09d8b1813cd6679dccd6c90dcf82a177592ead7c763ed0d63826f608",
+    "traces/budget-live/20261021-budget-live-glm-01/step-6.jsonl": "22f1fb73e4a95c5a20d95fb76349cfb47f01f5337cfa23f4b2d42bef3d57dcf0",
+    "traces/budget-live/20261021-budget-live-glm-01/step-8.jsonl": "ba79c2dc163988f3a0f68274a35e7b1425ab7c755661b24fa176ccd212187f6a",
+    "traces/budget-live/20261021-budget-live-glm-01/step-10.jsonl": "26687c113b6adaeee4aa059a8582505046d3793a691640e1d60bde541fe76f34"
+  },
+  "preflight": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "41",
+    "time": "8.644",
+    "timestamp": "2026-10-21T17:23:18.351478+08:00",
+    "hostname": "DESKTOP-NTN44UQ"
+  },
+  "requests": {
+    "requests": 16,
+    "known_spent": "0.015244",
+    "unknown_requests": 0
+  },
+  "notes": [
+    "Application source unchanged during this paid batch.",
+    "Human approval, confirm preflight and runtime restore are explicit controls.",
+    "Model actively refused over-budget submit after a fresh read; preflight tested forced backend rejection.",
+    "One rejected customer-name shortening was corrected within the same recorded model turn.",
+    "DeepSeek not called."
+  ]
+}

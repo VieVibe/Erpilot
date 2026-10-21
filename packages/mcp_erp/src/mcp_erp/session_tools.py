@@ -8,6 +8,7 @@ from erp_store.operations import ErpOperations
 from fastmcp import Client
 
 from mcp_erp.bridge import ErpMutationReconciler, _convert, _with_risk_and_gate
+from mcp_erp.draft_constraints import bind_draft_constraints
 from mcp_erp.policy_answer import bind_policy_response
 from mcp_erp.server import create_server
 
@@ -48,7 +49,7 @@ class SessionErpTools:
             for t in self._metadata
         ]
         tools = [_with_risk_and_gate(t, self.gate) for t in tools] if self.writes else tools
-        return bind_policy_response(tools)
+        return bind_draft_constraints(bind_policy_response(tools))
 
     def reconciler(self, session_id):
         return ErpMutationReconciler(self.db_path, session_id=session_id)

@@ -14,6 +14,14 @@ from pydantic import BaseModel
 from agent_core.response_contract import ResponseContract
 
 
+class ToolConstraintError(ValueError):
+    """Trusted application preflight rejection with a stable, serializable code."""
+
+    def __init__(self, code: str, message: str):
+        super().__init__(message)
+        self.code = code
+
+
 def _strip_titles(node: Any) -> Any:
     """递归去掉 JSON Schema 里的 title 键——对注入请求是纯噪音。"""
     if isinstance(node, dict):
@@ -37,6 +45,25 @@ class Tool:
     approved_handler: Callable[[BaseModel], Awaitable[object]] | None = None
     approval_gate: object | None = None
     response_contract: ResponseContract | None = None
+    # Application-owned validation against trusted conversation state.
+    # Returns JSON evidence; ValueError rejects the call before execution or approval.
+    call_validator: Callable[[dict, list[dict], list[dict]], dict] | None = None
+    # Receives application validation evidence outside the model-visible schema.
+    validated_handler: Callable[[BaseModel, dict], Awaitable[object]] | None = None
+    # Application-selected read prerequisites, evaluated against this turn's real history.
+    # Returns this tool's arguments, or None. Never installed on an approval tool.
+    required_read: Callable[[list[dict], list[dict]], dict | None] | None = None
+    # Trusted application mapping: a known business failure ends the turn.
+    # It cannot be supplied or extended by model/tool output.
+    terminal_errors: dict[str, str] | None = None
+    # Trusted renderer for a human-selected, approved action without model planning.
+    direct_response: Callable[[dict], str] | None = None
+
+    def __post_init__(self):
+        if self.validated_handler is not None and self.risk is not None:
+            raise ValueError("validated handlers cannot bypass approval handlers")
+        if self.required_read is not None and self.risk is not None:
+            raise ValueError("required reads cannot bypass approval handlers")
 
     def openai_schema(self) -> dict[str, Any]:
         """OpenAI tools 参数格式：{"type": "function", "function": {...}}。"""

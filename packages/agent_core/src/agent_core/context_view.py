@@ -15,11 +15,17 @@ from agent_core.context import ContextPolicy, estimate_tokens
 ToolProjector = Callable[[str], str | None]
 
 
+class ContextBudgetExceeded(ValueError):
+    """Protected messages exceed the estimated request budget; no request is sent."""
+
+
 @dataclass(frozen=True)
 class ContextView:
     projectors: Mapping[str, ToolProjector] = field(default_factory=dict)
     remember_tools: tuple[str, ...] = ()
     recent_only: bool = True
+    retain_user_messages: bool = False
+    fail_on_overflow: bool = False
 
     def __call__(self, history: list[dict], policy: ContextPolicy) -> list[dict]:
         messages = deepcopy(history)
@@ -55,6 +61,10 @@ class ContextView:
             else:
                 units.append([i])
         protected = {i for i, m in enumerate(messages) if m["role"] == "system"}
+        if self.retain_user_messages:
+            # Preserve original instructions as user data, without interpreting or
+            # promoting them to system instructions or cross-session memory.
+            protected.update(i for i, m in enumerate(messages) if m["role"] == "user")
         boundary = max(0, len(messages) - max(1, policy.keep_last_messages))
         protected.update(range(boundary, len(messages)))
         # Retain the most recent observation, including errors/none/ambiguity.
@@ -78,4 +88,7 @@ class ContextView:
                 break
             if not protected.intersection(unit):
                 selected.difference_update(unit)
-        return [messages[i] for i in sorted(selected)]
+        result = [messages[i] for i in sorted(selected)]
+        if self.fail_on_overflow and estimate_tokens(result) > policy.max_tokens:
+            raise ContextBudgetExceeded("protected context exceeds estimated token budget")
+        return result

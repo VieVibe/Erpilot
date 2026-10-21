@@ -77,6 +77,7 @@ async def test_multiround_task_query_then_ordinal_update_survives_new_host(tmp_p
                             "expected_revision": current["revision"],
                             "item_number": 2,
                             "quantity": 50,
+                                "expected_sku": current["items"][1]["sku"],
                         }
                     ),
                 )

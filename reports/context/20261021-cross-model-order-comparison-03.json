@@ -1,0 +1,125 @@
+{
+  "version": "cross-model-order-comparison-1",
+  "plan": "reports/acceptance/20261021-cross-model-order-plan.json",
+  "plan_sha256": "b974af3ae62e69e7bcdd74fe1c145bd7e9ee0fb5fe92bc65d83cf044c7dc4155",
+  "paired_audit": "reports/context/20261021-cross-model-order-paired-audit-03.json",
+  "paired_audit_sha256": "81178299076fa62a5ca718be7a1c66bf8a4c16844902bbefddae747962050096",
+  "execution_contract_matches": true,
+  "checks": {
+    "frozen_application_source_unchanged": true,
+    "frozen_api_web_files_unchanged": true,
+    "both_models_match_plan": true,
+    "same_frozen_cases": true,
+    "same_frozen_source": true,
+    "same_execution_settings": true,
+    "independent_record_audit_passed": true
+  },
+  "joint_acceptance_passed": false,
+  "models": [
+    {
+      "model": "glm-5.3-flash",
+      "report": "reports/context/20261021-cross-model-order-glm-03.json",
+      "report_sha256": "a7f4dfd6837a42b23364a9400c8d5e2083154db2e04fdaee65df767dd620c147",
+      "journal_sha256": "6eeeae46fce002bbded64d1db14beb0d4a610cd85ec42b75ce40770547f29045",
+      "inputs_sha256": "2719fbbbb3331fb534ae2e4906cec1e70acf2bc64a581536a24e3529b42761ba",
+      "cases_match_plan": true,
+      "source_matches_plan": true,
+      "execution_settings_match_plan": true,
+      "planned_journeys": 3,
+      "complete_journeys": 3,
+      "passed_journeys": 3,
+      "planned_steps": 28,
+      "executed_steps": 28,
+      "passed_steps": 28,
+      "not_executed_steps": 0,
+      "complete": true,
+      "request_audit": {
+        "requests": 45,
+        "known_spent": "0.039878",
+        "unknown_requests": 0
+      },
+      "known_usage_tokens": {
+        "prompt_tokens": 358562,
+        "completion_tokens": 16040,
+        "total_tokens": 374602
+      },
+      "budget": {
+        "currency": "CNY",
+        "limit": "0.10",
+        "known_spent": "0.039878",
+        "unknown_usage": false
+      },
+      "failures": [],
+      "final_answers": [
+        {
+          "journey": "selection-and-denial",
+          "answer": "```json\n{\n  \"customer\": \"整单验收客户甲\",\n  \"note\": \"分开发票，周五发货\",\n  \"revision\": 3,\n  \"item_count\": 2,\n  \"first_quantity\": 12,\n  \"second_quantity\": 50,\n  \"total_amount\": 592.6,\n  \"status\": \"submitted\",\n  \"order_id\": \"SO20261021-0001\"\n}\n```"
+        },
+        {
+          "journey": "approval-drift",
+          "answer": "```json\n{\n  \"customer\": \"整单验收客户甲\",\n  \"note\": \"分开发票，周五发货\",\n  \"revision\": 3,\n  \"item_count\": 2,\n  \"first_quantity\": 5,\n  \"second_quantity\": 3,\n  \"total_amount\": 130.0,\n  \"status\": \"submitted\",\n  \"order_id\": \"SO20261021-0001\"\n}\n```"
+        },
+        {
+          "journey": "restore-pending",
+          "answer": "```json\n{\n  \"customer\": \"整单验收客户甲\",\n  \"note\": \"分开发票，周五发货\",\n  \"revision\": 2,\n  \"item_count\": 2,\n  \"first_quantity\": 12,\n  \"second_quantity\": 3,\n  \"total_amount\": 147.6,\n  \"status\": \"submitted\",\n  \"order_id\": \"SO20261021-0001\"\n}\n```"
+        }
+      ]
+    },
+    {
+      "model": "deepseek-v4.1-flash",
+      "report": "reports/context/20261021-cross-model-order-deepseek-03.json",
+      "report_sha256": "02624da37bf4c170872c396de3ae7e7b696d8b229b8cf287c1e20e9d4488b526",
+      "journal_sha256": "e538f5550635c3d3094112e3d10fecc45810bbc98b12839ec72d2914eb285cfd",
+      "inputs_sha256": "5f4a16410a0782be268edf242800c30a2b25209274c69f8795098fde5fbcb981",
+      "cases_match_plan": true,
+      "source_matches_plan": true,
+      "execution_settings_match_plan": true,
+      "planned_journeys": 3,
+      "complete_journeys": 0,
+      "passed_journeys": 0,
+      "planned_steps": 28,
+      "executed_steps": 1,
+      "passed_steps": 0,
+      "not_executed_steps": 27,
+      "complete": false,
+      "request_audit": {
+        "requests": 1,
+        "known_spent": "0",
+        "unknown_requests": 1
+      },
+      "known_usage_tokens": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "budget": {
+        "currency": "USD",
+        "limit": "0.05",
+        "known_spent": "0",
+        "unknown_usage": true
+      },
+      "failures": [
+        {
+          "journey": "selection-and-denial",
+          "step": 1,
+          "error": "InternalServerError: Error code: 502 - {'error': {'message': 'Upstream service temporarily unavailable', 'type': 'upstream_error'}}",
+          "failed_checks": [
+            "exact_draft_versions",
+            "target_constraints_and_all_items",
+            "verified_origins_preserved",
+            "required_mutation_missing",
+            "run_error: InternalServerError: Error code: 502 - {'error': {'message': 'Upstream service temporarily unavailable', 'type': 'upstream_error'}}"
+          ],
+          "business_snapshot_unchanged": true
+        }
+      ],
+      "final_answers": []
+    }
+  ],
+  "notes": [
+    "Known amounts exclude unknown requests. No provider invoices or currency conversion.",
+    "Old missing-usage batches and outcomes are not overwritten.",
+    "Original natural-language cases only; confirmed-action UI is separate.",
+    "No statistical reliability claim or real hard-crash claim."
+  ]
+}

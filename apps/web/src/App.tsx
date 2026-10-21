@@ -16,6 +16,7 @@ import {
   streamRunEvents,
   streamApprovalResume,
   streamChat,
+  streamConfirmedDraft,
   submitApproval,
 } from "./protocol";
 
@@ -33,7 +34,7 @@ import {
   newAssistantTurn,
 } from "./session";
 import { AssistantMessage } from "./components/AssistantMessage";
-import { approvalDraftIssue, createOrderDraft, getOrderDraft, listOrderDrafts, parseOrderDraft, reviseOrderDraft, type OrderDraft } from './drafts';
+import { approvalDraftIssue, createOrderDraft, draftConfirmationText, getOrderDraft, listOrderDrafts, parseOrderDraft, reviseOrderDraft, type OrderDraft } from './drafts';
 import { DraftSummary, OrderDraftPanel } from './components/OrderDraftPanel';
 import { approvalOperationIssue, getOperation, requiresBusinessSummary, parseOperation, retainOperationSnapshot, type BusinessOperation } from './operations';
 import { BusinessApprovalSummary } from './components/BusinessApprovalSummary';
@@ -223,7 +224,7 @@ export default function App() {
           // 心跳只代表连接存活，不代表业务进度；不写入消息内容
           break;
         case "start":
-          setStatus(`${ev.data.model}`);
+          setStatus(ev.data.execution_mode === 'confirmed_action' ? '正在申请审批…' : `${ev.data.model}`);
           setSessionStatus("running");
           updateLastAssistant(t => applyTurnEvent(t, ev));
           break;
@@ -250,6 +251,7 @@ export default function App() {
             ...prev.filter(item => item.pending_id !== pending.pending_id), pending,
           ]);
           setSessionStatus("waiting_approval");
+          setStatus('等待人工审批');
           updateLastAssistant(t => applyTurnEvent(t, ev));
           break;
         }
@@ -582,9 +584,9 @@ export default function App() {
     void refreshSession().catch(() => {});
   }, [busy, sessionStatus, refreshSession]);
 
-  const send = useCallback(async (requestedMessage?: string) => {
+  const send = useCallback(async (requestedMessage?: string, confirmedDraft?: OrderDraft) => {
     const message = (requestedMessage ?? input).trim();
-    if (!message || !canSend || hasPending || interrupted) return;
+    if (!message || !canSend || hasPending || interrupted || liveConnection.current) return;
     const ticket = sessionRequests.current.capture();
     localStorage.removeItem(FRESH_SESSION_KEY);
     setInput("");
@@ -604,7 +606,9 @@ export default function App() {
     replayConnection.current?.abort();
     liveConnection.current = true;
     try {
-      await consumeEvents(streamChat(message, sessionIdRef.current));
+      await consumeEvents(confirmedDraft
+        ? streamConfirmedDraft(sessionIdRef.current, confirmedDraft.draft_id, confirmedDraft.revision)
+        : streamChat(message, sessionIdRef.current));
     } catch (e) {
       if (!sessionRequests.current.isCurrent(ticket)) return;
       if (isConflict(e)) {
@@ -653,7 +657,7 @@ export default function App() {
   const sessionLocked = busy || hasPending || interrupted || sessionStatus === 'running';
   const inputLocked = !canSend || hasPending || interrupted;
   const inspectApprovals = () => { setBusinessTab('approvals'); setBusinessOpen(true); };
-  const orderPanel = draftsEnabled ? <OrderDraftPanel key={sessionIdRef.current} drafts={drafts} loading={draftsLoading} error={draftsError} busy={busy && !hasPending} canSubmit={writesEnabled&&canSend&&!hasPending&&!interrupted} writesEnabled={writesEnabled} hasPending={hasPending}
+  const orderPanel = draftsEnabled ? <OrderDraftPanel key={sessionIdRef.current} sessionId={sessionIdRef.current} drafts={drafts} loading={draftsLoading} error={draftsError} busy={busy && !hasPending} canSubmit={writesEnabled&&canSend&&!hasPending&&!interrupted} writesEnabled={writesEnabled} hasPending={hasPending}
           onRefresh={()=>void refreshDrafts()} onSave={async (draft,input)=>{
             const sessionId=sessionIdRef.current;
             const ticket=sessionRequests.current.capture();
@@ -666,7 +670,7 @@ export default function App() {
             } finally {if(sessionRequests.current.isCurrent(ticket)) await refreshDrafts();}
           }} onSubmit={draft=>{
             if (Date.parse(draft.expires_at)<=Date.now()) {void refreshDrafts();return;}
-            void send(`请调用 submit_order_draft 提交草稿 ${draft.draft_id} 的版本 ${draft.revision}，并申请审批。`);
+            void send(draftConfirmationText(draft), draft);
           }} /> :
     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="当前环境尚未开放订单草稿" />;
   const approvalPanel = <div className="approval-list">

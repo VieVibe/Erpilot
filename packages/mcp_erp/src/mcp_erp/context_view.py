@@ -9,7 +9,7 @@ import json
 from agent_core.context_view import ContextView
 
 
-def summarize_task(content: str) -> str | None:
+def summarize_task(content: str, *, numbered: bool = False) -> str | None:
     try:
         payload = json.loads(content)
         if not isinstance(payload, dict):
@@ -24,9 +24,16 @@ def summarize_task(content: str) -> str | None:
                 ("draft_id", "revision", "customer", "note", "status", "expires_at")
             }
             result["draft"]["items"] = [
-                {"sku": item["sku"], "quantity": item["quantity"]}
-                for item in draft["items"]
+                {**({"item_number": number} if numbered else {}),
+                 "sku": item["sku"], "quantity": item["quantity"]}
+                for number, item in enumerate(draft["items"], 1)
             ]
+            result["draft"]["item_count"] = len(draft["items"])
+            if numbered and "total_amount" in draft:
+                result["draft"]["total_amount"] = draft["total_amount"]
+            for key in ("budget_limit", "budget_constraint", "budget_check", "pending_issues"):
+                if key in draft:
+                    result["draft"][key] = draft[key]
         elif payload["status"] == "ambiguous":
             # Candidate identities and ambiguity must remain intact.
             result["candidates"] = payload["candidates"]
@@ -38,6 +45,9 @@ def summarize_task(content: str) -> str | None:
         return None
 
 
-def erp_context_view() -> ContextView:
-    return ContextView(projectors={"get_order_task": summarize_task},
-                       remember_tools=("get_order_task",))
+def erp_context_view(*, workflow: bool = False) -> ContextView:
+    return ContextView(
+        projectors={"get_order_task": lambda content: summarize_task(content, numbered=workflow)},
+        remember_tools=("get_order_task",), retain_user_messages=workflow,
+        fail_on_overflow=workflow,
+    )

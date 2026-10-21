@@ -19,6 +19,7 @@ from agent_core.demo_tools import SYSTEM_PROMPT
 from agent_core.events import LoopEnd, StepEnd, ToolCallFinished, ToolCallStarted
 from agent_core.graph_runtime import LangGraphRuntime
 from agent_core.llm import LLMClient, TextDelta, Usage
+from agent_core.runtime_config import LoopConfig
 from agent_core.trace import JsonlTraceRecorder, new_trace_path
 from langgraph.checkpoint.memory import InMemorySaver
 from sqlalchemy.engine import Engine
@@ -127,6 +128,7 @@ async def run_case(
     system_prompt: str = SYSTEM_PROMPT,
     state_engine: Engine | None = None,
     conversation: list | None = None,
+    loop_config: LoopConfig | None = None,
 ) -> tuple[CaseResult, Path]:
     """跑一条已解析占位符的 case，返回 (结果, trace 路径)。
 
@@ -162,7 +164,8 @@ async def run_case(
     tool_attempts: list[str] = []
 
     for attempt in range(1, retries + 2):
-        agent = LangGraphRuntime(client, tools=list(tools), checkpointer=InMemorySaver())
+        agent = LangGraphRuntime(client, tools=list(tools), checkpointer=InMemorySaver(),
+                                 config=loop_config or LoopConfig())
         messages: list = (
             list(conversation) if conversation is not None
             else [{"role": "system", "content": system_prompt}]

@@ -1,0 +1,14 @@
+{"request": 1, "case_id": "history-live-pages", "status": "started", "ts": "2026-10-21T03:37:43.662781+00:00", "billing": null}
+{"request": 1, "case_id": "history-live-pages", "status": "settled", "ts": "2026-10-21T03:37:46.975064+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000690", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 2, "case_id": "history-live-pages", "status": "started", "ts": "2026-10-21T03:37:47.057853+00:00", "billing": null}
+{"request": 2, "case_id": "history-live-pages", "status": "settled", "ts": "2026-10-21T03:37:48.993994+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000721", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 3, "case_id": "history-live-pages", "status": "started", "ts": "2026-10-21T03:37:49.034852+00:00", "billing": null}
+{"request": 3, "case_id": "history-live-pages", "status": "settled", "ts": "2026-10-21T03:37:50.726780+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000742", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 4, "case_id": "history-live-pages", "status": "started", "ts": "2026-10-21T03:37:50.766054+00:00", "billing": null}
+{"request": 4, "case_id": "history-live-pages", "status": "settled", "ts": "2026-10-21T03:37:53.471875+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000849", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 5, "case_id": "history-live-pages", "status": "started", "ts": "2026-10-21T03:37:53.513213+00:00", "billing": null}
+{"request": 5, "case_id": "history-live-pages", "status": "settled", "ts": "2026-10-21T03:37:56.823860+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000985", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 6, "case_id": "history-live-foreign", "status": "started", "ts": "2026-10-21T03:37:56.852852+00:00", "billing": null}
+{"request": 6, "case_id": "history-live-foreign", "status": "settled", "ts": "2026-10-21T03:38:03.904060+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000688", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 7, "case_id": "history-live-foreign", "status": "started", "ts": "2026-10-21T03:38:04.031020+00:00", "billing": null}
+{"request": 7, "case_id": "history-live-foreign", "status": "settled", "ts": "2026-10-21T03:38:08.377905+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000693", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}

@@ -1,0 +1,4 @@
+{"request": 1, "case_id": "history-live-pages", "status": "started", "ts": "2026-10-21T04:13:36.184481+00:00", "billing": null}
+{"request": 1, "case_id": "history-live-pages", "status": "settled", "ts": "2026-10-21T04:13:39.068020+00:00", "billing": {"currency": "USD", "estimated_amount": "0.000383", "pricing_source": "user-confirmed-2026-10-12", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 2, "case_id": "history-live-pages", "status": "started", "ts": "2026-10-21T04:13:39.108445+00:00", "billing": null}
+{"request": 2, "case_id": "history-live-pages", "status": "unknown", "ts": "2026-10-21T04:13:40.220695+00:00", "billing": {"currency": "USD", "estimated_amount": null, "pricing_source": "user-confirmed-2026-10-12", "cache_assumption": "unknown_usage", "complete": false}}

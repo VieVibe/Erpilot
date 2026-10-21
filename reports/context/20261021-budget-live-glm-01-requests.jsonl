@@ -1,0 +1,32 @@
+{"request": 1, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:26:39.458614+00:00", "billing": null}
+{"request": 1, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:26:43.656964+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000797", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 2, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:26:43.667701+00:00", "billing": null}
+{"request": 2, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:26:46.095325+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000734", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 3, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:26:46.180737+00:00", "billing": null}
+{"request": 3, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:26:50.594157+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000927", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 4, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:26:50.682761+00:00", "billing": null}
+{"request": 4, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:26:53.427471+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000820", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 5, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:26:53.469825+00:00", "billing": null}
+{"request": 5, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:26:57.432381+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000948", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 6, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:26:57.478732+00:00", "billing": null}
+{"request": 6, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:27:04.838343+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.001081", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 7, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:27:04.861770+00:00", "billing": null}
+{"request": 7, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:27:09.788054+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.001016", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 8, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:27:09.828681+00:00", "billing": null}
+{"request": 8, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:27:17.359951+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.001185", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 9, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:27:17.412784+00:00", "billing": null}
+{"request": 9, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:27:20.024515+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000911", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 10, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:27:20.069789+00:00", "billing": null}
+{"request": 10, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:27:23.966092+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000874", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 11, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:27:24.010945+00:00", "billing": null}
+{"request": 11, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:27:29.802398+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.001019", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 12, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:27:29.824400+00:00", "billing": null}
+{"request": 12, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:27:32.550526+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000910", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 13, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:27:32.590730+00:00", "billing": null}
+{"request": 13, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:27:42.604806+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000874", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 14, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:27:42.729620+00:00", "billing": null}
+{"request": 14, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:27:47.027326+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000980", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 15, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:27:47.056368+00:00", "billing": null}
+{"request": 15, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:27:53.472887+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.001007", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 16, "case_id": "order-budget-live-1", "status": "started", "ts": "2026-10-21T09:27:53.543285+00:00", "billing": null}
+{"request": 16, "case_id": "order-budget-live-1", "status": "settled", "ts": "2026-10-21T09:27:57.097383+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.001161", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}

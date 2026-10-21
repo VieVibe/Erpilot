@@ -29,13 +29,14 @@ from agent_core.approval import (
     ApprovalGate,
     guarded,
 )
-from agent_core.tools import Tool
+from agent_core.tools import Tool, ToolConstraintError
 from erp_store.db import DEFAULT_DB, make_engine
 from erp_store.mutations import ErpMutations
 from fastmcp import Client
 from fastmcp.client.client import CallToolResult
 from pydantic import BaseModel, Field, create_model
 
+from mcp_erp.draft_constraints import bind_draft_constraints
 from mcp_erp.policy_answer import bind_policy_response
 from mcp_erp.server import PolicyResolver, create_server
 
@@ -182,7 +183,7 @@ async def build_agent_tools_async(
     ]
     if writes:
         tools = [_with_risk_and_gate(t, approval_gate) for t in tools]  # type: ignore[arg-type]
-    return bind_policy_response(tools)
+    return bind_draft_constraints(bind_policy_response(tools))
 
 
 def _with_risk_and_gate(tool: Tool, gate: ApprovalGate | None) -> Tool:
@@ -190,6 +191,8 @@ def _with_risk_and_gate(tool: Tool, gate: ApprovalGate | None) -> Tool:
     risk = WRITE_TOOL_RISK.get(tool.name)
     if risk is None:
         return tool
+    from mcp_erp.draft_tools import SUBMISSION_TERMINAL_ERRORS, direct_submission_response
+
     marked = Tool(
         name=tool.name,
         description=tool.description,
@@ -197,6 +200,10 @@ def _with_risk_and_gate(tool: Tool, gate: ApprovalGate | None) -> Tool:
         handler=tool.handler,
         risk=risk,
         retry_safe=True,
+        call_validator=tool.call_validator,
+        validated_handler=tool.validated_handler,
+        terminal_errors=SUBMISSION_TERMINAL_ERRORS if tool.name == "submit_order_draft" else None,
+        direct_response=direct_submission_response if tool.name == "submit_order_draft" else None,
     )
     assert gate is not None  # build_agent_tools_async 已校验
     return guarded(marked, gate)
@@ -220,19 +227,49 @@ def _convert(
     """
     params_model = _params_model(name, schema)
 
-    async def handler(args: BaseModel, _name: str = name) -> object:
+    async def invoke(args: BaseModel, evidence=None) -> object:
+        _name = name
         if _name in WRITE_TOOL_RISK and args.client_token is None:
             # 同次工具执行的超时/异常重试复用同一个参数对象与 token。
             args.client_token = uuid4().hex
         server = create_server(
             db_path, include_writes=writes, policy_resolver=policy_resolver, session_id=session_id,
             replenishment_at=replenishment_at,
+            draft_evidence=evidence,
         )
         async with Client(server) as client:
             result = await client.call_tool(_name, args.model_dump(mode="json", exclude_none=True))
         return _extract(result)
 
-    return Tool(name=name, description=description, params_model=params_model, handler=handler)
+    async def handler(args: BaseModel) -> object:
+        return await invoke(args)
+
+    async def validated_handler(args: BaseModel, evidence: dict) -> object:
+        return await invoke(args, evidence)
+
+    def submission_preflight(arguments, messages, history):
+        from erp_store.draft_budget import ensure_budget
+        from erp_store.drafts import ErpDrafts
+        from erp_store.mutations import MutationError
+
+        engine = make_engine(db_path)
+        try:
+            draft = ErpDrafts(engine).get(session_id, arguments["draft_id"], arguments["revision"])
+            ensure_budget(draft)
+        except MutationError as exc:
+            raise ToolConstraintError(exc.code, exc.message + "；" + exc.hint) from exc
+        finally:
+            engine.dispose()
+        return {}
+
+    return Tool(
+        name=name, description=description, params_model=params_model, handler=handler,
+        validated_handler=validated_handler if session_id is not None and name in {
+            "prepare_order_draft", "revise_order_draft", "revise_order_draft_quantity",
+        } else None,
+        call_validator=(submission_preflight
+                        if session_id is not None and name == "submit_order_draft" else None),
+    )
 
 
 def _params_model(tool_name: str, schema: dict[str, Any]) -> type[BaseModel]:
@@ -242,18 +279,22 @@ def _params_model(tool_name: str, schema: dict[str, Any]) -> type[BaseModel]:
     for prop_name, prop in schema.get("properties", {}).items():
         description = prop.get("description", "")
         annotation = _annotation_of(prop)
+        constraints = {"strict": True} if (
+            tool_name == "revise_order_draft_quantity"
+            or prop_name in {"budget_limit", "clear_budget"}
+        ) else {}
         if prop_name in required:
-            fields[prop_name] = (annotation, Field(description=description))
+            fields[prop_name] = (annotation, Field(description=description, **constraints))
         elif prop.get("default") is not None:
             # 工具有自己的默认值：不传时 exclude_none 会让服务端走默认
             fields[prop_name] = (
                 annotation,
-                Field(default=prop["default"], description=description),
+                Field(default=prop["default"], description=description, **constraints),
             )
         else:
             fields[prop_name] = (
                 annotation | None,
-                Field(default=None, description=description),
+                Field(default=None, description=description, **constraints),
             )
     model = create_model(f"{tool_name}_params", **fields)
     model.__doc__ = f"工具 {tool_name} 的入参（由 MCP inputSchema 生成）"

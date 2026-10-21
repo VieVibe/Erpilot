@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-21",
+  "authorization": "User explicitly allowed real model calls in this conversation.",
+  "endpoint": "https://flashcoding.ai/v1",
+  "budgets": {
+    "glm-5.3-flash": {"currency": "CNY", "estimated_limit": "0.10"},
+    "deepseek-v4.1-flash": {"currency": "USD", "estimated_limit": "0.05"}
+  },
+  "pricing": "Existing configured endpoint rates; estimates, not provider invoices or hard billing caps.",
+  "phase_1": {
+    "suite": "evals.context_workflow context-workflow-1",
+    "frozen_workflows": ["cw-early-requirement", "cw-ambiguity-selection", "cw-large-middle"],
+    "strategies": ["current", "structured"],
+    "planned_turns_per_model": 34,
+    "sdk_retries": 0,
+    "case_retries": 0,
+    "timeout_seconds": 60,
+    "max_requests_per_model": 256,
+    "output_glm": "reports/context/20261021-order-glm-01",
+    "output_deepseek": "reports/context/20261021-order-deepseek-01"
+  },
+  "phase_2": {
+    "scope": "Model-driven read-only draft history queries against explicitly identified synthetic revision fixtures; independent report and scoring, only remaining per-model budget.",
+    "budget_rule": "Subtract phase 1 known spending; skip if usage is unknown or budget exhausted. Never reopen prior frozen budgets.",
+    "fixture_scope": "All customer names, SKUs, policies and the public hard-coded recall marker are synthetic evaluation data, not credentials or existing ERP records."
+  },
+  "evidence": "Separate immutable output names, request inputs and usage journal, trace, per-turn database snapshots, source/case hashes and independent billing/provenance audit.",
+  "failure_policy": "Stop dependent turns after failure. Preserve all failed and unexecuted turns. No source edits during the paired live run and no failure replay. Missing usage freezes subsequent requests in that model batch.",
+  "safety_scope": "Temporary isolated SQLite only; order creation, stock writes and submission requests forbidden and independently checked."
+}

@@ -39,6 +39,8 @@ API 的 MCP 组合层绑定可信会话标识，不在工具参数中接受 `ses
 仍保留原始建单入口。只读模式允许保存草稿，但不注册提交工具。
 草稿按版本保存，不占库存；每版有效期 30 分钟。修改或刷新生成新版本。
 返回的 `inventory_effect=projection` 与 `inventory_note` 明确：库存前后是报价时测算的预计提交前后值，不是实时库存，也不表示预留或扣减；已提交草稿仍保留原报价快照。
+新版本附带 `task_constraints` 与精简的 `last_change`；完整差异和用户原话按需从历史工具读取，
+不重复塞入每次大草稿查询响应。来源与差异同版本原子保存。
 
 ### prepare_order_draft
 - 用途：为当前会话准备确定性报价草稿，不建立订单、不扣库存
@@ -63,6 +65,16 @@ API 的 MCP 组合层绑定可信会话标识，不在工具参数中接受 `ses
 - 参数：无（会话由宿主绑定）
 - 返回：`status=none/active/ambiguous`、`draft`、`candidates`、`has_more`；唯一未提交草稿为 active，多份须澄清；过期草稿仍保留，最多显示 20 个候选
 - 执行：只读；不能按更新时间猜测多个草稿中的目标
+
+### get_order_draft_history
+- 用途：只读查看当前会话草稿各版本的实际变更、客户 / 备注要求及来源；历史原话不授权本轮操作
+- 参数：`draft_id`、可选 `before_revision`（正整数、排除该版本）、`limit=5`（1–20）
+- 返回：`schema_version=1`、`draft_id`、`latest_revision`、倒序 `items`、`has_more`、`next_before_revision`；每项含版本、创建时间、`task_constraints` 与 `change_record`。旧快照无来源时明确标记未核验，`change_record=null`
+- 错误：`not_found`（含跨会话）、`invalid_argument`；读取不创建或修改版本，不提交订单
+
+客户 / 备注的已核验来源与实际变更同草稿快照提交，数量编辑保留原来源。模型不能在工具参数中提供
+来源材料；应用运行时独立传递校验记录。未识别的创建字段继续标为未核验；已有核验要求的客户或
+备注不能经无新依据的原始 MCP 修改。网页表单明确编辑单独记录为表单来源。
 
 ### revise_order_draft_quantity
 - 用途：按明确草稿当前版本的行号修改数量，保留客户、备注和其他商品；只保存新报价，不建单
