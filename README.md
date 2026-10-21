@@ -4,7 +4,13 @@
 
 **一句话**：运行在 mini-ERP（商品 / 库存 / 订单）上的业务智能体：FastMCP 工具层 + 分级人工审批（HITL）+ 全程评测驱动；前端提供流式对话、工具时间线与审批卡片。
 
-**当前入口（2026-10-19）**：[项目状态](docs/project-status.md) · [作品与可复现源码包](docs/portfolio-overview.md) · [三个案例讲解](docs/interview-cases.md) · [上下文工程实验](docs/context-experiment.md)。当前推进长历史 / 大工具响应对照和求职展示整理；政策问答最新严格结果仍为两模型各 11/13。
+**最新真实验收（2026-10-21 预算专项）**：[GLM 预算完整流程](reports/acceptance/2026-10-21-budget-live-validation.md) **1/1 流程、10/10 受控阶段通过**，16 请求 / 16 usage，估价 CNY 0.015244。覆盖 3000 预算 → 3200 超额停止 → 明确改至 3500 → 恢复审批建单，含备注指令隔离和最终原始预算查询。一次客户名缩写被校验拦截并纠正，未落错误草稿；DeepSeek 继续跳过。
+
+**预算加入前的整单验收**：[独立跨模型批次](reports/acceptance/2026-10-21-cross-model-order-acceptance.md) GLM 3/3、28/28 阶段通过；DeepSeek 上游 502 缺 usage 后按用户决定跳过，共同门槛未达成，旧结果和未知费用保留。
+
+**当前深化（2026-10-21）**：[订单预算与待确认事项](docs/order-budget.md)。预算随版本保存，修改数量 / 刷新报价重新检查；超额展示差额并阻止提交，明确调整后重新核对和审批。[工程验收](reports/acceptance/2026-10-21-order-budget.md)：Python **1206 passed / 21 skipped**、前端 93、浏览器 31、本地正式服务演示 4 项通过；后续 GLM 真实预算专项见上方独立报告。[指定版本确认](docs/draft-confirmation.md)与[草稿来源记录](docs/draft-history.md)继续沿用。
+
+**当前入口（2026-10-19）**：[项目状态](docs/project-status.md) · [求职投递材料](docs/application-kit.md) · [统一作品交付](docs/portfolio-overview.md) · [连续多轮上下文验证](docs/context-workflow.md)。已将快照实验扩展为真实模型 / MCP 连续业务验证，结果与失败独立留证；政策问答最新严格结果仍为两模型各 11/13。
 
 **求职演示入口**：[三分钟本地演示指南](docs/demo-guide.md)。无需模型密钥或 PostgreSQL，使用临时数据库展示草稿修改 → 指定版本审批 → 建单，以及政策证据、无依据拒答和补货建议。脚本化模型与关键词向量仅用于流程演示；真实模型结果见下方独立验收记录。
 
@@ -114,7 +120,7 @@ M1 各周验收入口：第 1–3 周为 `python -m agent_core`（最简演示�
 
 ## 下一阶段规划
 
-当前主线是[长对话与大工具响应上下文实验](docs/context-experiment.md)和[作品整理](docs/portfolio-overview.md)。候选策略仅显式启用，保留完整原始历史，真实用量和本地估算分别报告；本阶段沿用本地演示范围。下述 B1–B6 段落是已实施能力及历史批次入口，最新总状态以[项目状态页](docs/project-status.md)为准。
+当前已补[连续多轮上下文验证](docs/context-workflow.md)和[统一投递材料](docs/application-kit.md)，历史快照实验继续独立保留。候选视图保留用户原话、明确行号，并在受保护消息超过估算预算时停止；仍仅显式启用。真实用量与本地估算分别报告，本阶段沿用本地演示范围。下述 B1–B6 段落是已实施能力及历史批次入口，最新总状态以[项目状态页](docs/project-status.md)为准。
 
 B6 已实现第一版只读补货建议。设置 `ERPILOT_TOOLS=mcp` 后可问「按最近 30 天销量、采购周期 7 天、到货后覆盖 14 天，哪些商品需要补货？」；工具按当前库存和有效订单件数计算目标量、建议量及预计可售天数，网页展示统计窗口、假设和限制。采购周期未知时明确未计入采购等待需求；零销量、下架及异常库存不伪造建议数量。不会采购或调整库存。独立 `--suite b6` 七场景使用固定时点/临时库、全表零变更和原币种预算；2026-10-19 真实验收最终 GLM / DeepSeek 同源码各 7/7，gate 与 strict 通过。下架时明确不建议补货、不推演假设数量，所有分支统一说明未采购、未调整库存；原始失败和措辞敏感失败均保留。见 [B6 设计](docs/superpowers/specs/2026-10-17-replenishment-design.md)、[工程验收](reports/acceptance/2026-10-17-replenishment.md)与[真实验收](reports/acceptance/2026-10-19-live-model-validation.md)。一组通过不代表长期稳定率。B4 指代专项已独立完成最终真实验收，旧未知用量与冻结预算保留。
 
@@ -154,8 +160,7 @@ M6–8 的 LangGraph + PostgreSQL HITL 已实施。基线验收见[2026-10-07 �
 
 - 所有架构决策记录在 `docs/adr/`（0001–0010，含 LangGraph/PostgreSQL HITL 与崩溃恢复范围），范围冻结与启动计划见 [`docs/agent-project-plan.md`](docs/agent-project-plan.md)
 - 评测集：人工标注标准 [`docs/eval-annotation-guide.md`](docs/eval-annotation-guide.md) + 工具卡 [`docs/tool-cards.md`](docs/tool-cards.md) + 错误自愈记录 [`docs/error-recovery-log.md`](docs/error-recovery-log.md)
-- 系列文章发布于个人站点 [Vie](https://vie-vibe.cn)，文稿随仓库维护：
-  1. 《手写 Agent Loop：从一次 API 调用到多步任务》—— [`docs/articles/01-handwritten-agent-loop.md`](docs/articles/01-handwritten-agent-loop.md)
+- 系列“Erpilot 开发实录”见[文章目录](docs/articles/README.md)：首篇已发布于 [Vie](https://vie-vibe.cn/articles/ai/handwritten-agent-loop)，第 2–7 篇文稿已完成、待发布，覆盖 MCP 工具、审批、崩溃恢复、评测、RAG 与多轮上下文。
 - 撰写规则见 [`docs/articles/writing-rules.md`](docs/articles/writing-rules.md)（禁虚构、客观口吻、技术正确性、发布前核对清单）
 
 政策答复现支持本轮证据绑定的结构化选证与程序原文渲染；真实验收可按用例分段续跑，上游中断与模型失败分别留证，未知费用保留。最新完整两模型均严格 **11/13**，质量门槛未达成；实现、费用和剩余失败见[结构化答复与续跑验收](reports/acceptance/2026-10-19-structured-policy-and-resume.md)，操作方式见[运行契约](docs/resumable-grounding-evaluation.md)。

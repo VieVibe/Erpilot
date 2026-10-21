@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "same_scope": true,
+  "reports": [
+    {
+      "report": "reports\\context\\20261021-order-deepseek-01.json",
+      "passed": true,
+      "checks": {
+        "request_coverage": true,
+        "input_uniqueness": true,
+        "input_hashes": true,
+        "tool_pairing": true,
+        "journal_totals": true,
+        "request_1_billing": true,
+        "request_2_billing": true,
+        "known_amount": true,
+        "unknown_amount": true,
+        "unique:('cw-early-requirement', 'current')": true,
+        "turn_sequence:('cw-early-requirement', 'current')": true,
+        "complete:('cw-early-requirement', 'current')": true,
+        "passed:('cw-early-requirement', 'current')": true,
+        "turn_usage:cw-early-requirement:current:turn-1": true,
+        "turn_usage:cw-early-requirement:current:turn-2": true
+      },
+      "requests": 2,
+      "usage_count": 1,
+      "known_spent": "0.000326",
+      "currency": "USD",
+      "unknown_requests": 1,
+      "report_sha256": "cf14303a7fb49fc1b435a31e2bbce3d4d3769e19803705c1ef663ee8a621046a",
+      "rate": {
+        "model": "deepseek-v4.1-flash",
+        "endpoint_host": "flashcoding.ai",
+        "currency": "USD",
+        "input_per_m": "0.045",
+        "output_per_m": "0.18",
+        "cached_input_per_m": "0.024",
+        "price_source": "user-confirmed-2026-10-12"
+      }
+    }
+  ]
+}

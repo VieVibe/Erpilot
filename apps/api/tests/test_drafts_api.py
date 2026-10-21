@@ -198,14 +198,11 @@ async def test_model_forged_foreign_draft_cannot_hydrate_or_submit(tmp_path, erp
     provider = await SessionErpTools.create(erp[0], writes=True, gate=StreamApprovalGate())
     foreign = provider.drafts.prepare("foreign-session", "私有客户", [("A", 10)])
     app, _ = await host(tmp_path, erp, draft=foreign)
-    approval = await pending(app)
-    state = await app.state.service.session_state("s1")
-    assert "draft" not in state["pending_approvals"][0]
-    events = [
-        event async for event in app.state.service.stream_resume("s1", approval.pending_id, True)
-    ]
+    events = [event async for event in app.state.service.stream_run("s1", "提交草稿")]
+    assert not any(isinstance(event, ApprovalPending) for event in events)
     assert events[-1].completed
     state = await app.state.service.session_state("s1")
+    assert state["pending_approvals"] == []
     assert "not_found" in state["tool_results"][0]["content"]
     assert "私有客户" not in json.dumps(state, ensure_ascii=False)
     assert erp[2].count_orders(customer="私有客户") == 0 and erp[2].get_stock("A").quantity == 1000

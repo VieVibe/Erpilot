@@ -37,6 +37,7 @@ def test_prepare_merges_and_prices_without_business_write(store):
     assert draft["total_amount"] == 1080.0 and draft["order_id"] is None
     assert len(draft["items"]) == 2
     assert draft["items"][0] == dict(
+        item_number=1,
         sku="A",
         name="A",
         quantity=10,
@@ -47,6 +48,7 @@ def test_prepare_merges_and_prices_without_business_write(store):
         stock_before=1000,
         stock_after=990,
     )
+    assert draft["item_count"] == 2 and draft["items"][1]["item_number"] == 2
     assert repo.get_stock("A").quantity == 1000
     assert repo.count_orders(customer="客户") == 0
 

@@ -42,6 +42,13 @@ test('草稿修改后断线恢复同版本审批，拒绝后可重新提交批�
   await expect(page.locator('.md').last()).toContainText('第 1 版');
   await chooseAndSend(page, '修改第二行');
   await expect(page.locator('.md').last()).toContainText('3355');
+  const records = page.getByRole('region', { name: '草稿修改记录' });
+  await page.getByRole('button', { name: '查看修改记录', exact: true }).click();
+  await expect(records.getByRole('article', { name: '草稿版本 2 修改记录' })).toContainText('数量：20 → 50');
+  await expect(records.getByRole('article', { name: '草稿版本 1 修改记录' })).toContainText('用户原话');
+  await page.reload();
+  await page.getByRole('button', { name: '查看修改记录', exact: true }).click();
+  await expect(records.getByRole('article', { name: '草稿版本 2 修改记录' })).toContainText('数量：20 → 50');
   await chooseAndSend(page, '提交草稿');
   const input = page.getByRole('textbox', { name: '消息', exact: true });
   const panel = page.getByRole('complementary', { name: '业务面板' });
@@ -55,6 +62,9 @@ test('草稿修改后断线恢复同版本审批，拒绝后可重新提交批�
   await expect(page.locator('.md').last()).toContainText('操作未执行');
   await panel.getByRole('tab', { name: '订单草稿', exact: true }).click();
   await panel.getByRole('button', { name: '请求提交版本 2 并审批', exact: true }).click();
+  const confirmation = page.getByRole('dialog', {name: '核对草稿版本 2'});
+  await expect(confirmation.getByText('总金额 ¥3355.00')).toBeVisible();
+  await confirmation.getByRole('button', {name: '确认此版本并申请审批', exact: true}).click();
   await expect(panel.getByRole('button', { name: '批准', exact: true })).toBeEnabled();
   await panel.getByRole('button', { name: '批准', exact: true }).click();
   await expect(input).toBeEnabled();
@@ -64,4 +74,27 @@ test('草稿修改后断线恢复同版本审批，拒绝后可重新提交批�
   await expect(page.locator('.md').filter({ hasText: '审批已拒绝' })).toHaveCount(1);
   await expect(page.locator('.session-history .history-meta').first()).toContainText('已完成');
   await page.screenshot({ path: '../../.playwright-mcp/demo-order-approved.png', fullPage: true });
+});
+
+test('表单预算超限后明确提高预算，刷新恢复并批准正确版本',async({page})=>{
+  await page.goto('/');
+  const panel=page.getByRole('complementary',{name:'业务面板'});
+  await panel.getByRole('textbox',{name:'草稿客户',exact:true}).fill('预算演示客户');
+  await panel.getByRole('textbox',{name:'第 1 行 SKU',exact:true}).fill('A1001');
+  await panel.getByRole('spinbutton',{name:'第 1 行数量',exact:true}).fill('10');
+  await panel.getByRole('textbox',{name:'预算上限',exact:true}).fill('500');
+  await panel.getByRole('button',{name:'创建草稿',exact:true}).click();
+  await expect(panel.getByText('待确认：报价超出预算',{exact:true})).toBeVisible();
+  await expect(panel.getByRole('button',{name:'请求提交版本 1 并审批',exact:true})).toBeDisabled();
+  await page.reload();
+  await expect(panel.getByRole('textbox',{name:'预算上限',exact:true})).toHaveValue('500');
+  await panel.getByRole('textbox',{name:'预算上限',exact:true}).fill('1000');
+  await panel.getByRole('button',{name:'保存 / 刷新报价',exact:true}).click();
+  await panel.getByRole('button',{name:'请求提交版本 2 并审批',exact:true}).click();
+  const dialog=page.getByRole('dialog',{name:'核对草稿版本 2'});
+  await expect(dialog).toContainText('预算上限：¥1000.00');
+  await dialog.getByRole('button',{name:'确认此版本并申请审批',exact:true}).click();
+  await panel.getByRole('button',{name:'批准',exact:true}).click();
+  await expect(page.locator('.md').last()).toContainText('已创建');
+  await expect(page.locator('.md').last()).toContainText('980.00');
 });

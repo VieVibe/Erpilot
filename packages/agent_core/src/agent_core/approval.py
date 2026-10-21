@@ -137,6 +137,11 @@ def guarded(tool: Tool, gate: ApprovalGate | SuspendingGate) -> Tool:
             retry_safe=tool.retry_safe,
             approved_handler=tool.approved_handler or tool.handler,
             approval_gate=gate,
+            response_contract=tool.response_contract,
+            call_validator=tool.call_validator,
+            validated_handler=tool.validated_handler,
+            terminal_errors=tool.terminal_errors,
+            direct_response=tool.direct_response,
         )
 
     async def handler(args: BaseModel) -> object:
@@ -155,6 +160,11 @@ def guarded(tool: Tool, gate: ApprovalGate | SuspendingGate) -> Tool:
         retry_safe=tool.retry_safe,
         approved_handler=tool.approved_handler or tool.handler,
         approval_gate=gate,
+        response_contract=tool.response_contract,
+        call_validator=tool.call_validator,
+        validated_handler=tool.validated_handler,
+        terminal_errors=tool.terminal_errors,
+        direct_response=tool.direct_response,
     )
 
 

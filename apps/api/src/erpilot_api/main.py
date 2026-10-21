@@ -36,7 +36,7 @@ from sse_starlette.sse import EventSourceResponse
 from starlette.background import BackgroundTask
 
 from erpilot_api.checkpoint import open_checkpointer
-from erpilot_api.draft_routes import register_draft_routes
+from erpilot_api.draft_routes import ConfirmDraftRequest, register_draft_routes
 from erpilot_api.events import encode_event, sse_frame
 from erpilot_api.history_routes import register_history_routes
 from erpilot_api.operation_routes import register_operation_routes
@@ -203,6 +203,16 @@ def create_app(
         session_id = req.session_id or uuid4().hex
         return event_response(session_id, service.stream_run(session_id, req.message))
 
+    @app.post("/api/sessions/{session_id}/order-drafts/{draft_id}/confirm/stream")
+    async def confirm_draft(session_id: str, draft_id: str, req: ConfirmDraftRequest):
+        draft, release = await service.reserve_draft_submission(
+            session_id, draft_id, req.expected_revision,
+        )
+        return event_response(
+            session_id, service.stream_confirmed_draft(session_id, draft), release,
+            execution_mode="confirmed_action",
+        )
+
     @app.post("/api/chat/approve/stream")
     async def resume_approval(req: ResumeRequest) -> EventSourceResponse:
         release = await service.reserve_resume(req.session_id, req.pending_id)
@@ -248,11 +258,14 @@ def create_app(
 
         return EventSourceResponse(replay_and_follow())
 
-    def event_response(session_id, stream, release=None):
+    def event_response(session_id, stream, release=None, *, execution_mode=None):
         heartbeat_interval = float(os.environ.get("ERPILOT_HEARTBEAT_SECONDS", "10") or 10)
 
         async def generate() -> AsyncIterator[dict[str, str]]:
-            yield sse_frame("start", {"session_id": session_id, "model": service.model})
+            start = {"session_id": session_id, "model": service.model}
+            if execution_mode:
+                start["execution_mode"] = execution_mode
+            yield sse_frame("start", start)
             t0 = time.perf_counter()
             queue: asyncio.Queue[Any] = asyncio.Queue()
             stream_end = object()

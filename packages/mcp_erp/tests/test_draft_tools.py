@@ -89,7 +89,7 @@ async def test_task_tools_rebuild_context_and_edit_without_business_write(db):
         assert set(schemas["revise_order_draft_quantity"]["properties"]) == {
             "draft_id", "expected_revision", "item_number", "quantity", "expected_sku"
         }
-        assert "expected_sku" not in schemas["revise_order_draft_quantity"].get("required", [])
+        assert "expected_sku" in schemas["revise_order_draft_quantity"].get("required", [])
         assert (await client.call_tool("get_order_task", {})).data["status"] == "none"
         draft = (await client.call_tool("prepare_order_draft", {
             "customer": "保留客户", "items": [{"sku": "A", "quantity": 2}], "note": "保留备注"
@@ -98,7 +98,8 @@ async def test_task_tools_rebuild_context_and_edit_without_business_write(db):
         state = (await client.call_tool("get_order_task", {})).data
         assert state["status"] == "active" and state["draft"]["draft_id"] == draft["draft_id"]
         arguments = {
-            "draft_id": draft["draft_id"], "expected_revision": 1, "item_number": 1, "quantity": 50
+            "draft_id": draft["draft_id"], "expected_revision": 1, "item_number": 1,
+            "quantity": 50, "expected_sku": "A",
         }
         changed = (await client.call_tool("revise_order_draft_quantity", arguments)).data
         assert changed["customer"] == "保留客户" and changed["note"] == "保留备注"
@@ -158,7 +159,8 @@ async def test_quantity_tool_rejects_coerced_numbers(db, key, value):
             "customer": "客户", "items": [{"sku": "A", "quantity": 2}]
         })).data
         args = {
-            "draft_id": draft["draft_id"], "expected_revision": 1, "item_number": 1, "quantity": 3
+            "draft_id": draft["draft_id"], "expected_revision": 1, "item_number": 1,
+            "quantity": 3, "expected_sku": "A",
         }
         result = await client.call_tool(
             "revise_order_draft_quantity", {**args, key: value}, raise_on_error=False

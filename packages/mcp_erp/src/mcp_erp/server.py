@@ -104,6 +104,7 @@ def create_server(
     policy_resolver: PolicyResolver | None = None,
     session_id: str | None = None,
     replenishment_at: datetime | None = None,
+    draft_evidence: dict | None = None,
 ) -> FastMCP:
     """构建 MCP server 实例（库内集成与独立进程共用）。
 
@@ -524,6 +525,6 @@ def create_server(
             mcp.local_provider.remove_tool("create_order")
             mcp.local_provider.remove_tool("cancel_order")
             mcp.local_provider.remove_tool("adjust_stock")
-        register_draft_tools(mcp, engine, session_id, include_writes)
+        register_draft_tools(mcp, engine, session_id, include_writes, evidence=draft_evidence)
         register_operation_tools(mcp, engine, session_id, include_writes)
     return mcp

@@ -9,6 +9,7 @@ from uuid import uuid4
 
 from agent_core.display import build_display
 from agent_core.graph_helpers import error_payload
+from agent_core.tools import ToolConstraintError
 
 
 def tool_schema_version(tool):
@@ -34,7 +35,9 @@ def call_arguments_fingerprint(tool_name, schema_version, arguments):
     return hashlib.sha256(fingerprint_json.encode("utf-8")).hexdigest()
 
 
-def prepare_tool_calls(calls, tools, *, now=None, approval_ttl_seconds=1800):
+def prepare_tool_calls(
+    calls, tools, *, now=None, approval_ttl_seconds=1800, messages=(), tool_history=(),
+):
     now = now or datetime.now(UTC)
     if now.tzinfo is None or now.utcoffset() is None:
         raise ValueError("approval clock must include a timezone")
@@ -60,6 +63,30 @@ def prepare_tool_calls(calls, tools, *, now=None, approval_ttl_seconds=1800):
                 record["arguments"] = tool.params_model.model_validate_json(
                     call.arguments,
                 ).model_dump(mode="json")
+                if tool.call_validator is not None:
+                    try:
+                        evidence = tool.call_validator(
+                            deepcopy(record["arguments"]),
+                            deepcopy(list(messages)),
+                            deepcopy(list(tool_history)),
+                        )
+                        if not isinstance(evidence, dict):
+                            raise ValueError("call validator must return JSON object evidence")
+                        # Keep callbacks and mutable runtime objects out of checkpoints.
+                        record["argument_evidence"] = json.loads(json.dumps(
+                            evidence, ensure_ascii=False, allow_nan=False,
+                        ))
+                    except Exception as exc:
+                        content = error_payload("argument_constraint", str(exc))
+                        if isinstance(exc, ToolConstraintError):
+                            payload = json.loads(content)
+                            payload["error"]["code"] = exc.code
+                            content = json.dumps(payload, ensure_ascii=False)
+                        record.update(
+                            content=content, ok=False,
+                        )
+                        prepared.append(record)
+                        continue
                 if tool.risk is not None:
                     token = record["arguments"].get("client_token") or uuid4().hex
                     record["client_token"] = token
@@ -100,7 +127,13 @@ async def execute_tool_call(call, tools, config, *, allow_retries=True):
         try:
             # Revalidate a fresh copy; a handler must not mutate checkpointed arguments.
             args = tool.params_model.model_validate(deepcopy(call["arguments"]))
-            result = await asyncio.wait_for(tool.handler(args), config.tool_timeout)
+            if tool.validated_handler is not None:
+                if "argument_evidence" not in call:
+                    raise ValueError("validated execution requires application evidence")
+                execution = tool.validated_handler(args, deepcopy(call["argument_evidence"]))
+            else:
+                execution = tool.handler(args)
+            result = await asyncio.wait_for(execution, config.tool_timeout)
         except TimeoutError:
             kind = "timeout"
             content = error_payload(kind, f"工具执行超时（>{config.tool_timeout}s）")

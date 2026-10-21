@@ -8,6 +8,14 @@ from sqlalchemy import func, inspect, select
 from sqlalchemy.orm import Session
 
 from erp_store.db import OrderDraftRow, ProductRow, StockRow
+from erp_store.draft_audit import snapshot_constraints, with_draft_audit
+from erp_store.draft_budget import (
+    UNSET,
+    budget_check,
+    budget_issues,
+    ensure_budget,
+    normalize_budget,
+)
 from erp_store.models import Order, ProductStatus
 from erp_store.mutations import ErpMutations, MutationError
 from erp_store.pricing import PricingError, price_for_quantity
@@ -105,6 +113,8 @@ class ErpDrafts(ErpMutations):
         return row
 
     def _payload(self, row, *, latest_revision=None):
+        snapshot = json.loads(row.snapshot)
+        change_record = snapshot.pop("change_record", None)
         status = (
             "submitted"
             if row.order_id
@@ -115,7 +125,16 @@ class ErpDrafts(ErpMutations):
             else "open"
         )
         return {
-            **json.loads(row.snapshot),
+            **snapshot,
+            "budget_check": budget_check(snapshot),
+            "pending_issues": budget_issues(snapshot),
+            "item_count": len(snapshot["items"]),
+            "items": [dict(item, item_number=number)
+                      for number, item in enumerate(snapshot["items"], 1)],
+            "last_change": {
+                "revision": row.revision, "operation": change_record["operation"],
+                "change_count": len(change_record["changes"]),
+            } if change_record is not None else None,
             "draft_id": row.draft_id,
             "revision": row.revision,
             "expires_at": row.expires_at,
@@ -128,8 +147,15 @@ class ErpDrafts(ErpMutations):
             ),
         }
 
-    def _save_revision(self, session, session_id, draft_id, revision, snapshot):
+    def _save_revision(
+        self, session, session_id, draft_id, revision, snapshot, *,
+        operation="create", evidence=None, previous=None,
+    ):
         now = self._now()
+        snapshot = with_draft_audit(
+            snapshot, draft_id=draft_id, revision=revision, operation=operation,
+            evidence=evidence, previous=previous,
+        )
         row = OrderDraftRow(
             draft_id=draft_id,
             revision=revision,
@@ -143,12 +169,15 @@ class ErpDrafts(ErpMutations):
         session.flush()
         return self._payload(row)
 
-    def prepare(self, session_id, customer, items, note=None):
+    def prepare(self, session_id, customer, items, note=None, *, evidence=None, budget_limit=None):
         customer, merged = self._normalize(session_id, customer, items, note)
         with self._write_session() as session:
             self._ensure_table(session)
             snapshot = self._snapshot(session, customer, merged, note)
-            result = self._save_revision(session, session_id, uuid4().hex, 1, snapshot)
+            snapshot["budget_limit"] = normalize_budget(budget_limit)
+            result = self._save_revision(
+                session, session_id, uuid4().hex, 1, snapshot, evidence=evidence,
+            )
             session.commit()
             return result
 
@@ -179,7 +208,43 @@ class ErpDrafts(ErpMutations):
             )
             return [self._payload(row) for row in rows]
 
-    def revise(self, session_id, draft_id, expected_revision, customer, items, note=None):
+    def history(self, session_id, draft_id, *, before_revision=None, limit=5):
+        if type(limit) is not int or not 1 <= limit <= 20 or (
+            before_revision is not None
+            and (type(before_revision) is not int or before_revision < 1)
+        ):
+            raise MutationError("invalid_argument", "版本游标或分页大小无效")
+        with Session(self._engine) as session:
+            latest = self._latest(session, session_id, draft_id)
+            query = select(OrderDraftRow).where(
+                OrderDraftRow.draft_id == draft_id, OrderDraftRow.session_id == session_id,
+                OrderDraftRow.revision <= latest.revision,
+            )
+            if before_revision is not None:
+                query = query.where(OrderDraftRow.revision < before_revision)
+            rows = list(session.scalars(
+                query.order_by(OrderDraftRow.revision.desc()).limit(limit + 1)
+            ))
+            items = []
+            for row in rows[:limit]:
+                snapshot = json.loads(row.snapshot)
+                items.append({
+                    "draft_id": row.draft_id, "revision": row.revision,
+                    "created_at": row.created_at,
+                    "task_constraints": snapshot_constraints(snapshot, row.revision),
+                    "change_record": snapshot.get("change_record"),
+                    "budget_constraint": snapshot.get("budget_constraint"),
+                })
+            return {
+                "schema_version": 1, "draft_id": draft_id, "latest_revision": latest.revision,
+                "items": items, "has_more": len(rows) > limit,
+                "next_before_revision": items[-1]["revision"] if len(rows) > limit else None,
+            }
+
+    def revise(
+        self, session_id, draft_id, expected_revision, customer, items, note=None, *, evidence=None,
+        budget_limit=UNSET,
+    ):
         customer, merged = self._normalize(session_id, customer, items, note)
         with self._write_session() as session:
             self._ensure_table(session)
@@ -189,8 +254,12 @@ class ErpDrafts(ErpMutations):
             if latest.revision != expected_revision:
                 raise MutationError("draft_changed", "草稿已有新版本", _REFRESH_HINT)
             snapshot = self._snapshot(session, customer, merged, note)
+            previous = json.loads(latest.snapshot)
+            snapshot["budget_limit"] = (previous.get("budget_limit") if budget_limit is UNSET
+                                        else normalize_budget(budget_limit))
             result = self._save_revision(
-                session, session_id, draft_id, latest.revision + 1, snapshot
+                session, session_id, draft_id, latest.revision + 1, snapshot,
+                operation="revise", evidence=evidence, previous=previous,
             )
             session.commit()
             return result
@@ -226,6 +295,7 @@ class ErpDrafts(ErpMutations):
 
     def revise_quantity(
         self, session_id, draft_id, expected_revision, item_number, quantity, *, expected_sku=None,
+        evidence=None,
     ):
         with self._write_session() as session:
             latest = self._latest(session, session_id, draft_id)
@@ -256,8 +326,10 @@ class ErpDrafts(ErpMutations):
                 session_id, previous["customer"], items, previous["note"]
             )
             snapshot = self._snapshot(session, customer, merged, previous["note"])
+            snapshot["budget_limit"] = previous.get("budget_limit")
             result = self._save_revision(
-                session, session_id, draft_id, latest.revision + 1, snapshot
+                session, session_id, draft_id, latest.revision + 1, snapshot,
+                operation="revise_quantity", evidence=evidence, previous=previous,
             )
             session.commit()
             return result
@@ -284,6 +356,7 @@ class ErpDrafts(ErpMutations):
             if datetime.fromisoformat(latest.expires_at) <= self._now():
                 raise MutationError("draft_expired", "报价草稿已过期", _REFRESH_HINT)
             snapshot = json.loads(latest.snapshot)
+            ensure_budget(snapshot)
             merged = {line["sku"]: line["quantity"] for line in snapshot["items"]}
             for line in snapshot["items"]:
                 product = session.get(ProductRow, line["sku"])

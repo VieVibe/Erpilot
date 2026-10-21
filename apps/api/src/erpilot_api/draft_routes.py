@@ -4,7 +4,7 @@ from erp_store.mutations import MutationError
 from fastapi import FastAPI, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from erpilot_api.service import SessionError
 
@@ -18,9 +18,15 @@ class DraftRequest(BaseModel):
     customer: str = Field(min_length=1, max_length=64)
     items: list[DraftItemRequest] = Field(min_length=1, max_length=100)
     note: str | None = Field(default=None, max_length=255)
+    budget_limit: float | None = Field(default=None, strict=True, gt=0, le=1e12)
 
 
 class ReviseDraftRequest(DraftRequest):
+    expected_revision: int = Field(strict=True, gt=0)
+
+
+class ConfirmDraftRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     expected_revision: int = Field(strict=True, gt=0)
 
 
@@ -39,6 +45,8 @@ def register_draft_routes(app: FastAPI, session_erp_tools):
                 "stock_changed",
                 "draft_submitted",
                 "operation_changed",
+                "constraint_changed",
+                "budget_exceeded",
             }
             else 422
         )
@@ -95,11 +103,23 @@ def register_draft_routes(app: FastAPI, session_erp_tools):
             req.customer,
             [(item.sku, item.quantity) for item in req.items],
             note=req.note,
+            evidence={"contract": "draft-form-1"},
+            budget_limit=req.budget_limit,
         )
 
     @app.get("/api/sessions/{session_id}/order-drafts/{draft_id}")
     def get_draft(session_id: str, draft_id: str, revision: int | None = Query(default=None, gt=0)):
         return drafts_service().get(session_id, draft_id, revision=revision)
+
+    @app.get("/api/sessions/{session_id}/order-drafts/{draft_id}/history")
+    def draft_history(
+        session_id: str, draft_id: str,
+        before_revision: int | None = Query(default=None, gt=0),
+        limit: int = Query(default=5, ge=1, le=20),
+    ):
+        return drafts_service().history(
+            session_id, draft_id, before_revision=before_revision, limit=limit,
+        )
 
     @app.patch("/api/sessions/{session_id}/order-drafts/{draft_id}")
     def revise_draft(session_id: str, draft_id: str, req: ReviseDraftRequest):
@@ -110,4 +130,7 @@ def register_draft_routes(app: FastAPI, session_erp_tools):
             req.customer,
             [(item.sku, item.quantity) for item in req.items],
             note=req.note,
+            evidence={"contract": "draft-form-1"},
+            **({"budget_limit": req.budget_limit}
+               if "budget_limit" in req.model_fields_set else {}),
         )

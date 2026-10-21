@@ -28,6 +28,7 @@ class InvocationState(TypedDict, total=False):
     ok: bool
     display: dict[str, Any] | None
     rendered_response: dict[str, Any]
+    argument_evidence: dict[str, Any]
 
 
 class AgentState(TypedDict):
@@ -42,6 +43,7 @@ class AgentState(TypedDict):
     recovery_required: bool
     response_contract: str | None
     suppressed_drafts: list[dict[str, Any]]
+    direct_action: bool
 
 
 def initial_state(messages: list[dict[str, Any]]) -> AgentState:
@@ -57,4 +59,5 @@ def initial_state(messages: list[dict[str, Any]]) -> AgentState:
         recovery_required=False,
         response_contract=None,
         suppressed_drafts=[],
+        direct_action=False,
     )

@@ -82,6 +82,7 @@ def task_client(*, wrong_item=False, usage=USAGE):
         return call("revise_order_draft_quantity", {
             "draft_id": draft["draft_id"], "expected_revision": draft["revision"],
             "item_number": item, "quantity": 12 if "12" in question else 50,
+            "expected_sku": draft["items"][item - 1]["sku"],
         })
 
     return make_client(handler, max_retries=0), requests

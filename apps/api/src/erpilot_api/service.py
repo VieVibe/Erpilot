@@ -2,6 +2,7 @@
 
 import asyncio
 import copy
+import json
 import os
 import time
 from collections.abc import AsyncIterator, Callable, Sequence
@@ -26,7 +27,7 @@ from agent_core.events import (
     ToolExecuting,
 )
 from agent_core.graph_runtime import LangGraphRuntime
-from agent_core.llm import LLMClient
+from agent_core.llm import LLMClient, ToolCall
 from agent_core.prices import cost_of
 from agent_core.runtime_config import LoopConfig
 from agent_core.tools import Tool
@@ -42,6 +43,19 @@ class SessionError(RuntimeError):
         super().__init__(message)
         self.status, self.code = status, code
         self.hint = hint
+
+
+class _LazyClient:
+    """Checkpoint reads and confirmed actions do not initialize a model client."""
+
+    def __init__(self, factory):
+        self._factory, self._client = factory, None
+
+    async def stream_chat(self, messages, tools=None):
+        if self._client is None:
+            self._client = self._factory()
+        async for event in self._client.stream_chat(messages, tools=tools):
+            yield event
 
 
 class _PresentationLogger:
@@ -238,6 +252,7 @@ class ChatService:
         self._approval_ttl_seconds, self._clock = approval_ttl_seconds, clock
         self._sinks = _sinks_from_env() if trace_sinks is None else list(trace_sinks)
         self._client = None
+        self._runtime_client = _LazyClient(self._load_client)
         self._locks: dict[str, asyncio.Lock] = {}
         self.last_trace: Path | None = None
 
@@ -245,11 +260,14 @@ class ChatService:
     def model(self):
         return self._model
 
-    def _runtime(self, session_id):
+    def _load_client(self):
         if self._client is None:
             self._client = self._client_factory()
+        return self._client
+
+    def _runtime(self, session_id):
         return LangGraphRuntime(
-            self._client,
+            self._runtime_client,
             self._session_tools_factory(session_id) if self._session_tools_factory else self._tools,
             self._loop_config,
             self._checkpointer,
@@ -525,6 +543,60 @@ class ChatService:
                 async for event in events:
                     yield event
 
+    async def reserve_draft_submission(self, session_id, draft_id, expected_revision):
+        lock = self.lock(session_id)
+        if lock.locked():
+            raise SessionError(409, "session_busy", "会话已有活动执行")
+        await lock.acquire()
+        released = False
+
+        def release():
+            nonlocal released
+            if not released:
+                released = True
+                lock.release()
+
+        try:
+            if self._drafts is None:
+                raise SessionError(503, "drafts_disabled", "当前环境未启用订单草稿")
+            tools = (self._session_tools_factory(session_id)
+                     if self._session_tools_factory else self._tools)
+            if not any(t.name == "submit_order_draft" and t.risk and t.direct_response
+                       for t in tools):
+                raise SessionError(403, "writes_disabled", "当前环境未开放订单提交")
+            if type(expected_revision) is not int or expected_revision < 1:
+                raise SessionError(422, "invalid_argument", "确认版本须为正整数")
+            state = await self._runtime(session_id).get_state(thread_id_for_session(session_id))
+            if state.next:
+                raise SessionError(409, "unfinished_run", "请先处理当前待审批或中断的操作")
+            draft = self._drafts.get(session_id, draft_id)
+            if draft["revision"] != expected_revision:
+                raise SessionError(409, "draft_changed", "草稿已有新版本，请重新核对后确认")
+            if draft["status"] != "open":
+                raise SessionError(409, "draft_unavailable", "草稿已过期或已提交，请重新核对")
+            from erp_store.draft_budget import ensure_budget
+
+            ensure_budget(draft)
+            return copy.deepcopy(draft), release
+        except BaseException:
+            release()
+            raise
+
+    async def stream_confirmed_draft(self, session_id, draft):
+        """Called only after reservation; the reviewed immutable revision goes to HITL."""
+        runtime = self._runtime(session_id)
+        previous = await self._history(session_id)
+        message = (f"已核对并确认草稿版本 {draft['revision']}"
+                   f"（总金额 ¥{draft['total_amount']:.2f}），申请人工审批。")
+        messages = [*previous, {"role": "user", "content": message}]
+        call = ToolCall("application-confirmation-" + uuid4().hex, "submit_order_draft",
+                        json.dumps({"draft_id": draft["draft_id"], "revision": draft["revision"]}))
+        async with aclosing(self._record_run(
+            runtime, messages, session_id, message, direct_call=call,
+        )) as events:
+            async for event in events:
+                yield event
+
     async def stream_resume(self, session_id, pending_id, approved, reason="", *, reserved=False):
         release = None if reserved else await self.reserve_resume(session_id, pending_id)
         try:
@@ -588,6 +660,7 @@ class ChatService:
         continuation=False,
         reconciliation_call_id=None,
         reconciliation_retry=True,
+        direct_call=None,
     ):
         if decision:
             stream = runtime.resume(thread, decision)
@@ -597,6 +670,8 @@ class ChatService:
             stream = runtime.retry_reconciliation(
                 thread, reconciliation_call_id, retry=reconciliation_retry
             )
+        elif direct_call is not None:
+            stream = runtime.stream_call(messages, direct_call, thread_id=thread)
         else:
             stream = runtime.stream(messages, thread_id=thread)
         while True:
@@ -636,6 +711,7 @@ class ChatService:
         continuation=False,
         reconciliation_call_id=None,
         reconciliation_retry=True,
+        direct_call=None,
     ):
         thread = thread_id_for_session(session_id)
         self.last_trace = new_trace_path(self._trace_dir, self._model)
@@ -661,6 +737,7 @@ class ChatService:
                 continuation,
                 reconciliation_call_id,
                 reconciliation_retry,
+                direct_call,
             ),
             messages,
         )

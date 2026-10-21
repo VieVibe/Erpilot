@@ -1,0 +1,4 @@
+{"request": 1, "case_id": "cw-early-requirement:current:turn-1", "status": "started", "ts": "2026-10-21T03:29:12.764303+00:00", "billing": null}
+{"request": 1, "case_id": "cw-early-requirement:current:turn-1", "status": "settled", "ts": "2026-10-21T03:29:15.684534+00:00", "billing": {"currency": "USD", "estimated_amount": "0.000326", "pricing_source": "user-confirmed-2026-10-12", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 2, "case_id": "cw-early-requirement:current:turn-2", "status": "started", "ts": "2026-10-21T03:29:15.715882+00:00", "billing": null}
+{"request": 2, "case_id": "cw-early-requirement:current:turn-2", "status": "unknown", "ts": "2026-10-21T03:30:15.739322+00:00", "billing": {"currency": "USD", "estimated_amount": null, "pricing_source": "user-confirmed-2026-10-12", "cache_assumption": "unknown_usage", "complete": false}}

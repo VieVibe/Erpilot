@@ -2,6 +2,7 @@ import asyncio
 import json
 from datetime import UTC, datetime, timedelta
 
+import pytest
 from agent_core.graph_tools import execute_tool_call, prepare_tool_calls
 from agent_core.llm import ToolCall
 from agent_core.runtime_config import LoopConfig, ToolRetryPolicy
@@ -11,6 +12,82 @@ from pydantic import BaseModel
 
 class Params(BaseModel):
     value: int
+
+
+@pytest.mark.parametrize("risk", [None, "confirm"])
+async def test_application_constraint_rejection_skips_execution_and_approval(risk):
+    invoked = []
+
+    async def handler(args):
+        invoked.append(args.value)
+
+    def reject(arguments, messages, history):
+        assert messages[-1] == {"role": "user", "content": "keep 7"}
+        raise ValueError("user required 7")
+
+    tools = {"guarded": Tool("guarded", "guarded", Params, handler,
+                             risk=risk, call_validator=reject)}
+    [call] = prepare_tool_calls(
+        [ToolCall("bad", "guarded", '{"value":8}')], tools,
+        messages=[{"role": "user", "content": "keep 7"}],
+    )
+    result = await execute_tool_call(call, tools, LoopConfig())
+    assert not result["ok"] and not invoked
+    assert json.loads(result["content"])["error"]["type"] == "argument_constraint"
+    assert call["pending_id"] is None and call["client_token"] is None
+
+
+def test_application_constraint_cannot_mutate_arguments_or_conversation():
+    messages = [{"role": "user", "content": "keep 7"}]
+    history = [{"content": "original"}]
+
+    def check(arguments, received_messages, received_history):
+        arguments["value"] = 99
+        received_messages[0]["content"] = "rewritten"
+        received_history.clear()
+        return {"contract": "test", "value": 7}
+
+    tools = {"read": Tool("read", "read", Params, lambda args: None, call_validator=check)}
+    [call] = prepare_tool_calls([ToolCall("a", "read", '{"value":7}')], tools,
+                                messages=messages, tool_history=history)
+    assert call["arguments"] == {"value": 7}
+    assert call["argument_evidence"] == {"contract": "test", "value": 7}
+    assert messages[0]["content"] == "keep 7" and history == [{"content": "original"}]
+
+
+@pytest.mark.parametrize("evidence", [None, [], {"value": float("nan")}, {"value": object()}])
+def test_invalid_constraint_evidence_fails_closed(evidence):
+    tools = {"read": Tool("read", "read", Params, lambda args: None,
+                          call_validator=lambda *args: evidence)}
+    [call] = prepare_tool_calls([ToolCall("a", "read", '{"value":7}')], tools)
+    assert not call["ok"]
+    assert json.loads(call["content"])["error"]["type"] == "argument_constraint"
+
+
+async def test_execution_evidence_is_outside_schema_and_cannot_mutate_checkpoint():
+    invoked = []
+
+    async def handler(args):
+        raise AssertionError("validated calls must use the evidence handler")
+
+    async def checked(args, evidence):
+        invoked.append((args.value, evidence["source"]))
+        evidence["source"] = "mutated"
+        return args.value
+
+    tool = Tool("save", "save", Params, handler, call_validator=lambda *args: {"source": "user"},
+                validated_handler=checked)
+    [call] = prepare_tool_calls([ToolCall("a", "save", '{"value":7}')], {"save": tool})
+    result = await execute_tool_call(call, {"save": tool}, LoopConfig())
+    assert result["ok"] and invoked == [(7, "user")]
+    assert call["argument_evidence"] == {"source": "user"}
+    assert "source" not in json.dumps(tool.openai_schema())
+
+
+def test_execution_evidence_handler_cannot_bypass_approval_wrapper():
+    with pytest.raises(ValueError, match="approval"):
+        Tool("write", "write", Params, lambda args: None, risk="confirm",
+             validated_handler=lambda args, evidence: None)
 
 
 async def test_validation_and_unknown_tools_never_invoke_handler():
