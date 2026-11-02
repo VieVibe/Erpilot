@@ -1,0 +1,316 @@
+{
+  "suite": "intent-semantic-live-1",
+  "label_status": "engineering_expectations",
+  "fixture_sha256": "edd959eace6d900234edd0350de74ed0015d9aa38e2771f9f612d28c19e899bd",
+  "model": "glm-5.3-flash",
+  "endpoint_host": "flashcoding.ai",
+  "currency": "CNY",
+  "limit": "0.05",
+  "max_requests": 6,
+  "source_before": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "84dd3f6a3ffa5285c3a8fa88e7fa5bf92ceb78dfb4bb63245ab532d39934159e"
+  },
+  "cases": [
+    {
+      "id": "basic",
+      "text": "帮客户甲列份采购清单：机械键盘要四个，预算1500元，备注『不要提交😀』。",
+      "expected": {
+        "customer": "客户甲",
+        "note": "不要提交😀",
+        "budget_limit": 1500.0,
+        "items": [
+          [
+            "K1",
+            4
+          ]
+        ]
+      },
+      "actual": null,
+      "preview": null,
+      "passed": false,
+      "requests": 1,
+      "duration_ms": 13976.664
+    },
+    {
+      "id": "multiple",
+      "text": "帮客户乙列份采购清单：机械键盘要三个，光学鼠标要五个，预算2000元。",
+      "expected": {
+        "customer": "客户乙",
+        "note": null,
+        "budget_limit": 2000.0,
+        "items": [
+          [
+            "K1",
+            3
+          ],
+          [
+            "M1",
+            5
+          ]
+        ]
+      },
+      "actual": null,
+      "preview": null,
+      "passed": false,
+      "requests": 1,
+      "duration_ms": 15173.912
+    },
+    {
+      "id": "missing_quantity",
+      "text": "帮客户丙列份采购清单：机械键盘，预算800元。",
+      "expected": {
+        "customer": "客户丙",
+        "note": null,
+        "budget_limit": 800.0,
+        "items": [
+          [
+            "K1",
+            null
+          ]
+        ]
+      },
+      "actual": null,
+      "preview": null,
+      "passed": false,
+      "requests": 1,
+      "duration_ms": 19289.972
+    },
+    {
+      "id": "repeated_quote",
+      "text": "帮客户丁列份采购清单：机械键盘要四个，备注『机械键盘四个仅供核对😀』。",
+      "expected": {
+        "customer": "客户丁",
+        "note": "机械键盘四个仅供核对😀",
+        "budget_limit": null,
+        "items": [
+          [
+            "K1",
+            4
+          ]
+        ]
+      },
+      "actual": null,
+      "preview": null,
+      "passed": false,
+      "requests": 1,
+      "duration_ms": 24657.138
+    },
+    {
+      "id": "ambiguous_catalogue",
+      "text": "帮客户戊列份采购清单：办公椅要两个。",
+      "expected": {
+        "customer": "客户戊",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          [
+            null,
+            2
+          ]
+        ]
+      },
+      "actual": null,
+      "preview": null,
+      "passed": false,
+      "requests": 1,
+      "duration_ms": 11373.013
+    },
+    {
+      "id": "conditional",
+      "text": "如果客户确认，帮客户甲列份采购清单：机械键盘要四个。",
+      "expected": null,
+      "actual": null,
+      "preview": null,
+      "passed": true,
+      "requests": 0,
+      "duration_ms": 3.403
+    },
+    {
+      "id": "existing_draft",
+      "text": "帮我修改已有草稿，把机械键盘改成四个。",
+      "expected": null,
+      "actual": null,
+      "preview": null,
+      "passed": true,
+      "requests": 0,
+      "duration_ms": 3.224
+    }
+  ],
+  "business_unchanged": true,
+  "requests": [
+    {
+      "request": 1,
+      "case_id": null,
+      "status": "settled",
+      "ts": "2026-11-02T06:39:25.095761+00:00",
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": "0.000369",
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "session_id": "basic",
+      "purpose": "intent",
+      "usage": {
+        "prompt_tokens": 961,
+        "completion_tokens": 815,
+        "total_tokens": 1776
+      },
+      "turn_id": "basic",
+      "source_sha256": "c4b9305d7341de57276c631db32a4215affdce53a1ea9717a7c9e7d8bf4462b5"
+    },
+    {
+      "request": 2,
+      "case_id": null,
+      "status": "settled",
+      "ts": "2026-11-02T06:39:40.274926+00:00",
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": "0.000352",
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "session_id": "multiple",
+      "purpose": "intent",
+      "usage": {
+        "prompt_tokens": 957,
+        "completion_tokens": 765,
+        "total_tokens": 1722
+      },
+      "turn_id": "multiple",
+      "source_sha256": "317d640387d69f41cdae782880c52b1c09bf0e349f8b6407d94f9258270a43dd"
+    },
+    {
+      "request": 3,
+      "case_id": null,
+      "status": "settled",
+      "ts": "2026-11-02T06:39:59.560195+00:00",
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": "0.000433",
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "session_id": "missing_quantity",
+      "purpose": "intent",
+      "usage": {
+        "prompt_tokens": 946,
+        "completion_tokens": 1005,
+        "total_tokens": 1951
+      },
+      "turn_id": "missing_quantity",
+      "source_sha256": "68a5ba5b198376fed6b44b2659ce60d37840dc37031b192d5309a3379607b1cc"
+    },
+    {
+      "request": 4,
+      "case_id": null,
+      "status": "settled",
+      "ts": "2026-11-02T06:40:24.217522+00:00",
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": "0.000488",
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "session_id": "repeated_quote",
+      "purpose": "intent",
+      "usage": {
+        "prompt_tokens": 956,
+        "completion_tokens": 1164,
+        "total_tokens": 2120
+      },
+      "turn_id": "repeated_quote",
+      "source_sha256": "c5683e611ff1be776b18fa30d1a2a6ae40baa10d70ecc12b61b643a10f61fa97"
+    },
+    {
+      "request": 5,
+      "case_id": null,
+      "status": "settled",
+      "ts": "2026-11-02T06:40:35.590366+00:00",
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": "0.000218",
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "session_id": "ambiguous_catalogue",
+      "purpose": "intent",
+      "usage": {
+        "prompt_tokens": 946,
+        "completion_tokens": 375,
+        "total_tokens": 1321
+      },
+      "turn_id": "ambiguous_catalogue",
+      "source_sha256": "6be57c6c6d6f2d09cab48cb05a146f503a40323271e7cea3983f67d1b125eaf6"
+    }
+  ],
+  "attempts": [
+    {
+      "status": "rejected",
+      "source_sha256": "c4b9305d7341de57276c631db32a4215affdce53a1ea9717a7c9e7d8bf4462b5",
+      "ts": "2026-11-02T06:39:11.143156+00:00",
+      "rejection_code": "ValueError",
+      "duration_ms": 13959.8492,
+      "semantic_version": "order-create-proposal-1",
+      "prompt_version": "order-create-proposal-prompt-1",
+      "prompt_sha256": "f8d760919af1b53d7f7a6d0625a88238f21df9d741fdfcfe8e52ecb1b116cd0d"
+    },
+    {
+      "status": "rejected",
+      "source_sha256": "317d640387d69f41cdae782880c52b1c09bf0e349f8b6407d94f9258270a43dd",
+      "ts": "2026-11-02T06:39:25.117829+00:00",
+      "rejection_code": "ValueError",
+      "duration_ms": 15159.237,
+      "semantic_version": "order-create-proposal-1",
+      "prompt_version": "order-create-proposal-prompt-1",
+      "prompt_sha256": "f8d760919af1b53d7f7a6d0625a88238f21df9d741fdfcfe8e52ecb1b116cd0d"
+    },
+    {
+      "status": "rejected",
+      "source_sha256": "68a5ba5b198376fed6b44b2659ce60d37840dc37031b192d5309a3379607b1cc",
+      "ts": "2026-11-02T06:39:40.291934+00:00",
+      "rejection_code": "ValueError",
+      "duration_ms": 19274.7965,
+      "semantic_version": "order-create-proposal-1",
+      "prompt_version": "order-create-proposal-prompt-1",
+      "prompt_sha256": "f8d760919af1b53d7f7a6d0625a88238f21df9d741fdfcfe8e52ecb1b116cd0d"
+    },
+    {
+      "status": "rejected",
+      "source_sha256": "c5683e611ff1be776b18fa30d1a2a6ae40baa10d70ecc12b61b643a10f61fa97",
+      "ts": "2026-11-02T06:39:59.582567+00:00",
+      "rejection_code": "ValueError",
+      "duration_ms": 24640.8527,
+      "semantic_version": "order-create-proposal-1",
+      "prompt_version": "order-create-proposal-prompt-1",
+      "prompt_sha256": "f8d760919af1b53d7f7a6d0625a88238f21df9d741fdfcfe8e52ecb1b116cd0d"
+    },
+    {
+      "status": "rejected",
+      "source_sha256": "6be57c6c6d6f2d09cab48cb05a146f503a40323271e7cea3983f67d1b125eaf6",
+      "ts": "2026-11-02T06:40:24.239529+00:00",
+      "rejection_code": "ValueError",
+      "duration_ms": 11358.1934,
+      "semantic_version": "order-create-proposal-1",
+      "prompt_version": "order-create-proposal-prompt-1",
+      "prompt_sha256": "f8d760919af1b53d7f7a6d0625a88238f21df9d741fdfcfe8e52ecb1b116cd0d"
+    }
+  ],
+  "known_spent": "0.001860",
+  "unknown_usage": false,
+  "provider_requests": 5,
+  "source_after": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "84dd3f6a3ffa5285c3a8fa88e7fa5bf92ceb78dfb4bb63245ab532d39934159e"
+  },
+  "source_unchanged": true,
+  "passed": false
+}

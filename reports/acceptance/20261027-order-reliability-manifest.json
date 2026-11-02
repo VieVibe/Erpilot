@@ -1,0 +1,564 @@
+{
+  "version": "order-reliability-1",
+  "scorer": "order-reliability-oracle-1",
+  "cases": {
+    "budget-denial-restore": [
+      {
+        "action": "user",
+        "question": "给整单验收客户甲保存报价草稿：CW871ca8d8 2件，CW5ddfaf33 3件，按此顺序；备注原文「分开发票，周五发货」。只存草稿，不提交。预算上限为45元。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": "prepare_order_draft",
+        "error": null,
+        "budget": 45,
+        "review_codes": null
+      },
+      {
+        "action": "user",
+        "question": "确认客户整单验收客户甲的当前草稿报价，请提交当前版本等待人工审批，不提交其他客户草稿。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": "submit_order_draft",
+        "error": "budget_exceeded",
+        "budget": 45,
+        "review_codes": [
+          "budget_exceeded"
+        ]
+      },
+      {
+        "action": "user",
+        "question": "预算改为75元；客户、商品、数量、顺序和备注不变，只保存新版本。",
+        "revision": 2,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": "revise_order_draft",
+        "error": null,
+        "budget": 75,
+        "review_codes": null
+      },
+      {
+        "action": "user",
+        "question": "确认客户整单验收客户甲的当前草稿报价，请提交当前版本等待人工审批，不提交其他客户草稿。",
+        "revision": 2,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": "submit_order_draft",
+        "error": null,
+        "budget": 75,
+        "review_codes": []
+      },
+      {
+        "action": "restore",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": null,
+        "error": null,
+        "budget": 75,
+        "review_codes": null
+      },
+      {
+        "action": "deny",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": null,
+        "error": null,
+        "budget": 75,
+        "review_codes": null
+      },
+      {
+        "action": "user",
+        "question": "确认客户整单验收客户甲的当前草稿报价，请提交当前版本等待人工审批，不提交其他客户草稿。",
+        "revision": 2,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": "submit_order_draft",
+        "error": null,
+        "budget": 75,
+        "review_codes": null
+      },
+      {
+        "action": "approve",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null,
+        "budget": 75,
+        "review_codes": null
+      },
+      {
+        "action": "verify",
+        "question": "只读查询草稿 {draft_id} 的当前结果，即使已提交也查询这个ID，不修改、不提交。最终只输出JSON对象：customer、note、revision、item_count、first_quantity、second_quantity、total_amount、status、order_id。数量、版本、行数、金额为数字。",
+        "revision": 2,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null,
+        "budget": 75,
+        "review_codes": null
+      }
+    ],
+    "price-change-review": [
+      {
+        "action": "user",
+        "question": "给整单验收客户甲保存报价草稿：CW871ca8d8 2件，CW5ddfaf33 3件，按此顺序；备注原文「分开发票，周五发货」。只存草稿，不提交。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": "prepare_order_draft",
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "user",
+        "question": "确认客户整单验收客户甲的当前草稿报价，请提交当前版本等待人工审批，不提交其他客户草稿。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": "submit_order_draft",
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "external_price",
+        "question": "",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": null,
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "approve",
+        "question": "",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": null,
+        "error": "quote_changed",
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "user",
+        "question": "只读查询当前草稿，说明待确认事项和下一步，不修改、不提交。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": null,
+        "error": null,
+        "budget": null,
+        "review_codes": [
+          "quote_changed"
+        ]
+      },
+      {
+        "action": "user",
+        "question": "刷新客户整单验收客户甲当前草稿的报价，客户、商品顺序、数量和备注不变。只刷新，不提交，等我重新确认。",
+        "revision": 2,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": "revise_order_draft",
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "user",
+        "question": "确认客户整单验收客户甲的当前草稿报价，请提交当前版本等待人工审批，不提交其他客户草稿。",
+        "revision": 2,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": "submit_order_draft",
+        "error": null,
+        "budget": null,
+        "review_codes": []
+      },
+      {
+        "action": "approve",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "verify",
+        "question": "只读查询草稿 {draft_id} 的当前结果，即使已提交也查询这个ID，不修改、不提交。最终只输出JSON对象：customer、note、revision、item_count、first_quantity、second_quantity、total_amount、status、order_id。数量、版本、行数、金额为数字。",
+        "revision": 2,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      }
+    ],
+    "ambiguity-and-selection": [
+      {
+        "action": "user",
+        "question": "给整单验收客户甲保存报价草稿：CW871ca8d8 2件，CW5ddfaf33 3件，按此顺序；备注原文「分开发票，周五发货」。只存草稿，不提交。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": "prepare_order_draft",
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "user",
+        "question": "给整单验收客户乙保存报价草稿：CW871ca8d8 2件，CW5ddfaf33 3件；备注原文「分开发票，周五发货」。只存草稿。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": true,
+        "ordered": false,
+        "pending": false,
+        "mutation": "prepare_order_draft",
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "user",
+        "question": "把第二行改成5件，先不要提交。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": true,
+        "ordered": false,
+        "pending": false,
+        "mutation": null,
+        "error": null,
+        "budget": null,
+        "review_codes": [
+          "draft_selection_required"
+        ]
+      },
+      {
+        "action": "user",
+        "question": "只修改客户整单验收客户甲的当前版本第二行改成5件，其他不变。",
+        "revision": 2,
+        "quantities": [
+          2,
+          5
+        ],
+        "other": true,
+        "ordered": false,
+        "pending": false,
+        "mutation": "revise_order_draft_quantity",
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "user",
+        "question": "确认客户整单验收客户甲的当前草稿报价，请提交当前版本等待人工审批，不提交其他客户草稿。",
+        "revision": 2,
+        "quantities": [
+          2,
+          5
+        ],
+        "other": true,
+        "ordered": false,
+        "pending": true,
+        "mutation": "submit_order_draft",
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "approve",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          2,
+          5
+        ],
+        "other": true,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "verify",
+        "question": "只读查询草稿 {draft_id} 的当前结果，即使已提交也查询这个ID，不修改、不提交。最终只输出JSON对象：customer、note、revision、item_count、first_quantity、second_quantity、total_amount、status、order_id。数量、版本、行数、金额为数字。",
+        "revision": 2,
+        "quantities": [
+          2,
+          5
+        ],
+        "other": true,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      }
+    ],
+    "version-change-and-replay": [
+      {
+        "action": "user",
+        "question": "给整单验收客户甲保存报价草稿：CW871ca8d8 2件，CW5ddfaf33 3件，按此顺序；备注原文「分开发票，周五发货」。只存草稿，不提交。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": "prepare_order_draft",
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "user",
+        "question": "确认客户整单验收客户甲的当前草稿报价，请提交当前版本等待人工审批，不提交其他客户草稿。",
+        "revision": 1,
+        "quantities": [
+          2,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": "submit_order_draft",
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "external_revision",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": null,
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "approve",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": false,
+        "mutation": null,
+        "error": "draft_changed",
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "user",
+        "question": "确认客户整单验收客户甲的当前草稿报价，请提交当前版本等待人工审批，不提交其他客户草稿。",
+        "revision": 2,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": "submit_order_draft",
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "restore",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": false,
+        "pending": true,
+        "mutation": null,
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "approve",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "repeat_decision",
+        "question": "",
+        "revision": 2,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      },
+      {
+        "action": "verify",
+        "question": "只读查询草稿 {draft_id} 的当前结果，即使已提交也查询这个ID，不修改、不提交。最终只输出JSON对象：customer、note、revision、item_count、first_quantity、second_quantity、total_amount、status、order_id。数量、版本、行数、金额为数字。",
+        "revision": 2,
+        "quantities": [
+          5,
+          3
+        ],
+        "other": false,
+        "ordered": true,
+        "pending": false,
+        "mutation": null,
+        "error": null,
+        "budget": null,
+        "review_codes": null
+      }
+    ]
+  }
+}

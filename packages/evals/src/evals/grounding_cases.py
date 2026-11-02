@@ -257,6 +257,24 @@ STRUCTURED_GROUNDING_CASES_V3 = [
 ]
 
 
+class StructuredGroundingCaseV4(StructuredGroundingCaseV3):
+    scorer_version: ClassVar[str] = "rag-grounding-structured-4"
+
+
+# Same thirteen questions, fixtures, substantive scopes and support/gap gold.
+# Only a blocked search ends in the trusted program instead of a model tool call.
+STRUCTURED_GROUNDING_CASES_V4 = [
+    StructuredGroundingCaseV4.model_validate({
+        **case.model_dump(),
+        **({"expect_tools_all": ["search_policy"], "tools_in_order": False,
+            "expect_successful_tools": [name for name in case.expect_successful_tools
+                                        if name != "compose_policy_answer"]}
+           if case.answer_kind == "blocked" else {}),
+    })
+    for case in STRUCTURED_GROUNDING_CASES_V3
+]
+
+
 def unsupported_warranty_claim(text: str) -> bool:
     """Known numerical assertion check; polarity-aware, not general entailment.
 
@@ -356,6 +374,22 @@ def check_grounding_result(
 
 def _check_structured_answer(case, result):
     from mcp_erp.policy_answer import render_policy_answer
+
+    if isinstance(case, StructuredGroundingCaseV4) and case.answer_kind == "blocked":
+        from mcp_erp.policy_answer import blocked_policy_answer
+
+        history = [{"name": t.name, "arguments": t.arguments, "ok": t.ok,
+                    "content": json.dumps(t.content, ensure_ascii=False)}
+                   for t in result.tool_results]
+        expected = blocked_policy_answer(history, [{"role": "user", "content": case.question}])
+        if expected is None or expected["policy_state"] != case.expected_policy_state:
+            return ["structured_invalid_program_abstention"]
+        failed = []
+        if result.visible_text != expected["text"] or expected["references"]:
+            failed.append("structured_noncanonical_output")
+        if result.steps != 1 or any(t.name == "compose_policy_answer" for t in result.tool_results):
+            failed.append("structured_blocked_search_not_terminal")
+        return failed
 
     answers = [t for t in result.tool_results if t.name == "compose_policy_answer" and t.succeeded]
     if len(answers) != 1:

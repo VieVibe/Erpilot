@@ -1,0 +1,473 @@
+{
+  "suite": "intent-semantic-scripted-api-1",
+  "label_status": "engineering_expectations_pending_human_review",
+  "provider_requests": 0,
+  "source_before": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "1906dd77b0ef8c0fef66a53f83da3698ba0507c738071736aa2b2db8b8d0444c"
+  },
+  "cases": {
+    "create": {
+      "passed": true,
+      "preview": {
+        "schema_version": 1,
+        "pending_id": "02a2110f864d4feca0c9024162cba05d",
+        "state_version": 1,
+        "expires_at": "2026-11-02T02:16:45.880855+00:00",
+        "status": "pending",
+        "can_confirm": true,
+        "clarification_attempts": 0,
+        "customer": "客户甲",
+        "note": "不要提交😀",
+        "budget_limit": 1500.0,
+        "items": [
+          {
+            "item_number": 1,
+            "product_query": "机械键盘",
+            "sku": "K1",
+            "name": "机械键盘",
+            "quantity": 4,
+            "candidates": []
+          }
+        ],
+        "message": "以下是待核对的候选字段。请对照完整原话检查全部要求，补齐或修改后按此完整清单保存草稿。",
+        "origin": "semantic_proposal",
+        "source_text": "帮客户甲列份采购清单：机械键盘要四个，预算1500元，备注『不要提交😀』。",
+        "unmapped_text": "帮    份采购清单：    要  ，预算     ，备注『     』。"
+      },
+      "confirmation_statuses": [
+        201,
+        409
+      ],
+      "saved": {
+        "customer": "完整表单客户",
+        "note": "表单核对后的备注",
+        "items": [
+          {
+            "sku": "K1",
+            "name": "机械键盘",
+            "quantity": 5,
+            "base_price": 200.0,
+            "discount": 1.0,
+            "unit_price": 200.0,
+            "line_total": 1000.0,
+            "stock_before": 1000,
+            "stock_after": 995,
+            "item_number": 1
+          }
+        ],
+        "total_amount": 1000.0,
+        "budget_limit": 1600.0,
+        "budget_constraint": {
+          "currency": "CNY",
+          "limit": 1600.0,
+          "origin": {
+            "kind": "manual_form",
+            "value": 1600.0,
+            "revision": 1
+          }
+        },
+        "item_constraint": {
+          "value": [
+            {
+              "sku": "K1",
+              "quantity": 5
+            }
+          ],
+          "verified": true,
+          "origin": {
+            "kind": "manual_form",
+            "revision": 1
+          }
+        },
+        "task_constraints": {
+          "schema_version": 1,
+          "fields": {
+            "customer": {
+              "value": "完整表单客户",
+              "verified": true,
+              "origin": {
+                "kind": "manual_form",
+                "value": "完整表单客户",
+                "revision": 1
+              }
+            },
+            "note": {
+              "value": "表单核对后的备注",
+              "verified": true,
+              "origin": {
+                "kind": "manual_form",
+                "value": "表单核对后的备注",
+                "revision": 1
+              }
+            }
+          },
+          "unverified_fields": []
+        },
+        "budget_check": {
+          "currency": "CNY",
+          "limit": 1600.0,
+          "total_amount": 1000.0,
+          "over_amount": 0.0,
+          "status": "within_budget"
+        },
+        "pending_issues": [],
+        "submission_check": {
+          "schema_version": 1,
+          "revision": 1,
+          "latest_revision": 1,
+          "checked_at": "2026-11-02T02:06:46.031855+00:00",
+          "can_submit": true
+        },
+        "item_count": 1,
+        "last_change": {
+          "revision": 1,
+          "operation": "create",
+          "change_count": 5
+        },
+        "draft_id": "373e4efa215b42b0b78b140014820588",
+        "revision": 1,
+        "expires_at": "2026-11-02T02:36:46.026854+00:00",
+        "status": "open",
+        "order_id": null,
+        "inventory_effect": "projection",
+        "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+      },
+      "history": {
+        "schema_version": 1,
+        "draft_id": "373e4efa215b42b0b78b140014820588",
+        "latest_revision": 1,
+        "items": [
+          {
+            "draft_id": "373e4efa215b42b0b78b140014820588",
+            "revision": 1,
+            "created_at": "2026-11-02T02:06:46.026854+00:00",
+            "task_constraints": {
+              "schema_version": 1,
+              "fields": {
+                "customer": {
+                  "value": "完整表单客户",
+                  "verified": true,
+                  "origin": {
+                    "kind": "manual_form",
+                    "value": "完整表单客户",
+                    "revision": 1
+                  }
+                },
+                "note": {
+                  "value": "表单核对后的备注",
+                  "verified": true,
+                  "origin": {
+                    "kind": "manual_form",
+                    "value": "表单核对后的备注",
+                    "revision": 1
+                  }
+                }
+              },
+              "unverified_fields": []
+            },
+            "change_record": {
+              "schema_version": 1,
+              "revision": 1,
+              "previous_revision": null,
+              "operation": "create",
+              "source": {
+                "kind": "manual_form",
+                "intent_preview": {
+                  "pending_id": "02a2110f864d4feca0c9024162cba05d",
+                  "state_version": 1,
+                  "messages": [
+                    {
+                      "message_id": "a63d13220e49b8685f743a830fe8975a1775c6b5b5211ba9dbe1e68b24c868d0",
+                      "text": "帮客户甲列份采购清单：机械键盘要四个，预算1500元，备注『不要提交😀』。",
+                      "sha256": "c4b9305d7341de57276c631db32a4215affdce53a1ea9717a7c9e7d8bf4462b5"
+                    }
+                  ],
+                  "semantic_proposal": {
+                    "schema_version": 1,
+                    "operation": "create",
+                    "action": {
+                      "message_id": "a63d13220e49b8685f743a830fe8975a1775c6b5b5211ba9dbe1e68b24c868d0",
+                      "start": 4,
+                      "end": 5,
+                      "quote": "列"
+                    },
+                    "customer": {
+                      "value": "客户甲",
+                      "evidence": {
+                        "message_id": "a63d13220e49b8685f743a830fe8975a1775c6b5b5211ba9dbe1e68b24c868d0",
+                        "start": 1,
+                        "end": 4,
+                        "quote": "客户甲"
+                      }
+                    },
+                    "note": {
+                      "value": "不要提交😀",
+                      "evidence": {
+                        "message_id": "a63d13220e49b8685f743a830fe8975a1775c6b5b5211ba9dbe1e68b24c868d0",
+                        "start": 30,
+                        "end": 35,
+                        "quote": "不要提交😀"
+                      }
+                    },
+                    "budget_limit": {
+                      "value": "1500",
+                      "evidence": {
+                        "message_id": "a63d13220e49b8685f743a830fe8975a1775c6b5b5211ba9dbe1e68b24c868d0",
+                        "start": 21,
+                        "end": 26,
+                        "quote": "1500元"
+                      }
+                    },
+                    "items": [
+                      {
+                        "product": {
+                          "value": "机械键盘",
+                          "evidence": {
+                            "message_id": "a63d13220e49b8685f743a830fe8975a1775c6b5b5211ba9dbe1e68b24c868d0",
+                            "start": 11,
+                            "end": 15,
+                            "quote": "机械键盘"
+                          }
+                        },
+                        "quantity": {
+                          "value": 4,
+                          "evidence": {
+                            "message_id": "a63d13220e49b8685f743a830fe8975a1775c6b5b5211ba9dbe1e68b24c868d0",
+                            "start": 16,
+                            "end": 18,
+                            "quote": "四个"
+                          }
+                        }
+                      }
+                    ],
+                    "unresolved": []
+                  },
+                  "verification": "explicit_form",
+                  "semantic_version": "order-create-proposal-1"
+                }
+              },
+              "confirmed_fields": [
+                "customer",
+                "note",
+                "budget_limit"
+              ],
+              "changes": [
+                {
+                  "field": "customer",
+                  "before": null,
+                  "after": "完整表单客户"
+                },
+                {
+                  "field": "note",
+                  "before": null,
+                  "after": "表单核对后的备注"
+                },
+                {
+                  "field": "total_amount",
+                  "before": null,
+                  "after": 1000.0
+                },
+                {
+                  "field": "budget_limit",
+                  "before": null,
+                  "after": 1600.0
+                },
+                {
+                  "field": "item",
+                  "sku": "K1",
+                  "before": null,
+                  "after": {
+                    "sku": "K1",
+                    "name": "机械键盘",
+                    "quantity": 5,
+                    "base_price": 200.0,
+                    "discount": 1.0,
+                    "unit_price": 200.0,
+                    "line_total": 1000.0,
+                    "stock_before": 1000,
+                    "stock_after": 995
+                  }
+                }
+              ]
+            },
+            "budget_constraint": {
+              "currency": "CNY",
+              "limit": 1600.0,
+              "origin": {
+                "kind": "manual_form",
+                "value": 1600.0,
+                "revision": 1
+              }
+            },
+            "item_constraint": {
+              "value": [
+                {
+                  "sku": "K1",
+                  "quantity": 5
+                }
+              ],
+              "verified": true,
+              "origin": {
+                "kind": "manual_form",
+                "revision": 1
+              }
+            }
+          }
+        ],
+        "has_more": false,
+        "next_before_revision": null
+      },
+      "requests": [
+        {
+          "request": 1,
+          "case_id": null,
+          "status": "settled",
+          "ts": "2026-11-02T02:06:45.867854+00:00",
+          "billing": {
+            "currency": "USD",
+            "estimated_amount": "0.000017",
+            "pricing_source": "offline-fixture",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          },
+          "session_id": "s",
+          "purpose": "intent",
+          "usage": {
+            "prompt_tokens": 11,
+            "completion_tokens": 3,
+            "total_tokens": 14
+          },
+          "turn_id": "a63d13220e49b8685f743a830fe8975a1775c6b5b5211ba9dbe1e68b24c868d0",
+          "source_sha256": "c4b9305d7341de57276c631db32a4215affdce53a1ea9717a7c9e7d8bf4462b5"
+        }
+      ],
+      "model_calls": 1,
+      "stocks": [
+        {
+          "sku": "K1",
+          "quantity": 1000,
+          "warehouse": "主仓"
+        }
+      ],
+      "orders": []
+    },
+    "combined_budget": {
+      "passed": true,
+      "requests": [
+        {
+          "request": 1,
+          "case_id": null,
+          "status": "settled",
+          "ts": "2026-11-02T02:06:46.333420+00:00",
+          "billing": {
+            "currency": "USD",
+            "estimated_amount": "0.000017",
+            "pricing_source": "offline-fixture",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          },
+          "session_id": "s",
+          "purpose": "intent",
+          "usage": {
+            "prompt_tokens": 11,
+            "completion_tokens": 3,
+            "total_tokens": 14
+          },
+          "turn_id": "a63d13220e49b8685f743a830fe8975a1775c6b5b5211ba9dbe1e68b24c868d0",
+          "source_sha256": "c4b9305d7341de57276c631db32a4215affdce53a1ea9717a7c9e7d8bf4462b5"
+        },
+        {
+          "request": 2,
+          "case_id": null,
+          "status": "settled",
+          "ts": "2026-11-02T02:06:46.472299+00:00",
+          "billing": {
+            "currency": "USD",
+            "estimated_amount": "0.000017",
+            "pricing_source": "offline-fixture",
+            "cache_assumption": "uncached_upper_bound",
+            "complete": true
+          },
+          "session_id": "s",
+          "purpose": "business",
+          "usage": {
+            "prompt_tokens": 11,
+            "completion_tokens": 3,
+            "total_tokens": 14
+          },
+          "turn_id": "40181016dadc9e0606904a282eaa3b2d118271889b86177cfd3f016971cce619",
+          "source_sha256": "670d9743542cae3ea7ebe36af56bd53648b0a1126162e78d81a32934a711302e"
+        }
+      ],
+      "model_calls": 2,
+      "known_spent": "0.000034",
+      "currency": "USD"
+    },
+    "unknown_usage_restore": {
+      "passed": true,
+      "requests": [
+        {
+          "request": 1,
+          "case_id": null,
+          "status": "settled",
+          "ts": "2026-11-02T02:06:46.775848+00:00",
+          "billing": {
+            "currency": "USD",
+            "estimated_amount": null,
+            "pricing_source": "offline-fixture",
+            "cache_assumption": "unknown_usage",
+            "complete": false
+          },
+          "session_id": "s",
+          "purpose": "intent",
+          "usage": null,
+          "turn_id": "a63d13220e49b8685f743a830fe8975a1775c6b5b5211ba9dbe1e68b24c868d0",
+          "source_sha256": "c4b9305d7341de57276c631db32a4215affdce53a1ea9717a7c9e7d8bf4462b5"
+        }
+      ],
+      "model_calls": 1,
+      "restored_model_calls": 0,
+      "unknown_usage_preserved": true
+    }
+  },
+  "event_files": [
+    {
+      "file": "reports/acceptance/20261102-intent-semantic-events/20261102-100646-3469c632.intent.jsonl",
+      "sha256": "ea4200bb0a461c545db07d998f8849f886efa8191afca1b67f89bf73508fb9de",
+      "events": 4
+    },
+    {
+      "file": "reports/acceptance/20261102-intent-semantic-events/20261102-100646-d68d55bc.intent.jsonl",
+      "sha256": "f3adaf600fe3b16d75824721d44b1bea651aaa3fe3c58be311bba88edbf01f83",
+      "events": 7
+    },
+    {
+      "file": "reports/acceptance/20261102-intent-semantic-events/20261102-100646-fc0f1de1.intent.jsonl",
+      "sha256": "f33dfa942463607c2f07f844926028c4a85ea8180cd4719cb72c2940bd3f6452",
+      "events": 13
+    },
+    {
+      "file": "reports/acceptance/20261102-intent-semantic-events/20261102-100645-941c0202.intent.jsonl",
+      "sha256": "a4a7887b68433d1f5ce2abe3a18c057e6122de15aacb3736d0d6c336baeaea29",
+      "events": 13
+    },
+    {
+      "file": "reports/acceptance/20261102-intent-semantic-events/20261102-100646-9436f1e4.intent.jsonl",
+      "sha256": "ae0bc6787d5e4811307a2b3c6f33c70cfba8a2b38c77586fd4c4b0897ae360fb",
+      "events": 4
+    },
+    {
+      "file": "reports/acceptance/20261102-intent-semantic-events/20261102-100646-fd9401ad.intent.jsonl",
+      "sha256": "97583c7894346712105f3be0fc754070ec7386d8a5a751aec9b2c51a07f6228e",
+      "events": 13
+    }
+  ],
+  "source_after": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "1906dd77b0ef8c0fef66a53f83da3698ba0507c738071736aa2b2db8b8d0444c"
+  },
+  "source_unchanged": true
+}

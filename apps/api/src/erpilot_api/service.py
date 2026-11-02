@@ -58,6 +58,18 @@ class _LazyClient:
             yield event
 
 
+class _SemanticSessionClient:
+    def __init__(self, coordinator, session_id):
+        self.coordinator, self.session_id = coordinator, session_id
+
+    async def stream_chat(self, messages, tools=None):
+        async with aclosing(self.coordinator.business_stream(
+            self.session_id, messages, tools,
+        )) as events:
+            async for event in events:
+                yield event
+
+
 class _PresentationLogger:
     """展示事件落库（设计 5.3）：UI 投影，不参与执行决策。
 
@@ -235,6 +247,9 @@ class ChatService:
         session_reconciler_factory=None,
         drafts=None,
         operations=None,
+        intent_store=None,
+        intent_recovery=None,
+        intent_diagnostics=None,
         trace_sinks: Sequence[TraceSink] | None = None,
     ):
         self._client_factory = client_factory
@@ -249,6 +264,10 @@ class ChatService:
         self._session_reconciler_factory = session_reconciler_factory
         self._drafts = drafts
         self._operations = operations
+        self._intent_store = intent_store
+        self._intent_recovery = intent_recovery
+        self._intent_diagnostics = intent_diagnostics
+        self._intent_semantic = None
         self._approval_ttl_seconds, self._clock = approval_ttl_seconds, clock
         self._sinks = _sinks_from_env() if trace_sinks is None else list(trace_sinks)
         self._client = None
@@ -267,7 +286,8 @@ class ChatService:
 
     def _runtime(self, session_id):
         return LangGraphRuntime(
-            self._runtime_client,
+            (_SemanticSessionClient(self._intent_semantic, session_id)
+             if self._intent_semantic is not None else self._runtime_client),
             self._session_tools_factory(session_id) if self._session_tools_factory else self._tools,
             self._loop_config,
             self._checkpointer,
@@ -370,6 +390,12 @@ class ChatService:
             }
         if self._drafts is not None:
             state["order_task"] = self._drafts.task_state(session_id)
+        if self._intent_store is not None:
+            state["pending_intent"] = self._intent_store.view(session_id)
+        if self._intent_recovery is not None and not state.get("pending_intent"):
+            recovery = self._intent_recovery.view(session_id)
+            if recovery is not None:
+                state["pending_intent"] = recovery
         presentation = self._presentation(session_id)
         if presentation is not None:
             state["presentation"] = presentation
@@ -403,6 +429,10 @@ class ChatService:
                 "若业务数据已变化或预览过期，说明原因并重新预览，重新取得用户确认和审批；"
                 "不得静默更换已批准的操作引用。"
             )
+        if self._intent_store is not None:
+            from mcp_erp.intent_analysis import INTENT_GUIDANCE
+
+            prompt += "\n" + INTENT_GUIDANCE
         return prompt
 
     def _presentation(self, session_id):
@@ -531,6 +561,8 @@ class ChatService:
             snapshot = await runtime.get_state(thread)
             if snapshot.next:
                 raise SessionError(409, "unfinished_run", "会话尚未完成，请先处理待审批操作")
+            if self._intent_store is not None:
+                self._intent_store.abandon_unrelated(session_id, message)
             previous = await self._history(session_id)
             # New turns use current workflow rules, including older persisted sessions.
             rules = {"role": "system", "content": self._system_prompt()}
@@ -574,9 +606,7 @@ class ChatService:
                 raise SessionError(409, "draft_changed", "草稿已有新版本，请重新核对后确认")
             if draft["status"] != "open":
                 raise SessionError(409, "draft_unavailable", "草稿已过期或已提交，请重新核对")
-            from erp_store.draft_budget import ensure_budget
-
-            ensure_budget(draft)
+            draft = self._drafts.check_submission(session_id, draft_id, expected_revision)
             return copy.deepcopy(draft), release
         except BaseException:
             release()
@@ -587,7 +617,8 @@ class ChatService:
         runtime = self._runtime(session_id)
         previous = await self._history(session_id)
         message = (f"已核对并确认草稿版本 {draft['revision']}"
-                   f"（总金额 ¥{draft['total_amount']:.2f}），申请人工审批。")
+                   f"（总金额 ¥{draft['total_amount']:.2f}），申请人工审批。"
+                   f"草稿标识：{draft['draft_id']}")
         messages = [*previous, {"role": "user", "content": message}]
         call = ToolCall("application-confirmation-" + uuid4().hex, "submit_order_draft",
                         json.dumps({"draft_id": draft["draft_id"], "revision": draft["revision"]}))
@@ -751,9 +782,19 @@ class ChatService:
             plogger.log_user_message(message, sum(m["role"] == "user" for m in messages) - 1)
         elif plogger is not None:
             plogger.log_resume()
+        diagnostic = None
+        if self._intent_diagnostics is not None:
+            diagnostic = self._intent_diagnostics.begin(
+                session_id, messages, self.last_trace.with_suffix(".intent.jsonl"),
+                kind="user_turn" if message is not None else "execution_continuation",
+                model=self._model, run_id=run_id,
+            )
+        diagnostic_error = None
         try:
             async with aclosing(stream) as events:
                 async for event in events:
+                    if diagnostic is not None:
+                        diagnostic.observe(event)
                     if plogger is not None:
                         plogger.log(event)
                     if isinstance(event, (ApprovalPending, ReconciliationPending)) and run_id:
@@ -778,11 +819,14 @@ class ChatService:
                         finished = True
                     yield event
         except BaseException as exc:
+            diagnostic_error = exc
             # 连接关闭不是运行终结；仅记录执行错误，恢复段会重新打开投影。
             if plogger is not None and not isinstance(exc, (asyncio.CancelledError, GeneratorExit)):
                 plogger.log_error(f"{type(exc).__name__}: {exc}")
             raise
         finally:
+            if self._intent_diagnostics is not None:
+                self._intent_diagnostics.finish(session_id, diagnostic, error=diagnostic_error)
             if plogger is not None:
                 plogger.flush()
             if run_id and not finished:

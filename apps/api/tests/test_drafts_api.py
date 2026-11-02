@@ -90,9 +90,11 @@ async def test_http_crud_versions_validation_and_session_isolation(tmp_path, erp
         assert stale.status_code == 409 and stale.json()["error"]["code"] == "draft_changed"
         assert (await client.get(route.replace("/s1/", "/s2/"))).status_code == 404
         assert (await client.get("/api/sessions/s2/order-drafts")).json() == {"items": []}
-        assert (await client.get("/api/sessions/s1/order-drafts")).json()["items"] == [
-            revised.json()
-        ]
+        listed = (await client.get("/api/sessions/s1/order-drafts")).json()["items"][0]
+        expected = revised.json()
+        assert listed["submission_check"].pop("checked_at")
+        assert expected["submission_check"].pop("checked_at")
+        assert listed == expected
         body["items"][0]["quantity"] = True
         invalid = await client.post("/api/sessions/s1/order-drafts", json=body)
         assert invalid.status_code == 422 and invalid.json()["error"]["code"] == "invalid_argument"
@@ -118,7 +120,10 @@ async def test_restored_host_hydrates_exact_version_and_approval(tmp_path, erp, 
     approval = await pending(app)
     restored, _ = await host(tmp_path, erp, saver, draft)
     state = await restored.state.service.session_state("s1")
-    assert state["pending_approvals"][0]["draft"] == draft
+    restored_draft = state["pending_approvals"][0]["draft"]
+    assert restored_draft["submission_check"].pop("checked_at")
+    assert draft["submission_check"].pop("checked_at")
+    assert restored_draft == draft
     assert state["pending_approvals"][0]["arguments"] == approval.arguments
     async with httpx2.AsyncClient(
         transport=httpx2.ASGITransport(restored), base_url="http://test"

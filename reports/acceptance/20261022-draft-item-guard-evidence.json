@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-22",
+  "scope": "Existing-draft item-change validation; offline engineering acceptance only",
+  "paid_model_requests": 0,
+  "embedding_requests": 0,
+  "final_python": {
+    "tests": 1338,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 21,
+    "passed": 1317,
+    "time_seconds": 152.807
+  },
+  "focused": {
+    "tests": 108,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 108,
+    "time_seconds": 15.176
+  },
+  "focused_by_module": {
+    "packages.mcp_erp.tests.test_draft_item_constraints": 72,
+    "packages.erp_store.tests.test_draft_item_guard": 36
+  },
+  "frontend": {
+    "passed": 93,
+    "failures": 0,
+    "command": "npm test",
+    "evidence": "execution output"
+  },
+  "demo": {
+    "scenarios": 10,
+    "verified": 10,
+    "all_assertions_passed": true
+  },
+  "files": {
+    "packages/mcp_erp/src/mcp_erp/draft_items.py": "a2fb672617629ae28e9151cad1b2151a5ebe71fd09f806703a78653a3a84336e",
+    "packages/mcp_erp/src/mcp_erp/draft_constraints.py": "cf16b3d4c7512c0a2c0571f1d6ccb9807c2681db0ce221821c690a41bbb81a53",
+    "packages/mcp_erp/src/mcp_erp/draft_tools.py": "b9d188b31d4228fdc72702e1c9df9425c1ee9c833021276e7450048109a4c9fc",
+    "packages/erp_store/src/erp_store/draft_audit.py": "6311c2030433789b8b3314c7f93d98355e8681a58bcb2ff318aff2a5f09d77f1",
+    "packages/mcp_erp/tests/test_draft_item_constraints.py": "ac939437800780b37a835635b646da2a9fb994c4d03f61cfe9d2d68f4f95682a",
+    "packages/erp_store/tests/test_draft_item_guard.py": "4d5fbdf5a09bfc0293561bdfb45de0b961c1742802058a7d0aa2056480ba71d5",
+    "packages/mcp_erp/tests/test_draft_constraints.py": "142c6a50e276083c1840e2cc4949103851afa71e3ce6d5560e1a8e63c98b39d0",
+    "packages/evals/tests/test_task_references.py": "d22be88d3f714b6e11e6070d2c854340f79cc93f8ec7923ef5151ce61db0e26d",
+    "packages/evals/tests/test_task_runtime.py": "92de54d0ecd49ceda915d8f7027c375245607314b9ca69ab51274560bcf3ea35",
+    "docs/draft-item-constraints.md": "3e0423661259ff52595ae726d111f1665b5e293b8afbc193a27114b679f1b9b5",
+    "reports/acceptance/2026-10-22-draft-item-guard.md": "c799f7a02fef7391e81dd5c724c7211797ae3084311fea8a9859bfba48cd4369",
+    "reports/acceptance/20261022-draft-item-guard-tests.xml": "0c9c5d26fca10f9ed7bcc2be01ea536fecb50510353e36703a7ad10fc299cd4d",
+    "reports/acceptance/20261022-draft-item-guard-interim-tests.xml": "50b1496f8bfee115e74b23d1ceca4aafaf7e6e824cfac085212026a24ea31428",
+    "reports/acceptance/20261022-draft-item-guard-focused.xml": "d7d44c5a886541f028085607db3705abe9ded8e895c4737214a16746dfdb4246",
+    "reports/acceptance/20261022-draft-item-guard-demo.json": "bed3b40789e0cfe0b86115947a367a4ee9df704cb1d3f61d6c1cd5bf1fae2f22"
+  },
+  "limits": [
+    "No new supplier-model accuracy claim",
+    "Creation item semantics remain unverified",
+    "Raw MCP and trusted Python callers without runtime evidence retain legacy behavior",
+    "No isolated PostgreSQL configuration; 21 tests skipped",
+    "Source snapshot hashes identify working files, not a commit or deployment"
+  ]
+}

@@ -134,8 +134,15 @@ async def test_wrong_reference_fails_and_stops_before_third_turn(task_db, tmp_pa
     client, requests = task_client(wrong_item=True)
     result, _ = await run_task(TASK_CASES[1], task_db, tmp_path, client)
     assert not result.passed and not result.completed
-    assert any("b4_constraints" in f for f in result.failed_checks)
+    assert any("b4_revision_count" in f for f in result.failed_checks)
     assert len(result.turn_results) == 2
+    failed_turn = result.turn_results[-1]
+    edit = next(t for t in failed_turn.tool_results if t.name == "revise_order_draft_quantity")
+    assert not edit.ok and edit.content["error"]["type"] == "argument_constraint"
+    state = failed_turn.state_evidence
+    assert state["before_sha256"] == state["after_sha256"]
+    assert state["drafts_before"] == state["drafts_after"]
+    assert snapshot_all(task_db[1])["order_drafts"] == state["drafts_before"]
     assert max(sum(m["role"] == "user" for m in r["messages"]) for r in requests) == 2
 
 

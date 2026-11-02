@@ -1,0 +1,421 @@
+[
+  {
+    "scenario": "quote",
+    "source": "scripted-demo",
+    "verified": true,
+    "checks": {
+      "completed": true,
+      "mutation_scope": true,
+      "tool_sequence": true,
+      "read_only": true,
+      "no_approval": true,
+      "quote": true
+    },
+    "before": 1000,
+    "after": 1000,
+    "tools": [
+      "compute_quote"
+    ],
+    "approvals": 0,
+    "turns": [
+      {
+        "prompt": "报价",
+        "completed": true,
+        "stock": {
+          "A1001": 1000,
+          "B2001": 300
+        }
+      }
+    ],
+    "trace": "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\quote\\20261027-114020-a20e2d54.jsonl",
+    "traces": [
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\quote\\20261027-114020-a20e2d54.jsonl"
+    ],
+    "changed_tables": [],
+    "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+  },
+  {
+    "scenario": "approve",
+    "source": "scripted-demo",
+    "verified": true,
+    "checks": {
+      "completed": true,
+      "mutation_scope": true,
+      "tool_sequence": true,
+      "approval": true,
+      "inventory": true
+    },
+    "before": 1000,
+    "after": 1005,
+    "tools": [
+      "prepare_stock_adjustment",
+      "adjust_stock"
+    ],
+    "approvals": 1,
+    "turns": [
+      {
+        "prompt": "批准",
+        "completed": true,
+        "stock": {
+          "A1001": 1005,
+          "B2001": 300
+        }
+      }
+    ],
+    "trace": "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\approve\\20261027-114021-2539d2c2.jsonl",
+    "traces": [
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\approve\\20261027-114021-2539d2c2.jsonl",
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\approve\\20261027-114022-b1dbc4c6.jsonl"
+    ],
+    "changed_tables": [
+      "stocks",
+      "mutation_requests",
+      "business_operations"
+    ],
+    "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+  },
+  {
+    "scenario": "deny",
+    "source": "scripted-demo",
+    "verified": true,
+    "checks": {
+      "completed": true,
+      "mutation_scope": true,
+      "tool_sequence": true,
+      "approval": true,
+      "inventory": true
+    },
+    "before": 1000,
+    "after": 1000,
+    "tools": [
+      "prepare_stock_adjustment",
+      "adjust_stock"
+    ],
+    "approvals": 1,
+    "turns": [
+      {
+        "prompt": "拒绝",
+        "completed": true,
+        "stock": {
+          "A1001": 1000,
+          "B2001": 300
+        }
+      }
+    ],
+    "trace": "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\deny\\20261027-114022-f3a081e3.jsonl",
+    "traces": [
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\deny\\20261027-114022-f3a081e3.jsonl",
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\deny\\20261027-114022-4c734cf3.jsonl"
+    ],
+    "changed_tables": [
+      "business_operations"
+    ],
+    "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+  },
+  {
+    "scenario": "recover",
+    "source": "scripted-demo",
+    "verified": true,
+    "checks": {
+      "completed": true,
+      "mutation_scope": true,
+      "tool_sequence": true,
+      "approval": true,
+      "inventory": true,
+      "error_recovery": true
+    },
+    "before": 1000,
+    "after": 1000,
+    "tools": [
+      "prepare_stock_adjustment",
+      "get_stock"
+    ],
+    "approvals": 0,
+    "turns": [
+      {
+        "prompt": "恢复",
+        "completed": true,
+        "stock": {
+          "A1001": 1000,
+          "B2001": 300
+        }
+      }
+    ],
+    "trace": "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\recover\\20261027-114023-a18ade90.jsonl",
+    "traces": [
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\recover\\20261027-114023-a18ade90.jsonl"
+    ],
+    "changed_tables": [],
+    "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+  },
+  {
+    "scenario": "order",
+    "source": "scripted-demo",
+    "verified": true,
+    "checks": {
+      "completed": true,
+      "mutation_scope": true,
+      "tool_sequence": true,
+      "revision_and_total": true,
+      "draft_does_not_reserve": true,
+      "approved_version": true,
+      "orders": true,
+      "inventory": true,
+      "draft_status": true
+    },
+    "before": 1000,
+    "after": 990,
+    "tools": [
+      "prepare_order_draft",
+      "get_order_task",
+      "revise_order_draft_quantity",
+      "get_order_task",
+      "submit_order_draft"
+    ],
+    "approvals": 1,
+    "turns": [
+      {
+        "prompt": "给演示客户创建草稿：A1001 10 件、B2001 20 件，备注分箱发货",
+        "completed": true,
+        "stock": {
+          "A1001": 1000,
+          "B2001": 300
+        }
+      },
+      {
+        "prompt": "把当前版本的第二行改成 50 件",
+        "completed": true,
+        "stock": {
+          "A1001": 1000,
+          "B2001": 300
+        }
+      },
+      {
+        "prompt": "提交当前草稿",
+        "completed": true,
+        "stock": {
+          "A1001": 990,
+          "B2001": 250
+        }
+      }
+    ],
+    "trace": "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\order\\20261027-114023-8a5f24c2.jsonl",
+    "traces": [
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\order\\20261027-114023-8a5f24c2.jsonl",
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\order\\20261027-114023-849c7232.jsonl",
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\order\\20261027-114024-54b7d05b.jsonl",
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\order\\20261027-114024-e71f2c57.jsonl"
+    ],
+    "changed_tables": [
+      "stocks",
+      "orders",
+      "mutation_requests",
+      "order_drafts",
+      "order_items"
+    ],
+    "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+  },
+  {
+    "scenario": "order_denied",
+    "source": "scripted-demo",
+    "verified": true,
+    "checks": {
+      "completed": true,
+      "mutation_scope": true,
+      "tool_sequence": true,
+      "revision_and_total": true,
+      "draft_does_not_reserve": true,
+      "approved_version": true,
+      "orders": true,
+      "inventory": true,
+      "draft_status": true
+    },
+    "before": 1000,
+    "after": 1000,
+    "tools": [
+      "prepare_order_draft",
+      "get_order_task",
+      "revise_order_draft_quantity",
+      "get_order_task",
+      "submit_order_draft"
+    ],
+    "approvals": 1,
+    "turns": [
+      {
+        "prompt": "给演示客户创建草稿：A1001 10 件、B2001 20 件，备注分箱发货",
+        "completed": true,
+        "stock": {
+          "A1001": 1000,
+          "B2001": 300
+        }
+      },
+      {
+        "prompt": "把当前版本的第二行改成 50 件",
+        "completed": true,
+        "stock": {
+          "A1001": 1000,
+          "B2001": 300
+        }
+      },
+      {
+        "prompt": "提交当前草稿",
+        "completed": true,
+        "stock": {
+          "A1001": 1000,
+          "B2001": 300
+        }
+      }
+    ],
+    "trace": "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\order_denied\\20261027-114025-3db37aa3.jsonl",
+    "traces": [
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\order_denied\\20261027-114025-3db37aa3.jsonl",
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\order_denied\\20261027-114025-a9675dc1.jsonl",
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\order_denied\\20261027-114025-995d67a4.jsonl",
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\order_denied\\20261027-114026-7fb69abd.jsonl"
+    ],
+    "changed_tables": [
+      "order_drafts"
+    ],
+    "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+  },
+  {
+    "scenario": "policy",
+    "source": "scripted-demo",
+    "verified": true,
+    "checks": {
+      "completed": true,
+      "mutation_scope": true,
+      "tool_sequence": true,
+      "read_only": true,
+      "no_approval": true,
+      "evidence": true
+    },
+    "before": 1000,
+    "after": 1000,
+    "tools": [
+      "search_policy"
+    ],
+    "approvals": 0,
+    "turns": [
+      {
+        "prompt": "查询数量梯度折扣政策",
+        "completed": true,
+        "stock": {
+          "A1001": 1000,
+          "B2001": 300
+        }
+      }
+    ],
+    "trace": "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\policy\\20261027-114026-85ac3e57.jsonl",
+    "traces": [
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\policy\\20261027-114026-85ac3e57.jsonl"
+    ],
+    "changed_tables": [],
+    "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+  },
+  {
+    "scenario": "policy_miss",
+    "source": "scripted-demo",
+    "verified": true,
+    "checks": {
+      "completed": true,
+      "mutation_scope": true,
+      "tool_sequence": true,
+      "read_only": true,
+      "no_approval": true,
+      "evidence": true
+    },
+    "before": 1000,
+    "after": 1000,
+    "tools": [
+      "search_policy"
+    ],
+    "approvals": 0,
+    "turns": [
+      {
+        "prompt": "查询火星移民政策",
+        "completed": true,
+        "stock": {
+          "A1001": 1000,
+          "B2001": 300
+        }
+      }
+    ],
+    "trace": "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\policy_miss\\20261027-114026-0b7a7907.jsonl",
+    "traces": [
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\policy_miss\\20261027-114026-0b7a7907.jsonl"
+    ],
+    "changed_tables": [],
+    "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+  },
+  {
+    "scenario": "cancellation",
+    "source": "scripted-demo",
+    "verified": true,
+    "checks": {
+      "completed": true,
+      "mutation_scope": true,
+      "tool_sequence": true,
+      "read_only": true,
+      "no_approval": true,
+      "eligible": true
+    },
+    "before": 1000,
+    "after": 1000,
+    "tools": [
+      "assess_order_cancellation"
+    ],
+    "approvals": 0,
+    "turns": [
+      {
+        "prompt": "查询 DEMO-CANCEL-001 的取消资格",
+        "completed": true,
+        "stock": {
+          "A1001": 1000,
+          "B2001": 300
+        }
+      }
+    ],
+    "trace": "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\cancellation\\20261027-114027-f9b1abd9.jsonl",
+    "traces": [
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\cancellation\\20261027-114027-f9b1abd9.jsonl"
+    ],
+    "changed_tables": [],
+    "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+  },
+  {
+    "scenario": "replenishment",
+    "source": "scripted-demo",
+    "verified": true,
+    "checks": {
+      "completed": true,
+      "mutation_scope": true,
+      "tool_sequence": true,
+      "read_only": true,
+      "no_approval": true,
+      "calculation": true
+    },
+    "before": 1000,
+    "after": 1000,
+    "tools": [
+      "suggest_replenishment"
+    ],
+    "approvals": 0,
+    "turns": [
+      {
+        "prompt": "按最近 30 天销量、采购周期 7 天、到货后覆盖 14 天，给 R3001 补货建议",
+        "completed": true,
+        "stock": {
+          "A1001": 1000,
+          "B2001": 300
+        }
+      }
+    ],
+    "trace": "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\replenishment\\20261027-114028-4db7c5fa.jsonl",
+    "traces": [
+      "F:\\VIE\\Erpilot\\traces\\demo\\20261027-114020-2cd921\\replenishment\\20261027-114028-4db7c5fa.jsonl"
+    ],
+    "changed_tables": [],
+    "note": "脚本化模型与关键词向量；不代表真实模型成功率或嵌入质量。"
+  }
+]

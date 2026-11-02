@@ -7,6 +7,24 @@ async function chooseAndSend(page: Page, label: string) {
   await input.press('Enter');
 }
 
+test('商品名称和中文件数经正式 API 保存完整草稿并恢复原始要求',async({page})=>{
+  await page.goto('/');
+  await chooseAndSend(page,'商品名称下单');
+  await expect(page.locator('.md').last()).toContainText('已按名称和中文件数保存第 1 版草稿');
+  const panel=page.getByRole('region',{name:'订单草稿',exact:true});
+  await expect(panel).toContainText('总金额 ¥350.00');
+  await panel.getByText('查看原始商品要求',{exact:true}).click();
+  await expect(panel).toContainText('青瓷茶具两件 → 青瓷茶具（A1001），2 件');
+  await expect(panel).toContainText('三件宣纸礼盒 → 宣纸礼盒（B2001），3 件');
+  await expect(panel.getByLabel('预算与待确认事项')).toContainText('¥500.00');
+  const posts:string[]=[];
+  page.on('request',request=>{if(request.method()==='POST')posts.push(request.url());});
+  await page.reload();
+  await page.getByRole('region',{name:'订单草稿',exact:true}).getByText('查看原始商品要求',{exact:true}).click();
+  await expect(page.getByRole('region',{name:'订单草稿',exact:true})).toContainText('三件宣纸礼盒');
+  expect(posts).toEqual([]);
+});
+
 for (const width of [320, 1440]) {
   test(`真实离线服务在 ${width}px 展示证据、拒答及补货依据`, async ({ page }) => {
     await page.setViewportSize({ width, height: 1000 });

@@ -211,3 +211,60 @@ def test_renderer_does_not_mutate_tool_history():
     original = copy.deepcopy(history)
     render(proposal(ref), history)
     assert history == original
+
+
+@pytest.mark.parametrize("state", ["conflict", "unavailable", "inactive", "no_match"])
+@pytest.mark.parametrize("parallel_write", [False, True])
+async def test_blocked_search_stops_without_another_model_request_or_approval(
+    tmp_path, state, parallel_write,
+):
+    from agent_core.events import ApprovalPending
+    from agent_core.tools import Tool
+    from erp_store.db import make_engine
+    from evals.context_workflow import snapshot_all
+    from evals.grounding_cases import STRUCTURED_GROUNDING_CASES_V4
+    from evals.grounding_runtime import build_grounding_harness
+    from pydantic import BaseModel
+
+    case = next(c for c in STRUCTURED_GROUNDING_CASES_V4 if c.expected_policy_state == state)
+    db = tmp_path / "blocked.db"
+    seed_database(db, n_products=5, n_orders=2)
+    tools = await build_agent_tools_async(
+        db, policy_resolver=build_grounding_harness().resolver_overrides[case.id],
+    )
+    writes = []
+
+    class Empty(BaseModel):
+        pass
+
+    async def write(args):
+        writes.append(args)
+        return {"changed": True}
+
+    tools.append(Tool("dangerous_write", "Requires explicit approval", Empty, write,
+                      risk="single_confirm"))
+    requests = [TextDelta("未经证实的政策结论"), call("search_policy", {"query": case.question})]
+    if parallel_write:
+        requests.append(call("dangerous_write", {}, "write"))
+    client = Script([requests])  # A second request is an error, not a scripted fallback.
+    agent = LangGraphRuntime(client, tools, checkpointer=InMemorySaver(), approval_enabled=True)
+    engine = make_engine(db)
+    try:
+        before = snapshot_all(engine)
+        events = [e async for e in agent.stream(
+            [{"role": "user", "content": case.question}], thread_id="blocked",
+        )]
+        assert client.calls == 1 and not writes
+        assert not any(isinstance(e, ApprovalPending) for e in events)
+        assert events[-1].completed and snapshot_all(engine) == before
+        text = "".join(e.text for e in events if isinstance(e, TextDelta))
+        assert "未经证实的政策结论" not in text and "核对" in text
+        saved = (await agent.get_state("blocked")).values
+        search = next(t for t in saved["tool_history"] if t["name"] == "search_policy")
+        assert search["rendered_response"]["mode"] == "program-abstention"
+        assert search["rendered_response"]["policy_state"] == state
+        if parallel_write:
+            cancelled = next(t for t in saved["tool_history"] if t["name"] == "dangerous_write")
+            assert cancelled["invocation_status"] == "cancelled"
+    finally:
+        engine.dispose()

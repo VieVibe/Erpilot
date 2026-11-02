@@ -127,7 +127,7 @@ def test_discount_change_invalidates_even_when_unit_price_rounds_the_same(store,
     _, repo, drafts = store
     draft = drafts.prepare("s1", "客户", [("A", 10)])
     monkeypatch.setattr(
-        "erp_store.drafts.price_for_quantity", lambda price, qty: (0.98001, 98.0, 980.0)
+        "erp_store.draft_review.price_for_quantity", lambda price, qty: (0.98001, 98.0, 980.0)
     )
     with pytest.raises(MutationError) as error:
         drafts.submit("s1", draft["draft_id"], 1, "approval")
@@ -206,7 +206,7 @@ def test_task_state_rebuilds_latest_unsubmitted_and_keeps_expired(store):
     now = datetime(2026, 10, 11, tzinfo=UTC)
     drafts = ErpDrafts(engine, clock=lambda: now)
     assert drafts.task_state("s1") == {
-        "status": "none", "draft": None, "candidates": [], "has_more": False
+        "status": "none", "draft": None, "candidates": [], "has_more": False, "pending_issues": []
     }
     first = drafts.prepare("s1", "客户", [("A", 2)], "备注")
     revised = drafts.revise("s1", first["draft_id"], 1, "客户", [("A", 3)], "备注")

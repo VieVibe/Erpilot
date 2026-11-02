@@ -1,0 +1,23 @@
+{
+  "messages": [
+    {
+      "role": "system",
+      "content": "只返回一个符合 schema 的 JSON 对象，无代码块、无工具调用。只提出创建草稿候选，不能授予写入或提交权限。所有 evidence 使用所给原始消息的 message_id、Python Unicode 字符位置 [start,end) 和完全一致的 quote。客户、备注保留原文；商品只引用完整名称或 SKU；件数只能引用原文的总件数，包装单位不换算，缺失填 null。预算仅人民币，不推测。action 只选动作词，不能覆盖字段。字段证据不得重叠；所有未知要求放入 unresolved。不能用引文、条件或否定要求生成创建动作。整个结果必须由用户完整核对后才能保存。Schema：{\"$defs\": {\"BudgetCandidate\": {\"additionalProperties\": false, \"properties\": {\"value\": {\"pattern\": \"^[0-9]+(?:\\\\.[0-9]{1,2})?$\", \"title\": \"Value\", \"type\": \"string\"}, \"evidence\": {\"$ref\": \"#/$defs/SourceSpan\"}}, \"required\": [\"value\", \"evidence\"], \"title\": \"BudgetCandidate\", \"type\": \"object\"}, \"ItemCandidate\": {\"additionalProperties\": false, \"properties\": {\"product\": {\"$ref\": \"#/$defs/TextCandidate\"}, \"quantity\": {\"anyOf\": [{\"$ref\": \"#/$defs/QuantityCandidate\"}, {\"type\": \"null\"}]}}, \"required\": [\"product\", \"quantity\"], \"title\": \"ItemCandidate\", \"type\": \"object\"}, \"QuantityCandidate\": {\"additionalProperties\": false, \"properties\": {\"value\": {\"maximum\": 999999999, \"minimum\": 1, \"title\": \"Value\", \"type\": \"integer\"}, \"evidence\": {\"$ref\": \"#/$defs/SourceSpan\"}}, \"required\": [\"value\", \"evidence\"], \"title\": \"QuantityCandidate\", \"type\": \"object\"}, \"SourceSpan\": {\"additionalProperties\": false, \"properties\": {\"message_id\": {\"title\": \"Message Id\", \"type\": \"string\"}, \"start\": {\"minimum\": 0, \"title\": \"Start\", \"type\": \"integer\"}, \"end\": {\"minimum\": 0, \"title\": \"End\", \"type\": \"integer\"}, \"quote\": {\"title\": \"Quote\", \"type\": \"string\"}}, \"required\": [\"message_id\", \"start\", \"end\", \"quote\"], \"title\": \"SourceSpan\", \"type\": \"object\"}, \"TextCandidate\": {\"additionalProperties\": false, \"properties\": {\"value\": {\"maxLength\": 255, \"minLength\": 1, \"title\": \"Value\", \"type\": \"string\"}, \"evidence\": {\"$ref\": \"#/$defs/SourceSpan\"}}, \"required\": [\"value\", \"evidence\"], \"title\": \"TextCandidate\", \"type\": \"object\"}}, \"additionalProperties\": false, \"properties\": {\"schema_version\": {\"const\": 1, \"title\": \"Schema Version\", \"type\": \"integer\"}, \"operation\": {\"const\": \"create\", \"title\": \"Operation\", \"type\": \"string\"}, \"action\": {\"$ref\": \"#/$defs/SourceSpan\"}, \"customer\": {\"anyOf\": [{\"$ref\": \"#/$defs/TextCandidate\"}, {\"type\": \"null\"}]}, \"note\": {\"anyOf\": [{\"$ref\": \"#/$defs/TextCandidate\"}, {\"type\": \"null\"}]}, \"budget_limit\": {\"anyOf\": [{\"$ref\": \"#/$defs/BudgetCandidate\"}, {\"type\": \"null\"}]}, \"items\": {\"items\": {\"$ref\": \"#/$defs/ItemCandidate\"}, \"maxItems\": 100, \"minItems\": 1, \"title\": \"Items\", \"type\": \"array\"}, \"unresolved\": {\"items\": {\"$ref\": \"#/$defs/SourceSpan\"}, \"maxItems\": 100, \"title\": \"Unresolved\", \"type\": \"array\"}}, \"required\": [\"schema_version\", \"operation\", \"action\", \"customer\", \"note\", \"budget_limit\", \"items\", \"unresolved\"], \"title\": \"CreateProposal\", \"type\": \"object\"}"
+    },
+    {
+      "role": "user",
+      "content": "{\"message_id\": \"multiple\", \"text\": \"帮客户乙列份采购清单：机械键盘要三个，光学鼠标要五个，预算2000元。\", \"sha256\": \"317d640387d69f41cdae782880c52b1c09bf0e349f8b6407d94f9258270a43dd\"}"
+    }
+  ],
+  "response": "{\"schema_version\":1,\"operation\":\"create\",\"action\":{\"message_id\":\"multiple\",\"start\":4,\"end\":5,\"quote\":\"列\"},\"customer\":{\"value\":\"客户乙\",\"evidence\":{\"message_id\":\"multiple\",\"start\":1,\"end\":4,\"quote\":\"客户乙\"}},\"note\":null,\"budget_limit\":{\"value\":\"2000\",\"evidence\":{\"message_id\":\"multiple\",\"start\":27,\"end\":34,\"quote\":\"预算2000元\"}},\"items\":[{\"product\":{\"value\":\"机械键盘\",\"evidence\":{\"message_id\":\"multiple\",\"start\":11,\"end\":15,\"quote\":\"机械键盘\"}},\"quantity\":{\"value\":3,\"evidence\":{\"message_id\":\"multiple\",\"start\":16,\"end\":18,\"quote\":\"三个\"}}},{\"product\":{\"value\":\"光学鼠标\",\"evidence\":{\"message_id\":\"multiple\",\"start\":19,\"end\":23,\"quote\":\"光学鼠标\"}},\"quantity\":{\"value\":5,\"evidence\":{\"message_id\":\"multiple\",\"start\":24,\"end\":26,\"quote\":\"五个\"}}}],\"unresolved\":[]}",
+  "events": [
+    {
+      "type": "StreamEnd",
+      "usage": {
+        "prompt_tokens": 957,
+        "completion_tokens": 765,
+        "total_tokens": 1722
+      }
+    }
+  ]
+}

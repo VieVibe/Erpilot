@@ -1,0 +1,18 @@
+{
+  "source": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "d5b3e485c0b873cc820a5d9175b33417a021019e7a7bfd5ac58e047d73d438f3"
+  },
+  "parser_version": "order-rules-3",
+  "mode_default": "off",
+  "provider_requests": 0,
+  "label_status": "engineering_expectations_pending_human_review",
+  "suite": "offline-engineering-regression",
+  "source_unchanged": true,
+  "source_after": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "d5b3e485c0b873cc820a5d9175b33417a021019e7a7bfd5ac58e047d73d438f3"
+  }
+}

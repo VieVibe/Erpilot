@@ -113,7 +113,7 @@ async def test_reference_contract_uses_real_tools_and_preserves_per_turn_evidenc
 
 @pytest.mark.parametrize("case_index,fault,marker", [
     (1, "early_write", "b4_write_attempted"),
-    (1, "wrong_sku", "b4_constraints"),
+    (1, "wrong_sku", "b4_revision_count"),
     (0, "missing_guard", "b4_reference_sku_guard"),
     (2, "claim_reserved", "must_mention_any_groups"),
 ])
@@ -123,6 +123,13 @@ async def test_reference_contract_rejects_early_edits_wrong_targets_and_false_in
     result, _ = await run_reference(REFERENCE_CASES[case_index], reference_db, tmp_path, fault)
     assert not result.passed
     assert any(marker in failure for failure in result.failed_checks), result.failed_checks
+    if fault == "wrong_sku":
+        failed_turn = result.turn_results[-1]
+        edit = next(t for t in failed_turn.tool_results if t.name == "revise_order_draft_quantity")
+        assert not edit.ok and edit.content["error"]["type"] == "argument_constraint"
+        state = failed_turn.state_evidence
+        assert state["before_sha256"] == state["after_sha256"]
+        assert state["drafts_before"] == state["drafts_after"]
 
 
 def test_legacy_b4_case_fingerprint_is_unchanged():

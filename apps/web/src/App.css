@@ -100,10 +100,12 @@ button, input, textarea { font: inherit; }
 .recovery-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }.recovery-actions:empty { display: none; }
 .pending-notice { margin-top: 10px; }
 .jump-latest { position: absolute; right: 28px; bottom: 190px; box-shadow: 0 4px 16px rgb(30 35 55 / 8%); }
-.business-pane { width: 360px; flex-shrink: 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; border-left: 1px solid var(--line); background: #fbfcfe; }
-.business-pane-heading { display: flex; align-items: center; justify-content: space-between; padding: 22px 20px 0; }.business-pane-heading h2 { font-size: 14px; font-weight: 600; margin: 0; }
-.business-tabs { min-height: 0; flex: 1; overflow: hidden; display: flex; flex-direction: column; padding-inline: 20px; }
-.business-tabs > .ant-tabs-nav { flex-shrink: 0; }.business-tabs > .ant-tabs-content-holder { overflow-y: auto; padding-bottom: 24px; }
+.business-pane { width: 360px; flex-shrink: 0; min-width: 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; border-left: 1px solid var(--line); background: #fbfcfe; }
+.business-pane-heading { display: flex; flex-shrink: 0; align-items: center; justify-content: space-between; padding: 22px 20px 0; }.business-pane-heading h2 { font-size: 14px; font-weight: 600; margin: 0; }
+.business-tabs { min-width: 0; min-height: 0; flex: 1; overflow: hidden; display: flex; flex-direction: column; padding-inline: 20px; }
+.business-tabs > .ant-tabs-nav { flex-shrink: 0; }
+/* Ant Design 6 uses body-holder; keep the tab header outside the scroll area. */
+.business-tabs > .ant-tabs-body-holder { flex: 1; min-width: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; padding-bottom: 24px; }
 .business-tabs .ant-tabs-tab { font-size: 12px; }.tab-count { background: #f5e4c6; color: #835619; border-radius: 5px; padding: 1px 5px; font-size: 11px; }
 .business-results { display: flex; flex-direction: column; gap: 14px; }.approval-list { display: flex; flex-direction: column; gap: 16px; }
 .business-tabs .ant-empty { margin-block: 48px; }.business-tabs .ant-empty-image > .anticon { font-size: 34px; color: var(--ok); }
@@ -112,8 +114,9 @@ button, input, textarea { font: inherit; }
 .draft-panel label { display: flex; flex-direction: column; gap: 7px; font-size: 12px; color: var(--dim); }
 .draft-line { display: grid; grid-template-columns: minmax(0, 1fr) 82px 32px; gap: 8px; align-items: end; }.draft-line .ant-input-number { width: 100%; }
 .draft-actions, .approval-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.draft-summary { margin-top: 24px; font-size: 12px; line-height: 1.75; }.draft-summary p { margin-block: 10px; }
+.draft-summary { min-width: 0; margin-top: 24px; font-size: 12px; line-height: 1.75; overflow-wrap: anywhere; }.draft-summary p { margin-block: 10px; }
 .draft-table, .business-table { max-width: 100%; overflow-x: auto; }.draft-table .ant-table, .business-table .ant-table { font-size: 12px; }
+.draft-table .ant-table-cell, .business-table .ant-table-cell { overflow-wrap: anywhere; }
 .draft-submit { width: 100%; margin-top: 16px; }
 .draft-review-summary { overflow-wrap: anywhere; }
 .draft-review-items { display: none; }
@@ -127,7 +130,7 @@ button, input, textarea { font: inherit; }
   .draft-review-items dt { color: var(--dim); }
   .draft-review-items dd { margin: 0; }
 }
-.approval { font-size: 13px; line-height: 1.8; }.approval-label { font-weight: 600; display: block; margin-bottom: 12px; }.approval p { margin-block: 10px; }
+.approval { min-width: 0; font-size: 13px; line-height: 1.8; overflow-wrap: anywhere; }.approval-label { font-weight: 600; display: block; margin-bottom: 12px; }.approval p { margin-block: 10px; }
 .approval > .ant-btn { margin-top: 10px; margin-right: 8px; }.approval .ant-alert { margin-block: 12px; }
 .business-technical { margin-top: 18px; color: var(--dim); font-size: 12px; }.business-technical summary { cursor: pointer; }
 .card { border: 1px solid var(--line); border-radius: 10px; padding: 14px; background: #fff; margin-top: 12px; }
@@ -135,7 +138,7 @@ button, input, textarea { font: inherit; }
 .card-body { font-size: 13px; line-height: 1.8; overflow-wrap: anywhere; }.card-body strong { font-weight: 650; }
 .card-outcome { font-size: 11px; color: var(--ok); }.card-outcome.failed { color: var(--fail); }.card-outcome.denied { color: var(--dim); }
 .skip-link { position: fixed; left: 12px; top: -80px; z-index: 2000; background: #fff; padding: 10px 18px; color: var(--accent); }.skip-link:focus { top: 12px; }
-.history-drawer .ant-drawer-body { padding: 0; }.business-drawer .ant-drawer-body { padding: 0; }.business-drawer .business-tabs { height: 100%; }
+.history-drawer .ant-drawer-body { padding: 0; }.business-drawer .ant-drawer-body { display: flex; flex-direction: column; min-height: 0; overflow: hidden; padding: 0; }
 @media (min-width: 1600px) { .business-pane { width: 400px; }.chat { padding-inline: 48px; } }
 @media (max-width: 1199px) { .conversation-content { max-width: 760px; }.composer-area { max-width: 816px; } }
 @media (max-width: 767px) {
@@ -161,6 +164,8 @@ button, input, textarea { font: inherit; }
 .draft-history-item summary { cursor: pointer; }
 .card.ant-card { padding: 0; }
 .card.ant-card .ant-card-head { min-height: 42px; padding-inline: 14px; border-bottom: 1px solid var(--line); }
+.card.ant-card .ant-card-head-title { min-width: 0; padding-block: 10px; white-space: normal; overflow-wrap: anywhere; }
+.card.ant-card .ant-card-extra { flex-shrink: 0; }
 .card.ant-card .ant-card-body { padding: 14px; }
 .card.ant-card .ant-tag { margin-inline-end: 0; }
 .cancellation-assessment .card-body { overflow-wrap: anywhere; min-width: 0; }

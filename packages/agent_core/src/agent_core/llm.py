@@ -197,6 +197,11 @@ class LLMClient:
         """只读配置（evals runner 按 config.model 计量成本）。"""
         return self._config
 
+    def without_retries(self):
+        """An opt-in single-request consumer must not inherit SDK HTTP retries."""
+        return LLMClient(self._config, client=self._client.with_options(max_retries=0),
+                         request_timeout=self._request_timeout)
+
     async def stream_chat(
         self,
         messages: Sequence[ChatCompletionMessageParam],

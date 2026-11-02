@@ -1,0 +1,50 @@
+{
+  "source_before": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "1906dd77b0ef8c0fef66a53f83da3698ba0507c738071736aa2b2db8b8d0444c"
+  },
+  "provider_requests": 0,
+  "interrupted_preflight": "An earlier full run was stopped before acceptance to fix one Ruff line-length error; source was edited only after its processes had stopped.",
+  "source_after": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "1906dd77b0ef8c0fef66a53f83da3698ba0507c738071736aa2b2db8b8d0444c"
+  },
+  "source_unchanged": true,
+  "full_tests": {
+    "passed": 1646,
+    "skipped": 21,
+    "deselected": 47,
+    "seconds": 241.15
+  },
+  "focused_tests": 102,
+  "web_tests": 104,
+  "browser_tests": 2,
+  "core": {
+    "passed": 120,
+    "total": 120,
+    "label_status": "engineering_expectations_pending_human_review"
+  },
+  "implementation_sha256": {
+    "packages/agent_core/src/agent_core/billing.py": "92d2d9047f1ad93b69a30d15f4c6ada726541a877082f2d55749a87ad02cc0fc",
+    "packages/agent_core/src/agent_core/llm.py": "cc1ea8cbdbd60325aa312f7ec76eadb1f9c3499029b14096c53523a3c2e710b0",
+    "packages/evals/src/evals/billing.py": "0a86183a265b5c0133005f27498e8cc78436d190140d1bd999b4f96eac86aa67",
+    "packages/erp_store/src/erp_store/intent_semantic.py": "192421450ed97136971c14e897fe41666ccfdcd812c527d9a63dba7cccfa8975",
+    "packages/erp_store/src/erp_store/intent_semantic_state.py": "bc29bf3f22c20fd6106c1667f7517b2cb4c96b26816230472fc6c68c0893bd05",
+    "packages/erp_store/src/erp_store/intent_state.py": "54556480e672c06ba09d6333bf586cc5f97dd0613674caf8ae73221129e237bc",
+    "packages/erp_store/src/erp_store/intent_preview.py": "7f33c0f98a889a33530adac8e6fc56b2f3b0dc2e45c1ae55b82bbb7634a322b8",
+    "packages/mcp_erp/src/mcp_erp/intent_semantic.py": "ed1e0446789f3f9c2353fdd6a1c0ea873e531a4f9a7c56af2c9553d7ab4532aa",
+    "packages/mcp_erp/src/mcp_erp/intent_analysis.py": "30f8aec2590c291fd2b7a096fec555fbad3a46fd8a931f7986ae703dd5be8aa9",
+    "packages/mcp_erp/src/mcp_erp/intent_diagnostics.py": "69b6216a32817a530a0c944c2d96e47c254972d660dfd3876cf6b11932c6d508",
+    "apps/api/src/erpilot_api/main.py": "25fdb990334fc6c7dfff0dcff30c348ff6240c38f3d5b31609a0d11e549c9fb6",
+    "apps/api/src/erpilot_api/service.py": "9e6002a386677e70f54840951099a2a9024ef5007d0edc73b945c21d7ce32492",
+    "apps/api/tests/test_intent_semantic_api.py": "5111c756bea8daff485c8ee5154a072eea8d96e92acc953e68927d414d16671d",
+    "apps/web/src/intent-preview.ts": "b1fc1602607c3c34a03e03a549ed9eeab5f5163455eeaeee2f42cba9fc3c8733",
+    "apps/web/src/components/IntentPreviewPanel.tsx": "d9877d0566773285b45113b3199cddfc0e0b41ea20d2abe4d63ebf4f2858d48c",
+    "apps/web/tests/intent-preview.test.mjs": "8811636a80fdee402b31f341f0a91d8c2910e7c0b78152d30ad724b3a0caafd8",
+    "apps/web/tests/ui/intent-semantic.spec.ts": "7cfb911371a80e46cb794bc1215c0e3f106d68352719ff2253a4978e57972931",
+    "artifacts/accept-intent-semantic.py": "9950dac1adfb14127ee82a7d38d71616f8e1cc77db8a599cf5c9ad2b10c92a4f"
+  },
+  "api_evidence_source_matches": true
+}

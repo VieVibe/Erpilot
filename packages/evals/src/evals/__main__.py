@@ -24,6 +24,7 @@ from evals.grounding_cases import (
     STRUCTURED_GROUNDING_CASES,
     STRUCTURED_GROUNDING_CASES_V2,
     STRUCTURED_GROUNDING_CASES_V3,
+    STRUCTURED_GROUNDING_CASES_V4,
 )
 from evals.policy_cases import POLICY_CASES
 from evals.replenishment_cases import REPLENISHMENT_CASES
@@ -44,7 +45,8 @@ def main() -> None:
     parser.add_argument("--suite", default="baseline",
                         choices=["baseline", "b4", "b4-reference", "b5", "b6",
                                  "rag-grounding", "rag-grounding-v1", "rag-grounding-structured",
-                                 "rag-grounding-structured-v2", "rag-grounding-structured-v3"],
+                                 "rag-grounding-structured-v2", "rag-grounding-structured-v3",
+                                 "rag-grounding-structured-v4"],
                         help="case 集，rag-grounding 为受控检索下的证据充分性 / 引用验收")
     parser.add_argument("--timeout", type=float, default=30,
                         help="单次请求总截止秒数，包含连接和整个流")
@@ -66,7 +68,8 @@ def main() -> None:
                    "rag-grounding-v1": GROUNDING_CASES_V1,
                    "rag-grounding-structured": STRUCTURED_GROUNDING_CASES,
                    "rag-grounding-structured-v2": STRUCTURED_GROUNDING_CASES_V2,
-                   "rag-grounding-structured-v3": STRUCTURED_GROUNDING_CASES_V3}[args.suite]
+                   "rag-grounding-structured-v3": STRUCTURED_GROUNDING_CASES_V3,
+                   "rag-grounding-structured-v4": STRUCTURED_GROUNDING_CASES_V4}[args.suite]
     cases = [c for c in suite_cases if not args.case or c.id in args.case]
     unknown = set(args.case) - {c.id for c in cases}
     if unknown or args.budget <= 0 or args.timeout <= 0:
@@ -75,7 +78,7 @@ def main() -> None:
         parser.error("--regression-baseline requires --gate")
     if args.campaign:
         if (args.suite not in {"rag-grounding-structured", "rag-grounding-structured-v2",
-                              "rag-grounding-structured-v3"}
+                              "rag-grounding-structured-v3", "rag-grounding-structured-v4"}
                 or not args.budget_currency or args.gate):
             parser.error(
                 "--campaign requires a structured grounding suite, native currency, and no --gate"
@@ -105,7 +108,8 @@ def main() -> None:
     sdk_timeout = {"timeout": args.timeout, "max_retries": 0}
     harness = None
     if args.suite in {"rag-grounding", "rag-grounding-v1", "rag-grounding-structured",
-                      "rag-grounding-structured-v2", "rag-grounding-structured-v3"}:
+                      "rag-grounding-structured-v2", "rag-grounding-structured-v3",
+                      "rag-grounding-structured-v4"}:
         from evals.grounding_runtime import build_grounding_harness
 
         harness = build_grounding_harness()

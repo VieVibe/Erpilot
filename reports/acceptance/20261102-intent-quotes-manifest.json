@@ -1,0 +1,30 @@
+{
+  "source_frozen_snapshot": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "bb7e4d47d91345d86ef6b1f802ca6726c73804327456a8726e01e474e1adc0bd"
+  },
+  "source_after": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "bb7e4d47d91345d86ef6b1f802ca6726c73804327456a8726e01e474e1adc0bd"
+  },
+  "source_unchanged": true,
+  "full_tests": {
+    "passed": 1658,
+    "skipped": 21,
+    "deselected": 47,
+    "seconds": 249.51
+  },
+  "focused_tests": 75,
+  "live_call_attempts": 19,
+  "live_complete_usage_requests": 18,
+  "known_estimated_cny": "0.005192",
+  "unknown_requests": 1,
+  "additional_paid_requests_after_unknown": 0,
+  "evidence_sha256": {
+    "20261102-intent-quotes-full-final.xml": "f530a24168464a940abb40dadf267ffb860da8bc47d4aca9d2e577db3414716c",
+    "20261102-intent-quotes-focused-final2.xml": "49c04983218d403f814cc683954de6cc8de2b50bae5a2d0aa20d316c50da0302",
+    "20261102-intent-live-budget-restored.json": "f8a2b14567c0853c071506b0c363c25770549b43da2a9bc4de0c18e4846b3160"
+  }
+}

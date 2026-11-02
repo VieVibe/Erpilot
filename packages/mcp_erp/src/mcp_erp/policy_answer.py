@@ -18,7 +18,8 @@ class PolicyAnswerPart(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
     question_quote: str = Field(
         min_length=1, max_length=8000,
-        description="当前用户问题的连续原文子串，不改写；逐个政策问题选择证据或标记缺口",
+        description="当前用户每个独立政策疑问的连续原文子串，不改写；保留该疑问的背景条件。"
+        "前提或假设不能单独列为已获证据支持的问题；条件与真正疑问放在同一原话中",
     )
     status: Literal["evidence", "gap"] = Field(
         description="原文能回答该问题选 evidence；缺依据选 gap，不能套用主题相近的条款",
@@ -140,8 +141,21 @@ def render_policy_answer(proposal, history, messages):
     }
 
 
+def blocked_policy_answer(history, messages):
+    """Trusted terminal abstention; no model-selected finalizer or policy assertions."""
+    if not any(item["name"] == "search_policy" for item in history):
+        return None
+    refs, blocked = _evidence(history)
+    if refs and not blocked:
+        return None
+    result = render_policy_answer(None, history, messages)
+    result["mode"] = "program-abstention"
+    return result
+
+
 POLICY_RESPONSE_CONTRACT = ResponseContract(
     "policy-extractive-1", "search_policy", "compose_policy_answer", render_policy_answer,
+    blocked_response=blocked_policy_answer,
 )
 
 

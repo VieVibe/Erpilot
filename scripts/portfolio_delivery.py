@@ -23,7 +23,8 @@ START = """# Erpilot · 会请示的 ERP 智能体
 
 视频复用已有录制，使用脚本模型、演示向量和临时库，展示正式 API / LangGraph / MCP
 链路。连续多轮真实模型结果见源码 docs/context-workflow.md 和对应报告；两类证据分别列示。
-政策问答最新两模型均为 11/13，门槛未达成。项目当前范围为可信单用户、单进程本地服务。
+最新订单与政策验收、原始失败及后续版本见源码 docs/project-status.md，各批次独立列示。
+项目当前范围为可信单用户、单进程本地服务。
 
 核验交付包：在解压的源码目录运行
 `python scripts/portfolio_delivery.py --verify <本交付ZIP绝对路径>`。

@@ -120,7 +120,8 @@ async def test_graph_rejects_short_name_then_saves_only_corrected_draft(database
     assert [record["ok"] for record in state["tool_history"]] == [False, True]
     evidence = state["tool_history"][1]["argument_evidence"]
     assert evidence["fields"]["customer"]["value"] == CUSTOMER
-    assert evidence["unverified_fields"] == ["items"]
+    assert evidence["unverified_fields"] == []
+    assert evidence["creation_guard"]["items"] == [{"sku": "A", "quantity": 2}]
     saved = await graph.aget_state(config)
     assert saved.values["tool_history"][1]["argument_evidence"] == evidence
     rows, stock = snapshot(engine)
@@ -151,19 +152,19 @@ async def test_full_revision_cannot_drop_existing_constraints(database, field, v
     assert not result["ok"] and snapshot(engine) == before
 
 
-@pytest.mark.parametrize("question,customer,note", [
-    ("数量改成3件，其他不变", CUSTOMER, NOTE),
-    ("客户改为新客户；备注改为「新备注」", "新客户", "新备注"),
-    ("清空备注", CUSTOMER, None),
+@pytest.mark.parametrize("question,customer,note,quantity", [
+    ("数量改成3件，其他不变", CUSTOMER, NOTE, 3),
+    ("客户改为新客户；备注改为「新备注」", "新客户", "新备注", 2),
+    ("清空备注", CUSTOMER, None, 2),
 ])
 async def test_explicit_correction_and_preservation_save_new_revision(
-    database, question, customer, note,
+    database, question, customer, note, quantity,
 ):
     path, engine = database
     provider = await SessionErpTools.create(path)
     draft = provider.drafts.prepare("s1", CUSTOMER, [("A", 2)], NOTE)
     args = {"draft_id": draft["draft_id"], "expected_revision": 1,
-            "customer": customer, "note": note, "items": [{"sku": "A", "quantity": 3}]}
+            "customer": customer, "note": note, "items": [{"sku": "A", "quantity": quantity}]}
     tools = {tool.name: tool for tool in provider.for_session("s1")}
     history = [{"name": "get_order_draft", "ok": True, "content": json.dumps(draft)}]
     [call] = prepare_tool_calls([ToolCall("change", "revise_order_draft", json.dumps(args))], tools,
@@ -173,6 +174,7 @@ async def test_explicit_correction_and_preservation_save_new_revision(
     assert result["ok"]
     payload = json.loads(result["content"])
     assert (payload["revision"], payload["customer"], payload["note"]) == (2, customer, note)
+    assert payload["items"][0]["quantity"] == quantity
     assert provider.drafts.get("s1", draft["draft_id"], 1)["customer"] == CUSTOMER
     assert snapshot(engine)[1] == 1000
 
@@ -192,7 +194,7 @@ async def test_missing_current_read_cannot_be_replaced_by_assistant_text(databas
     assert not result["ok"] and snapshot(engine) == before
 
 
-async def test_unrecognized_creation_wording_is_explicitly_unverified(database):
+async def test_unrecognized_creation_items_require_clarification(database):
     path, _ = database
     tools = {tool.name: tool for tool in await build_agent_tools_async(path, session_id="s1")}
     args = {"customer": CUSTOMER, "note": NOTE, "items": [{"sku": "A", "quantity": 2}]}
@@ -200,9 +202,8 @@ async def test_unrecognized_creation_wording_is_explicitly_unverified(database):
         [ToolCall("create", "prepare_order_draft", json.dumps(args))], tools,
         messages=[{"role": "user", "content": "按照刚讨论的方案保存"}],
     )
-    assert "content" not in call
-    assert call["argument_evidence"]["fields"] == {}
-    assert call["argument_evidence"]["unverified_fields"] == ["customer", "note", "items"]
+    assert "argument_constraint" in call["content"]
+    assert "草稿未保存" in call["content"]
 
 
 async def test_old_user_requirements_do_not_override_current_correction(database):
@@ -212,7 +213,7 @@ async def test_old_user_requirements_do_not_override_current_correction(database
     [call] = prepare_tool_calls(
         [ToolCall("create", "prepare_order_draft", json.dumps(args))], tools,
         messages=[{"role": "user", "content": QUESTION},
-                  {"role": "user", "content": "给新客户保存报价草稿"}],
+                  {"role": "user", "content": "给新客户保存报价草稿：A 2件"}],
     )
     assert "content" not in call
     assert call["argument_evidence"]["fields"]["customer"]["value"] == "新客户"
@@ -241,7 +242,9 @@ async def test_quantity_turn_persists_request_and_original_origins_after_new_fac
     )
     result = await execute_tool_call(call, tools, LoopConfig())
     changed = json.loads(result["content"])
-    assert changed["task_constraints"] == created["task_constraints"]
+    assert changed["task_constraints"]["fields"] == created["task_constraints"]["fields"]
+    assert changed["item_constraint"]["verified"]
+    assert changed["item_constraint"]["value"] == [{"sku": "A", "quantity": 5}]
     assert changed["last_change"]["operation"] == "revise_quantity"
     history_tool = tools["get_order_draft_history"]
     history = await history_tool.handler(history_tool.params_model.model_validate({

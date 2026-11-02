@@ -1,0 +1,50 @@
+{
+  "source_before": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "bd8b1ca5e9f888d09eac8fd00891c5d4a9e3bd30ba09e4b26c4458eeaeff6386"
+  },
+  "provider_requests": 0,
+  "source_after_full_tests": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "bd8b1ca5e9f888d09eac8fd00891c5d4a9e3bd30ba09e4b26c4458eeaeff6386"
+  },
+  "source_unchanged_full_tests": true,
+  "tests": {
+    "passed": 1606,
+    "skipped": 21,
+    "deselected": 47,
+    "seconds": 248.12,
+    "junit": "reports/acceptance/20261102-intent-diagnostics-tests.xml"
+  },
+  "core": {
+    "passed": 120,
+    "total": 120,
+    "label_status": "engineering_expectations_pending_human_review"
+  },
+  "stateful_benchmark": {
+    "report": "reports/acceptance/20261102-intent-state-stress.json",
+    "cases": 4,
+    "all_passed": true,
+    "source_unchanged": true
+  },
+  "source_final": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "bd8b1ca5e9f888d09eac8fd00891c5d4a9e3bd30ba09e4b26c4458eeaeff6386"
+  },
+  "source_unchanged_final": true,
+  "implementation_sha256": {
+    "packages/mcp_erp/src/mcp_erp/intent_diagnostics.py": "66b31820186b6aca7909d484e3185738ef28bea559d381c4567c76c4c4d994f8",
+    "packages/mcp_erp/src/mcp_erp/intent_analysis.py": "134edd978f53e9cb970ca3cb5fc07075f245d59c5ad99296a5072ed8e2c06c55",
+    "packages/erp_store/src/erp_store/intent_rules.py": "16c510ebed95648a7ea5c79144edd487e189e74e8621c61ec9ded371b6986d74",
+    "packages/erp_store/src/erp_store/intent_contract.py": "d497106df92add88491b615f37303c244de60eee6efc268b6fd4b573ff150fbb",
+    "apps/api/src/erpilot_api/main.py": "79a3361b837173b5ce003d37ddfc144065855bc923465ae395fc910b868049d7",
+    "apps/api/src/erpilot_api/service.py": "414b9a78acbe962989dcda3251ec0ba9fbc90d0170d70b5134aeb9d2c5dcac1c",
+    "apps/api/tests/test_intent_diagnostics_api.py": "2aec37583c60e9d72869bf51d55daf83d61139e509a86072292334abd8c67f0a",
+    "packages/mcp_erp/tests/test_intent_diagnostics.py": "d26788823c11bd712420c18cfe53487a86823f6b3a4bb41d60e13fec9074b811",
+    "packages/evals/src/evals/intent_state_benchmark.py": "6345d18827b3a6b60f5e47d9154cd90d8746f51239e90d83e46d84d942e04704",
+    "packages/evals/tests/test_intent_state_benchmark.py": "8df967ff8d489ca385620fe9c8bf050f220cd586947c16b2e8cbfa9884449e6e"
+  }
+}

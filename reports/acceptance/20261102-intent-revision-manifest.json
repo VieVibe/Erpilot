@@ -1,0 +1,46 @@
+{
+  "source_before": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "c59debaa42b16ced79dc3496ff0d2e5ddb639308f16961ccc86014e2bd73fe9f"
+  },
+  "source_after": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "c59debaa42b16ced79dc3496ff0d2e5ddb639308f16961ccc86014e2bd73fe9f"
+  },
+  "source_unchanged": true,
+  "provider_requests": 0,
+  "previous_real_budget": "remains_frozen_unknown_usage",
+  "full_tests": {
+    "passed": 1681,
+    "skipped": 21,
+    "deselected": 47,
+    "seconds": 244.38
+  },
+  "new_api_tests": 23,
+  "web_tests": 105,
+  "browser_tests": 4,
+  "actual_api_frontend_contracts_verified": true,
+  "sha256": {
+    "packages/erp_store/src/erp_store/intent_revision.py": "6841509e805d24d120fad30f31e7c6bed2825578d7f1c9cf7bf51ec8ef3bfe18",
+    "packages/erp_store/src/erp_store/intent_semantic.py": "6828863950ee4ebce3968b0c59654e58e75ee319c303404586817e587da6e41c",
+    "packages/erp_store/src/erp_store/intent_preview.py": "e2c7b90577c2f28097abefdb5aa16f4cab36dd0f7a9ed16ebe86d1c783bb658c",
+    "packages/erp_store/src/erp_store/drafts.py": "4a855ef4dbf514a540518b5af63fc179abdd5d4e11ebc7804dd4b8f503246a58",
+    "packages/mcp_erp/src/mcp_erp/intent_semantic.py": "c20c1099c755421476c712e8d96cba2fd3ba963c92ea241d4fd90e3add12f3da",
+    "apps/api/src/erpilot_api/intent_routes.py": "061a16c4f017a1793e3993949fa2ed2902b7385041951b53aedc28d0326bb56a",
+    "apps/api/src/erpilot_api/main.py": "3b42d824b1fbb18b7a3a18c2bc5e8b40cd9c52d5f8bb0d3aea7e6152ab33a989",
+    "apps/api/tests/test_intent_revision_api.py": "2ec154ce3b93a34d7db9fa2df6c259eafc74b8ae868079d3cd53f1de04ac572c",
+    "apps/web/src/intent-preview.ts": "de3716e0a52d878c98612579da96e0580a2a002a3860355d7971f36d54ccc117",
+    "apps/web/src/components/IntentPreviewPanel.tsx": "781615bb56585df7af558d824654e07de19c93c08b8352e57d5b57a10417a617",
+    "apps/web/src/components/OrderDraftPanel.tsx": "a811f7df3b04f21ca420e2b33c6e3de7dfd90cfcf3d3fd3b6be2091b1b024491",
+    "apps/web/src/App.tsx": "ced3222dacbe5ccf107d1c6893f420bc55cc67ca30c1d59f5c422168f3caac07",
+    "apps/web/tests/ui/intent-revision.spec.ts": "f44c34ee2579df69e467c37691c1605b3c3c4435a29b9f50b80eddc9266b8431",
+    "apps/web/tests/intent-preview.test.mjs": "d497f4360938db849b656150e39d006ce9171d80cabc44d4c1445b111c6127a7",
+    "artifacts/accept-intent-revision.py": "a06733dee3ceba920f4264475051cb42346121bb3314451c84f73b82e6c55688",
+    "reports/acceptance/20261102-intent-revision-api-evidence.json": "b92a2d1a781e5d4a495daece6f619e79253cdc65225e0e5ffe7b2b2a37ed1c04",
+    "reports/acceptance/20261102-intent-revision-full-final.xml": "1a153c70115561c8fd090e339fccfbd23cac8603a93b235522cde16b5d6e501d",
+    "reports/acceptance/20261102-intent-revision-320.png": "5cf02caa990c882008f41d0eaa7e6175fe3e98d5e938b11245cacd78db27b1bf",
+    "reports/acceptance/20261102-intent-revision-1440.png": "2fc6789f583f4bc367f11364d99c03dcb28439748d9db21a29583edad81d5db4"
+  }
+}

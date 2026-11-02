@@ -307,6 +307,7 @@ const TOOL_TITLES: Record<string, string> = {
   adjust_stock: "调整库存",
   create_order: "创建订单",
   prepare_order_draft: "准备订单草稿",
+  resolve_order_items: "核对商品名称与件数",
   get_order_task: "查询当前草稿任务",
   get_order_draft: "查询订单草稿",
   get_order_draft_history: "查看草稿修改记录",

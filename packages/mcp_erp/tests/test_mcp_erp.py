@@ -430,6 +430,7 @@ def test_tool_cards_doc_matches_server_tools() -> None:
         "prepare_order_draft", "get_order_draft", "revise_order_draft", "submit_order_draft",
         "get_order_task", "revise_order_draft_quantity",
         "get_order_draft_history",
+        "resolve_order_items",
         "prepare_cancel_order", "prepare_stock_adjustment",
     }
 

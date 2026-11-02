@@ -20,7 +20,7 @@ Erpilot 是运行在 mini-ERP 上的审批型业务智能体：模型通过 MCP 
 | 审批、版本与幂等 | `erp_store.drafts`、`agent_core.graph`；草稿到审批演示 | [订单草稿](../reports/acceptance/2026-10-11-order-draft.md)、[写入可靠性](write-reliability.md) |
 | 状态恢复与业务提交对账 | graph checkpoint、mutation token、RunStore 投影 | [19 项进程恢复记录](../reports/acceptance/2026-10-08-crash-recovery.md)；ADR-0010 仍待评审 |
 | 多轮草稿指代 | 持久任务查询、版本 / SKU guard | [B4 指代专项](../reports/acceptance/2026-10-19-b4-final-validation.md)：两模型各 3/3 场景、7/7 轮 |
-| RAG 与证据绑定 | `search_policy`、结构化选证、程序原文渲染 | [最新政策验收](../reports/acceptance/2026-10-19-structured-policy-and-resume.md)：两模型各 11/13，门槛未达成 |
+| RAG 与证据绑定 | `search_policy`、结构化选证、程序原文渲染及受阻直接结束 | [新验收](../reports/acceptance/2026-10-28-contracts-and-policy.md)：GLM v4 独立 13/13；旧 v3 两模型各 11/13 保留 |
 | 补货建议 | 销量 / 库存 / 采购周期计算，无采购写入 | [B6 最终真实验收](../reports/acceptance/2026-10-19-live-model-validation.md)：两模型各 7/7，一组成对样本 |
 | 上下文与输入成本 | [固定场景实验](context-experiment.md)，可选结构化视图 | [本批验收](../reports/acceptance/2026-10-19-context-and-portfolio.md)，离线与真实结果分列 |
 
@@ -31,6 +31,17 @@ Erpilot 是运行在 mini-ERP 上的审批型业务智能体：模型通过 MCP 
 不包含 `.env`、本地业务库、traces、安装依赖或个人工具配置。
 
 ## 统一投递包
+
+2026-10-28 更新的材料与源码包为 `artifacts/erpilot-portfolio-20261028.zip`，复用既有字幕视频，
+包含新的订单契约、政策程序结束实现及独立验收。订单 v2 真实验收因连接错误缺 usage 冻结；
+政策 GLM v4 13/13 是受控检索单批观察。构建与核验方式：
+
+```sh
+python scripts/portfolio_delivery.py --output artifacts/erpilot-portfolio-20261028.zip
+python scripts/portfolio_delivery.py --verify artifacts/erpilot-portfolio-20261028.zip
+```
+
+以下保留此前交付路径，输出存在时使用新的文件名。
 
 复用已有视频、字幕、章节和两张业务截图，连同当前源码组成一个交付 ZIP：
 

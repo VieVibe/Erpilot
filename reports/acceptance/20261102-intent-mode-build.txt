@@ -1,0 +1,18 @@
+
+> erpilot-web@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v6.4.3 building for production...
+transforming...
+✓ 6306 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     0.42 kB │ gzip:   0.30 kB
+dist/assets/index-OhGBeBli.css     26.02 kB │ gzip:   6.33 kB
+dist/assets/index-BOv0W1Li.js   1,359.05 kB │ gzip: 436.27 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 8.84s

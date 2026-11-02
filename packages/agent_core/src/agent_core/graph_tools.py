@@ -60,6 +60,10 @@ def prepare_tool_calls(
             )
         else:
             try:
+                if tool.stage_policy is not None and not tool.stage_policy(
+                    deepcopy(list(messages)), deepcopy(list(tool_history)),
+                ):
+                    raise ToolConstraintError("intent_stage_blocked", "当前阶段不允许该操作")
                 record["arguments"] = tool.params_model.model_validate_json(
                     call.arguments,
                 ).model_dump(mode="json")
@@ -108,7 +112,10 @@ def prepare_tool_calls(
                     )
             except Exception as exc:
                 record.update(
-                    content=error_payload("validation", f"参数校验失败：{exc}"), ok=False
+                    content=error_payload(
+                        exc.code if isinstance(exc, ToolConstraintError) else "validation",
+                        f"参数校验失败：{exc}",
+                    ), ok=False
                 )
         prepared.append(record)
     return prepared

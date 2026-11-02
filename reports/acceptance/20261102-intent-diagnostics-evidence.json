@@ -1,0 +1,129 @@
+{
+  "provider_requests": 0,
+  "fixture": "scripted_model_actual_api_and_mcp",
+  "runs": [
+    {
+      "test": "test_every_plain_text_turn_is_2",
+      "file": "reports/acceptance/20261102-intent-diagnostic-events/20261102-093126-01b44084.intent.jsonl",
+      "sha256": "61d481093e97ab8d6b94f89a2b817f05facb1bf2e3ba71f5df9da3cc564e8d8c",
+      "request_id": "c051444cea844178832ea8601eaf0d96",
+      "mode": "enforce",
+      "events": 5,
+      "outcome": "completed",
+      "business_model_requests": 1,
+      "unknown_usage_steps": [],
+      "tool_attempts": [],
+      "rejected_tools": [],
+      "final_versions": []
+    },
+    {
+      "test": "test_every_plain_text_turn_is_2",
+      "file": "reports/acceptance/20261102-intent-diagnostic-events/20261102-093126-e7cd01fa.intent.jsonl",
+      "sha256": "26846ee2076a3069b71bef3f69bac1aab62bef23a0db70edd474883ad746e36c",
+      "request_id": "87897b10a0b4420e9cbfb0596e500371",
+      "mode": "enforce",
+      "events": 5,
+      "outcome": "completed",
+      "business_model_requests": 1,
+      "unknown_usage_steps": [],
+      "tool_attempts": [],
+      "rejected_tools": [],
+      "final_versions": []
+    },
+    {
+      "test": "test_model_failure_preserves_u0",
+      "file": "reports/acceptance/20261102-intent-diagnostic-events/20261102-093128-68b1ed32.intent.jsonl",
+      "sha256": "2e7a7523146b738a3491e109d4dd3d85770ba0ae906c667a06ac5c3f11ac38eb",
+      "request_id": "50388ab967d249aaa7c5f45e32994e48",
+      "mode": "enforce",
+      "events": 4,
+      "outcome": "error",
+      "business_model_requests": 1,
+      "unknown_usage_steps": [
+        1
+      ],
+      "tool_attempts": [],
+      "rejected_tools": [],
+      "final_versions": []
+    },
+    {
+      "test": "test_required_reads_rejected_a0",
+      "file": "reports/acceptance/20261102-intent-diagnostic-events/20261102-093127-885747e6.intent.jsonl",
+      "sha256": "48e4dad91b571cfe6ebefe7f96d11d1fe4dfb9983b4cc4e60c6085cceb5cdef9",
+      "request_id": "c9a864934972480da4740983d13d56b2",
+      "mode": "enforce",
+      "events": 6,
+      "outcome": "completed",
+      "business_model_requests": 0,
+      "unknown_usage_steps": [],
+      "tool_attempts": [
+        "resolve_order_items"
+      ],
+      "rejected_tools": [],
+      "final_versions": []
+    },
+    {
+      "test": "test_required_reads_rejected_a0",
+      "file": "reports/acceptance/20261102-intent-diagnostic-events/20261102-093127-8fe9c94d.intent.jsonl",
+      "sha256": "8bc847ec2003d67f7fa3f5e93598b29e41849d400555157a98aef8eff232f66b",
+      "request_id": "567cdf1edddf4c8aa442187395511bb3",
+      "mode": "enforce",
+      "events": 27,
+      "outcome": "completed",
+      "business_model_requests": 4,
+      "unknown_usage_steps": [],
+      "tool_attempts": [
+        "resolve_order_items",
+        "submit_order_draft",
+        "prepare_order_draft",
+        "prepare_order_draft"
+      ],
+      "rejected_tools": [
+        {
+          "call_id": "forbidden",
+          "name": "submit_order_draft",
+          "ok": false,
+          "rejection_code": "intent_stage_blocked",
+          "content": "{\"error\": {\"type\": \"intent_stage_blocked\", \"message\": \"参数校验失败：当前阶段不允许该操作\"}}"
+        },
+        {
+          "call_id": "wrong-count",
+          "name": "prepare_order_draft",
+          "ok": false,
+          "rejection_code": "argument_constraint",
+          "content": "{\"error\": {\"type\": \"argument_constraint\", \"message\": \"工具参数与完整原始请求不一致，未保存部分清单\"}}"
+        }
+      ],
+      "final_versions": [
+        {
+          "draft_id": "9191ad45efa54effb5f2d98ad502f215",
+          "revision": 1
+        }
+      ]
+    },
+    {
+      "test": "test_shadow_analysis_is_persis0",
+      "file": "reports/acceptance/20261102-intent-diagnostic-events/20261102-093131-41bf6fbf.intent.jsonl",
+      "sha256": "13a359f67e73c0df0b0219303f9ed95e1b997824bd6a1d0c454b26ba74437e39",
+      "request_id": "b943b2028c9445c9a16d357fc75d1436",
+      "mode": "shadow",
+      "events": 9,
+      "outcome": "completed",
+      "business_model_requests": 2,
+      "unknown_usage_steps": [],
+      "tool_attempts": [
+        "prepare_order_draft"
+      ],
+      "rejected_tools": [
+        {
+          "call_id": "attempt",
+          "name": "prepare_order_draft",
+          "ok": false,
+          "rejection_code": "argument_constraint",
+          "content": "{\"error\": {\"type\": \"argument_constraint\", \"message\": \"创建商品清单无法核验，草稿未保存。请在本轮明确说『给客户保存报价草稿：A1001 2件，B2001 3件』，完整列出 SKU 和正整数件数；有条件、冲突或不确定的需求请先确认，也可在草稿表单中逐项核对。\"}}"
+        }
+      ],
+      "final_versions": []
+    }
+  ]
+}

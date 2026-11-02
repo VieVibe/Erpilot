@@ -1,0 +1,41 @@
+{
+  "source_before": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "6c2abe19ac36248c4f790b3e97e57b10bb8cf04421b31ce676de5e0494234b28"
+  },
+  "source_after": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "6c2abe19ac36248c4f790b3e97e57b10bb8cf04421b31ce676de5e0494234b28"
+  },
+  "source_unchanged": true,
+  "full_tests": {
+    "passed": 1764,
+    "skipped": 0,
+    "deselected": 47,
+    "seconds": 427.05
+  },
+  "postgres_focused": 56,
+  "local_mode_tests": 32,
+  "web_tests": 106,
+  "browser_tests": 2,
+  "core_passed": 120,
+  "core_label_status": "engineering_expectations_pending_human_review",
+  "human_review": "user_deferred_review_keep_pending",
+  "new_generation_attempts": 1,
+  "new_generation_usage_unknown": 1,
+  "revision_live_batch_started": false,
+  "old_budget_unchanged": true,
+  "evidence_sha256": {
+    "20261102-intent-mode-full-postgres.xml": "343eb00c688dc43199c66182e68468daf6814887cd6a2249ef5dc16d4e4fe607",
+    "20261102-intent-mode-postgres.xml": "63969eda8f1b424a585d7fe623f4c0a3072c81b828df83cfb93c283042e10048",
+    "20261102-intent-mode-local-final.xml": "348fd8249180f3cc9e1f302594ab5062536b3861f02fb23a551fc8c814f91721",
+    "20261102-intent-mode-core.json": "963566a4f785126ce6011a397cbcabb660956bcece0bd88b155b1f32d50dce8f",
+    "20261102-intent-mode-web-tests.txt": "783f443e87838005b3fe3de5346209b8d863f07003e7dba453e0a3daee47372b",
+    "20261102-intent-mode-ui-tests.txt": "91435046667086ee3f6a145535aff22811ae99da3014fdb97302e41cd71ded47",
+    "20261102-intent-mode-recovery-320.png": "f62b2181a6e736b6b4474f4a456179eb51aa1ab546728eadc10be2e2cf516e62",
+    "20261102-intent-mode-recovery-1440.png": "4c36a7cdc69ae7bffafbbc107901708986e8dca93489beb1ea548d6e9c11d1a0",
+    "20261102-intent-completion-create-live/report.json": "d5611a2a40734358cfb334a6bc837a7118ecd9a18c4970c928a382dfb8804244"
+  }
+}

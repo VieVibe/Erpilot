@@ -36,6 +36,8 @@ import {
 import { AssistantMessage } from "./components/AssistantMessage";
 import { approvalDraftIssue, createOrderDraft, draftConfirmationText, getOrderDraft, listOrderDrafts, parseOrderDraft, reviseOrderDraft, type OrderDraft } from './drafts';
 import { DraftSummary, OrderDraftPanel } from './components/OrderDraftPanel';
+import { IntentPreviewPanel } from './components/IntentPreviewPanel';
+import { requestIntentRevisionPreview } from './intent-preview';
 import { approvalOperationIssue, getOperation, requiresBusinessSummary, parseOperation, retainOperationSnapshot, type BusinessOperation } from './operations';
 import { BusinessApprovalSummary } from './components/BusinessApprovalSummary';
 import { SessionRequests } from './history';
@@ -50,6 +52,7 @@ const SESSION_KEY = "erpilot-session-id";
 const FRESH_SESSION_KEY = "erpilot-fresh-session-id";
 const DEMO_PROMPTS: Record<string, string> = {
   draft: '给演示客户创建草稿：A1001 10 件、B2001 20 件，备注分箱发货',
+  natural: '给演示客户准备订单：青瓷茶具两件，三件宣纸礼盒；备注原文「分箱发货」；预算上限为500元；只保存草稿',
   revise: '把当前版本的第二行改成 50 件',
   submit: '提交当前草稿',
   policy: '查询数量梯度折扣政策',
@@ -92,6 +95,7 @@ export default function App() {
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<string>("");
   const [runtimeLabel, setRuntimeLabel] = useState("数据源未确认");
+  const [intentRevisionEnabled, setIntentRevisionEnabled] = useState(false);
   const [scriptedDemo, setScriptedDemo] = useState(false);
   const [error, setError] = useState<string>("");
   const [busy, setBusy] = useState(false);
@@ -113,6 +117,9 @@ export default function App() {
   const lastEventAtRef = useRef(Date.now());
   const [stalled, setStalled] = useState(false);
   const [draftsEnabled, setDraftsEnabled] = useState(false);
+  const [intentPreviewEnabled, setIntentPreviewEnabled] = useState(false);
+  const [intentRecoveryEnabled, setIntentRecoveryEnabled] = useState(false);
+  const [intentRefresh, setIntentRefresh] = useState(0);
   const [writesEnabled, setWritesEnabled] = useState(false);
   const draftsEnabledRef = useRef(false);
   const [drafts, setDrafts] = useState<OrderDraft[]>([]);
@@ -126,6 +133,7 @@ export default function App() {
   const draftRequest = useRef(0);
   const refreshDrafts = useCallback(async () => {
     if (!draftsEnabledRef.current) return;
+    setIntentRefresh(value => value + 1);
     const sessionId = sessionIdRef.current;
     const ticket = sessionRequests.current.capture();
     const request = ++draftRequest.current;
@@ -366,6 +374,9 @@ export default function App() {
         runtime.data_source === "demo" ? "演示数据" : "数据源未确认";
       setRuntimeLabel(`${source} · ${runtime.writes_enabled ? "写入需审批" : "只读"}`);
       setDraftsEnabled(runtime.drafts_enabled === true);
+      setIntentPreviewEnabled(runtime.intent_preview_enabled === true);
+      setIntentRecoveryEnabled(runtime.intent_recovery_enabled === true);
+      setIntentRevisionEnabled(runtime.intent_semantic_revision_enabled === true);
       setWritesEnabled(runtime.writes_enabled === true);
       setBusinessEnabled(runtime.business_approvals_enabled === true);
       draftsEnabledRef.current = runtime.drafts_enabled === true;
@@ -657,7 +668,19 @@ export default function App() {
   const sessionLocked = busy || hasPending || interrupted || sessionStatus === 'running';
   const inputLocked = !canSend || hasPending || interrupted;
   const inspectApprovals = () => { setBusinessTab('approvals'); setBusinessOpen(true); };
-  const orderPanel = draftsEnabled ? <OrderDraftPanel key={sessionIdRef.current} sessionId={sessionIdRef.current} drafts={drafts} loading={draftsLoading} error={draftsError} busy={busy && !hasPending} canSubmit={writesEnabled&&canSend&&!hasPending&&!interrupted} writesEnabled={writesEnabled} hasPending={hasPending}
+  const orderPanel = draftsEnabled ? <>
+    {(intentPreviewEnabled || intentRecoveryEnabled) && <IntentPreviewPanel key={`intent:${sessionIdRef.current}`} sessionId={sessionIdRef.current}
+      refresh={intentRefresh} busy={sessionLocked || restoreState === 'loading' || restoreState === 'recovery_failed'} onBusy={setBusy} onSaved={() => void refreshDrafts()} />}
+    <OrderDraftPanel key={sessionIdRef.current} sessionId={sessionIdRef.current} drafts={drafts} loading={draftsLoading} error={draftsError} busy={busy && !hasPending} canSubmit={writesEnabled&&canSend&&!hasPending&&!interrupted} writesEnabled={writesEnabled} hasPending={hasPending}
+          onIntentPreview={intentRevisionEnabled ? async (draft,source) => {
+            if (sessionLocked || restoreState !== 'ready') throw new Error('请先完成当前会话操作');
+            const ticket = sessionRequests.current.capture(); const sessionId = sessionIdRef.current;
+            setBusy(true);
+            try {
+              await requestIntentRevisionPreview(sessionId, draft, source, crypto.randomUUID());
+              if (sessionRequests.current.isCurrent(ticket)) setIntentRefresh(v => v + 1);
+            } finally {if (sessionRequests.current.isCurrent(ticket)) setBusy(false);}
+          } : undefined}
           onRefresh={()=>void refreshDrafts()} onSave={async (draft,input)=>{
             const sessionId=sessionIdRef.current;
             const ticket=sessionRequests.current.capture();
@@ -671,7 +694,7 @@ export default function App() {
           }} onSubmit={draft=>{
             if (Date.parse(draft.expires_at)<=Date.now()) {void refreshDrafts();return;}
             void send(draftConfirmationText(draft), draft);
-          }} /> :
+          }} /></> :
     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="当前环境尚未开放订单草稿" />;
   const approvalPanel = <div className="approval-list">
     {pendingApprovals.length === 0 ? <Empty image={<CheckCircleOutlined />} description="暂无待处理审批" /> :
@@ -724,7 +747,7 @@ export default function App() {
         {scriptedDemo && <Alert className="demo-notice" type="info" showIcon title="离线脚本化演示"
           description={<>使用固定指令和临时数据，重启后会话清空。政策使用关键词演示向量；此模式用于查看业务流程，不代表真实模型表现。
             <Space wrap style={{ marginTop: 8 }}>
-              {Object.entries({draft: '创建草稿', revise: '修改第二行', submit: '提交草稿', policy: '政策证据',
+              {Object.entries({draft: '创建草稿', natural: '商品名称下单', revise: '修改第二行', submit: '提交草稿', policy: '政策证据',
                 policyMiss: '无依据拒答', cancellation: '取消资格', replenishment: '补货建议'}).map(([key, label]) =>
                 <Button key={key} size="small" disabled={inputLocked} onClick={() => setInput(DEMO_PROMPTS[key])}>{label}</Button>)}
             </Space></>} />}

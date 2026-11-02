@@ -248,14 +248,20 @@ def _convert(
         return await invoke(args, evidence)
 
     def submission_preflight(arguments, messages, history):
-        from erp_store.draft_budget import ensure_budget
         from erp_store.drafts import ErpDrafts
         from erp_store.mutations import MutationError
 
+        from mcp_erp.draft_constraints import ensure_task_selection
+
         engine = make_engine(db_path)
         try:
-            draft = ErpDrafts(engine).get(session_id, arguments["draft_id"], arguments["revision"])
-            ensure_budget(draft)
+            drafts = ErpDrafts(engine)
+            question = next((row.get("content", "") for row in reversed(messages)
+                             if row.get("role") == "user"), "")
+            ensure_task_selection(arguments["draft_id"], question, drafts.task_state(session_id))
+            drafts.check_submission(
+                session_id, arguments["draft_id"], arguments["revision"],
+            )
         except MutationError as exc:
             raise ToolConstraintError(exc.code, exc.message + "；" + exc.hint) from exc
         finally:
@@ -266,6 +272,7 @@ def _convert(
         name=name, description=description, params_model=params_model, handler=handler,
         validated_handler=validated_handler if session_id is not None and name in {
             "prepare_order_draft", "revise_order_draft", "revise_order_draft_quantity",
+            "resolve_order_items",
         } else None,
         call_validator=(submission_preflight
                         if session_id is not None and name == "submit_order_draft" else None),

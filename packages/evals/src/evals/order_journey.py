@@ -9,6 +9,7 @@ import asyncio
 import json
 import math
 import tempfile
+import time
 from dataclasses import asdict, dataclass, replace
 from decimal import Decimal
 from pathlib import Path
@@ -212,7 +213,9 @@ def check_step(step, before, after, *, pending, history, answer, price):
     return failed
 
 
-async def run_journey(name, *, client, directory, trace_dir, on_step=None):
+async def run_journey(
+    name, *, client, directory, trace_dir, on_step=None, steps=None, checker=None,
+):
     engine = cw.seed_workflow(directory / "erp.db", cw.Workflow(name, ()), SESSION)
     factory = await SessionErpTools.create(directory / "erp.db", writes=True,
                                             gate=StreamApprovalGate())
@@ -226,7 +229,8 @@ async def run_journey(name, *, client, directory, trace_dir, on_step=None):
     conversation = [{"role": "system", "content": system_prompt(True) + "\n" + DRAFT_GUIDANCE}]
     results = []
     try:
-        for number, step in enumerate(JOURNEYS[name], 1):
+        for number, step in enumerate(JOURNEYS[name] if steps is None else steps, 1):
+            started = time.monotonic()
             before = snapshot_all(engine)
             trace = trace_dir / f"{name}-{number}.jsonl"
             error, history, answer, question = None, [], "", step.question
@@ -290,11 +294,12 @@ async def run_journey(name, *, client, directory, trace_dir, on_step=None):
             except Exception as exc:
                 error = f"{type(exc).__name__}: {exc}"
             after = snapshot_all(engine)
-            failed = check_step(step, before, after, pending=pending, history=history,
-                                answer=answer, price=price)
+            failed = (checker or check_step)(step, before, after, pending=pending, history=history,
+                                             answer=answer, price=price)
             if error:
                 failed.append("run_error: " + error)
             row = {"step": number, "control": asdict(step), "question": question,
+                   "elapsed_seconds": round(time.monotonic() - started, 6),
                    "passed": not failed, "failed_checks": failed, "error": error,
                    "final_answer": answer, "tool_history": history,
                    "pending": asdict(pending) if pending else None, "trace": str(trace.resolve()),
@@ -310,7 +315,9 @@ async def run_journey(name, *, client, directory, trace_dir, on_step=None):
         engine.dispose()
 
 
-async def run_live(config, *, limit, currency, output, timeout=60, client_override=None):
+async def run_live(config, *, limit, currency, output, timeout=60, client_override=None,
+                   journeys=None, version=VERSION, checker=None):
+    journeys = JOURNEYS if journeys is None else journeys
     rate = endpoint_rate(config.model, config.base_url)
     if rate.currency != currency:
         raise ValueError("currency mismatch")
@@ -321,9 +328,9 @@ async def run_live(config, *, limit, currency, output, timeout=60, client_overri
         raise ValueError("batch already exists")
     journal.touch(exist_ok=False)
     budget = CurrencyBudget(limit, currency, max_requests=160)
-    report = {"version": VERSION, "model": config.model, "source": cw.source_fingerprint(),
-              "cases": {k: [asdict(s) for s in v] for k, v in JOURNEYS.items()},
-              "cases_sha256": cw.digest({k: [asdict(s) for s in v] for k, v in JOURNEYS.items()}),
+    report = {"version": version, "model": config.model, "source": cw.source_fingerprint(),
+              "cases": {k: [asdict(s) for s in v] for k, v in journeys.items()},
+              "cases_sha256": cw.digest({k: [asdict(s) for s in v] for k, v in journeys.items()}),
               "timeout": timeout, "sdk_retries": 0, "case_retries": 0,
               "rate": {k: str(v) for k, v in asdict(rate).items()},
               "budget": {"currency": currency, "limit": str(limit)},
@@ -336,7 +343,7 @@ async def run_live(config, *, limit, currency, output, timeout=60, client_overri
         raw = client_override or LLMClient(config, client=sdk, request_timeout=timeout)
         client = BudgetedClient(cw.RecordedClient(raw, inputs, budget, report["source"]), rate,
                                 budget, request_observer=lambda e: cw.append_record(journal, e))
-        for name, steps in JOURNEYS.items():
+        for name, steps in journeys.items():
             if budget.exhausted:
                 break
             row = {"journey": name, "planned_steps": len(steps), "steps": [],
@@ -355,10 +362,11 @@ async def run_live(config, *, limit, currency, output, timeout=60, client_overri
             client.begin_case(name)
             with tempfile.TemporaryDirectory(prefix="erpilot-order-journey-") as temp:
                 await run_journey(name, client=client, directory=Path(temp), on_step=on_step,
-                                  trace_dir=cw.ROOT / "traces" / "order-journey" / output.name)
+                                  trace_dir=cw.ROOT / "traces" / "order-journey" / output.name,
+                                  steps=steps, checker=checker)
     report["journal_audit"] = request_totals(journal)
     report["budget"].update(known_spent=str(budget.spent), unknown_usage=budget.unknown_usage)
-    report["complete"] = len(report["results"]) == len(JOURNEYS) and all(
+    report["complete"] = len(report["results"]) == len(journeys) and all(
         r["complete"] for r in report["results"]
     )
     report["source_consistent"] = cw.source_fingerprint()["sha256"] == report["source"]["sha256"]

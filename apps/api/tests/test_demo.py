@@ -41,7 +41,7 @@ async def test_offline_demo_verifies_all_business_flows_without_external_fallbac
     monkeypatch.setattr("httpx2.AsyncHTTPTransport.handle_async_request", forbidden)
     results = await demo["run_demo"](tmp_path)
     assert {r["scenario"] for r in results} == set(demo["SCENARIOS"])
-    assert len(results) == 10
+    assert len(results) == 11
     assert all(r["verified"] for r in results)
     assert all(Path(path).is_file() for r in results for path in r["traces"])
     for result in results:

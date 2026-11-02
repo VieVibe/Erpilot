@@ -10,42 +10,21 @@ import hashlib
 import json
 import re
 from dataclasses import replace
-from decimal import Decimal
 from functools import partial
 
 from erp_store.draft_budget import normalize_budget
+from erp_store.intent_literals import _CLAUSE, _NOTES, _mask_notes, literal_requirements
 
-_CLAUSE = r"(?:^|[，,。；;\n])\s*(?:请\s*)?"
-_CREATE_CUSTOMER = re.compile(
-    _CLAUSE + r"(?:给|为)\s*(?P<value>[^，,。；;\n]{1,80}?)\s*"
-    r"(?:保存|创建|新建|准备|生成)(?:一(?:份|个|张))?(?:报价|订单)?草稿"
+from mcp_erp.draft_creation import validate_creation_items
+from mcp_erp.draft_items import validate_item_changes
+from mcp_erp.order_language import (
+    ResolveOrderItemsParams,
+    check_resolved_arguments,
+    observed_resolution,
+    required_resolution,
+    resolution_source,
 )
-_CHANGE_CUSTOMER = re.compile(
-    _CLAUSE + r"(?:把|将)?客户(?:名|全称)?\s*"
-    r"(?:修改为|设置为|改成|改为|设为|为|是|[:：])\s*"
-    r"(?P<value>[^，,。；;\n]{1,80}?)(?=$|[，,。；;\n])"
-)
-_QUOTE_PAIRS = (("「", "」"), ("“", "”"), ('"', '"'), ("'", "'"))
-_NOTES = [
-    re.compile(
-        _CLAUSE + r"(?:把|将|修改)?备注(?:原文|内容)?\s*"
-        r"(?:修改为|设置为|改成|改为|设为|为|是|[:：])?\s*"
-        + re.escape(left) + r"(?P<value>[^" + re.escape(left + right) + r"]*)"
-        + re.escape(right)
-    )
-    for left, right in _QUOTE_PAIRS
-]
-_CLEAR_NOTE = re.compile(
-    _CLAUSE + r"(?:(?:清空|删除|去掉)备注|(?:把|将)?备注(?:清空|删除))(?=$|[，,。；;\n])"
-)
-_BUDGET = re.compile(
-    _CLAUSE + r"(?:把|将)?(?:订单)?(?:总预算|预算(?:上限)?|总价上限|总价)\s*"
-    r"(?:修改为|调整为|提高到|提高至|降低到|降低至|设置为|改成|改为|设为|不得超过|不超过|最多|为|[:：])\s*"
-    r"(?:人民币|CNY|[¥￥])?\s*(?P<value>\d+(?:\.\d+)?)\s*(?:元)?(?=$|[，,。；;\n])"
-)
-_CLEAR_BUDGET = re.compile(
-    _CLAUSE + r"(?:取消|清空|移除)预算上限(?=$|[，,。；;\n])"
-)
+
 # Deliberately bounded to an explicit query clause and a real draft-id shape.
 # Quoted notes and old conversation messages do not select a prerequisite read.
 _HISTORY_QUERY = re.compile(
@@ -95,54 +74,6 @@ def required_history_read(messages, history):
     return None
 
 
-def _one(values, field):
-    if not values:
-        return None
-    if len({value for value, _ in values}) != 1:
-        raise ValueError(f"本轮存在多个不同的{field}要求，请明确唯一值后再保存；草稿未修改")
-    return values[-1]
-
-
-def _customer_literal(value):
-    value = value.strip()
-    for left, right in _QUOTE_PAIRS:
-        if value.startswith(left) and value.endswith(right):
-            return value[len(left):-len(right)].strip()
-    return value
-
-
-def literal_requirements(question):
-    """Recognize documented positive clauses; quoted notes never act as commands."""
-    notes, spans = [], []
-    for pattern in _NOTES:
-        for match in pattern.finditer(question):
-            notes.append((match["value"], match.group().lstrip("，,。；;\n ")))
-            spans.append(match.span())
-    masked = list(question)
-    for start, end in spans:
-        masked[start:end] = " " * (end - start)
-    remaining = "".join(masked)
-    notes.extend((None, match.group().strip()) for match in _CLEAR_NOTE.finditer(remaining))
-    customers = [
-        (_customer_literal(match["value"]), match.group().strip("，,。；;\n "))
-        for pattern in (_CREATE_CUSTOMER, _CHANGE_CUSTOMER)
-        for match in pattern.finditer(remaining)
-    ]
-    budgets = [(normalize_budget(Decimal(m["value"])), m.group().strip("，,。；;\n "))
-               for m in _BUDGET.finditer(remaining)]
-    budgets.extend((None, m.group().strip("，,。；;\n "))
-                   for m in _CLEAR_BUDGET.finditer(remaining))
-    masked_budget = _CLEAR_BUDGET.sub(" ", _BUDGET.sub(" ", remaining))
-    if re.search(_CLAUSE + r"(?:订单)?(?:总预算|预算|总价上限|总价不超过|"
-                 r"(?:取消|清空|移除|删除)预算)", masked_budget):
-        raise ValueError("预算表达无法核验；请明确说预算上限为3000元、预算改为3500元或取消预算上限")
-    labels = {"customer": "客户", "note": "备注", "budget_limit": "预算"}
-    return {
-        field: {"value": chosen[0], "quote": chosen[1]}
-        for field, values in (("customer", customers), ("note", notes), ("budget_limit", budgets))
-        if (chosen := _one(values, labels[field])) is not None
-    }
-
 
 def _observed_draft(arguments, history):
     for record in reversed(history):
@@ -163,6 +94,21 @@ def _observed_draft(arguments, history):
     raise ValueError("先在本轮查询目标草稿的当前版本，再修改；草稿未修改")
 
 
+def ensure_task_selection(draft_id, question, task):
+    if task.get("status") != "ambiguous":
+        return
+    # Quoted data cannot select a task. Duplicate customer names require an ID.
+    from mcp_erp.draft_items import _mask_quotes
+
+    text = _mask_quotes(_mask_notes(question))
+    candidates = task["candidates"]
+    selected = [row for row in candidates if row["draft_id"] in text]
+    if not selected:
+        selected = [row for row in candidates if row["customer"] in text]
+    if len(selected) != 1 or selected[0]["draft_id"] != draft_id:
+        raise ValueError("当前存在多份草稿，请明确唯一客户或草稿标识后再操作；未修改或提交")
+
+
 def validate_draft_arguments(tool_name, arguments, messages, history):
     question = next(
         (message.get("content") for message in reversed(messages) if message.get("role") == "user"),
@@ -173,6 +119,17 @@ def validate_draft_arguments(tool_name, arguments, messages, history):
     literals = literal_requirements(question)
     fields = {}
     previous = _observed_draft(arguments, history) if tool_name != "prepare_order_draft" else None
+    resolved = observed_resolution(question, history) if previous is None else None
+    if resolved:
+        parsed, _ = resolved
+        literals["customer"] = {"value": parsed['customer'], "quote": parsed['customer_quote']}
+        if "note" not in literals and arguments.get("note") is not None:
+            raise ValueError("本轮未指定备注，不能自行补写；草稿未保存")
+    if previous is not None:
+        for row in reversed(history):
+            if row.get("ok") and row.get("name") == "get_order_task":
+                ensure_task_selection(arguments["draft_id"], question, json.loads(row["content"]))
+                break
     if tool_name == "revise_order_draft_quantity":
         number = arguments.get("item_number")
         if type(number) is not int or not 1 <= number <= len(previous["items"]):
@@ -222,14 +179,23 @@ def validate_draft_arguments(tool_name, arguments, messages, history):
             "kind": "observed_draft", "value": prior_budget,
             "draft_id": previous["draft_id"], "revision": previous["revision"],
         }
+    item_guard = validate_item_changes(
+        tool_name, arguments, previous, _mask_notes(question), question,
+    ) if previous is not None else None
+    creation_guard = None
+    if previous is None:
+        creation_guard = (check_resolved_arguments(arguments, resolved) if resolved
+                          else validate_creation_items(arguments, _mask_notes(question), question))
     return {
         "contract": "draft-literals-1",
         "source_user_sha256": hashlib.sha256(question.encode("utf-8")).hexdigest(),
         "source_user_text": question,
         "fields": fields,
+        **({"item_guard": item_guard} if item_guard is not None else {}),
+        **({"creation_guard": creation_guard} if creation_guard is not None else {}),
         "unverified_fields": [
-            field for field in ("customer", "note", "items") if field not in fields
-        ],
+            field for field in ("customer", "note") if field not in fields
+        ] + ([] if creation_guard else ["items"]),
     }
 
 
@@ -238,7 +204,10 @@ def bind_draft_constraints(tools):
         replace(tool, call_validator=partial(validate_draft_arguments, tool.name))
         if tool.name in {
             "prepare_order_draft", "revise_order_draft", "revise_order_draft_quantity",
-        } else replace(tool, required_read=required_history_read)
+        } else replace(tool, params_model=ResolveOrderItemsParams, call_validator=resolution_source,
+                       required_read=required_resolution)
+        if tool.name == "resolve_order_items"
+        else replace(tool, required_read=required_history_read)
         if tool.name == "get_order_draft_history"
         else replace(tool, required_read=required_task_read) if tool.name == "get_order_task"
         else tool

@@ -1,0 +1,98 @@
+{
+  "suite": "intent-preview-20261031",
+  "source_before": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "f10fac6a191760f692b917d6141b48225cbf0f80e5da3c2faa862cea173457e3"
+  },
+  "default_mode": "off",
+  "provider_requests": 0,
+  "extra_hashes": {
+    "apps/web/package.json": "dc5c2f390c497b2525e6b7b174687d20771ec89cd5894fcacfcbc32c160ba402",
+    "artifacts/intent-preview-acceptance.py": "922db09be773a1a0cabe1a3f6dd49ec0d890c80bc64291d5c2577f85de2e06ad",
+    "apps/web/src/intent-preview.ts": "f0e696e601c6d3c8b5adc6e86a99539080928616be618192f4115ddba2798d24",
+    "apps/web/src/components/IntentPreviewPanel.tsx": "1cb41d6d6485f0e78fcb3b7f77d786fa1737baf29a2b190f808855354d5c7323",
+    "apps/api/src/erpilot_api/intent_routes.py": "7a4930fc7f9cbfac5f5193965e26cfa045c060a4c1e4d9e697e470ceb98eaa8e",
+    "packages/erp_store/src/erp_store/intent_preview.py": "34ac9a55e3d5a91bfa22453b9851ca75189eae926b8e80cbdd18e77eb9fb4fd3"
+  },
+  "source_after_interim": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "f10fac6a191760f692b917d6141b48225cbf0f80e5da3c2faa862cea173457e3"
+  },
+  "source_before_final": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "db5ea611263a98ab7da3f71852c3826bdb36bb9186e7a81d44979bf615e0b468"
+  },
+  "final_extra_hashes": {
+    "apps/web/package.json": "dc5c2f390c497b2525e6b7b174687d20771ec89cd5894fcacfcbc32c160ba402",
+    "artifacts/intent-preview-acceptance.py": "922db09be773a1a0cabe1a3f6dd49ec0d890c80bc64291d5c2577f85de2e06ad",
+    "apps/web/src/intent-preview.ts": "f0e696e601c6d3c8b5adc6e86a99539080928616be618192f4115ddba2798d24",
+    "apps/web/src/components/IntentPreviewPanel.tsx": "1cb41d6d6485f0e78fcb3b7f77d786fa1737baf29a2b190f808855354d5c7323",
+    "apps/api/src/erpilot_api/intent_routes.py": "7a4930fc7f9cbfac5f5193965e26cfa045c060a4c1e4d9e697e470ceb98eaa8e",
+    "packages/erp_store/src/erp_store/intent_preview.py": "34ac9a55e3d5a91bfa22453b9851ca75189eae926b8e80cbdd18e77eb9fb4fd3"
+  },
+  "source_after_final": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "db5ea611263a98ab7da3f71852c3826bdb36bb9186e7a81d44979bf615e0b468"
+  },
+  "source_unchanged_final": true,
+  "runs": [
+    {
+      "report": "20261031-intent-preview-tests.xml",
+      "tests": "1609",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "21",
+      "time": "232.537"
+    },
+    {
+      "report": "20261031-intent-preview-focused.xml",
+      "tests": "431",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "65.410"
+    },
+    {
+      "report": "20261031-intent-preview-tests-final.xml",
+      "tests": "1609",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "21",
+      "time": "211.686"
+    }
+  ],
+  "frontend": {
+    "unit_passed": 103,
+    "ui_passed": 51,
+    "ui_skipped_explicit_server": 2,
+    "real_api_browser_passed": 2,
+    "build": "passed"
+  },
+  "actual_api_summary": {
+    "provider_requests": 0,
+    "model_initializations": 0,
+    "orders": 0,
+    "drafts": 2,
+    "stocks": [
+      [
+        "K1",
+        1000
+      ],
+      [
+        "R1",
+        1000
+      ],
+      [
+        "R2",
+        1000
+      ]
+    ],
+    "consumed": 2,
+    "database": "F:\\VIE\\Erpilot\\artifacts\\intent-preview-real-34e660977add4ce79eea05f05a60dfda\\erp.db"
+  },
+  "source_comparison_note": "The interim full run preserved its original source. The final full run froze the default-runtime compatibility correction; frontend and acceptance fixture hashes were unchanged."
+}
