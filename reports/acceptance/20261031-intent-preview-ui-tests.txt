@@ -1,0 +1,63 @@
+
+> erpilot-web@0.1.0 test:ui
+> playwright test --workers=2
+
+
+Running 53 tests using 2 workers
+
+  ok  1 tests\ui\business-panel.spec.ts:51:3 › 320px 业务面板可滚动至全部商品和提交按钮，表格可横向查看 (2.7s)
+  ok  2 tests\ui\business-panel.spec.ts:51:3 › 1024px 业务面板可滚动至全部商品和提交按钮，表格可横向查看 (2.8s)
+  ok  3 tests\ui\business-panel.spec.ts:51:3 › 1200px 业务面板可滚动至全部商品和提交按钮，表格可横向查看 (1.8s)
+  ok  4 tests\ui\business-panel.spec.ts:51:3 › 1440px 业务面板可滚动至全部商品和提交按钮，表格可横向查看 (1.8s)
+  ok  5 tests\ui\business-panel.spec.ts:51:3 › 1920px 业务面板可滚动至全部商品和提交按钮，表格可横向查看 (1.7s)
+  ok  6 tests\ui\business-panel.spec.ts:72:3 › 320px 审批和结果均可滚动，长商品编码完整换行 (2.1s)
+  ok  7 tests\ui\business-panel.spec.ts:72:3 › 1440px 审批和结果均可滚动，长商品编码完整换行 (1.9s)
+  ok  8 tests\ui\draft-confirmation.spec.ts:48:3 › 确认 320px 的具体草稿版本和全部报价后才申请审批 (2.9s)
+  ok  9 tests\ui\draft-confirmation.spec.ts:48:3 › 确认 1440px 的具体草稿版本和全部报价后才申请审批 (2.7s)
+  ok 10 tests\ui\draft-confirmation.spec.ts:85:1 › 确认后发现版本已变化时停下并展示新版本，不自动重提 (1.7s)
+  ok 11 tests\ui\draft-history.spec.ts:49:3 › 修改记录在 320px 展示差异与来源，分页不写业务 (2.1s)
+  ok 12 tests\ui\draft-history.spec.ts:49:3 › 修改记录在 1440px 展示差异与来源，分页不写业务 (1.7s)
+  ok 13 tests\ui\draft-history.spec.ts:78:1 › 历史读取失败可重试，损坏记录不冒充有效来源 (1.8s)
+  ok 14 tests\ui\draft-history.spec.ts:95:1 › 切换会话后迟到的旧修改记录不会串入新任务 (1.9s)
+  ok 16 tests\ui\draft-review.spec.ts:33:31 › 商品名称与中文件数 1440px 可核对原文和实际商品 (1.6s)
+  ok 15 tests\ui\draft-review.spec.ts:33:31 › 商品名称与中文件数 320px 可核对原文和实际商品 (2.0s)
+  ok 18 tests\ui\draft-review.spec.ts:50:31 › 待确认事项 1440px 展示全部原因并阻止提交 (1.7s)
+  ok 17 tests\ui\draft-review.spec.ts:50:31 › 待确认事项 320px 展示全部原因并阻止提交 (2.1s)
+  ok 19 tests\ui\draft-review.spec.ts:68:1 › 核对窗口打开后同版本条件变化也会禁用确认 (1.7s)
+  -  21 tests\ui\intent-preview-real.spec.ts:6:31 › 实际 API 320px 恢复并核对完整请求，无模型建单调用
+  -  22 tests\ui\intent-preview-real.spec.ts:6:31 › 实际 API 1440px 恢复并核对完整请求，无模型建单调用
+  ok 20 tests\ui\draft-review.spec.ts:82:1 › 多份草稿需明确选择目标后才能编辑和提交 (1.7s)
+  ok 23 tests\ui\intent-preview.spec.ts:40:31 › 完整请求预览 320px 可恢复、补齐并一次保存全部字段 (2.1s)
+  ok 24 tests\ui\intent-preview.spec.ts:40:31 › 完整请求预览 1440px 可恢复、补齐并一次保存全部字段 (2.6s)
+  ok 25 tests\ui\intent-preview.spec.ts:70:1 › 请求改版后旧核对窗口保持原输入并禁止确认 (1.6s)
+  ok 26 tests\ui\intent-preview.spec.ts:84:1 › 保存冲突不自动重试、不覆盖编辑内容或提交订单 (2.0s)
+  ok 27 tests\ui\intent-preview.spec.ts:97:1 › 过期核对窗口不能保存，关闭和恢复不会发送变更 (1.6s)
+  ok 28 tests\ui\intent-preview.spec.ts:110:1 › 移除商品后仍按原商品展示来源，确认只保存可见完整清单 (2.0s)
+  ok 29 tests\ui\intent-preview.spec.ts:123:1 › 切换会话清除旧请求编辑，旧来源不会显示或保存到新会话 (2.1s)
+  ok 31 tests\ui\order-budget.spec.ts:4:3 › 预算在 1440px 跨刷新保留，超额阻止提交，明确调整后重新核对 (4.0s)
+  ok 30 tests\ui\order-budget.spec.ts:4:3 › 预算在 320px 跨刷新保留，超额阻止提交，明确调整后重新核对 (4.6s)
+  ok 33 tests\ui\policy-assessment.spec.ts:51:3 › 取消资格卡在 768px 展示事实和可键盘展开的政策，不写入业务 (1.4s)
+  ok 32 tests\ui\policy-assessment.spec.ts:51:3 › 取消资格卡在 320px 展示事实和可键盘展开的政策，不写入业务 (1.5s)
+  ok 34 tests\ui\policy-assessment.spec.ts:51:3 › 取消资格卡在 1024px 展示事实和可键盘展开的政策，不写入业务 (1.8s)
+  ok 35 tests\ui\policy-assessment.spec.ts:51:3 › 取消资格卡在 1440px 展示事实和可键盘展开的政策，不写入业务 (2.0s)
+  ok 36 tests\ui\policy-assessment.spec.ts:76:1 › 历史恢复保留原查询结论和引用，不发起新查询或审批 (1.7s)
+  ok 37 tests\ui\policy-search.spec.ts:43:3 › RAG 在 320px 直接展示原文高亮及版本证据 (1.6s)
+  ok 39 tests\ui\policy-search.spec.ts:65:1 › 历史回放保留原查询时间、引用和高亮，零新请求 (2.1s)
+  ok 38 tests\ui\policy-search.spec.ts:43:3 › RAG 在 1440px 直接展示原文高亮及版本证据 (2.3s)
+  ok 41 tests\ui\policy-search.spec.ts:75:3 › failed 回显缺口，不展示引用或高亮 (2.1s)
+  ok 40 tests\ui\policy-search.spec.ts:75:3 › no_match 回显缺口，不展示引用或高亮 (2.2s)
+  ok 43 tests\ui\replenishment.spec.ts:38:3 › 补货建议在 320px 展示依据且仅产生查询对话 (2.0s)
+  ok 42 tests\ui\policy-search.spec.ts:85:1 › 旧版结果仍能展开查看原始证据，不补造查询时间 (2.1s)
+  ok 45 tests\ui\replenishment.spec.ts:60:1 › 历史补货建议恢复时展示原有快照并保持零变更请求 (2.1s)
+  ok 44 tests\ui\replenishment.spec.ts:38:3 › 补货建议在 1440px 展示依据且仅产生查询对话 (2.4s)
+  ok 46 tests\ui\workspace.spec.ts:39:1 › 桌面工作台把历史、对话和业务表单分开 (1.9s)
+  ok 47 tests\ui\workspace.spec.ts:49:1 › 报价库存显示为预计提交值，打开草稿不会发送写请求 (2.0s)
+  ok 49 tests\ui\workspace.spec.ts:77:1 › 发送流式回复后正确展示 Markdown 并清洗模型 HTML 和危险链接 (1.8s)
+  ok 48 tests\ui\workspace.spec.ts:64:1 › 窄屏工作台通过抽屉查看会话和业务，关闭后恢复焦点 (3.5s)
+  ok 50 tests\ui\workspace.spec.ts:90:1 › 恢复审批保持输入锁定，业务面板显示核对后的实际影响 (1.7s)
+  ok 51 tests\ui\workspace.spec.ts:98:1 › 切换历史恢复失败时锁定输入，重试和新会话仍可使用 (2.1s)
+  ok 52 tests\ui\workspace.spec.ts:108:1 › 真实模型连接错误后核对服务端终态并解锁输入 (1.9s)
+  ok 53 tests\ui\workspace.spec.ts:126:1 › 连接错误后的中断任务保留输入锁定并提供继续恢复 (1.6s)
+
+  2 skipped
+  51 passed (56.7s)

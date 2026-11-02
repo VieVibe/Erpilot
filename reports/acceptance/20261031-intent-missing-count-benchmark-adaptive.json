@@ -1,0 +1,158 @@
+{
+  "suite": "intent-stress-engineering-1",
+  "parser_version": "order-rules-4",
+  "label_status": "engineering_expectations_pending_human_review",
+  "provider_requests": 0,
+  "iterations_per_mode": 20,
+  "warmup_pairs": 1,
+  "platform": "Windows-10-10.0.19045-SP0",
+  "python": "3.12.14",
+  "catalogue_size": 5102,
+  "source_before": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "7504bc44851ddf5fcc5a8643edad848e988545fd92c6edc73ec72ed660c881b0"
+  },
+  "source_after": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "7504bc44851ddf5fcc5a8643edad848e988545fd92c6edc73ec72ed660c881b0"
+  },
+  "source_unchanged": true,
+  "all_equivalent": true,
+  "cases": [
+    {
+      "id": "single",
+      "source_characters": 23,
+      "equivalent": true,
+      "modes": {
+        "legacy": {
+          "p50_ms": 0.9155,
+          "p95_ms": 1.0472,
+          "selects_min": 2,
+          "selects_max": 2
+        },
+        "batched": {
+          "p50_ms": 0.926,
+          "p95_ms": 0.9868,
+          "selects_min": 2,
+          "selects_max": 2
+        }
+      }
+    },
+    {
+      "id": "100_items",
+      "source_characters": 908,
+      "equivalent": true,
+      "modes": {
+        "legacy": {
+          "p50_ms": 80.02,
+          "p95_ms": 84.8821,
+          "selects_min": 200,
+          "selects_max": 200
+        },
+        "batched": {
+          "p50_ms": 3.7659,
+          "p95_ms": 4.3212,
+          "selects_min": 2,
+          "selects_max": 2
+        }
+      }
+    },
+    {
+      "id": "100_skus",
+      "source_characters": 1208,
+      "equivalent": true,
+      "modes": {
+        "legacy": {
+          "p50_ms": 29.1508,
+          "p95_ms": 29.843,
+          "selects_min": 200,
+          "selects_max": 200
+        },
+        "batched": {
+          "p50_ms": 2.8015,
+          "p95_ms": 2.8925,
+          "selects_min": 1,
+          "selects_max": 1
+        }
+      }
+    },
+    {
+      "id": "long_note",
+      "source_characters": 23730,
+      "equivalent": true,
+      "modes": {
+        "legacy": {
+          "p50_ms": 29.3568,
+          "p95_ms": 29.7506,
+          "selects_min": 2,
+          "selects_max": 2
+        },
+        "batched": {
+          "p50_ms": 29.3829,
+          "p95_ms": 30.603,
+          "selects_min": 2,
+          "selects_max": 2
+        }
+      }
+    },
+    {
+      "id": "repeated_quotes",
+      "source_characters": 28024,
+      "equivalent": true,
+      "modes": {
+        "legacy": {
+          "p50_ms": 34.6011,
+          "p95_ms": 35.304,
+          "selects_min": 2,
+          "selects_max": 2
+        },
+        "batched": {
+          "p50_ms": 34.4911,
+          "p95_ms": 35.7678,
+          "selects_min": 2,
+          "selects_max": 2
+        }
+      }
+    },
+    {
+      "id": "5000_name_matches",
+      "source_characters": 22,
+      "equivalent": true,
+      "modes": {
+        "legacy": {
+          "p50_ms": 0.7246,
+          "p95_ms": 0.8449,
+          "selects_min": 2,
+          "selects_max": 2
+        },
+        "batched": {
+          "p50_ms": 0.7305,
+          "p95_ms": 0.8152,
+          "selects_min": 2,
+          "selects_max": 2
+        }
+      }
+    },
+    {
+      "id": "numeric_boundary",
+      "source_characters": 22,
+      "equivalent": true,
+      "modes": {
+        "legacy": {
+          "p50_ms": 1.2893,
+          "p95_ms": 1.5342,
+          "selects_min": 3,
+          "selects_max": 3
+        },
+        "batched": {
+          "p50_ms": 0.8048,
+          "p95_ms": 0.9379,
+          "selects_min": 2,
+          "selects_max": 2
+        }
+      }
+    }
+  ]
+}

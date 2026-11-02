@@ -50,7 +50,7 @@ async def provider(tmp_path):
 async def test_model_must_save_exact_explicit_budget_with_source(provider, budget):
     tools = {t.name: t for t in provider.for_session("s")}
     args = {"customer": "客户甲", "items": [{"sku": "A", "quantity": 2}], "budget_limit": budget}
-    question = "给客户甲保存报价草稿；预算上限为300元"
+    question = "给客户甲保存报价草稿：A 2件；预算上限为300元"
     [call] = prepare_tool_calls(
         [ToolCall("create", "prepare_order_draft", json.dumps(args))], tools,
         messages=[{"role": "user", "content": question}],

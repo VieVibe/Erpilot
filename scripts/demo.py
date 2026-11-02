@@ -39,6 +39,8 @@ PROMPTS = {
     "deny": "拒绝",
     "recover": "恢复",
     "draft": "给演示客户创建草稿：A1001 10 件、B2001 20 件，备注分箱发货",
+    "natural": ("给演示客户准备订单：青瓷茶具两件，三件宣纸礼盒；"
+                "备注原文「分箱发货」；预算上限为500元；只保存草稿"),
     "revise": "把当前版本的第二行改成 50 件",
     "submit": "提交当前草稿",
     "policy": "查询数量梯度折扣政策",
@@ -48,7 +50,7 @@ PROMPTS = {
 }
 SCENARIOS = (
     "quote", "approve", "deny", "recover", "order", "order_denied",
-    "policy", "policy_miss", "cancellation", "replenishment",
+    "policy", "policy_miss", "cancellation", "replenishment", "natural",
 )
 
 
@@ -126,6 +128,23 @@ def demo_client(sku: str = "A1001"):
             return answer("这是离线脚本化演示，支持固定演示指令，不理解自由输入。"
                           "请输入「报价」，或按 docs/demo-guide.md 复制草稿、政策、补货指令。"
                           "本次未调用业务工具、未执行操作。")
+        if intent == "natural":
+            resolved = next((r for r in results if 'source_user_sha256' in r), None)
+            if resolved is None:
+                return call('resolve_order_items', {}, 1)
+            if resolved.get('status') != 'resolved':
+                return answer('商品或件数尚未明确，请核对候选并重新列出完整清单。草稿未保存。')
+            if not any('draft_id' in r for r in results):
+                return call('prepare_order_draft', {
+                    'customer': CUSTOMER, 'items': resolved['items'], 'note': '分箱发货',
+                    'budget_limit': 500,
+                }, 2)
+            draft = results[-1]
+            if 'error' in draft:
+                return answer('商品要求核对未通过，草稿未保存，请重新核对完整清单。')
+            return answer(f"已按名称和中文件数保存第 {draft['revision']} 版草稿，"
+                          f"总金额 {draft['total_amount']} 元，预算 500 元。"
+                          "请核对青瓷茶具 A1001 两件、宣纸礼盒 B2001 三件；未建单、未扣库存。")
         if not results:
             if selected:
                 return call("get_order_draft", {
@@ -284,6 +303,7 @@ async def run_scenario(scenario: str, db: Path, output: Path) -> dict:
             "deny": {"business_operations"},
             "order": {"stocks", "orders", "order_items", "mutation_requests", "order_drafts"},
             "order_denied": {"order_drafts"},
+            "natural": {"order_drafts"},
         }
         expected_tools = {
             "quote": ["compute_quote"],
@@ -295,6 +315,7 @@ async def run_scenario(scenario: str, db: Path, output: Path) -> dict:
             "policy": ["search_policy"], "policy_miss": ["search_policy"],
             "cancellation": ["assess_order_cancellation"],
             "replenishment": ["suggest_replenishment"],
+            "natural": ["resolve_order_items", "prepare_order_draft"],
         }
         expected_tools["order_denied"] = expected_tools["order"]
         checks = {
@@ -316,6 +337,18 @@ async def run_scenario(scenario: str, db: Path, output: Path) -> dict:
                 inventory=stock_after == 1000 - 10 * int(approved)
                 and repo.get_stock("B2001").quantity == 300 - 50 * int(approved),
                 draft_status=draft["status"] == ("submitted" if approved else "open"),
+            )
+        elif scenario == "natural":
+            draft = service._drafts.list_latest(scenario)[0]
+            checks.update(
+                complete_items=[(r['sku'], r['quantity']) for r in draft['items']]
+                == [('A1001', 2), ('B2001', 3)],
+                quote=draft['total_amount'] == 350 and draft['budget_limit'] == 500,
+                origins=draft['item_constraint']['origin']['kind'] == 'catalog_resolved'
+                and draft['item_constraint']['verified'],
+                no_approval=approvals == 0, no_order=repo.count_orders(customer=CUSTOMER) == 0,
+                no_inventory_change=stock_after == stock_before
+                and repo.get_stock('B2001').quantity == 300,
             )
         elif scenario in {"approve", "deny", "recover"}:
             checks.update(approval=approvals == (0 if scenario == "recover" else 1),

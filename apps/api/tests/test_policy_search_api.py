@@ -52,7 +52,10 @@ async def test_policy_evidence_survives_sse_and_restore_without_retrieval_or_wri
         db, writes=True, approval_gate=gate, session_id="rag", policy_resolver=resolver
     )
 
+    model_requests = []
+
     def model(request):
+        model_requests.append(request)
         messages = json.loads(request.content)["messages"]
         if messages[-1]["role"] == "tool":
             return sse_response(
@@ -96,6 +99,14 @@ async def test_policy_evidence_survives_sse_and_restore_without_retrieval_or_wri
     recovered = await restored.state.service.session_state("rag")
     assert recovered["tool_results"][0]["display"] == display
     assert recovered["pending_approvals"] == [] and resolutions == [query]
+    if state != "matched":
+        assert len(model_requests) == 1
+        assert [r["name"] for r in recovered["tool_results"]] == ["search_policy"]
+        final = recovered["messages"][-1]["content"]
+        deltas = [json.loads(block.split("data: ", 1)[1])["text"]
+                  for block in response.text.replace("\r\n", "\n").split("\n\n")
+                  if block.startswith("event: delta\n")]
+        assert "".join(deltas) == final and "核对" in final
     with sqlite3.connect(db) as connection:
         assert "\n".join(connection.iterdump()) == before
 

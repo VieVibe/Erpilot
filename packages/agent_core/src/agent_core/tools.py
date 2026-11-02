@@ -57,7 +57,9 @@ class Tool:
     # It cannot be supplied or extended by model/tool output.
     terminal_errors: dict[str, str] | None = None
     # Trusted renderer for a human-selected, approved action without model planning.
-    direct_response: Callable[[dict], str] | None = None
+    direct_response: Callable[[dict], str | None] | None = None
+    # Optional application policy; also checked when a model bypasses visibility.
+    stage_policy: Callable[[list[dict], list[dict]], bool] | None = None
 
     def __post_init__(self):
         if self.validated_handler is not None and self.risk is not None:

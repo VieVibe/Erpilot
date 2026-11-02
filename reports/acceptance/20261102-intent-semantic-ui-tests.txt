@@ -1,0 +1,17 @@
+
+> erpilot-web@0.1.0 test:ui
+> playwright test intent-semantic.spec.ts --workers=2
+
+[WebServer] (node:16700) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 2 workers
+
+(node:10948) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:16352) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 tests\ui\intent-semantic.spec.ts:3:31 › 语义候选 1440px 显示原话且仅完整表单确认会保存 (2.1s)
+  ok 1 tests\ui\intent-semantic.spec.ts:3:31 › 语义候选 320px 显示原话且仅完整表单确认会保存 (2.1s)
+
+  2 passed (3.4s)

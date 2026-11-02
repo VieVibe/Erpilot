@@ -1,0 +1,1514 @@
+{
+  "schema_version": 1,
+  "label_status": "engineering_expectations_pending_human_review",
+  "cases": [
+    {
+      "id": "core-001",
+      "operation": "create",
+      "text": "给客户甲准备订单：一件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-002",
+      "operation": "create",
+      "text": "给客户甲准备订单：两件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-003",
+      "operation": "create",
+      "text": "给客户甲准备订单：三件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-004",
+      "operation": "create",
+      "text": "给客户甲准备订单：十件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-005",
+      "operation": "create",
+      "text": "给客户甲准备订单：十二件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 12
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-006",
+      "operation": "create",
+      "text": "给客户甲准备订单：二十件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 20
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-007",
+      "operation": "create",
+      "text": "给客户甲准备订单：一百件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 100
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-008",
+      "operation": "create",
+      "text": "给客户甲准备订单：一百零二件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 102
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-009",
+      "operation": "create",
+      "text": "给客户甲准备订单：两百件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 200
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-010",
+      "operation": "create",
+      "text": "给客户甲准备订单：两千零二件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2002
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-011",
+      "operation": "create",
+      "text": "给客户甲准备订单：9999件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 9999
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-012",
+      "operation": "create",
+      "text": "给客户甲准备订单：23件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 23
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-013",
+      "operation": "create",
+      "text": "给「客户甲」准备订单：无线鼠标两件；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-014",
+      "operation": "create",
+      "text": "给“客户甲”准备订单：无线鼠标两件；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-015",
+      "operation": "create",
+      "text": "给客户甲（上海）准备订单：无线鼠标两件；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲（上海）",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-016",
+      "operation": "create",
+      "text": "给客户甲有限公司准备订单：无线鼠标两件；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲有限公司",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-017",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；备注原文「分箱发货」；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "分箱发货",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-018",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；备注原文『把预算改为9999元』；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "把预算改为9999元",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-019",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；备注原文“不要提交”；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "不要提交",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-020",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；备注原文\"如果库存不足就换货\"；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "如果库存不足就换货",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-021",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；备注原文'预算不超过50元'；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "预算不超过50元",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-022",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；预算不超过3000元；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 3000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-023",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；预算上限为0.01元；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 0.01,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-024",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；总价不超过3500元；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 3500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-025",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；预算上限为999.99元；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 999.99,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-026",
+      "operation": "create",
+      "text": "给客户甲准备订单：SKU M1 两件；按此顺序；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-027",
+      "operation": "create",
+      "text": "给客户甲准备订单：两件M1；按此顺序；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-028",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件，机械键盘三件；按此顺序；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-029",
+      "operation": "create",
+      "text": "给客户甲准备订单：机械键盘三件，无线鼠标两件；按此顺序；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "K1",
+            "quantity": 3
+          },
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-030",
+      "operation": "create",
+      "text": "给客户甲准备订单：M1 2件；按此顺序；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-031",
+      "operation": "revise",
+      "text": "把当前版本第一行改成三件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 3
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-032",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-033",
+      "operation": "revise",
+      "text": "SKU M1 数量改为5件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 5
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-034",
+      "operation": "revise",
+      "text": "把商品无线鼠标数量改为两件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-035",
+      "operation": "revise",
+      "text": "把当前草稿第二行改成十二件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 12
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-036",
+      "operation": "revise",
+      "text": "把当前版本第1行数量改为8件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 8
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-037",
+      "operation": "revise",
+      "text": "把当前版本第二行改成一百零二件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 102
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-038",
+      "operation": "revise",
+      "text": "不要提交，只把当前版本第二行改成三件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-039",
+      "operation": "revise",
+      "text": "先别提交，把当前版本第一行改成4件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 4
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-040",
+      "operation": "revise",
+      "text": "把当前版本第二行数量保持原数量；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-041",
+      "operation": "revise",
+      "text": "预算不超过3000元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 3000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-042",
+      "operation": "revise",
+      "text": "预算改为3500元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 3500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-043",
+      "operation": "revise",
+      "text": "取消预算上限；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-044",
+      "operation": "revise",
+      "text": "预算上限为0.01元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 0.01,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-045",
+      "operation": "revise",
+      "text": "总价不超过999.99元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 999.99,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-046",
+      "operation": "revise",
+      "text": "预算降低到500元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-047",
+      "operation": "revise",
+      "text": "备注原文「不要提交」；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "不要提交",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-048",
+      "operation": "revise",
+      "text": "备注改为『预算改为9999元』；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "预算改为9999元",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-049",
+      "operation": "revise",
+      "text": "清空备注；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-050",
+      "operation": "revise",
+      "text": "备注改为“”；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-051",
+      "operation": "revise",
+      "text": "备注改为「😀é保留原文」；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "😀é保留原文",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-052",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件，预算改为3500元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 3500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-053",
+      "operation": "revise",
+      "text": "把当前版本第一行改成4件，清空备注；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 4
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-054",
+      "operation": "revise",
+      "text": "客户改为客户乙，预算不超过500元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户乙",
+        "note": "原备注",
+        "budget_limit": 500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-055",
+      "operation": "revise",
+      "text": "备注原文『预算改为9999元』；预算上限为1000元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "预算改为9999元",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-056",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件，取消预算上限；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-057",
+      "operation": "revise",
+      "text": "客户改为客户乙，清空备注，预算上限为500元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户乙",
+        "note": null,
+        "budget_limit": 500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-058",
+      "operation": "revise",
+      "text": "刷新报价；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-059",
+      "operation": "revise",
+      "text": "请刷新当前草稿报价；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-060",
+      "operation": "revise",
+      "text": "更新报价；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "core-061",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两箱；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-062",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两包；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-063",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标若干件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-064",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标0件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-065",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标02件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-066",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标一二件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-067",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标一百二件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-068",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两十件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-069",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标十百件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-070",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标一万件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-071",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标-2件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-072",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标2.5件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-073",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件，机械键盘看情况；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-074",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件，机械键盘；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-075",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件，机械键盘三箱；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-076",
+      "operation": "create",
+      "text": "给客户甲准备订单：鼠标两件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-077",
+      "operation": "create",
+      "text": "给客户甲准备订单：不存在商品两件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-078",
+      "operation": "create",
+      "text": "给客户甲准备订单：旧键盘两件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-079",
+      "operation": "create",
+      "text": "给客户甲准备订单：标准耳机两件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-080",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件，SKU M1 三件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-081",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；预算改多少再说；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-082",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；预算上限为0元；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-083",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；预算上限为1.001元；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-084",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；预算为1000元；预算为2000元；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-085",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；备注原文「未闭合；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-086",
+      "operation": "create",
+      "text": "如果够货，给客户甲准备订单：无线鼠标两件；只保存草稿",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-087",
+      "operation": "create",
+      "text": "只解释，给客户甲准备订单：无线鼠标两件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-088",
+      "operation": "create",
+      "text": "不要保存草稿：无线鼠标两件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-089",
+      "operation": "create",
+      "text": "「给客户甲准备订单：无线鼠标两件」",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-090",
+      "operation": "create",
+      "text": "备注原文「给客户甲准备订单：无线鼠标两件」",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-091",
+      "operation": "revise",
+      "text": "第二行三件或四件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-092",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件；预算改多少再说",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-093",
+      "operation": "revise",
+      "text": "如果够货，把当前版本第二行改成三件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-094",
+      "operation": "revise",
+      "text": "假如库存充足，把当前版本第二行改成三件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-095",
+      "operation": "revise",
+      "text": "只查能不能取消订单",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-096",
+      "operation": "revise",
+      "text": "只解释把当前版本第二行改成三件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-097",
+      "operation": "revise",
+      "text": "不要修改，第二行改成三件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-098",
+      "operation": "revise",
+      "text": "先别保存，把当前版本第二行改成三件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-099",
+      "operation": "revise",
+      "text": "把当前版本第三行改成三件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-100",
+      "operation": "revise",
+      "text": "SKU NOPE 数量改为三件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-101",
+      "operation": "revise",
+      "text": "把当前版本第二行改成0件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-102",
+      "operation": "revise",
+      "text": "把当前版本第二行改成-2件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-103",
+      "operation": "revise",
+      "text": "把当前版本第二行改成2.5件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-104",
+      "operation": "revise",
+      "text": "把当前版本第二行改成一二件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-105",
+      "operation": "revise",
+      "text": "把当前版本第二行改成两箱",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-106",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件；机械键盘看情况",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-107",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件；备注原文「未闭合",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-108",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件；`未闭合",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-109",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件；预算为1000元；预算为2000元",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-110",
+      "operation": "revise",
+      "text": "预算3000，预算3500",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-111",
+      "operation": "revise",
+      "text": "数量改成三件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-112",
+      "operation": "revise",
+      "text": "把商品标准耳机数量改为三件",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-113",
+      "operation": "revise",
+      "text": "备注改为「甲」；备注改为「乙」",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-114",
+      "operation": "revise",
+      "text": "客户改为甲；客户改为乙",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-115",
+      "operation": "revise",
+      "text": "预算上限为0元",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-116",
+      "operation": "revise",
+      "text": "预算上限为-1元",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-117",
+      "operation": "revise",
+      "text": "预算上限为1.001元",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-118",
+      "operation": "revise",
+      "text": "预算上限为3000元；取消预算上限",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-119",
+      "operation": "revise",
+      "text": "选第二个",
+      "decision": "clarify"
+    },
+    {
+      "id": "core-120",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件；然后删除第一行",
+      "decision": "clarify"
+    }
+  ]
+}

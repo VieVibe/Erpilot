@@ -31,13 +31,16 @@ def summarize_task(content: str, *, numbered: bool = False) -> str | None:
             result["draft"]["item_count"] = len(draft["items"])
             if numbered and "total_amount" in draft:
                 result["draft"]["total_amount"] = draft["total_amount"]
-            for key in ("budget_limit", "budget_constraint", "budget_check", "pending_issues"):
+            for key in ("budget_limit", "budget_constraint", "budget_check", "pending_issues",
+                        "submission_check"):
                 if key in draft:
                     result["draft"][key] = draft[key]
         elif payload["status"] == "ambiguous":
             # Candidate identities and ambiguity must remain intact.
             result["candidates"] = payload["candidates"]
             result["has_more"] = payload["has_more"]
+            if "pending_issues" in payload:
+                result["pending_issues"] = payload["pending_issues"]
         result["context_view"] = "historical_task_snapshot"
         result["refresh_required"] = True
         return json.dumps(result, ensure_ascii=False, separators=(",", ":"))

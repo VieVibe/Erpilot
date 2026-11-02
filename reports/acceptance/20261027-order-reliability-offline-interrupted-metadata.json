@@ -1,0 +1,7 @@
+{
+  "execution_mode": "scripted_offline",
+  "billing_is_simulated": true,
+  "supplier_requests": 0,
+  "status": "artifact_save_interrupted",
+  "reason": "Windows denied atomic file replacement while recording stage 3 of version-change-and-replay; no further stages ran. Kept as incomplete evidence; final independent offline batch is separate."
+}

@@ -1,11 +1,22 @@
 export interface DraftLine { sku: string; name: string; quantity: number; base_price: number; discount: number; unit_price: number; line_total: number; stock_before: number; stock_after: number }
 export interface BudgetConstraint { currency: 'CNY'; limit: number | null; origin: {kind: 'user_literal' | 'manual_form' | 'unattributed' | 'not_set'; revision: number; quote?: string; source_user_sha256?: string} }
-export interface OrderDraft { draft_id: string; revision: number; customer: string; note: string | null; items: DraftLine[]; total_amount: number; expires_at: string; status: 'open' | 'expired' | 'superseded' | 'submitted'; order_id: string | null; budget_limit?: number | null; budget_constraint?: BudgetConstraint; budget_check?: {currency: 'CNY'; limit: number | null; total_amount: number; over_amount: number; status: 'not_set' | 'within_budget' | 'over_budget'}; pending_issues?: {code: string; message: string; required_action: string}[] }
+export interface DraftIssue {code: string; message: string; required_action: string; revision?: number; blocking?: boolean; sku?: string}
+export interface DraftSourceSpan {message_id: string; start: number; end: number; quote: string}
+export interface DraftItemsConstraint {value: {sku: string; quantity: number}[]; verified: boolean; origin: {kind: 'user_literal' | 'catalog_resolved' | 'intent_verified' | 'manual_form' | 'unverified'; revision: number; source_user_sha256?: string; requirements?: {sku: string; quantity: number; quote?: string; product_query?: string; product_name?: string; evidence_refs?: DraftSourceSpan[]}[]; previous_revision?: number; contract?: string; source_messages?: {message_id: string; sha256: string}[]}}
+export interface OrderDraft { draft_id: string; revision: number; customer: string; note: string | null; items: DraftLine[]; total_amount: number; expires_at: string; status: 'open' | 'expired' | 'superseded' | 'submitted'; order_id: string | null; budget_limit?: number | null; budget_constraint?: BudgetConstraint; budget_check?: {currency: 'CNY'; limit: number | null; total_amount: number; over_amount: number; status: 'not_set' | 'within_budget' | 'over_budget'}; pending_issues?: DraftIssue[]; submission_check?: {schema_version: 1; revision: number; latest_revision: number; checked_at: string; can_submit: boolean}; item_constraint?: DraftItemsConstraint }
 export interface DraftInput { customer: string; items: {sku: string; quantity: number}[]; note?: string; budget_limit?: number | null }
 export function draftBudgetIssue(draft: OrderDraft): string | null {
   if (draft.budget_limit == null) return null;
   const excess = Math.round(draft.total_amount * 100) - Math.round(draft.budget_limit * 100);
   return excess > 0 ? `当前报价超过预算 ¥${(excess / 100).toFixed(2)}，请明确调整预算或商品后保存新版本。` : null;
+}
+export function draftSubmissionIssue(draft: OrderDraft, now = Date.now()): string | null {
+  const issue = draft.pending_issues?.find(item => item.blocking !== false);
+  if (issue) return `${issue.message} ${issue.required_action}`;
+  if (draft.status !== 'open') return '草稿已过期、已提交或已有新版本，请重新核对。';
+  if (Date.parse(draft.expires_at) <= now) return '此版本报价已过期，请明确刷新报价后重新核对和审批。';
+  if (draft.submission_check?.can_submit === false) return '此版本暂不能提交，请刷新草稿并核对待确认事项。';
+  return draftBudgetIssue(draft);
 }
 export function draftConfirmationText(draft: OrderDraft): string {
   return `已核对并确认草稿版本 ${draft.revision}（总金额 ¥${draft.total_amount.toFixed(2)}），申请人工审批。`;
@@ -21,6 +32,14 @@ export function parseOrderDraft(value: unknown): OrderDraft {
   if (value.budget_limit != null && (!number(value.budget_limit) || Number(value.budget_limit) <= 0 || Number(value.budget_limit) > 1e12)) throw new Error('订单预算格式无效');
   if (value.budget_constraint !== undefined && !validBudgetConstraint(value.budget_constraint, Number(value.revision))) throw new Error('订单预算来源格式无效');
   if (value.budget_constraint !== undefined && (value.budget_constraint as BudgetConstraint).limit !== (value.budget_limit ?? null)) throw new Error('订单预算来源不一致');
+  if (value.pending_issues !== undefined && (!Array.isArray(value.pending_issues) || value.pending_issues.length > 205 || value.pending_issues.some(issue => !record(issue) || typeof issue.code !== 'string' || !issue.code || typeof issue.message !== 'string' || !issue.message || typeof issue.required_action !== 'string' || !issue.required_action || (issue.revision !== undefined && issue.revision !== value.revision) || (issue.blocking !== undefined && typeof issue.blocking !== 'boolean') || (issue.sku !== undefined && typeof issue.sku !== 'string')))) throw new Error('待确认事项格式无效');
+  if (value.submission_check !== undefined) {
+    const check = value.submission_check;
+    if (!record(check) || check.schema_version !== 1 || check.revision !== value.revision || !positiveInteger(check.latest_revision) || Number(check.latest_revision) < Number(value.revision) || typeof check.checked_at !== 'string' || !Number.isFinite(Date.parse(check.checked_at)) || typeof check.can_submit !== 'boolean' || !Array.isArray(value.pending_issues) || (check.can_submit && (value.status !== 'open' || check.latest_revision !== value.revision || value.pending_issues.some(issue => (issue as DraftIssue).blocking !== false)))) throw new Error('草稿提交检查格式无效');
+  }
+  if (value.item_constraint !== undefined && (!validItemConstraint(value.item_constraint, Number(value.revision)) || JSON.stringify((value.item_constraint as DraftItemsConstraint).value) !== JSON.stringify(value.items.map(line => ({sku: (line as DraftLine).sku, quantity: (line as DraftLine).quantity}))))) throw new Error('商品要求核验记录无效');
+  const itemOrigin = (value.item_constraint as DraftItemsConstraint | undefined)?.origin;
+  if (itemOrigin?.kind === 'catalog_resolved' && itemOrigin.requirements?.some(row => !(value.items as DraftLine[]).some(line => line.sku === row.sku && line.name === row.product_name))) throw new Error('商品名称核对记录不一致');
   return value as unknown as OrderDraft;
 }
 function base(sessionId: string) { return `/api/sessions/${encodeURIComponent(sessionId)}/order-drafts`; }
@@ -54,6 +73,7 @@ export function approvalDraftIssue(pending: {arguments: Record<string, unknown>}
   if (!current) return '当前草稿未核对，请刷新或拒绝后重新提交。';
   if (current.revision !== snapshot.revision) return '草稿已修改，请拒绝旧审批后重新提交。';
   if (draftBudgetIssue(current)) return '当前草稿超出预算，请拒绝旧审批，明确调整后重新提交。';
+  if (draftSubmissionIssue(current, now)) return `${draftSubmissionIssue(current, now)} 请拒绝旧审批后重新核对。`;
   if (current.status !== 'open' || Date.parse(snapshot.expires_at) <= now) return '草稿已过期或已提交，请拒绝旧审批后刷新。';
   return null;
 }
@@ -66,6 +86,7 @@ export interface DraftChange { field: string; sku?: string; before: unknown; aft
 export interface DraftHistoryItem {
   draft_id: string; revision: number; created_at: string;
   task_constraints: { schema_version: 1; fields: { customer: DraftConstraint; note: DraftConstraint }; unverified_fields: string[] };
+  item_constraint?: DraftItemsConstraint | null;
   budget_constraint?: BudgetConstraint | null;
   change_record: null | {
     schema_version: 1; revision: number; previous_revision: number | null;
@@ -112,6 +133,26 @@ function validBudgetConstraint(value: unknown, revision: number): boolean {
   const origin = value.origin;
   return positiveInteger(origin.revision) && Number(origin.revision) <= revision && ['user_literal','manual_form','unattributed','not_set'].includes(String(origin.kind)) && (origin.kind !== 'user_literal' || (typeof origin.quote === 'string' && !!origin.quote && digest(origin.source_user_sha256)));
 }
+function validItemConstraint(value: unknown, revision: number): boolean {
+  if (!record(value) || typeof value.verified !== 'boolean' || !record(value.origin) || !positiveInteger(value.origin.revision) || Number(value.origin.revision) > revision || !['user_literal', 'catalog_resolved', 'intent_verified', 'manual_form', 'unverified'].includes(String(value.origin.kind)) || value.verified !== (value.origin.kind !== 'unverified') || !Array.isArray(value.value) || !value.value.length || value.value.length > 100) return false;
+  const items = value.value;
+  if (items.some(row => !record(row) || typeof row.sku !== 'string' || !row.sku || !positiveInteger(row.quantity)) || new Set(items.map(row => row.sku)).size !== items.length) return false;
+  if (value.origin.kind === 'intent_verified') return validIntentItems(value.origin, items);
+  if (value.origin.kind === 'user_literal' || value.origin.kind === 'catalog_resolved') {
+    const requirements = value.origin.requirements;
+    if (!digest(value.origin.source_user_sha256) || !Array.isArray(requirements) || !requirements.length || requirements.length > 100 || requirements.some(row => !record(row) || typeof row.quote !== 'string' || !row.quote || !items.some(line => line.sku === row.sku && line.quantity === row.quantity)) || new Set(requirements.map(row => row.sku)).size !== requirements.length) return false;
+    if (value.origin.kind === 'catalog_resolved' && (requirements.length !== items.length || requirements.some(row => typeof row.product_query !== 'string' || !row.product_query || typeof row.product_name !== 'string' || !row.product_name))) return false;
+  }
+  return true;
+}
+function validIntentItems(origin: Record<string, unknown>, items: {sku: unknown; quantity: unknown}[]): boolean {
+  const sources = origin.source_messages, requirements = origin.requirements;
+  if (origin.contract !== 'draft-intent-2' || !Array.isArray(sources) || !sources.length || sources.length > 102 || sources.some(s => !record(s) || typeof s.message_id !== 'string' || !s.message_id || !digest(s.sha256)) || new Set(sources.map(s => s.message_id)).size !== sources.length) return false;
+  const ids = new Set(sources.map(s => s.message_id));
+  if (!Array.isArray(requirements) || !requirements.length || requirements.length > 100 || new Set(requirements.map(r => record(r) ? r.sku : undefined)).size !== requirements.length) return false;
+  if (origin.previous_revision === undefined ? requirements.length !== items.length : !positiveInteger(origin.previous_revision) || origin.previous_revision !== Number(origin.revision) - 1) return false;
+  return requirements.every(r => record(r) && items.some(i => i.sku === r.sku && i.quantity === r.quantity) && Array.isArray(r.evidence_refs) && r.evidence_refs.length > 0 && r.evidence_refs.length <= 204 && r.evidence_refs.every(ref => record(ref) && ids.has(ref.message_id) && integer(ref.start) && integer(ref.end) && Number(ref.start) < Number(ref.end) && Number(ref.end) <= 32000 && typeof ref.quote === 'string' && Array.from(ref.quote).length === Number(ref.end) - Number(ref.start)));
+}
 export function parseDraftHistory(value: unknown): DraftHistoryPage {
   const invalid = () => new Error('草稿修改记录格式无效');
   if (!record(value) || value.schema_version !== 1 || typeof value.draft_id !== 'string' || !value.draft_id || !positiveInteger(value.latest_revision) || !Array.isArray(value.items) || value.items.length > 20 || typeof value.has_more !== 'boolean') throw invalid();
@@ -122,6 +163,7 @@ export function parseDraftHistory(value: unknown): DraftHistoryPage {
     if (item.budget_constraint != null && !validBudgetConstraint(item.budget_constraint, previous)) throw invalid();
     const ledger = item.task_constraints;
     if (!record(ledger) || ledger.schema_version !== 1 || !record(ledger.fields) || !validConstraint(ledger.fields.customer, previous, false) || !validConstraint(ledger.fields.note, previous, true) || !Array.isArray(ledger.unverified_fields) || ledger.unverified_fields.some(field => !['customer', 'note', 'items'].includes(String(field)))) throw invalid();
+    if (item.item_constraint != null && (!validItemConstraint(item.item_constraint, previous) || ledger.unverified_fields.includes('items') === (item.item_constraint as DraftItemsConstraint).verified)) throw invalid();
     for (const field of ['customer', 'note']) {
       const constraint = ledger.fields[field] as unknown as DraftConstraint;
       if (ledger.unverified_fields.includes(field) === constraint.verified) throw invalid();

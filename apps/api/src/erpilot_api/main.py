@@ -39,6 +39,7 @@ from erpilot_api.checkpoint import open_checkpointer
 from erpilot_api.draft_routes import ConfirmDraftRequest, register_draft_routes
 from erpilot_api.events import encode_event, sse_frame
 from erpilot_api.history_routes import register_history_routes
+from erpilot_api.intent_routes import register_intent_routes
 from erpilot_api.operation_routes import register_operation_routes
 from erpilot_api.run_store import RunStore
 from erpilot_api.service import ChatService, SessionError
@@ -99,6 +100,7 @@ def create_app(
     approval_ttl_seconds: int | None = None,
     clock=None,
     session_erp_tools=None,
+    intent_semantic_settings=None,
     scripted_demo: bool = False,
 ) -> FastAPI:
     """应用工厂：测试注入 mock 的 LLMClient 工厂、临时 trace 目录与工具集。"""
@@ -121,6 +123,9 @@ def create_app(
         resolved_tools, env_gate = session_erp_tools.tools, session_erp_tools.gate
     else:
         resolved_tools, env_gate = _resolve_tools(tools)
+    if getattr(getattr(session_erp_tools, "intent_analysis", None), "semantic", None) is not None:
+        raise ValueError("semantic provider already belongs to an API host; "
+                         "create a fresh provider")
     service = ChatService(
         client_factory=client_factory or (lambda: LLMClient(LLMConfig.from_env())),
         model=model,
@@ -142,8 +147,25 @@ def create_app(
         session_reconciler_factory=session_erp_tools.reconciler if session_erp_tools else None,
         drafts=session_erp_tools.drafts if session_erp_tools else None,
         operations=getattr(session_erp_tools, "operations", None),
+        intent_store=getattr(getattr(session_erp_tools, "intent_analysis", None), "store", None),
+        intent_recovery=getattr(
+            getattr(session_erp_tools, "intent_analysis", None), "recovery", None),
+        intent_diagnostics=getattr(
+            getattr(session_erp_tools, "intent_analysis", None), "diagnostics", None,
+        ),
         trace_sinks=[] if scripted_demo else None,
     )
+    if intent_semantic_settings is not None:
+        from mcp_erp.intent_semantic import SemanticCoordinator
+
+        analyzer = getattr(session_erp_tools, "intent_analysis", None)
+        if analyzer is None or analyzer.mode != "enforce":
+            raise ValueError("semantic proposals require a session ERP provider in enforce mode")
+        if model.lower() != intent_semantic_settings.rate.model.lower():
+            raise ValueError("API model must match the semantic budget model")
+        coordinator = SemanticCoordinator(
+            analyzer, intent_semantic_settings, service._client_factory)
+        analyzer.semantic = service._intent_semantic = coordinator
 
     @asynccontextmanager
     async def lifespan(app):
@@ -177,6 +199,7 @@ def create_app(
         return {"status": "ok"}
 
     register_draft_routes(app, session_erp_tools)
+    register_intent_routes(app, session_erp_tools, service)
     register_operation_routes(app, service._operations)
     register_history_routes(app, service._run_store)
 
@@ -192,6 +215,12 @@ def create_app(
             "writes_enabled": any(tool.risk is not None for tool in resolved_tools),
             "reasoning_enabled": os.environ.get("ERPILOT_THINKING", "").lower() in _WRITES_ENV,
             "drafts_enabled": session_erp_tools is not None,
+            **({"intent_preview_enabled": True} if service._intent_store is not None else {}),
+            **({"intent_recovery_enabled": True}
+               if service._intent_store is None and service._intent_recovery is not None
+               and service._intent_recovery.available else {}),
+            **({"intent_semantic_revision_enabled": True}
+               if intent_semantic_settings is not None else {}),
             "business_approvals_enabled": (
                 service._operations is not None
                 and any(tool.risk is not None for tool in resolved_tools)

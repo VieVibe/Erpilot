@@ -126,7 +126,9 @@ def build_graph(
         parts, calls, usage = [], [], None
         async for event in client.stream_chat(
             request_messages,
-            tools=[t.openai_schema() for t in tools] or None,
+            tools=[t.openai_schema() for t in tools if t.stage_policy is None
+                   or t.stage_policy(deepcopy(state["messages"]),
+                                     deepcopy(state["tool_history"]))] or None,
         ):
             if isinstance(event, TextDelta):
                 parts.append(event.text)
@@ -222,6 +224,13 @@ def build_graph(
                     }}, ensure_ascii=False), ok=False)
             else:
                 result = await execute_tool_call(call, registry, config)
+            # Trusted read renderers can terminate a clarification before a model
+            # rewrites the displayed candidate order. The registry stays intact.
+            tool = registry.get(call["name"])
+            if tool and tool.risk is None and tool.direct_response:
+                text = tool.direct_response(deepcopy(result))
+                if text is not None:
+                    result["rendered_response"] = {"text": text, "kind": "tool_result"}
             writer(
                 ToolCallFinished(
                     result["call_id"],
@@ -240,10 +249,23 @@ def build_graph(
                 if call["risk"] is None or "content" in call
             )
         )
+        contract = contracts.get(state.get("response_contract"))
+        if (contract and contract.blocked_response
+                and any(r["name"] == contract.evidence_tool for r in results)):
+            history = [*state["tool_history"], *results]
+            response = contract.blocked_response(deepcopy(history), deepcopy(state["messages"]))
+            if response is not None:
+                if not isinstance(response, dict) or not isinstance(response.get("text"), str):
+                    raise ValueError("blocked response must return a text field")
+                json.dumps(response, ensure_ascii=False, allow_nan=False)
+                evidence = next(r for r in reversed(results)
+                                if r["name"] == contract.evidence_tool)
+                evidence["rendered_response"] = response
         return {"tool_results": results}
 
     def next_write(state):
-        if any(terminal_response(r) for r in state["tool_results"]):
+        if any(terminal_response(r) or r.get("rendered_response")
+               for r in state["tool_results"]):
             return None
         done = {r["call_id"] for r in state["tool_results"]}
         return next((c for c in state["pending_calls"] if c["call_id"] not in done), None)
@@ -478,7 +500,8 @@ def build_graph(
         results = {r["call_id"]: r for r in state["tool_results"]}
         calls = {c["call_id"]: c for c in state["pending_calls"]}
         terminal = next((response for r in results.values()
-                         if (response := terminal_response(r)) is not None), None)
+                         if (response := terminal_response(r) or r.get("rendered_response"))
+                         is not None), None)
         if terminal:
             for call in state["pending_calls"]:
                 if call["call_id"] not in results:

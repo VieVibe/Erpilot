@@ -1,0 +1,17 @@
+
+> erpilot-web@0.1.0 test:ui
+> playwright test tests/ui/intent-mode-recovery.spec.ts
+
+[WebServer] (node:33068) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 2 workers
+
+(node:8396) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:28252) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 tests\ui\intent-mode-recovery.spec.ts:3:31 › 回退恢复 320px 只能重新核对且无保存入口 (1.8s)
+  ok 1 tests\ui\intent-mode-recovery.spec.ts:3:31 › 回退恢复 1440px 只能重新核对且无保存入口 (1.8s)
+
+  2 passed (3.3s)

@@ -8,6 +8,7 @@ from evals.grounding_cases import (
     STRUCTURED_GROUNDING_CASES,
     STRUCTURED_GROUNDING_CASES_V2,
     STRUCTURED_GROUNDING_CASES_V3,
+    STRUCTURED_GROUNDING_CASES_V4,
     check_grounding_result,
 )
 from evals.grounding_runtime import build_grounding_harness
@@ -16,7 +17,7 @@ from evals.runner import Budget
 
 @pytest.mark.parametrize(
     "scope", [STRUCTURED_GROUNDING_CASES, STRUCTURED_GROUNDING_CASES_V2,
-              STRUCTURED_GROUNDING_CASES_V3],
+              STRUCTURED_GROUNDING_CASES_V3, STRUCTURED_GROUNDING_CASES_V4],
 )
 async def test_all_structured_cases_through_real_mcp_and_terminal_trace(tmp_path, scope):
     cases = {c.question: c for c in scope}
@@ -52,7 +53,15 @@ async def test_all_structured_cases_through_real_mcp_and_terminal_trace(tmp_path
         case_harness=build_grounding_harness(), report_dir=tmp_path / "reports",
         trace_dir=tmp_path / "traces",
     )
-    assert all(r.passed for r in results), [(r.case_id, r.failed_checks) for r in results]
+    for result in results:
+        case = next(c for c in scope if c.id == result.case_id)
+        if case.answer_kind == "blocked" and scope is not STRUCTURED_GROUNDING_CASES_V4:
+            # Old protocols still demand a model finalizer; keep that incompatibility visible.
+            assert not result.passed and "structured_missing_single_finalizer" in (
+                result.failed_checks
+            )
+        else:
+            assert result.passed, (result.case_id, result.failed_checks)
     report = json.loads(path.with_suffix(".json").read_text(encoding="utf-8"))
     assert report["suite"]["grounding_scorer_version"] == scope[0].scorer_version
     for result in results:
@@ -62,7 +71,8 @@ async def test_all_structured_cases_through_real_mcp_and_terminal_trace(tmp_path
         ]
         rendered = [r for r in records if r["type"] == "rendered_answer"]
         assert len(rendered) == 1 and rendered[0]["text"] == result.visible_text
-        assert result.total_tokens == 40  # Two requests; renderer adds no token charge.
+        case = next(c for c in scope if c.id == result.case_id)
+        assert result.total_tokens == (20 if case.answer_kind == "blocked" else 40)
         assert result.state_evidence["before_sha256"] == result.state_evidence["after_sha256"]
     # Correct quotations alone do not make an inapplicable freight rule a valid answer.
     freight = next(r for r in results if r.case_id == "rag-grounding-freight-gap")
@@ -82,6 +92,49 @@ async def test_all_structured_cases_through_real_mcp_and_terminal_trace(tmp_path
     forged.tool_results[-1].content = data
     forged.visible_text = data["text"]
     assert "structured_gap_requires_abstention" in check_grounding_result(case, forged, {}, {})
+
+
+def test_v4_retains_all_question_scopes_fixtures_and_support_gold():
+    for old, new in zip(STRUCTURED_GROUNDING_CASES_V3, STRUCTURED_GROUNDING_CASES_V4, strict=True):
+        for key in ("id", "question", "question_scopes", "sections", "expected_policy_state",
+                    "required_citations", "answer_kind", "forbid_tools", "state"):
+            assert getattr(old, key) == getattr(new, key)
+        if old.answer_kind != "blocked":
+            assert old.model_dump() == new.model_dump()
+
+
+@pytest.mark.parametrize("state", ["conflict", "unavailable", "inactive", "no_match"])
+def test_v4_rejects_forged_or_nonterminal_program_abstention(state):
+    from evals.model import CaseResult, ToolResult
+    from mcp_erp.policy_answer import blocked_policy_answer
+    from test_grounding import payload
+
+    case = next(c for c in STRUCTURED_GROUNDING_CASES_V4 if c.expected_policy_state == state)
+    proof = payload(case)
+    proof.update(policy_state=state, matches=[])
+    if state == "unavailable":
+        proof = {"error": {"code": "policy_unavailable"}}
+    args = {"query": case.question}
+    history = [{"name": "search_policy", "arguments": args, "ok": True,
+                "content": json.dumps(proof)}]
+    response = blocked_policy_answer(history, [{"role": "user", "content": case.question}])
+    result = CaseResult(
+        case_id=case.id, category=case.category, passed=True, completed=True, steps=1,
+        visible_text=response["text"], tool_attempts=["search_policy"],
+        tool_results=[ToolResult(call_id="s", name="search_policy", arguments=args,
+                                 content=proof, ok=True)],
+    )
+    assert check_grounding_result(case, result, {}, {}) == []
+    forged = result.model_copy(deep=True)
+    forged.visible_text += "运费由店铺承担"
+    assert "structured_noncanonical_output" in check_grounding_result(case, forged, {}, {})
+    continued = result.model_copy(update={"steps": 2})
+    assert "structured_blocked_search_not_terminal" in check_grounding_result(
+        case, continued, {}, {},
+    )
+    assert "structured_missing_single_finalizer" in check_grounding_result(
+        next(c for c in STRUCTURED_GROUNDING_CASES_V3 if c.id == case.id), result, {}, {},
+    )
 
 
 def test_v2_covers_policy_questions_without_treating_execution_constraints_as_questions():

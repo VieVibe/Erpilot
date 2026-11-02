@@ -1,0 +1,4 @@
+budget-denial-restore/1: PASS; known=0.001797 CNY
+budget-denial-restore/2: PASS; known=0.003755 CNY
+budget-denial-restore/3: PASS; known=0.006775 CNY
+budget-denial-restore/4: FAIL; known=0.006775 CNY

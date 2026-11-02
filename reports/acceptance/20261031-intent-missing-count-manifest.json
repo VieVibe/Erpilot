@@ -1,0 +1,57 @@
+{
+  "suite": "intent-missing-count-20261031",
+  "source_before": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "7504bc44851ddf5fcc5a8643edad848e988545fd92c6edc73ec72ed660c881b0"
+  },
+  "parser_version": "order-rules-4",
+  "policy_version": "order-stage-1",
+  "default_mode": "off",
+  "provider_requests": 0,
+  "label_status": "engineering_expectations_pending_human_review",
+  "runs": [
+    {
+      "report": "20261031-intent-missing-count-tests.xml",
+      "tests": "1588",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "21",
+      "time": "210.921"
+    },
+    {
+      "report": "20261031-intent-missing-count-focused.xml",
+      "tests": "410",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "57.008"
+    },
+    {
+      "report": "20261031-intent-missing-count-tests-final.xml",
+      "tests": "1588",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "21",
+      "time": "210.823"
+    }
+  ],
+  "source_after": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "7504bc44851ddf5fcc5a8643edad848e988545fd92c6edc73ec72ed660c881b0"
+  },
+  "source_unchanged": true,
+  "frontend": {
+    "tests_passed": 100,
+    "build": "passed"
+  },
+  "manual_batch_collision_probe": {
+    "exact_name_matches": 100,
+    "displayed": 20,
+    "truncated_selection_blocked": true,
+    "sku_name_collision_count": 2,
+    "self_name_counted_once": true,
+    "output_equal_to_legacy": true
+  }
+}

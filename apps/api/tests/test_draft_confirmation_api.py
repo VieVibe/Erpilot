@@ -80,6 +80,45 @@ async def wait_pending(service):
     return (await service.session_state("s1"))["pending_approvals"][0]
 
 
+def quote_content(draft):
+    return {**draft, "submission_check": {
+        key: value for key, value in draft["submission_check"].items() if key != "checked_at"
+    }}
+
+
+@pytest.mark.parametrize("change,code", [("price", "quote_changed"), ("stock", "stock_changed")])
+async def test_current_pending_issues_block_http_confirmation_before_approval(
+    tmp_path, database, change, code,
+):
+    app, provider = await host(tmp_path, database)
+    first = prepare(provider)
+    with Session(database[1]) as session:
+        if change == "price":
+            session.get(ProductRow, "A").price = 200
+        else:
+            session.get(StockRow, "A").quantity = 1
+        session.commit()
+    before = snapshot_all(database[1])
+    async with httpx2.AsyncClient(
+        transport=httpx2.ASGITransport(app), base_url="http://test",
+    ) as client:
+        response = await client.get(f"/api/sessions/s1/order-drafts/{first['draft_id']}")
+        assert response.status_code == 200
+        payload = response.json()
+        assert payload["pending_issues"][0]["code"] == code
+        assert not payload["submission_check"]["can_submit"]
+        assert payload["items"] == first["items"]
+        blocked = await client.post(
+            f"/api/sessions/s1/order-drafts/{first['draft_id']}/confirm/stream",
+            json={"expected_revision": 1},
+        )
+        assert blocked.status_code == 409 and blocked.json()["error"]["code"] == code
+    assert snapshot_all(database[1]) == before
+    with pytest.raises(SessionError) as exc:
+        await app.state.service.session_state("s1")
+    assert exc.value.code == "session_not_found"
+
+
 @pytest.mark.parametrize("approved", [False, True])
 async def test_http_confirmation_is_only_an_approval_request_and_uses_no_model(
     tmp_path, database, approved,
@@ -97,7 +136,8 @@ async def test_http_confirmation_is_only_an_approval_request_and_uses_no_model(
         try:
             pending = await wait_pending(app.state.service)
             assert pending["arguments"]["draft_id"] == draft["draft_id"]
-            assert pending["arguments"]["revision"] == 1 and pending["draft"] == draft
+            assert pending["arguments"]["revision"] == 1
+            assert quote_content(pending["draft"]) == quote_content(draft)
             assert snapshot_all(database[1]) == before
             duplicate = await client.post(
                 f"/api/sessions/s1/order-drafts/{draft['draft_id']}/confirm/stream",
@@ -192,6 +232,8 @@ async def test_review_new_revision_then_price_drift_refresh_and_reconfirm_exact_
     assert provider.drafts.get("s1", draft["draft_id"], 1)["total_amount"] == 260
     assert provider.drafts.history("s1", draft["draft_id"])["latest_revision"] == 3
     assert refreshed["task_constraints"] == draft["task_constraints"]
+    assert refreshed["item_constraint"]["value"] == [{"sku": "A", "quantity": 5},
+                                                      {"sku": "B", "quantity": 3}]
 
 
 @pytest.mark.parametrize("committed", [False, True])

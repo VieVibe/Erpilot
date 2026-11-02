@@ -70,6 +70,7 @@ def register_policy_tools(mcp, repo, resolver, threshold):
             "status（evidence 或 gap）、citations（search_policy 实际返回的 citation 标签数组）。"
             "evidence 必须选适用原文；gap 必须空 citations。不得添加自由回答文本。"
             "覆盖完整提问，可将整个用户问题作为一项；部分有据时拆项。"
+            "前提、假设和背景条件放在对应疑问的原话中，不单独作为 evidence 分项。"
         ))],
     ) -> dict:
         """检索后单独调用，提交结构化政策答复；程序核对本轮证据并输出原文与缺口。

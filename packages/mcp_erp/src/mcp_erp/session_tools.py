@@ -1,5 +1,6 @@
 """Cache discovery metadata while binding execution to the trusted chat session."""
 
+import os
 from pathlib import Path
 
 from erp_store.db import DEFAULT_DB, make_engine
@@ -15,7 +16,8 @@ from mcp_erp.server import create_server
 
 class SessionErpTools:
     @classmethod
-    async def create(cls, db_path=DEFAULT_DB, *, writes=False, gate=None, policy_resolver=None):
+    async def create(cls, db_path=DEFAULT_DB, *, writes=False, gate=None, policy_resolver=None,
+                     intent_mode=None):
         if writes and gate is None:
             raise ValueError("writes=True 必须提供 approval gate")
         path = Path(db_path)
@@ -26,13 +28,17 @@ class SessionErpTools:
         )
         async with Client(server) as client:
             metadata = await client.list_tools()
-        return cls(path, writes, gate, policy_resolver, metadata)
+        return cls(path, writes, gate, policy_resolver, metadata,
+                   intent_mode=intent_mode or os.getenv("ERPILOT_INTENT_MODE", "off"))
 
-    def __init__(self, path, writes, gate, policy_resolver, metadata):
+    def __init__(self, path, writes, gate, policy_resolver, metadata, *, intent_mode="off"):
         self.db_path, self.writes, self.gate = path, writes, gate
         self.policy_resolver, self._metadata = policy_resolver, metadata
         self.drafts = ErpDrafts(make_engine(path))
         self.operations = ErpOperations(make_engine(path))
+        from mcp_erp.intent_analysis import OrderIntentAnalyzer
+
+        self.intent_analysis = OrderIntentAnalyzer(make_engine(path), mode=intent_mode)
         self.tools = self.for_session("discovery")
 
     def for_session(self, session_id):
@@ -49,7 +55,9 @@ class SessionErpTools:
             for t in self._metadata
         ]
         tools = [_with_risk_and_gate(t, self.gate) for t in tools] if self.writes else tools
-        return bind_draft_constraints(bind_policy_response(tools))
+        return self.intent_analysis.bind(
+            bind_draft_constraints(bind_policy_response(tools)), session_id,
+        )
 
     def reconciler(self, session_id):
         return ErpMutationReconciler(self.db_path, session_id=session_id)

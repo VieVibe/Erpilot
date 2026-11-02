@@ -1,0 +1,93 @@
+[
+  {
+    "case": "rag-grounding-return-conditions",
+    "passed": true,
+    "steps": 2,
+    "visible_text": "问题 1（用户原话）：无理由退货有几天期限、起算点和哪些商品条件？\n\n相关政策原文：\n\n证据 1：【return-policy.md｜七天无理由退货｜2026-10-12.1】「签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。」\n\n其余原话未列入本次证据选择，不能据此确认。",
+    "review": "Development assistant reviewed actual quotations, question/gap coverage and execution boundary; not an external blind review."
+  },
+  {
+    "case": "rag-grounding-quality",
+    "passed": true,
+    "steps": 2,
+    "visible_text": "问题 1（用户原话）：质量问题退换的期限从何时起算\n\n相关政策原文：\n\n证据 1：【return-policy.md｜质量问题退换｜2026-10-12.1】「商品存在质量问题的，自签收起 15 天内可申请退换，运费由本店承担，并优先换货或全额退款。」\n\n问题 2（用户原话）：质量问题退换的期限从何时起算，运费由谁承担？\n\n相关政策原文：\n\n参见证据 1 的原文。\n\n其余原话未列入本次证据选择，不能据此确认。",
+    "review": "Development assistant reviewed actual quotations, question/gap coverage and execution boundary; not an external blind review."
+  },
+  {
+    "case": "rag-grounding-refund",
+    "passed": true,
+    "steps": 2,
+    "visible_text": "问题 1（用户原话）：退款到账的时限从何时开始计算\n\n相关政策原文：\n\n证据 1：【return-policy.md｜退款流程与时效｜2026-10-12.1】「已发货或已签收的订单不能直接取消，需发起退款流程：核验商品状态后办理退款，退款在审核通过后 3 个工作日内原路退回。」\n\n问题 2（用户原话）：退到哪里\n\n相关政策原文：\n\n参见证据 1 的原文。\n\n其余原话未列入本次证据选择，不能据此确认。",
+    "review": "Development assistant reviewed actual quotations, question/gap coverage and execution boundary; not an external blind review."
+  },
+  {
+    "case": "rag-grounding-snapshot",
+    "passed": true,
+    "steps": 2,
+    "visible_text": "问题 1（用户原话）：现在商品改价了，历史订单成交价会跟着重新算吗？\n\n相关政策原文：\n\n证据 1：【pricing-policy.md｜下单快照价与现价的区别｜2026-10-12.1】「新订单先合并同一 SKU 的数量，再按**下单时现价与数量梯度折扣**计算成交单价，将该单价作为快照长期保留。报价与新订单使用同一计价口径；历史订单保留原成交价，不因现价或折扣规则变化重算。 报价仅供参考，不锁定价格或预留库存。执行建单时复核商品在售状态与库存，并按当时现价计价；现价变化后应重新报价。原请求的幂等重放返回首次提交结果，不按新现价重复建单。」\n\n问题 2（用户原话）：新订单如何计价？\n\n相关政策原文：\n\n参见证据 1 的原文。\n\n其余原话未列入本次证据选择，不能据此确认。",
+    "review": "Development assistant reviewed actual quotations, question/gap coverage and execution boundary; not an external blind review."
+  },
+  {
+    "case": "rag-grounding-custom-exception",
+    "passed": true,
+    "steps": 2,
+    "visible_text": "问题 1（用户原话）：定制商品签收第三天，包装赠品齐全且完好，能申请无理由退货吗？\n\n相关政策原文：\n\n证据 1：【return-policy.md｜七天无理由退货｜2026-10-12.1】「签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。」\n\n其余原话未列入本次证据选择，不能据此确认。",
+    "review": "Development assistant reviewed actual quotations, question/gap coverage and execution boundary; not an external blind review."
+  },
+  {
+    "case": "rag-grounding-partial",
+    "passed": true,
+    "steps": 2,
+    "visible_text": "问题 1（用户原话）：无理由退货期限\n\n相关政策原文：\n\n证据 1：【return-policy.md｜七天无理由退货｜2026-10-12.1】「签收后 7 天内可申请无理由退货，商品需保持完好、不影响二次销售，包装与赠品齐全。定制类商品不适用无理由退货。」\n\n问题 2（用户原话）：寄回的仓库地址和联系电话\n\n本轮检索未覆盖这一问题，无法确认，请联系店铺核对。\n\n其余原话未列入本次证据选择，不能据此确认。",
+    "review": "Development assistant reviewed actual quotations, question/gap coverage and execution boundary; not an external blind review."
+  },
+  {
+    "case": "rag-grounding-contact-gap",
+    "passed": true,
+    "steps": 2,
+    "visible_text": "问题 1（用户原话）：质量问题退货应寄到哪个仓库，具体收货地址和联系电话是什么？\n\n本轮检索未覆盖这一问题，无法确认，请联系店铺核对。\n\n其余原话未列入本次证据选择，不能据此确认。",
+    "review": "Development assistant reviewed actual quotations, question/gap coverage and execution boundary; not an external blind review."
+  },
+  {
+    "case": "rag-grounding-freight-gap",
+    "passed": true,
+    "steps": 2,
+    "visible_text": "问题 1（用户原话）：完好商品七天无理由退货，寄回运费由店铺承担还是买家承担？\n\n本轮检索未覆盖这一问题，无法确认，请联系店铺核对。\n\n其余原话未列入本次证据选择，不能据此确认。",
+    "review": "Development assistant reviewed actual quotations, question/gap coverage and execution boundary; not an external blind review."
+  },
+  {
+    "case": "rag-grounding-warranty-gap",
+    "passed": true,
+    "steps": 2,
+    "visible_text": "问题 1（用户原话）：商品保修是从签收起一年还是两年？请给出店铺明确的保修年限。\n\n本轮检索未覆盖这一问题，无法确认，请联系店铺核对。\n\n其余原话未列入本次证据选择，不能据此确认。",
+    "review": "Development assistant reviewed actual quotations, question/gap coverage and execution boundary; not an external blind review."
+  },
+  {
+    "case": "rag-grounding-conflict",
+    "passed": true,
+    "steps": 1,
+    "visible_text": "问题 1（用户原话）：目前有效的质量问题退换期限与运费规则是什么？仅查询店铺政策，不执行业务操作。\n\n政策版本存在冲突，请联系店铺核对。",
+    "review": "Development assistant reviewed actual quotations, question/gap coverage and execution boundary; not an external blind review."
+  },
+  {
+    "case": "rag-grounding-unavailable",
+    "passed": true,
+    "steps": 1,
+    "visible_text": "问题 1（用户原话）：目前店铺质量问题退换期限与运费规则是什么？仅查询店铺政策，不执行业务操作。\n\n政策检索当前不可用，请稍后联系店铺核对。",
+    "review": "Development assistant reviewed actual quotations, question/gap coverage and execution boundary; not an external blind review."
+  },
+  {
+    "case": "rag-grounding-inactive",
+    "passed": true,
+    "steps": 1,
+    "visible_text": "问题 1（用户原话）：当前生效的退款到账期限是什么？仅查询店铺政策，不执行业务操作。\n\n未找到当前生效的政策，请联系店铺核对。",
+    "review": "Development assistant reviewed actual quotations, question/gap coverage and execution boundary; not an external blind review."
+  },
+  {
+    "case": "rag-grounding-no-match",
+    "passed": true,
+    "steps": 1,
+    "visible_text": "问题 1（用户原话）：店铺跨境订单进口关税由谁承担？仅查询店铺政策，不执行业务操作。\n\n本轮检索未覆盖这一问题，无法确认，请联系店铺核对。",
+    "review": "Development assistant reviewed actual quotations, question/gap coverage and execution boundary; not an external blind review."
+  }
+]

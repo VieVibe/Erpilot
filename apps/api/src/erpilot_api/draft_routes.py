@@ -47,6 +47,8 @@ def register_draft_routes(app: FastAPI, session_erp_tools):
                 "operation_changed",
                 "constraint_changed",
                 "budget_exceeded",
+                "pending_intent_changed",
+                "intent_preview_changed",
             }
             else 422
         )
@@ -63,7 +65,7 @@ def register_draft_routes(app: FastAPI, session_erp_tools):
 
     @app.exception_handler(RequestValidationError)
     async def validation_error(request: Request, exc: RequestValidationError):
-        if "/order-drafts" in request.url.path:
+        if "/order-drafts" in request.url.path or "/pending-intent" in request.url.path:
             return JSONResponse(
                 status_code=422,
                 content={

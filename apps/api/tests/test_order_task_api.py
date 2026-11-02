@@ -35,7 +35,10 @@ async def test_order_task_http_none_active_ambiguous_and_isolation(tmp_path, erp
         assert (await client.get(endpoint)).json()["status"] == "none"
         draft = provider.drafts.prepare("s1", "客户", [("A", 3), ("B", 4)], "保留备注")
         task = (await client.get(endpoint)).json()
-        assert task["status"] == "active" and task["draft"] == draft
+        assert task["status"] == "active"
+        assert task["draft"]["submission_check"].pop("checked_at")
+        assert draft["submission_check"].pop("checked_at")
+        assert task["draft"] == draft
         assert (await client.get("/api/sessions/s2/order-task")).json()["draft"] is None
         provider.drafts.prepare("s1", "另一客户", [("A", 1)])
         task = (await client.get(endpoint)).json()

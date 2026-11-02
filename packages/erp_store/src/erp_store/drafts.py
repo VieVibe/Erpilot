@@ -12,10 +12,9 @@ from erp_store.draft_audit import snapshot_constraints, with_draft_audit
 from erp_store.draft_budget import (
     UNSET,
     budget_check,
-    budget_issues,
-    ensure_budget,
     normalize_budget,
 )
+from erp_store.draft_review import ensure_review, review_issues
 from erp_store.models import Order, ProductStatus
 from erp_store.mutations import ErpMutations, MutationError
 from erp_store.pricing import PricingError, price_for_quantity
@@ -112,7 +111,7 @@ class ErpDrafts(ErpMutations):
             raise MutationError("not_found", "草稿不存在或不属于此会话", "请重新查询当前会话草稿")
         return row
 
-    def _payload(self, row, *, latest_revision=None):
+    def _payload(self, row, session, *, latest_revision=None):
         snapshot = json.loads(row.snapshot)
         change_record = snapshot.pop("change_record", None)
         status = (
@@ -124,10 +123,22 @@ class ErpDrafts(ErpMutations):
             if datetime.fromisoformat(row.expires_at) <= self._now()
             else "open"
         )
+        issues = review_issues(
+            session, snapshot, revision=row.revision,
+            latest_revision=latest_revision or row.revision,
+            expired=datetime.fromisoformat(row.expires_at) <= self._now(),
+            submitted=bool(row.order_id),
+        )
         return {
             **snapshot,
             "budget_check": budget_check(snapshot),
-            "pending_issues": budget_issues(snapshot),
+            "pending_issues": issues,
+            "submission_check": {
+                "schema_version": 1, "revision": row.revision,
+                "latest_revision": latest_revision or row.revision,
+                "checked_at": self._now().isoformat(),
+                "can_submit": status == "open" and not issues,
+            },
             "item_count": len(snapshot["items"]),
             "items": [dict(item, item_number=number)
                       for number, item in enumerate(snapshot["items"], 1)],
@@ -152,10 +163,39 @@ class ErpDrafts(ErpMutations):
         operation="create", evidence=None, previous=None,
     ):
         now = self._now()
-        snapshot = with_draft_audit(
-            snapshot, draft_id=draft_id, revision=revision, operation=operation,
-            evidence=evidence, previous=previous,
-        )
+        if isinstance(evidence, dict) and evidence.get("contract") == "draft-intent-2":
+            from erp_store.intent_audit import with_intent_audit
+            from erp_store.intent_execution import verify_for_save
+
+            plan, intent_record = verify_for_save(
+                session, session_id, evidence, snapshot, previous, draft_id, revision, now,
+            )
+            snapshot = with_intent_audit(
+                snapshot, draft_id=draft_id, revision=revision, operation=operation,
+                plan=plan, record=intent_record, previous=previous,
+            )
+        else:
+            form_source = None
+            if isinstance(evidence, dict) and evidence.get("contract") in {
+                    "intent-form-1", "intent-revise-form-1"}:
+                from erp_store.intent_preview import consume_form_preview
+
+                revising = evidence["contract"] == "intent-revise-form-1"
+                if (set(evidence) != {"contract", "pending_ref"}
+                        or (revising and (previous is None or operation != "revise"))
+                        or (not revising and (previous is not None or operation != "create"))):
+                    raise MutationError("invalid_argument", "预览与草稿操作不一致")
+                form_source = consume_form_preview(
+                    session, session_id, evidence["pending_ref"], snapshot, draft_id, now,
+                    previous=previous, revision=revision,
+                )
+                evidence = {"contract": "draft-form-1"}
+            snapshot = with_draft_audit(
+                snapshot, draft_id=draft_id, revision=revision, operation=operation,
+                evidence=evidence, previous=previous,
+            )
+            if form_source:
+                snapshot["change_record"]["source"]["intent_preview"] = form_source
         row = OrderDraftRow(
             draft_id=draft_id,
             revision=revision,
@@ -167,7 +207,7 @@ class ErpDrafts(ErpMutations):
         )
         session.add(row)
         session.flush()
-        return self._payload(row)
+        return self._payload(row, session)
 
     def prepare(self, session_id, customer, items, note=None, *, evidence=None, budget_limit=None):
         customer, merged = self._normalize(session_id, customer, items, note)
@@ -175,6 +215,9 @@ class ErpDrafts(ErpMutations):
             self._ensure_table(session)
             snapshot = self._snapshot(session, customer, merged, note)
             snapshot["budget_limit"] = normalize_budget(budget_limit)
+            from erp_store.order_request import recheck_creation
+
+            recheck_creation(session, evidence, snapshot)
             result = self._save_revision(
                 session, session_id, uuid4().hex, 1, snapshot, evidence=evidence,
             )
@@ -188,7 +231,7 @@ class ErpDrafts(ErpMutations):
             row = latest if revision is None else session.get(OrderDraftRow, (draft_id, revision))
             if row is None or row.session_id != session_id:
                 raise MutationError("not_found", "草稿版本不存在", "请查询当前草稿版本")
-            return self._payload(row, latest_revision=latest.revision)
+            return self._payload(row, session, latest_revision=latest.revision)
 
     def list_latest(self, session_id):
         with Session(self._engine) as session:
@@ -206,7 +249,7 @@ class ErpDrafts(ErpMutations):
                 .order_by(OrderDraftRow.created_at.desc(), OrderDraftRow.draft_id)
                 .limit(20)
             )
-            return [self._payload(row) for row in rows]
+            return [self._payload(row, session) for row in rows]
 
     def history(self, session_id, draft_id, *, before_revision=None, limit=5):
         if type(limit) is not int or not 1 <= limit <= 20 or (
@@ -234,6 +277,7 @@ class ErpDrafts(ErpMutations):
                     "task_constraints": snapshot_constraints(snapshot, row.revision),
                     "change_record": snapshot.get("change_record"),
                     "budget_constraint": snapshot.get("budget_constraint"),
+                    "item_constraint": snapshot.get("item_constraint"),
                 })
             return {
                 "schema_version": 1, "draft_id": draft_id, "latest_revision": latest.revision,
@@ -282,7 +326,7 @@ class ErpDrafts(ErpMutations):
                 .where(OrderDraftRow.order_id.is_(None))
                 .order_by(OrderDraftRow.created_at.desc(), OrderDraftRow.draft_id)
             ))
-            payloads = [self._payload(row) for row in rows[:20]]
+            payloads = [self._payload(row, session) for row in rows[:20]]
             return {
                 "status": "none" if not rows else "active" if len(rows) == 1 else "ambiguous",
                 "draft": payloads[0] if len(rows) == 1 else None,
@@ -291,7 +335,20 @@ class ErpDrafts(ErpMutations):
                     for payload in payloads
                 ],
                 "has_more": len(rows) > 20,
+                "pending_issues": [{
+                    "code": "draft_selection_required", "blocking": True,
+                    "message": "当前会话有多份未提交草稿，目标尚未确定。",
+                    "required_action": "请明确客户或草稿标识后再修改或提交。",
+                }] if len(rows) > 1 else (payloads[0]["pending_issues"] if payloads else []),
             }
+
+    def check_submission(self, session_id, draft_id, revision):
+        """Preflight before asking for approval; submission rechecks in its write transaction."""
+        draft = self.get(session_id, draft_id, revision)
+        if draft["status"] == "submitted":
+            raise MutationError("draft_submitted", "草稿已提交，不能再次申请审批")
+        ensure_review(draft["pending_issues"])
+        return draft
 
     def revise_quantity(
         self, session_id, draft_id, expected_revision, item_number, quantity, *, expected_sku=None,
@@ -356,23 +413,13 @@ class ErpDrafts(ErpMutations):
             if datetime.fromisoformat(latest.expires_at) <= self._now():
                 raise MutationError("draft_expired", "报价草稿已过期", _REFRESH_HINT)
             snapshot = json.loads(latest.snapshot)
-            ensure_budget(snapshot)
+            from erp_store.intent_execution import recheck_saved_intent
+
+            recheck_saved_intent(session, latest, snapshot)
+            ensure_review(review_issues(
+                session, snapshot, revision=revision, latest_revision=latest.revision,
+            ))
             merged = {line["sku"]: line["quantity"] for line in snapshot["items"]}
-            for line in snapshot["items"]:
-                product = session.get(ProductRow, line["sku"])
-                if product is None or product.status != ProductStatus.ON_SALE.value:
-                    raise MutationError("quote_changed", "商品已不存在或不在售", _REFRESH_HINT)
-                if product.price != line["base_price"] or product.name != line["name"]:
-                    raise MutationError("quote_changed", "商品价格或名称已变化", _REFRESH_HINT)
-                try:
-                    current_price = price_for_quantity(product.price, line["quantity"])
-                except PricingError as exc:
-                    raise MutationError("quote_changed", "计价条件已变化", _REFRESH_HINT) from exc
-                if current_price != (line["discount"], line["unit_price"], line["line_total"]):
-                    raise MutationError("quote_changed", "折扣规则已变化", _REFRESH_HINT)
-                stock = session.get(StockRow, line["sku"])
-                if stock is None or stock.quantity != line["stock_before"]:
-                    raise MutationError("stock_changed", "库存已变化，需重新确认", _REFRESH_HINT)
             result = self._create_order_in_session(
                 session,
                 snapshot["customer"],

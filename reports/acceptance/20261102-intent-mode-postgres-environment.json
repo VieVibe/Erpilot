@@ -1,0 +1,10 @@
+{
+  "container_id": "3e49cc79fbdcbbc13879729b9be48795a391ba056bf778a7368c10f3a64f65ff",
+  "name": "erpilot-intent-recovery-5c2877e1",
+  "server_version": "16.15",
+  "image_digest": "postgres@sha256:0cefaabd882e42bcb2a2f3dc56d3ce4770560ba62fd7f197f1a2e008fd5731ab",
+  "remaining_test_schemas": 0,
+  "container_removed": true,
+  "data_storage": "tmpfs",
+  "existing_user_containers_modified": false
+}

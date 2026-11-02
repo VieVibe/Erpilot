@@ -15,3 +15,4 @@ class ResponseContract:
     evidence_tool: str
     finalize_tool: str
     render: Callable[[dict | None, list[dict], list[dict]], dict[str, Any]]
+    blocked_response: Callable[[list[dict], list[dict]], dict[str, Any] | None] | None = None

@@ -1,0 +1,529 @@
+{
+  "suite": "intent-revision-scripted-api-1",
+  "provider_requests": 0,
+  "scripted_model_calls": 1,
+  "source_before": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "135c58641b93e77926e41c7f198eedaa357ed185761deda5899f14d9cd2d22c4"
+  },
+  "source_after": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "135c58641b93e77926e41c7f198eedaa357ed185761deda5899f14d9cd2d22c4"
+  },
+  "source_unchanged": true,
+  "preview": {
+    "schema_version": 1,
+    "pending_id": "9910695c0b4c4930965f0aa842879c4f",
+    "state_version": 1,
+    "expires_at": "2026-11-02T07:27:55.287369+00:00",
+    "status": "pending",
+    "can_confirm": true,
+    "clarification_attempts": 0,
+    "customer": "原客户",
+    "note": "加急😀",
+    "budget_limit": 1200.0,
+    "items": [
+      {
+        "sku": "K1",
+        "quantity": 6,
+        "item_number": 1,
+        "product_query": "机械键盘",
+        "name": "机械键盘",
+        "candidates": []
+      },
+      {
+        "sku": "M1",
+        "quantity": 3,
+        "item_number": 2,
+        "product_query": "鼠标",
+        "name": "鼠标",
+        "candidates": []
+      }
+    ],
+    "message": "以下是待核对的候选字段。请对照完整原话检查全部要求，补齐或修改后按此完整清单保存草稿。",
+    "operation": "revise",
+    "before_fields": {
+      "customer": "原客户",
+      "note": "原备注",
+      "budget_limit": 1000.0,
+      "items": [
+        {
+          "sku": "K1",
+          "quantity": 2
+        },
+        {
+          "sku": "M1",
+          "quantity": 3
+        }
+      ]
+    },
+    "target": {
+      "draft_id": "cc805458844446daae0492f8a59e743b",
+      "revision": 1
+    },
+    "origin": "semantic_proposal",
+    "source_text": "调整机械键盘到六个，预算改为1200元，备注改为『加急😀』。",
+    "unmapped_text": "到  ，预算改为     ，备注改为『   』。"
+  },
+  "confirmation": {
+    "pending_ref": {
+      "pending_id": "9910695c0b4c4930965f0aa842879c4f",
+      "state_version": 1
+    },
+    "target": {
+      "draft_id": "cc805458844446daae0492f8a59e743b",
+      "revision": 1
+    },
+    "customer": "原客户",
+    "note": null,
+    "budget_limit": null,
+    "items": [
+      {
+        "sku": "K1",
+        "quantity": 7
+      },
+      {
+        "sku": "M1",
+        "quantity": 3
+      }
+    ]
+  },
+  "saved": {
+    "customer": "原客户",
+    "note": null,
+    "items": [
+      {
+        "sku": "K1",
+        "name": "机械键盘",
+        "quantity": 7,
+        "base_price": 200.0,
+        "discount": 1.0,
+        "unit_price": 200.0,
+        "line_total": 1400.0,
+        "stock_before": 1000,
+        "stock_after": 993,
+        "item_number": 1
+      },
+      {
+        "sku": "M1",
+        "name": "鼠标",
+        "quantity": 3,
+        "base_price": 20.0,
+        "discount": 1.0,
+        "unit_price": 20.0,
+        "line_total": 60.0,
+        "stock_before": 1000,
+        "stock_after": 997,
+        "item_number": 2
+      }
+    ],
+    "total_amount": 1460.0,
+    "budget_limit": null,
+    "budget_constraint": {
+      "currency": "CNY",
+      "limit": null,
+      "origin": {
+        "kind": "manual_form",
+        "value": null,
+        "revision": 2
+      }
+    },
+    "item_constraint": {
+      "value": [
+        {
+          "sku": "K1",
+          "quantity": 7
+        },
+        {
+          "sku": "M1",
+          "quantity": 3
+        }
+      ],
+      "verified": true,
+      "origin": {
+        "kind": "manual_form",
+        "revision": 2
+      }
+    },
+    "task_constraints": {
+      "schema_version": 1,
+      "fields": {
+        "customer": {
+          "value": "原客户",
+          "verified": true,
+          "origin": {
+            "kind": "manual_form",
+            "value": "原客户",
+            "revision": 1
+          }
+        },
+        "note": {
+          "value": null,
+          "verified": true,
+          "origin": {
+            "kind": "manual_form",
+            "value": null,
+            "revision": 2
+          }
+        }
+      },
+      "unverified_fields": []
+    },
+    "budget_check": {
+      "currency": "CNY",
+      "limit": null,
+      "total_amount": 1460.0,
+      "over_amount": 0.0,
+      "status": "not_set"
+    },
+    "pending_issues": [],
+    "submission_check": {
+      "schema_version": 1,
+      "revision": 2,
+      "latest_revision": 2,
+      "checked_at": "2026-11-02T07:17:55.324362+00:00",
+      "can_submit": true
+    },
+    "item_count": 2,
+    "last_change": {
+      "revision": 2,
+      "operation": "revise",
+      "change_count": 6
+    },
+    "draft_id": "cc805458844446daae0492f8a59e743b",
+    "revision": 2,
+    "expires_at": "2026-11-02T07:47:55.320361+00:00",
+    "status": "open",
+    "order_id": null,
+    "inventory_effect": "projection",
+    "inventory_note": "库存前后值为此版本报价时测算的预计提交前后库存，不是实时库存；保存草稿不预留、不扣减库存，实际变更以订单提交结果为准。"
+  },
+  "history": {
+    "schema_version": 1,
+    "draft_id": "cc805458844446daae0492f8a59e743b",
+    "latest_revision": 2,
+    "items": [
+      {
+        "draft_id": "cc805458844446daae0492f8a59e743b",
+        "revision": 2,
+        "created_at": "2026-11-02T07:17:55.320361+00:00",
+        "task_constraints": {
+          "schema_version": 1,
+          "fields": {
+            "customer": {
+              "value": "原客户",
+              "verified": true,
+              "origin": {
+                "kind": "manual_form",
+                "value": "原客户",
+                "revision": 1
+              }
+            },
+            "note": {
+              "value": null,
+              "verified": true,
+              "origin": {
+                "kind": "manual_form",
+                "value": null,
+                "revision": 2
+              }
+            }
+          },
+          "unverified_fields": []
+        },
+        "change_record": {
+          "schema_version": 1,
+          "revision": 2,
+          "previous_revision": 1,
+          "operation": "revise",
+          "source": {
+            "kind": "manual_form",
+            "intent_preview": {
+              "pending_id": "9910695c0b4c4930965f0aa842879c4f",
+              "state_version": 1,
+              "messages": [
+                {
+                  "message_id": "8e422e18bbd94743a7329dbd0e477e1b",
+                  "text": "调整机械键盘到六个，预算改为1200元，备注改为『加急😀』。",
+                  "sha256": "63d43184f5188711b681ebc0bf078f80d5cf9276f3ddbdf8ef82a78254426730"
+                }
+              ],
+              "semantic_proposal": {
+                "schema_version": 1,
+                "operation": "revise",
+                "action": {
+                  "message_id": "8e422e18bbd94743a7329dbd0e477e1b",
+                  "start": 0,
+                  "end": 2,
+                  "quote": "调整"
+                },
+                "customer": null,
+                "note": {
+                  "value": "加急😀",
+                  "evidence": {
+                    "message_id": "8e422e18bbd94743a7329dbd0e477e1b",
+                    "start": 25,
+                    "end": 28,
+                    "quote": "加急😀"
+                  }
+                },
+                "budget_limit": {
+                  "value": "1200",
+                  "evidence": {
+                    "message_id": "8e422e18bbd94743a7329dbd0e477e1b",
+                    "start": 14,
+                    "end": 19,
+                    "quote": "1200元"
+                  }
+                },
+                "items": [
+                  {
+                    "product": {
+                      "value": "机械键盘",
+                      "evidence": {
+                        "message_id": "8e422e18bbd94743a7329dbd0e477e1b",
+                        "start": 2,
+                        "end": 6,
+                        "quote": "机械键盘"
+                      }
+                    },
+                    "quantity": {
+                      "value": 6,
+                      "evidence": {
+                        "message_id": "8e422e18bbd94743a7329dbd0e477e1b",
+                        "start": 7,
+                        "end": 9,
+                        "quote": "六个"
+                      }
+                    }
+                  }
+                ],
+                "unresolved": []
+              },
+              "verification": "explicit_form",
+              "semantic_version": "order-revise-proposal-1",
+              "operation": "revise",
+              "target": {
+                "draft_id": "cc805458844446daae0492f8a59e743b",
+                "revision": 1,
+                "snapshot_sha256": "8e15907f300e9470a3a41f27a5f12ce327bdc7614af7d6da78b206b1e9fb531a"
+              },
+              "before_fields": {
+                "customer": "原客户",
+                "note": "原备注",
+                "budget_limit": 1000.0,
+                "items": [
+                  {
+                    "sku": "K1",
+                    "quantity": 2
+                  },
+                  {
+                    "sku": "M1",
+                    "quantity": 3
+                  }
+                ]
+              }
+            }
+          },
+          "confirmed_fields": [
+            "customer",
+            "note",
+            "budget_limit"
+          ],
+          "changes": [
+            {
+              "field": "note",
+              "before": "原备注",
+              "after": null
+            },
+            {
+              "field": "total_amount",
+              "before": 460.0,
+              "after": 1460.0
+            },
+            {
+              "field": "budget_limit",
+              "before": 1000.0,
+              "after": null
+            },
+            {
+              "field": "quantity",
+              "sku": "K1",
+              "before": 2,
+              "after": 7
+            },
+            {
+              "field": "line_total",
+              "sku": "K1",
+              "before": 400.0,
+              "after": 1400.0
+            },
+            {
+              "field": "stock_after",
+              "sku": "K1",
+              "before": 998,
+              "after": 993
+            }
+          ]
+        },
+        "budget_constraint": {
+          "currency": "CNY",
+          "limit": null,
+          "origin": {
+            "kind": "manual_form",
+            "value": null,
+            "revision": 2
+          }
+        },
+        "item_constraint": {
+          "value": [
+            {
+              "sku": "K1",
+              "quantity": 7
+            },
+            {
+              "sku": "M1",
+              "quantity": 3
+            }
+          ],
+          "verified": true,
+          "origin": {
+            "kind": "manual_form",
+            "revision": 2
+          }
+        }
+      },
+      {
+        "draft_id": "cc805458844446daae0492f8a59e743b",
+        "revision": 1,
+        "created_at": "2026-11-02T07:17:55.226451+00:00",
+        "task_constraints": {
+          "schema_version": 1,
+          "fields": {
+            "customer": {
+              "value": "原客户",
+              "verified": true,
+              "origin": {
+                "kind": "manual_form",
+                "value": "原客户",
+                "revision": 1
+              }
+            },
+            "note": {
+              "value": "原备注",
+              "verified": true,
+              "origin": {
+                "kind": "manual_form",
+                "value": "原备注",
+                "revision": 1
+              }
+            }
+          },
+          "unverified_fields": []
+        },
+        "change_record": {
+          "schema_version": 1,
+          "revision": 1,
+          "previous_revision": null,
+          "operation": "create",
+          "source": {
+            "kind": "manual_form"
+          },
+          "confirmed_fields": [
+            "customer",
+            "note",
+            "budget_limit"
+          ],
+          "changes": [
+            {
+              "field": "customer",
+              "before": null,
+              "after": "原客户"
+            },
+            {
+              "field": "note",
+              "before": null,
+              "after": "原备注"
+            },
+            {
+              "field": "total_amount",
+              "before": null,
+              "after": 460.0
+            },
+            {
+              "field": "budget_limit",
+              "before": null,
+              "after": 1000.0
+            },
+            {
+              "field": "item",
+              "sku": "K1",
+              "before": null,
+              "after": {
+                "sku": "K1",
+                "name": "机械键盘",
+                "quantity": 2,
+                "base_price": 200.0,
+                "discount": 1.0,
+                "unit_price": 200.0,
+                "line_total": 400.0,
+                "stock_before": 1000,
+                "stock_after": 998
+              }
+            },
+            {
+              "field": "item",
+              "sku": "M1",
+              "before": null,
+              "after": {
+                "sku": "M1",
+                "name": "鼠标",
+                "quantity": 3,
+                "base_price": 20.0,
+                "discount": 1.0,
+                "unit_price": 20.0,
+                "line_total": 60.0,
+                "stock_before": 1000,
+                "stock_after": 997
+              }
+            }
+          ]
+        },
+        "budget_constraint": {
+          "currency": "CNY",
+          "limit": 1000.0,
+          "origin": {
+            "kind": "manual_form",
+            "value": 1000.0,
+            "revision": 1
+          }
+        },
+        "item_constraint": {
+          "value": [
+            {
+              "sku": "K1",
+              "quantity": 2
+            },
+            {
+              "sku": "M1",
+              "quantity": 3
+            }
+          ],
+          "verified": true,
+          "origin": {
+            "kind": "manual_form",
+            "revision": 1
+          }
+        }
+      }
+    ],
+    "has_more": false,
+    "next_before_revision": null
+  },
+  "replay_status": 409,
+  "stocks_unchanged": true,
+  "orders": [],
+  "passed": true
+}

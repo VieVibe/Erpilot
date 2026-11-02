@@ -1,0 +1,189 @@
+{
+  "suite": "intent-state-stress-engineering-1",
+  "parser_version": "order-rules-5",
+  "label_status": "engineering_expectations_pending_human_review",
+  "provider_requests": 0,
+  "platform": "Windows-10-10.0.19045-SP0",
+  "python": "3.12.14",
+  "source_before": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "d8e456ba33ffcfde621bd17936a228ccb5ded6435c9c8c5a3af780d3ca40af15"
+  },
+  "source_after": {
+    "revision": "b8c5ef6934ec17b5dc30e22ca6c28f28fc0f1227",
+    "working_tree_dirty": true,
+    "source_sha256": "d8e456ba33ffcfde621bd17936a228ccb5ded6435c9c8c5a3af780d3ca40af15"
+  },
+  "source_unchanged": true,
+  "all_passed": false,
+  "cases": [
+    {
+      "id": "100_choices_and_counts",
+      "passed": true,
+      "checks": {
+        "replay_0": true,
+        "invalid_turn_keeps_state": true,
+        "replay_50": true,
+        "replay_99": true,
+        "all_100_items_bound": true,
+        "source_limit_atomic": true,
+        "ttl_unchanged": true,
+        "no_partial_business_write": true,
+        "full_snapshot_saved": true,
+        "all_sources_retained": true,
+        "consumed_once": true,
+        "replay_cannot_resave": true,
+        "stocks_unchanged": true,
+        "no_orders": true
+      },
+      "details": {
+        "items": 100,
+        "accepted_messages": 102,
+        "source_characters": 638,
+        "restorations": 10
+      },
+      "turn_latency": {
+        "count": 108,
+        "p50_ms": 29.1162,
+        "p95_ms": 34.6308,
+        "max_ms": 90.9805
+      },
+      "select_count": 1190,
+      "elapsed_ms": 3361.5042,
+      "draft_count": 1,
+      "pending_statuses": [
+        "consumed"
+      ]
+    },
+    {
+      "id": "100_counts_long_source",
+      "passed": true,
+      "checks": {
+        "replay_0": true,
+        "invalid_turn_keeps_state": true,
+        "replay_50": true,
+        "replay_99": true,
+        "all_100_items_bound": true,
+        "source_limit_atomic": true,
+        "ttl_unchanged": true,
+        "no_partial_business_write": true,
+        "full_snapshot_saved": true,
+        "all_sources_retained": true,
+        "consumed_once": true,
+        "replay_cannot_resave": true,
+        "stocks_unchanged": true,
+        "no_orders": true
+      },
+      "details": {
+        "items": 100,
+        "accepted_messages": 102,
+        "source_characters": 31999,
+        "restorations": 10
+      },
+      "turn_latency": {
+        "count": 108,
+        "p50_ms": 50.6641,
+        "p95_ms": 56.2555,
+        "max_ms": 106.3783
+      },
+      "select_count": 1077,
+      "elapsed_ms": 5645.7421,
+      "draft_count": 1,
+      "pending_statuses": [
+        "consumed"
+      ]
+    },
+    {
+      "id": "session_expiry_catalogue",
+      "passed": true,
+      "checks": {
+        "cross_session_no_context": true,
+        "bound_0": true,
+        "bound_1": true,
+        "bound_2": true,
+        "bound_3": true,
+        "bound_4": true,
+        "bound_5": true,
+        "bound_6": true,
+        "bound_7": true,
+        "catalogue_rejected_8": true,
+        "catalogue_rejected_9": true,
+        "catalogue_rejected_10": true,
+        "catalogue_rejected_11": true,
+        "expiry_rejected_12": true,
+        "expiry_rejected_13": true,
+        "expiry_rejected_14": true,
+        "expiry_rejected_15": true,
+        "no_drafts": true,
+        "stocks_unchanged": true,
+        "no_orders": true
+      },
+      "details": {
+        "sessions": 16
+      },
+      "turn_latency": {
+        "count": 33,
+        "p50_ms": 6.9822,
+        "p95_ms": 7.5641,
+        "max_ms": 7.7142
+      },
+      "select_count": 193,
+      "elapsed_ms": 209.2441,
+      "draft_count": 0,
+      "pending_statuses": [
+        "ready",
+        "ready",
+        "ready",
+        "ready",
+        "ready",
+        "ready",
+        "ready",
+        "ready",
+        "superseded",
+        "superseded",
+        "superseded",
+        "superseded",
+        "pending",
+        "pending",
+        "pending",
+        "pending"
+      ]
+    },
+    {
+      "id": "concurrent_consumption",
+      "passed": false,
+      "checks": {
+        "exactly_one_save": true,
+        "seven_stale_rejections": false,
+        "stocks_unchanged": true,
+        "no_orders": true
+      },
+      "details": {
+        "contenders": 8,
+        "outcomes": [
+          "saved",
+          "pending_intent_changed",
+          "pending_intent_changed",
+          "pending_intent_changed",
+          "pending_intent_changed",
+          "pending_intent_changed",
+          "pending_intent_changed",
+          "pending_intent_changed"
+        ]
+      },
+      "turn_latency": {
+        "count": 1,
+        "p50_ms": 8.0051,
+        "p95_ms": 8.0051,
+        "max_ms": 8.0051
+      },
+      "select_count": 46,
+      "elapsed_ms": 153.7712,
+      "draft_count": 1,
+      "pending_statuses": [
+        "consumed"
+      ]
+    }
+  ]
+}
