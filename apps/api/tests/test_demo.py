@@ -46,6 +46,9 @@ async def test_offline_demo_verifies_all_business_flows_without_external_fallbac
     assert all(Path(path).is_file() for r in results for path in r["traces"])
     for result in results:
         assert result["source"] == "scripted-demo"
+        if result["scenario"] == "policy":
+            assert result["tools"] == ["search_policy", "compose_policy_answer"]
+            assert result["checks"]["grounded_answer"]
         if result["scenario"] in {
             "quote", "policy", "policy_miss", "cancellation", "replenishment",
         }:

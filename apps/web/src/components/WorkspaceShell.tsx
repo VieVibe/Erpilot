@@ -37,7 +37,7 @@ export function WorkspaceShell({ sidebar, children, composer, business, runtimeL
       <div className="workspace-body">
         <main className="chat-main" id="main-content" tabIndex={-1}>
           {children}
-          <div className="composer-area">{status && <p className="session-status" role="status">{status}</p>}{composer}</div>
+          <div className="composer-area"><p className="runtime-mobile" aria-label="运行状态">{runtimeLabel}</p>{status && <p className="session-status" role="status">{status}</p>}{composer}</div>
         </main>
         {screens.xl && businessOpen && <aside className="business-pane" aria-label="业务面板">
           <div className="business-pane-heading"><h2>业务面板</h2><Button type="text" size="small" icon={<CloseOutlined />}

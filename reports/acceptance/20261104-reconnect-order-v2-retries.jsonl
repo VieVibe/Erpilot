@@ -1,0 +1,5 @@
+{"logical_request": 1, "attempt": 1, "physical_request": 1, "error_type": "APIConnectionError", "http_status": null, "retry": true, "delay_seconds": 2}
+{"logical_request": 26, "attempt": 1, "physical_request": 27, "error_type": "TimeoutError", "http_status": null, "retry": true, "delay_seconds": 2}
+{"logical_request": 29, "attempt": 1, "physical_request": 31, "error_type": "APIConnectionError", "http_status": null, "retry": true, "delay_seconds": 2}
+{"logical_request": 48, "attempt": 1, "physical_request": 51, "error_type": "APIConnectionError", "http_status": null, "retry": true, "delay_seconds": 2}
+{"logical_request": 48, "attempt": 2, "physical_request": 52, "error_type": "APIConnectionError", "http_status": null, "retry": true, "delay_seconds": 4}

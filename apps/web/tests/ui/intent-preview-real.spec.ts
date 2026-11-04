@@ -3,7 +3,7 @@ import {test, expect} from '@playwright/test';
 const api = process.env.ERPILOT_PREVIEW_TEST_API;
 test.skip(!api, 'Run explicitly against the isolated preview acceptance server.');
 
-for(const width of [320,1440])test(`实际 API ${width}px 恢复并核对完整请求，无模型建单调用`,async({page,request})=>{
+for(const width of [320,1440])test(`实际 API ${width}px 恢复并核对完整请求，无模型建单调用`,async({page,request},testInfo)=>{
   const sid=`preview-browser-${width}`;
   const source='给客户甲准备订单：标准耳机，机械键盘两件；备注原文『不要提交』；预算不超过1000元；只保存草稿';
   for(const message of [source,'选第九个','选第八个']){
@@ -29,7 +29,7 @@ for(const width of [320,1440])test(`实际 API ${width}px 恢复并核对完整�
   await dialog.getByLabel('核对第 1 行件数',{exact:true}).fill('4');
   await dialog.getByLabel('核对客户',{exact:true}).fill(`核对完整客户${width}`);
   await dialog.getByLabel('核对预算',{exact:true}).fill('1500');
-  await page.screenshot({path:`../../reports/acceptance/20261031-intent-preview-real-${width}.png`,fullPage:true,animations:'disabled'});
+  await page.screenshot({path:testInfo.outputPath(`intent-preview-real-${width}.png`),fullPage:true,animations:'disabled'});
   await dialog.getByRole('button',{name:'按此完整清单保存草稿',exact:true}).click();
   await expect(dialog).not.toBeVisible();
   expect(posts).toHaveLength(1);expect(posts[0].path).toMatch(/\/pending-intent\/confirm$/);

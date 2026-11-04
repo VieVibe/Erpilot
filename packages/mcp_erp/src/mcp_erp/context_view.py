@@ -1,4 +1,4 @@
-"""Historical draft summaries for the opt-in context experiment.
+"""Current and historical task summaries for the opt-in context experiment.
 
 They are observations, never current inventory, authorization or execution facts.
 The existing tool guidance still requires a fresh get_order_task before mutation.
@@ -9,7 +9,7 @@ import json
 from agent_core.context_view import ContextView
 
 
-def summarize_task(content: str, *, numbered: bool = False) -> str | None:
+def summarize_task(content: str, *, numbered: bool = False, historical: bool = True) -> str | None:
     try:
         payload = json.loads(content)
         if not isinstance(payload, dict):
@@ -20,19 +20,27 @@ def summarize_task(content: str, *, numbered: bool = False) -> str | None:
         if payload["status"] == "active":
             draft = payload["draft"]
             result["draft"] = {
-                key: draft[key] for key in
-                ("draft_id", "revision", "customer", "note", "status", "expires_at")
+                key: draft[key]
+                for key in ("draft_id", "revision", "customer", "note", "status", "expires_at")
             }
             result["draft"]["items"] = [
-                {**({"item_number": number} if numbered else {}),
-                 "sku": item["sku"], "quantity": item["quantity"]}
+                {
+                    **({"item_number": number} if numbered else {}),
+                    "sku": item["sku"],
+                    "quantity": item["quantity"],
+                }
                 for number, item in enumerate(draft["items"], 1)
             ]
             result["draft"]["item_count"] = len(draft["items"])
             if numbered and "total_amount" in draft:
                 result["draft"]["total_amount"] = draft["total_amount"]
-            for key in ("budget_limit", "budget_constraint", "budget_check", "pending_issues",
-                        "submission_check"):
+            for key in (
+                "budget_limit",
+                "budget_constraint",
+                "budget_check",
+                "pending_issues",
+                "submission_check",
+            ):
                 if key in draft:
                     result["draft"][key] = draft[key]
         elif payload["status"] == "ambiguous":
@@ -41,8 +49,12 @@ def summarize_task(content: str, *, numbered: bool = False) -> str | None:
             result["has_more"] = payload["has_more"]
             if "pending_issues" in payload:
                 result["pending_issues"] = payload["pending_issues"]
-        result["context_view"] = "historical_task_snapshot"
-        result["refresh_required"] = True
+        result["context_view"] = (
+            "historical_task_snapshot" if historical else "current_turn_task_observation"
+        )
+        if historical:
+            result["refresh_required"] = True
+            result["refresh_action"] = "read_current_task_not_refresh_quote"
         return json.dumps(result, ensure_ascii=False, separators=(",", ":"))
     except (ValueError, KeyError, TypeError):
         return None
@@ -51,6 +63,12 @@ def summarize_task(content: str, *, numbered: bool = False) -> str | None:
 def erp_context_view(*, workflow: bool = False) -> ContextView:
     return ContextView(
         projectors={"get_order_task": lambda content: summarize_task(content, numbered=workflow)},
-        remember_tools=("get_order_task",), retain_user_messages=workflow,
+        current_projectors={
+            "get_order_task": lambda content: summarize_task(
+                content, numbered=workflow, historical=False
+            )
+        },
+        remember_tools=("get_order_task",),
+        retain_user_messages=workflow,
         fail_on_overflow=workflow,
     )

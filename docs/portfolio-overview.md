@@ -4,6 +4,21 @@ Erpilot 是运行在 mini-ERP 上的审批型业务智能体：模型通过 MCP 
 
 ## 三分钟看项目
 
+在仓库根目录运行 `python scripts/quickstart.py`，即可按锁文件安装、构建并启动无密钥本地演示。
+运行条件、失败排查和工程验收见[开发指南](development.md)。
+
+2026-11-04 的[最新真实验收](../reports/acceptance/2026-11-04-real-model-reconnect.md)为订单 4/4、34/34，
+语义创建/修改 7/7、6/6，以及带账号的真实 HTTP 建单。随后完成[语义默认启用收尾](semantic-parsing.md)。
+随后完成[120条委托AI标签审核](label-review.md)，当前已无用户待审项。
+当前源码包为 `artifacts/erpilot-label-review-20261104.zip`，
+带已有字幕录屏的交付包为 `artifacts/erpilot-delivery-label-review-20261104.zip`；视频保留原录制口径。
+前批 `erpilot-semantic-default-20261104.zip` 及对应交付包保留。
+前批 `erpilot-real-validation-20261104.zip` 及对应交付包继续保留。
+账号/同源容器/重建恢复的[前批补强](../reports/acceptance/2026-11-04-production-readiness.md)与
+`erpilot-readiness-20261104.zip` / `erpilot-delivery-readiness-20261104.zip` 继续保留。
+前一阶段 `erpilot-portfolio-20261104.zip` / `erpilot-delivery-20261104.zip` 继续保留，
+[原收口验收](../reports/acceptance/2026-11-04-portfolio-maturity.md)含当时源码副本从零安装证据。
+
 1. 按[演示指南](demo-guide.md)启动本地页面，展示草稿创建、修改、固定版本审批、拒绝后重提与建单。
 2. 展示政策原文与无依据拒答、只读补货建议，区分模型判断、工具事实和业务执行。
 3. 从[三个讲解案例](interview-cases.md)进入实现与失败证据，再读[最新状态](project-status.md)。
@@ -70,7 +85,9 @@ npm --prefix apps/web run build
 uv run python scripts/demo.py --serve --port 8765
 ```
 
-依赖首次安装需要网络；源码包不内置运行环境、付费配置、真实嵌入索引或历史原始 trace。报告中的旧 trace 路径只作原验收定位，不能在源码包中重新查阅不存在的文件。完整源码复现与逐字节重现模型答复是不同范围。
+依赖首次安装需要网络；源码包不内置运行环境、付费配置或历史原始 trace。
+仓库已跟踪的政策向量索引会随源码打包，但不能替代匹配的嵌入配置或授权查询；离线演示不读取该索引。
+报告中的旧 trace 路径只作原验收定位，不能在源码包中重新查阅不存在的文件。完整源码复现与逐字节重现模型答复是不同范围。
 
 重新录屏前安装 Playwright 对应的 Chromium / FFmpeg，然后执行：
 
@@ -81,4 +98,5 @@ npm --prefix apps/web run record:demo -- artifacts/portfolio-recapture
 
 已有兼容浏览器可通过 `PLAYWRIGHT_CHROMIUM_EXECUTABLE` 指定。`PLAYWRIGHT_BROWSERS_PATH` 可将录屏依赖安装到项目临时目录。录屏脚本使用独立端口 8767，拒绝连接已有服务，结束时关闭自己启动的服务。
 
-项目当前范围为本机可信单用户、单 API 进程；身份认证、多租户和多 worker 执行权需要独立设计。真实模型固定用例通过不等于生产可用或长期成功率。
+项目另提供[带账号容器](deployment.md)，隔离各账号的会话、草稿与审批；ERP 仍为共享门店，单 API 进程。
+多租户和多 worker 执行权未交付。真实模型固定用例通过不等于生产可用或长期成功率。

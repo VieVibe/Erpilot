@@ -78,6 +78,10 @@ class RunStore:
                 );
                 CREATE INDEX IF NOT EXISTS presentation_by_session
                     ON presentation_event(session_id, seq);
+                CREATE TABLE IF NOT EXISTS draft_form_observation (
+                    session_id TEXT PRIMARY KEY,
+                    messages_json TEXT NOT NULL
+                );
             """)
             duplicate = conn.execute(
                 "SELECT run_id, seq FROM presentation_event "
@@ -108,6 +112,27 @@ class RunStore:
             raise
         finally:
             conn.close()
+
+    def record_draft_form(self, session_id: str, messages: list) -> None:
+        """Keep the latest server-returned form snapshot for the next chat turn.
+
+        This is a display reference only. The ERP transaction rechecks its
+        session, immutable revision and snapshot hash before any modification.
+        """
+        with self._connect() as conn:
+            conn.execute(
+                "INSERT INTO draft_form_observation VALUES (?, ?) "
+                "ON CONFLICT(session_id) DO UPDATE SET messages_json=excluded.messages_json",
+                (session_id, _json(messages)),
+            )
+
+    def draft_form_observation(self, session_id: str) -> list:
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT messages_json FROM draft_form_observation WHERE session_id=?",
+                (session_id,),
+            ).fetchone()
+        return json.loads(row[0]) if row else []
 
     def create_run(
         self, session_id: str, user_input: str, history: list, trace_path: str | None
@@ -254,7 +279,8 @@ class RunStore:
         result["history"] = json.loads(result.pop("history_json"))
         return result
 
-    def list_sessions(self, *, limit: int = 20, offset: int = 0) -> dict[str, Any]:
+    def list_sessions(self, *, limit: int = 20, offset: int = 0,
+                      owner_id: str | None = None) -> dict[str, Any]:
         """Read-only navigation projection; opening uses checkpoint execution state."""
         if type(limit) is not int or not 1 <= limit <= 50 or type(offset) is not int or offset < 0:
             raise ValueError("invalid history page")
@@ -267,8 +293,10 @@ class RunStore:
                 "ORDER BY r.rowid DESC LIMIT 1) AS status "
                 "FROM run_session s WHERE EXISTS (SELECT 1 FROM run r "
                 "WHERE r.session_id=s.session_id) "
-                "ORDER BY s.updated_at DESC, s.session_id DESC LIMIT ? OFFSET ?",
-                (limit + 1, offset),
+                + ("AND EXISTS (SELECT 1 FROM auth_owned_session a "
+                   "WHERE a.session_id=s.session_id AND a.user_id=?) " if owner_id else "")
+                + "ORDER BY s.updated_at DESC, s.session_id DESC LIMIT ? OFFSET ?",
+                (*((owner_id,) if owner_id else ()), limit + 1, offset),
             ).fetchall()
         return {"items": [dict(row) for row in rows[:limit]], "has_more": len(rows) > limit}
 

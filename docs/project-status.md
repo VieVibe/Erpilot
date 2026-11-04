@@ -1,6 +1,30 @@
 # 项目当前状态
 
-更新：2026-10-28。本页是当前能力和范围的入口；日期更早的计划与验收保留其当时结论。
+更新：2026-11-04。本页是当前能力和范围的入口；日期更早的计划与验收保留其当时结论。
+
+## 当前交付
+
+| 项目 | 当前状态 | 证据 |
+|---|---|---|
+| 标签委托审核 | **120/120已审核**，6条补充范围说明，判定/字段改动0；无用户待审项。审核后规则120/120，评测专项449通过、无付费调用 | [审核说明](label-review.md)、[逐条记录](../reports/review/20261104-intent-label-audit/review.md)、[专项JUnit](../reports/acceptance/20261104-intent-label-review-evals.xml) |
+| 语义默认启用收尾 | 真实 API 默认创建/修改预览；完整 HTTP **8/8**，该轮全仓 PG17 **1817 passed**、前端112、UI58、离线浏览器5、容器3、场景11/11；随后120条标签委托AI审核完成 | [默认启用收尾](../reports/acceptance/2026-11-04-semantic-default.md)、[当前标签审核](label-review.md) |
+| 最新真实验收 | 订单同批 **4/4 / 34/34**、55 请求/usage；创建 **7/7**、修改 **6/6**；默认上下文的带登录真实 HTTP 六项检查通过。模型/字段失败与未知费用保留 | [最终验收](../reports/acceptance/2026-11-04-real-model-reconnect.md)、[独立审计](../reports/acceptance/20261104-reconnect-final-audit.json) |
+| 本轮修复与回归 | 当前查询不再误标历史；明确备注字段作用域、完整原文和动作来源结构；全仓 PG17 **1796 passed**，随后 HTTP/SSE 与语义协议专项 **19 passed** | [自审](../reports/review/20261104-real-model-reconnect.md)、[验收](../reports/acceptance/2026-11-04-real-model-reconnect.md) |
+| 本轮最终工程验收 | Python 1783 / 0 skipped / 47 live eval deselected；前端 112、UI 57 / 2 skipped、正式离线 API 浏览器 5、容器浏览器 3、场景 11/11；实查依赖故障及 live 配置启动 | [本批验收](../reports/acceptance/2026-11-04-production-readiness.md) |
+| 同源容器与持久恢复 | 前端/API 镜像 + PostgreSQL，非 root / 根只读、健康检查、业务与 checkpoint 持久卷；默认无密钥，真实模型显式启用 | [部署指南](deployment.md)、[本批验收](../reports/acceptance/2026-11-04-production-readiness.md) |
+| 最小身份与权限 | 本地账号、HttpOnly cookie / CSRF、服务端会话归属、只读/审批角色及操作者审计；共享门店，不能跨账号查任务或代批 | [ADR-0012](adr/0012-authenticated-container-deployment.md)、[本批验收](../reports/acceptance/2026-11-04-production-readiness.md) |
+| 前一批真实订单 v2（保留） | 执行 7 / 计划 34 阶段，通过 6；完整任务 0/4。11 请求、10 usage，估价 CNY 0.009714 + 1 笔未知；当时连接失败后冻结，现由新授权重连批次继续验收 | [独立旧报告](../reports/acceptance/20261104-readiness-order-v2.json)、[当时说明](../reports/acceptance/2026-11-04-production-readiness.md) |
+| 一键运行与统一验收 | 环境诊断、冻结安装、构建、无密钥演示与带日志验收；前一阶段 Python 1771、前端 106，已完成源码副本从零安装和 320/1440px 验证；本轮结果见首行 | [前一阶段验收](../reports/acceptance/2026-11-04-portfolio-maturity.md)、[开发指南](development.md) |
+| 求职展示入口 | README 按业务场景、启动、架构、取舍和证据组织；补实际架构及当前技术选择，旧规划不冒充实现 | [实际架构](architecture.md)、[交付决策](adr/0011-local-portfolio-delivery.md) |
+| 意图规则、澄清与完整预览 | 已支持候选编号、多轮补件数、字段原文、原子消费、完整表单、来源与会话隔离；11-02 API 诊断和压力验证已留证 | [完整范围](intent-analysis.md)、[11-02 工程证据](../reports/acceptance/2026-11-02-intent-diagnostics.md) |
+| 语义创建 / 修改候选 | 单次候选、来源/目录/字段作用域验证、完整预览、独立原币种预算；修改绑定具体版本。默认启用；120条委托AI审核完成，规则回归120/120，无用户待审项 | [使用指南](semantic-parsing.md)、[当前标签审核](label-review.md) |
+| 模式回退与恢复 | off / shadow 回退使未消费请求 needs_recheck；旧审批与已保存新来源可恢复。11-02 历史全仓真实 PG 1764 passed，不视为本次复测 | [11-02 恢复验收](../reports/acceptance/2026-11-02-intent-mode-recovery.md) |
+| 演示与证据保护 | 政策脚本接入本轮结构化选证；浏览器正文有依据时不再降级。截图改为逐测试独立路径，旧历史图片恢复原样，复测及 CI 防止覆盖 | [修复和验证](../reports/acceptance/2026-11-04-portfolio-maturity.md)、[结构化审查](../reports/review/20261104-portfolio-maturity.md) |
+
+默认核心链路继续为订单草稿 → 指定版本核对 → 独立审批 → 事务复核及建单，
+加政策证据与只读补货。按用户最新要求，语义预览完成收尾并作为真实 API 默认能力，见[配置与边界](semantic-parsing.md)。
+
+## 历史能力与独立真实观察（保留原批次）
 
 | 项目 | 当前状态 | 证据 |
 |---|---|---|
@@ -29,6 +53,11 @@
 每组真实结果是对应冻结用例、源码和预算下的一次观察，不合成跨版本统一成功率。旧未知 usage 与冻结预算保持独立，用户已跳过的供应商账单核销不重新追索。
 
 ## 当前开发顺序
+
+2026-11-04：基础部署/身份后，用户明确允许连接中断继续尝试。按[重连计划](plans/2026-11-04-real-model-reconnect.md)
+完成可恢复验收，修复真实暴露的上下文/语义问题。默认核心完整真实验证已通过；
+本段保留该批次结论；随后默认启用受约束预览，再按用户委托完成120条AI标签审核，见[当前记录](label-review.md)。
+以下为历史开发顺序，各条“后续”均指其当时状态，最新状态以上方当前交付为准。
 
 2026-10-28（自然输入）：按用户选择完成商品名称与中文件数路径。只读解析当前完整要求，商品名称精确且唯一才转为 SKU；候选需明确选择并重述本轮完整要求，包括要保留的备注与预算。保存事务重新核对来源、目录和全部件数；旧草稿修改保留其已保存约束。新功能完成离线、API 与浏览器验收，没有新增真实模型请求，不改判旧政策结果，不重开订单冻结批次。详见[自然输入验收](../reports/acceptance/2026-10-28-natural-order.md)。
 
@@ -74,4 +103,5 @@ GLM 历史 2/2；原完整流程因笼统确认后的额外澄清保留 2/3，�
 1/1 完整流程、10/10 受控阶段；16 请求计量完整，一次客户名缩写在保存前被拒绝并纠正。
 正式功能源码未改，单批观察不推广为所有表达或两模型共同稳定率。
 
-维持本机可信单用户、单 API 进程范围。本阶段没有部署，身份认证、租户隔离与多 worker 执行权需要独立设计。崩溃恢复历史硬退出与组件证据见[原报告](../reports/acceptance/2026-10-08-crash-recovery.md)，ADR-0010 仍待评审。
+以上为历史批次范围。当前已有带账号的同源容器和任务归属隔离，仍为共享门店、单 API 进程；
+租户隔离和多 worker 执行权未交付。崩溃恢复历史硬退出与组件证据见[原报告](../reports/acceptance/2026-10-08-crash-recovery.md)，ADR-0010 仍待评审。

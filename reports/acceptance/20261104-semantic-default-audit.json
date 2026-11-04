@@ -1,0 +1,295 @@
+{
+  "scope": "Independent ledger/source audit of default-on acceptance; not a general accuracy estimate.",
+  "batches": [
+    {
+      "report": "reports/acceptance/20261104-semantic-default-live-attempt-1.json",
+      "sha256": "6ec31b80a002b6e772f1aac67ffcc47bb6e936c705b9c0a72a302650570b3f11",
+      "passed": false,
+      "source_consistent": true,
+      "totals": {
+        "requests": 1,
+        "known_spent": "0",
+        "unknown_requests": 1
+      },
+      "checks_passed": 1,
+      "error": {
+        "type": "AssertionError",
+        "message": "None"
+      }
+    },
+    {
+      "report": "reports/acceptance/20261104-semantic-default-live-attempt-2.json",
+      "sha256": "88ea37a577ecfc2217d6d4ff5166e342ad4a29473b32cd5b1f3ca00ddeba1349",
+      "passed": false,
+      "source_consistent": true,
+      "totals": {
+        "requests": 2,
+        "known_spent": "0.002054",
+        "unknown_requests": 0
+      },
+      "checks_passed": 7,
+      "error": {
+        "type": "AssertionError",
+        "message": ""
+      }
+    },
+    {
+      "report": "reports/acceptance/20261104-semantic-default-live-attempt-3.json",
+      "sha256": "0ee06c0bd2a98ea342b64aea703a7ee67eec75f7093c521937b35248eb7d2054",
+      "passed": false,
+      "source_consistent": true,
+      "totals": {
+        "requests": 1,
+        "known_spent": "0",
+        "unknown_requests": 1
+      },
+      "checks_passed": 1,
+      "error": {
+        "type": "AssertionError",
+        "message": "None"
+      }
+    },
+    {
+      "report": "reports/acceptance/20261104-semantic-default-live-attempt-4.json",
+      "sha256": "b3107b65f3e747493d3b3e9035f941c6a3a5cf39e85efc4ad634c5a780450a0e",
+      "passed": false,
+      "source_consistent": true,
+      "totals": {
+        "requests": 1,
+        "known_spent": "0",
+        "unknown_requests": 1
+      },
+      "checks_passed": 1,
+      "error": {
+        "type": "AssertionError",
+        "message": "None"
+      }
+    },
+    {
+      "report": "reports/acceptance/20261104-semantic-default-live-attempt-5.json",
+      "sha256": "1e37c8ee4c8f132ed010bcc3ff6810b6f950237a389668f6684caf4eab70e533",
+      "passed": false,
+      "source_consistent": null,
+      "totals": {
+        "requests": 3,
+        "known_spent": "0.003095",
+        "unknown_requests": 0
+      },
+      "checks_passed": 0,
+      "error": {
+        "type": "TypeError",
+        "message": "datetime snapshot was not JSON serializable; this derived terminal record does not claim the lost in-memory checks."
+      }
+    },
+    {
+      "report": "reports/acceptance/20261104-semantic-default-live-attempt-6.json",
+      "sha256": "6474a2517ba98e623743c536a05e9737836783ef39e6f1b846aa15d23b60fbb4",
+      "passed": false,
+      "source_consistent": true,
+      "totals": {
+        "requests": 2,
+        "known_spent": "0.000549",
+        "unknown_requests": 1
+      },
+      "checks_passed": 3,
+      "error": {
+        "type": "AssertionError",
+        "message": "{\"error\":{\"code\":\"intent_candidate_rejected\",\"message\":\"未生成可核对的修改候选，请使用完整表单或明确原话；草稿未修改\",\"hint\":\"\"}}"
+      }
+    },
+    {
+      "report": "reports/acceptance/20261104-semantic-default-live-attempt-7.json",
+      "sha256": "eb9256c25fad5c12a3ff1bacaba707141fb66b24a3183712f9acd6819361a2af",
+      "passed": false,
+      "source_consistent": true,
+      "totals": {
+        "requests": 1,
+        "known_spent": "0",
+        "unknown_requests": 1
+      },
+      "checks_passed": 1,
+      "error": {
+        "type": "AssertionError",
+        "message": "None"
+      }
+    },
+    {
+      "report": "reports/acceptance/20261104-semantic-default-live-attempt-8.json",
+      "sha256": "70af2cdf48c0c8033e95c27146a1256327875c75ab1c25685749715a1f419b75",
+      "passed": true,
+      "source_consistent": true,
+      "totals": {
+        "requests": 3,
+        "known_spent": "0.003144",
+        "unknown_requests": 0
+      },
+      "checks_passed": 8,
+      "error": null
+    }
+  ],
+  "final_passed": true,
+  "final_checks": {
+    "default_enabled_without_startup_model_call": true,
+    "semantic_create_preview_has_exact_fields_and_no_write": true,
+    "full_form_creates_only_one_draft_not_order": true,
+    "semantic_revision_binds_version_and_preserves_fields": true,
+    "confirmed_revision_requires_separate_approval": true,
+    "approved_exact_revised_order_and_stock": true,
+    "replay_cannot_create_another_order": true,
+    "business_calls_do_not_consume_candidate_quota": true
+  },
+  "requests": 14,
+  "known_spent_cny": "0.008842",
+  "unknown_requests": 5,
+  "fixture_sha256": "6010d3f1e35d8512587e857ea5564bce72a45bd2df393863576fd3a75bb1198c",
+  "human_review_completed": false,
+  "current_source": {
+    "revision": "e907f42282ee69a35b49fdaff9f0d99a8edfdebc",
+    "working_tree_dirty": true,
+    "source_sha256": "d2762fe1c4a698ef4efd5f61f13b582729c2ca80f4b8239f7d73b71f419b6a36"
+  },
+  "current_packages": {
+    "sha256": "27af01bf7c71a3c0b86fb8a09d098c377ac90a5303dd2b9854f3281f5cd9375f",
+    "files": {
+      "packages/agent_core/src/agent_core/__init__.py": "a69d099e1cf6eb220b33c3559cbb407d0bfa7a99f92f6a45d1adfd8654b7364d",
+      "packages/agent_core/src/agent_core/__main__.py": "d38b69abe7b11294b013628e8c6709b8fa6023f4606cb0e6d77ee1ce4807f69b",
+      "packages/agent_core/src/agent_core/approval.py": "ee351994075c8578b9323fbbf7ee0c916a0fedb5ea4fe75ddb2bec250181aa52",
+      "packages/agent_core/src/agent_core/billing.py": "92d2d9047f1ad93b69a30d15f4c6ada726541a877082f2d55749a87ad02cc0fc",
+      "packages/agent_core/src/agent_core/context.py": "3c9cd120114b6ccbe7a49d9d9c297120e90e4ee8da44aa856cc15b2c18a04357",
+      "packages/agent_core/src/agent_core/context_view.py": "df92b421b35b82ec77bdb2acd7f1ce832060b7585890ce7c143486285a5d1e6b",
+      "packages/agent_core/src/agent_core/demo_tools.py": "beadd7ff35758286e14c7d86430065a11358914089bb9c20c5caec2cbebeb5e2",
+      "packages/agent_core/src/agent_core/display.py": "29048028882ba4d8df381c1a5dd0340fa6870d92be7edeb497bee1a1d7d0e6a1",
+      "packages/agent_core/src/agent_core/dotenv.py": "31a41af4917d6c5fb76e45ef002df871a5ed84c69f8de9fb9519f5a340701f38",
+      "packages/agent_core/src/agent_core/events.py": "0fb4a3fa3a45ce6bcb43ea0b8e37b2f0c371e4e86a0246db66c250d276d01982",
+      "packages/agent_core/src/agent_core/graph.py": "f7217461462959f2db41d5e0164bfca4be2280f1652c1778f95e1c20f89d5975",
+      "packages/agent_core/src/agent_core/graph_approval.py": "9705aa427f4ece9916857339d7e03fb12e2649f99e6dd3352c224fd4fbd4dadc",
+      "packages/agent_core/src/agent_core/graph_helpers.py": "fd9617a51bb577fdeb9753f299e3dec2702e722398be797d2264577418d3dc7b",
+      "packages/agent_core/src/agent_core/graph_runtime.py": "b50d7f505ae2a5da5ff0c91f6be113f85c00ff986e67e8ac62b9e1c69b9a1949",
+      "packages/agent_core/src/agent_core/graph_state.py": "8ffa3af723afb9f1097b3ba84aa7080378127f5cd5d0744f1a64dc809089e71b",
+      "packages/agent_core/src/agent_core/graph_tools.py": "4ea53f5cd9a93cb97245816a5762bd548c9c096c7e6fdcb73fbfac40c84a24f7",
+      "packages/agent_core/src/agent_core/llm.py": "c7c600ce99f94b037c2916918e0e20bec756cff608d6de8a896ceb9320ee3254",
+      "packages/agent_core/src/agent_core/observability.py": "100b660b6d32c8c265f51e926a08213f5594408c6ee81cd1ea7c211ded2edb45",
+      "packages/agent_core/src/agent_core/policy_display.py": "bce33c20a13291c885ebf703d107254aeaac994be8812101b71d0fbf35743770",
+      "packages/agent_core/src/agent_core/prices.py": "07d9d409878e4c1735ddcfa10eea20049bd5cac46c4a8048c75629e231a9f399",
+      "packages/agent_core/src/agent_core/recovery.py": "41b24d5aafd4b49d3f042f8b8cd4e4315c23555cc0ec9f7cc5e83c1d54395019",
+      "packages/agent_core/src/agent_core/replenishment_display.py": "b5f067cc27e0d93f6087fab051d1e7ec70a54b651961865367b6b1c000000cb3",
+      "packages/agent_core/src/agent_core/response_contract.py": "451af4836fad3945b4a8b0950e7fc1b4d98226debfc93659060e22cd05d28fae",
+      "packages/agent_core/src/agent_core/runtime_config.py": "863b8403201f29ed7cda9d0b66afafd6b24391f3e9857260b5d965b78281df84",
+      "packages/agent_core/src/agent_core/testing.py": "8c49817bbea7681e44ddcb0d732b70de2abc7bb50bd14ab338845a28643f6a89",
+      "packages/agent_core/src/agent_core/tools.py": "b4b130e8fd67cc3646d92d381f6a524c0507b3255c899f04745f52698e139626",
+      "packages/agent_core/src/agent_core/trace.py": "0fc53c15276d647938ca2873dec2ef6fb53cc47e018bf7eaf2132a158cfc9079",
+      "packages/erp_store/src/erp_store/__init__.py": "610ac5166c74583dae35b0e9bad546cea6002d99478dca9da75880c383bccaec",
+      "packages/erp_store/src/erp_store/__main__.py": "7573cb8eacfa61a261cbdbbada466a39b698b5dcf10d7a712832609bfac2e1d7",
+      "packages/erp_store/src/erp_store/db.py": "adebff574bb5f95f133a7ee5dfc2dfe93899e70bde4e6cef2497336122a86a80",
+      "packages/erp_store/src/erp_store/draft_audit.py": "b7c774af23e215e98522b7662e74ffb7063073b2bbb108d4ba1e342008aca0b8",
+      "packages/erp_store/src/erp_store/draft_budget.py": "b39d9c04206ca71e0663741f438c01debd3a8985ecdcbc812f0eed7402f7e200",
+      "packages/erp_store/src/erp_store/draft_review.py": "584e92b5304096794d3e3f32501178e0fbefc2b9b83dc73ff3faabccf9447189",
+      "packages/erp_store/src/erp_store/drafts.py": "4a855ef4dbf514a540518b5af63fc179abdd5d4e11ebc7804dd4b8f503246a58",
+      "packages/erp_store/src/erp_store/intent_audit.py": "4c0c95036af87589258c265d48ce44b793dbe8f62e0d66f9507e7916fd14ab75",
+      "packages/erp_store/src/erp_store/intent_catalog.py": "e7bbc431ff9497030555de2fb250a284892e9170cbae54706cea512df4a75804",
+      "packages/erp_store/src/erp_store/intent_continuation.py": "399f55a219147bafaadf3f3278b48af6263638057c1af387cbe488f98e65674f",
+      "packages/erp_store/src/erp_store/intent_contract.py": "d497106df92add88491b615f37303c244de60eee6efc268b6fd4b573ff150fbb",
+      "packages/erp_store/src/erp_store/intent_execution.py": "773fb01e29a6b1e5c4721082ae963f8b0e6c27896248b41407c17add91761366",
+      "packages/erp_store/src/erp_store/intent_items.py": "e67d5a5e378c7faaf7d59591a003a4e5dc19b0473df8f35abd544039fa0a8a7c",
+      "packages/erp_store/src/erp_store/intent_literals.py": "2f8415f843ad6eca32bc39a0663fb7c98df2d898a13a8945bb5128375e2f11ce",
+      "packages/erp_store/src/erp_store/intent_preview.py": "e2c7b90577c2f28097abefdb5aa16f4cab36dd0f7a9ed16ebe86d1c783bb658c",
+      "packages/erp_store/src/erp_store/intent_recovery.py": "a3f248b9ae458345c19a9b008c44834eab25253bc68f2b477f7d3bf71a6fbe80",
+      "packages/erp_store/src/erp_store/intent_references.py": "d3e9e590e0bbd933cc5795a5e0321135fb556006d854e46f58f3e8645d1451a9",
+      "packages/erp_store/src/erp_store/intent_revision.py": "7364d59bc45080887a6c2370843e95d4e68142623606b069651ff7752dc25bf5",
+      "packages/erp_store/src/erp_store/intent_rules.py": "16c510ebed95648a7ea5c79144edd487e189e74e8621c61ec9ded371b6986d74",
+      "packages/erp_store/src/erp_store/intent_semantic.py": "9138b9dc3b34a524395917650a99bdf64d034d3ae86a1ffa2f12b290d1d8ba5f",
+      "packages/erp_store/src/erp_store/intent_semantic_state.py": "bc29bf3f22c20fd6106c1667f7517b2cb4c96b26816230472fc6c68c0893bd05",
+      "packages/erp_store/src/erp_store/intent_state.py": "54556480e672c06ba09d6333bf586cc5f97dd0613674caf8ae73221129e237bc",
+      "packages/erp_store/src/erp_store/models.py": "73227857967011b8b469d8ea980af82892fb9d1dccfe524ce149a777522dc5a1",
+      "packages/erp_store/src/erp_store/mutations.py": "2ff6fbe2dc93ad1ac5955a5d973543a06090215425ea317bf5f1718df6db3fad",
+      "packages/erp_store/src/erp_store/operations.py": "53d572230e640c5cacffa1e8fd80ad00959071a47acaa7e6423dd42d40512620",
+      "packages/erp_store/src/erp_store/order_request.py": "4b23bd8479da9144f4047dabb4f9aa498bb62bf7f0d25a934edfdfabf2212c5f",
+      "packages/erp_store/src/erp_store/pricing.py": "a54d7f3e4b003bebcba8d07245d282451462903bc6d7c952461250dfc6b7a67d",
+      "packages/erp_store/src/erp_store/replenishment.py": "40e469dfbac8f621f143b85e52338231f0fb53697ee805fe0ce72b7a5fb8dd3a",
+      "packages/erp_store/src/erp_store/repository.py": "85bd5cecc3561b93a7532559034cc813c04fd61b867a0f0d5071072afb2558c7",
+      "packages/erp_store/src/erp_store/seed.py": "c85ecc233c0f40954a1f2f50209a5ec1f648bd285108dc488bbb780c590b3939",
+      "packages/evals/src/evals/__init__.py": "b9ac59369048fa345875b03049503fda9306d72265a178c849c6fd265aa79baf",
+      "packages/evals/src/evals/__main__.py": "834f7b26c1217a461375d818efbce13e1959c349376ea588d508d75917e3bb58",
+      "packages/evals/src/evals/approval_cases.py": "9db94eeee4b2dccba0be0987bce09c6caa1d518d2cad3d45a761eedc1ad264ea",
+      "packages/evals/src/evals/approval_policy.py": "443ef874d7aaea53b8f92d84417881475825d95f239080daeea329ba28e0dff8",
+      "packages/evals/src/evals/baseline.py": "40dc8e7028015eb8f2a8f850594adfdb12eab2253e7a7b0685b64a9dfaa50b4e",
+      "packages/evals/src/evals/billing.py": "0a86183a265b5c0133005f27498e8cc78436d190140d1bd999b4f96eac86aa67",
+      "packages/evals/src/evals/campaign.py": "4bb042e6aa5fd97e7f19ebbc2287ccf9c1fb99f06a35bf78921dd42e2d22b778",
+      "packages/evals/src/evals/cases.py": "7c4a99f3cf23872fcb4e646b7d0e10a805d2d8d5b3e094aacce99283f0eff73b",
+      "packages/evals/src/evals/checks.py": "8082f03074362f13855aaf5cae0fb590562396c88f35aa9a2992c60a4e61a21b",
+      "packages/evals/src/evals/compare.py": "87a6587ed0e3b75b41a4c77b2ab75bbd57a2fedb824e6f8d90b8cf8d2490d8b5",
+      "packages/evals/src/evals/context.py": "0468bae23d811f4c8b0f8f986307df566d072319c5905dbfbd4aaa39aa1dc672",
+      "packages/evals/src/evals/context_experiment.py": "477d5c3c323d5275c03f8c26d4beb9cf6caf00d0c625f150bda51168f87d746d",
+      "packages/evals/src/evals/context_live.py": "85e6ca320fa56f29c85653fc7090e33ad759a8fa5411f6b2a57bf9f0e365095a",
+      "packages/evals/src/evals/context_workflow.py": "960abdd6fa572e6326775c94962bc2e1e644e315a7cf4fca8be86c3955a1da48",
+      "packages/evals/src/evals/gate.py": "30ffcbdc11cd059af019b8a82a55a71f6f57c36dc6037796243e4aa3c6decf8a",
+      "packages/evals/src/evals/grounding_cases.py": "e7f7f3abf7ffb6526d11d191ad599e34a3031be29cfdc7c5154594aefad627a2",
+      "packages/evals/src/evals/grounding_runtime.py": "81ac54d6204e7c9300aceffdd7e5c1f77100fdf9a8fb5cb7fcb021d52256c4e8",
+      "packages/evals/src/evals/injection_compare.py": "1efa49e9454eb5bc9cf15ec52e1fe0019325d052513d2e72e1c844e3aaf71972",
+      "packages/evals/src/evals/injection_support.py": "b0dbbe0d92f682cbc18c1e4de821dba2f72fa4b9835fa59cf18e4f0486bc3110",
+      "packages/evals/src/evals/intent_analysis.py": "c3a69699e811e6044aba16eb2e03702bc6642f7d7daa9726b1705e3566adb8cb",
+      "packages/evals/src/evals/intent_benchmark.py": "f7a8a6679c43fa5d5b70825e0b6bb0b196f481db60c185680db82db39d5a2c0b",
+      "packages/evals/src/evals/intent_semantic_live.py": "773522293a0aef776aabeba594c2f844975b5b1b513c4493d907ce3c3fc91525",
+      "packages/evals/src/evals/intent_state_benchmark.py": "6345d18827b3a6b60f5e47d9154cd90d8746f51239e90d83e46d84d942e04704",
+      "packages/evals/src/evals/model.py": "6bee5f0c0530e780d17f9aefccbab44ee084d5553a60d0a2aaab160cc567b306",
+      "packages/evals/src/evals/order_journey.py": "ad5880b57f69388bea37246da823793080034f9b195e5874c6ae79fdcd25421d",
+      "packages/evals/src/evals/order_reconnect.py": "db9a8c6e5fe12cf4a5c6bde1cdda87a604cc099a9fa08198fa915e02116c66cd",
+      "packages/evals/src/evals/order_reliability.py": "2c213c535ac0b2d5c8cd6477d85d2f6af4d587d0531de708bc82b4a4d43f67d0",
+      "packages/evals/src/evals/order_reliability_v2.py": "60620f5cd09d429a9e5f405cc2d6643992ce230b9ba57781d9ad971c3a89fd8c",
+      "packages/evals/src/evals/policy_cases.py": "d3c47947e0355cbcd6cb5ffa8fd3d241bd06bb49d32719fd616e2bfa82af93a6",
+      "packages/evals/src/evals/policy_runtime.py": "c0b57b0978ba736facae95e4f39d5dd547c00a4e80d27e388f75ca801c4bbe3c",
+      "packages/evals/src/evals/prompt_injection_cases.py": "e9d1ee8deab864c87d8fc9b10560d2bd37472ac149f67b492b172459955888cb",
+      "packages/evals/src/evals/reconnect.py": "323952d38f100d0746710aab3257620728dfb77c3d959dcf95637a68d973b328",
+      "packages/evals/src/evals/replenishment_cases.py": "d68665ecb58915037fb66ff4ade784db88188948da9b05c2b7463b9198c4b278",
+      "packages/evals/src/evals/report.py": "2ad131126ebd12d33a3e6099881285b4cafecd2abd2ecb62b30508acfd48656c",
+      "packages/evals/src/evals/runner.py": "11a7d8d6d0f324473687a0e60198ceb4d9ef231194e6015bbb50db31dddcb0a5",
+      "packages/evals/src/evals/state.py": "48d511ea03a068a6d70cc86dbcdd8932827658ab22420b900e5e1bbb7c5cd7e1",
+      "packages/evals/src/evals/task_cases.py": "1ffaab38ae65dc7bfd56c765400c83fd766aac744f8ed0dcb71331ed5b8b0791",
+      "packages/evals/src/evals/task_reference_cases.py": "9e30679c5e4ae91a1ddfd0e93d442d3e7c699ebb59edf6a2365d8bb072d0ebe6",
+      "packages/evals/src/evals/task_runtime.py": "1bb8697b2f36a772ee6df747a849ae240d24c7ef82674452c50c2dd126aa121f",
+      "packages/evals/src/evals/trends.py": "073dc800ee8975d949d4421b5f2683c86434d7dddde4717d4250be5f6cb53461",
+      "packages/evals/src/evals/write_cases.py": "87036fd77e49e517282709efc188babcef0b21bae23b052246b8f8fb0bec4a98",
+      "packages/mcp_erp/src/mcp_erp/__init__.py": "2e6317a6b3c3507a71cfcc404ac83b4a5ab19f56c431eececfa06db4221340dc",
+      "packages/mcp_erp/src/mcp_erp/__main__.py": "07cd67396e29ec4a522a2594378c6df419d7dd63a0acc73e2aca0f0eeb2ed58d",
+      "packages/mcp_erp/src/mcp_erp/bridge.py": "24c3ec3d0a205d7b37c42d60cff1dff935137214be15b3dd27b649785e3ac2b0",
+      "packages/mcp_erp/src/mcp_erp/cancellation_assessment.py": "aebcae4e94853cf0617a6fd1b6efb50e255af8fdbed9b62b6543552ea0956959",
+      "packages/mcp_erp/src/mcp_erp/context_view.py": "8e29e69054885caec9f54718ce495f37d51289f7a9e92271b5fbed2524427467",
+      "packages/mcp_erp/src/mcp_erp/draft_constraints.py": "42881c0ffdf75590fae673f1dc8cad0426eb576369cc4b80a0519f5831396bd7",
+      "packages/mcp_erp/src/mcp_erp/draft_creation.py": "d33844e50e2d55da5e79ecde7c827afadb0667a1496dbf16528106d71ead10b1",
+      "packages/mcp_erp/src/mcp_erp/draft_items.py": "5b5c30729bd16512087067d427e14568818400c72878b85c22b84f5bb1847d84",
+      "packages/mcp_erp/src/mcp_erp/draft_tools.py": "031c6837d462fa55f4bd565b41a85f8a15f4ca4632f4c39cdee4c2ff979d608c",
+      "packages/mcp_erp/src/mcp_erp/intent_analysis.py": "7bda2d06351a3835fce163c9f12e2a6e693c70b58bd8603facd1db9ee76e3af9",
+      "packages/mcp_erp/src/mcp_erp/intent_diagnostics.py": "69b6216a32817a530a0c944c2d96e47c254972d660dfd3876cf6b11932c6d508",
+      "packages/mcp_erp/src/mcp_erp/intent_semantic.py": "4293cddb6a217a75deb6e285dc3e717ee482b4cdfa31f76fb0d1b7c012090892",
+      "packages/mcp_erp/src/mcp_erp/operation_tools.py": "6882056e6fccecd4d91a0999714b5d9b5b3c593561bef8fc5eb578099565daad",
+      "packages/mcp_erp/src/mcp_erp/order_language.py": "190778eb2fa6fdcd2aa32ffe9e0b20c2f27ab4ea042f7d923774b9a23c3a2d5f",
+      "packages/mcp_erp/src/mcp_erp/policy_answer.py": "36942f9609044f077df3b7cff5a4e4541b5d3eade3ddcdf94244efcefc83635c",
+      "packages/mcp_erp/src/mcp_erp/policy_tools.py": "901b7e6a027a28fbfd56945d7d694f9990283a662a1fd81620c190b559247cf0",
+      "packages/mcp_erp/src/mcp_erp/replenishment_tools.py": "e3ab0bf49868edf6389dfc303c1a42e320d6838f1e18446e91484dc525843f32",
+      "packages/mcp_erp/src/mcp_erp/server.py": "16ed046e7d7071d868eea2215d55a22ded9428110beda6cee614b42bc1cb4260",
+      "packages/mcp_erp/src/mcp_erp/session_tools.py": "1e13776cb1ea9c916397bbe29e9da3746b302b4a986c66a00769bae025da6248",
+      "packages/rag/src/rag/__init__.py": "70a1cb5a3c802109908b1e36e3865e0a0344e230fbb725ec6d0a526c52baf643",
+      "packages/rag/src/rag/__main__.py": "ae763101890105973ec3e3d19e3d50e1e0eb97c5adbda8569505c595f8900f77",
+      "packages/rag/src/rag/benchmark.py": "290eed67ef56232f8611a106304a45918a8a7a4f7eeb26619fcd4232236179be",
+      "packages/rag/src/rag/chunk.py": "f842bd8f338b1692e0ce4218bb9c5f80d8c1c679a6ce147fba0aa7377b9fbae6",
+      "packages/rag/src/rag/citations.py": "5d9f71a6757574a38e6ab671d0381c4dc09808af8cf402efc1bdddc36c2e1d44",
+      "packages/rag/src/rag/collect.py": "5e6be567fb2b51c3afd3fac113c4d4e3e3d6c4de7de0a5fecd44464563e44ac7",
+      "packages/rag/src/rag/corpus.py": "12103e60307ad8850b5e604c6b1405875a5145f371abf7f4911d4ca028be6ff5",
+      "packages/rag/src/rag/embed.py": "ae5b46539d5529084fc2eac720851d927093d5de919fc5cc16b580d28d079607",
+      "packages/rag/src/rag/evidence.py": "270b93eb20e9f2332fa8ff88ec84a4b0711d3eeb9568c7f6ec545060e9438dfe",
+      "packages/rag/src/rag/index.py": "a479c4611594c4aab0e2f8f94166fcf9346041780864e05af5e08d545ac74cc1",
+      "packages/rag/src/rag/lexical.py": "cea6ff7e332042e5c6429872e6e745ccd248047d96ec32a5efdb74375c81143a",
+      "packages/rag/src/rag/openai_embedder.py": "7c9f75b0f33bf47603be68338969cecf2aa336ab316b785431780e77c5f2c441",
+      "packages/rag/src/rag/policy.py": "2350ac2572d8b4dda5a0bff588f049ab152f193bfc644315ad35a37c7133b28b"
+    }
+  },
+  "candidate_spend_is_subset_of_physical_spend": true,
+  "previous_stage_costs_not_added": true,
+  "harness_fixes": [
+    "30s outer tool vs 60s candidate mismatch fixed in product",
+    "attempt 2 incorrectly assumed deterministic confirmation must call LLM",
+    "attempt 5 lost in-memory checks on datetime JSON encoding; derived terminal record is not a pass"
+  ],
+  "planned_unknown_reserve_cny": "0.025",
+  "reserve_is_supplier_bill": false
+}

@@ -1,4 +1,4 @@
-"""One opt-in proposal request, shared business budget, explicit-form result only."""
+"""Metered proposal requests; only an explicit full form can save the result."""
 
 import asyncio
 import json
@@ -43,8 +43,11 @@ class SemanticSettings:
     limit: Decimal
     max_requests: int
     timeout_seconds: float = 30
+    include_business: bool = True
 
     def __post_init__(self):
+        if type(self.include_business) is not bool:
+            raise ValueError("include_business must be a boolean")
         if (isinstance(self.timeout_seconds, bool) or not math.isfinite(self.timeout_seconds)
                 or not 0 < self.timeout_seconds <= 120):
             raise ValueError("semantic timeout must be 0..120 seconds")
@@ -100,6 +103,8 @@ class SemanticCoordinator:
                   "limit": str(settings.limit), "max_requests": settings.max_requests,
                   "timeout_seconds": settings.timeout_seconds,
                   "semantic_version": SEMANTIC_VERSION, "prompt_version": SEMANTIC_PROMPT_VERSION}
+        if not settings.include_business:
+            config["scope"] = "semantic-proposals-only"
         self.journal = SemanticJournal(analyzer.engine, settings.budget_id, config)
         for number, record in self.journal.requests:
             self.budget.requests = max(self.budget.requests, number)
@@ -109,6 +114,7 @@ class SemanticCoordinator:
             else:
                 self.budget.record(BillingEstimate.model_validate(billing))
         self._client = None
+        self._owned_client = None
 
     def _observe(self, record):
         scope = _SCOPE.get()
@@ -142,9 +148,14 @@ class SemanticCoordinator:
                 raise ValueError("configured model and endpoint do not match the confirmed rate")
             if isinstance(raw, LLMClient):
                 raw = raw.without_retries()
+                self._owned_client = raw
             self._client = BudgetedClient(_UsageClient(raw), rate, self.budget,
                                           request_observer=self._observe)
         return self._client
+
+    async def aclose(self):
+        if self._owned_client is not None:
+            await self._owned_client.aclose()
 
     async def business_stream(self, session_id, messages, tools=None):
         users = [m["content"] for m in messages if m.get("role") == "user"]
@@ -200,7 +211,14 @@ class SemanticCoordinator:
             "完全一致的 quote。唯一出现的 quote 请省略 start/end，由程序定位；"
             "重复出现的 quote 必须提供 Python Unicode 字符位置 [start,end)，不能猜位置。"
             "action 只选最小动作词，如『列』。客户名称完整保留，如『客户甲』不能缩成『甲』。"
+            "action 必须是直接来源对象，只有 message_id、quote 和可选 start/end；"
+            '形状为 {"message_id":"所给ID","quote":"原文动作词"}。'
+            "action 没有 value 或 evidence 子字段，不能写成 action.evidence；"
+            "只有 customer/note/product/quantity 等候选字段才使用 value/evidence 两层。"
             "客户、备注保留原文；"
+            "note 仅引用用户显式『备注』字段的完整内容；没有备注字段必须为 null。"
+            "『采购清单』『订单』『草稿』是任务类型，不是备注，不得填入 note；"
+            "未指定备注时不能为了填满字段而从任务描述中摘一句。"
             'customer 和 note 必须为 null 或 {"value":"原文",'
             '"evidence":{"message_id":"所给ID","quote":"原文"}}，'
             "不能把 evidence 直接放到 customer/note，也不能省略 value。"

@@ -1,0 +1,121 @@
+{
+  "scope": "Default real-model startup; authenticated HTTP; semantic creation/revision; manual full forms and independent approval; synthetic ERP; in-memory saver.",
+  "model": "glm-5.3-flash",
+  "endpoint_host": "flashcoding.ai",
+  "source_before": {
+    "revision": "e907f42282ee69a35b49fdaff9f0d99a8edfdebc",
+    "working_tree_dirty": true,
+    "source_sha256": "d2762fe1c4a698ef4efd5f61f13b582729c2ca80f4b8239f7d73b71f419b6a36"
+  },
+  "checks": {
+    "default_enabled_without_startup_model_call": true,
+    "semantic_create_preview_has_exact_fields_and_no_write": true,
+    "full_form_creates_only_one_draft_not_order": true
+  },
+  "passed": false,
+  "sdk_automatic_retries": 0,
+  "error": {
+    "type": "AssertionError",
+    "message": "{\"error\":{\"code\":\"intent_candidate_rejected\",\"message\":\"未生成可核对的修改候选，请使用完整表单或明确原话；草稿未修改\",\"hint\":\"\"}}"
+  },
+  "candidate_budget": {
+    "currency": "CNY",
+    "limit": "1.00",
+    "known_spent": "0.000549",
+    "requests": 2,
+    "unknown_usage": true,
+    "max_requests": 200,
+    "scope": "semantic-proposals-only"
+  },
+  "candidate_requests": [
+    {
+      "request": 1,
+      "case_id": null,
+      "status": "settled",
+      "ts": "2026-11-04T07:36:36.925526+00:00",
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": "0.000549",
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "session_id": "deee419ca0954c03b7eb7c7694a2588d",
+      "purpose": "intent",
+      "usage": {
+        "prompt_tokens": 1433,
+        "completion_tokens": 1209,
+        "total_tokens": 2642
+      },
+      "turn_id": "091ec147e1be092144186f52d79d1621925c2136b07a00e406e414b11dcea14f",
+      "source_sha256": "82aac2851955d510249ddbcc77f635aafff1bb390fb7afe6d8d138a6f45d354f"
+    },
+    {
+      "request": 2,
+      "case_id": null,
+      "status": "unknown",
+      "ts": "2026-11-04T07:36:40.169576+00:00",
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": null,
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "unknown_usage",
+        "complete": false
+      },
+      "session_id": "deee419ca0954c03b7eb7c7694a2588d",
+      "purpose": "intent",
+      "usage": null,
+      "turn_id": "f91ce1a9f7a94b96ad7cedfd8ca5d67d",
+      "source_sha256": "f67d03d9e44ac4a38e3468869b01e4e6ccb5f84a0d8aafe57eac40ebf8d8a479"
+    }
+  ],
+  "candidate_attempts": [
+    {
+      "status": "preview",
+      "source_sha256": "82aac2851955d510249ddbcc77f635aafff1bb390fb7afe6d8d138a6f45d354f",
+      "ts": "2026-11-04T07:36:12.768709+00:00",
+      "pending_ref": {
+        "pending_id": "7a712c8bc8ee40e0b424e2ba213bf62f",
+        "state_version": 1
+      },
+      "duration_ms": 24174.9108,
+      "semantic_version": "order-create-proposal-3",
+      "prompt_version": "order-create-proposal-prompt-6",
+      "prompt_sha256": "039662df50e8ec0db9d55a9f96a89a028892ba94bc385936c714eb8085d05a3b"
+    },
+    {
+      "status": "rejected",
+      "source_sha256": "f67d03d9e44ac4a38e3468869b01e4e6ccb5f84a0d8aafe57eac40ebf8d8a479",
+      "ts": "2026-11-04T07:36:37.136494+00:00",
+      "rejection_code": "APIConnectionError",
+      "duration_ms": 3034.9854,
+      "semantic_version": "order-revise-proposal-2",
+      "prompt_version": "order-revise-proposal-prompt-3",
+      "prompt_sha256": "fa58e02b69d7869323a3b3620fbe926cb5aed006161d70e02875fbb38122cee7"
+    }
+  ],
+  "physical_budget": {
+    "currency": "CNY",
+    "limit": "0.05",
+    "known_spent": "0.000549",
+    "unknown_usage": true,
+    "unknown_requests": 1,
+    "requests": 2,
+    "unknown_reserve_per_request": "0.005",
+    "unknown_reserve_total": "0.005",
+    "reserve_is_actual_bill": false,
+    "max_unknown": 4,
+    "max_requests": 30
+  },
+  "journal_audit": {
+    "requests": 2,
+    "known_spent": "0.000549",
+    "unknown_requests": 1
+  },
+  "source_after": {
+    "revision": "e907f42282ee69a35b49fdaff9f0d99a8edfdebc",
+    "working_tree_dirty": true,
+    "source_sha256": "d2762fe1c4a698ef4efd5f61f13b582729c2ca80f4b8239f7d73b71f419b6a36"
+  },
+  "source_consistent": true
+}

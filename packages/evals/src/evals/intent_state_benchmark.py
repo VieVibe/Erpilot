@@ -188,7 +188,7 @@ def run_benchmark(*, directory=None):
         )]
     after = source_provenance()
     return {"suite": "intent-state-stress-engineering-1", "parser_version": PARSER_VERSION,
-            "label_status": "engineering_expectations_pending_human_review", "provider_requests": 0,
+            "label_status": "engineering_stress_expectations", "provider_requests": 0,
             "platform": platform.platform(), "python": platform.python_version(),
             "source_before": before, "source_after": after,
             "source_unchanged": before["source_sha256"] == after["source_sha256"],

@@ -1,0 +1,22 @@
+{
+  "policy": "at most three complete fresh batches; transport failures only",
+  "revision": false,
+  "limit_CNY": "0.02",
+  "batches": [
+    {
+      "directory": "reports\\acceptance\\20261104-reconnect-semantic-create-attempt-1",
+      "exit_code": 1,
+      "passed": false,
+      "provider_requests": 5,
+      "known_spent_CNY": "0.002611",
+      "unknown_requests": 0,
+      "rejection_codes": []
+    }
+  ],
+  "passed": false,
+  "known_spent_CNY": "0.002611",
+  "unknown_requests": 0,
+  "unknown_reserve_per_request_CNY": "0.005",
+  "reserve_is_actual_bill": false,
+  "unknown_reserve_total_CNY": "0.000"
+}

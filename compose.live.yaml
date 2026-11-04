@@ -1,0 +1,7 @@
+# Explicit opt-in: loads model credentials, can generate paid requests after login.
+services:
+  api:
+    env_file: .env
+    environment:
+      ERPILOT_RUNTIME: live
+      ERPILOT_WRITES: "0"

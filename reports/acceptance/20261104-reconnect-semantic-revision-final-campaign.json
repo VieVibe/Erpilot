@@ -1,0 +1,33 @@
+{
+  "policy": "at most three complete fresh batches; transport failures only",
+  "revision": true,
+  "limit_CNY": "0.02",
+  "batches": [
+    {
+      "directory": "reports\\acceptance\\20261104-reconnect-semantic-revision-final-attempt-1",
+      "exit_code": 1,
+      "passed": false,
+      "provider_requests": 1,
+      "known_spent_CNY": "0",
+      "unknown_requests": 1,
+      "rejection_codes": [
+        "TimeoutError"
+      ]
+    },
+    {
+      "directory": "reports\\acceptance\\20261104-reconnect-semantic-revision-final-attempt-2",
+      "exit_code": 0,
+      "passed": true,
+      "provider_requests": 3,
+      "known_spent_CNY": "0.002145",
+      "unknown_requests": 0,
+      "rejection_codes": []
+    }
+  ],
+  "passed": true,
+  "known_spent_CNY": "0.002145",
+  "unknown_requests": 1,
+  "unknown_reserve_per_request_CNY": "0.005",
+  "reserve_is_actual_bill": false,
+  "unknown_reserve_total_CNY": "0.005"
+}

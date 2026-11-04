@@ -1,7 +1,7 @@
 """Offline engineering regression for intent rules; no provider requests or old scorer changes.
 
-Labels in the fixture are engineering expectations pending human review. This
-runner measures local behavior, not real-model accuracy or a production release gate.
+The immutable fixture retains its historical status. A separate source-bound AI
+review supplies current provenance, without claiming human gold or LLM accuracy.
 """
 
 import argparse
@@ -16,26 +16,22 @@ from erp_store.intent_rules import analyze_rules
 from erp_store.order_request import resolve_request
 from sqlalchemy.orm import Session
 
+from evals.intent_review import CATALOGUE, PREVIOUS, load_review
+
 FIXTURE = Path(__file__).with_name("intent_core_120.json")
-PREVIOUS = {"draft_id": "a" * 32, "revision": 1, "customer": "客户甲", "note": "原备注",
-            "budget_limit": 1000.0,
-            "items": [{"sku": "M1", "name": "无线鼠标", "quantity": 2},
-                      {"sku": "K1", "name": "机械键盘", "quantity": 1}]}
 
 
 def run_regression():
-    fixture = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    checked = load_review(FIXTURE)
+    fixture = checked.fixture
     results, durations = [], []
     with tempfile.TemporaryDirectory() as directory:
         engine = make_engine(Path(directory) / "intent.db")
         init_db(engine)
         try:
             with Session(engine) as session:
-                for sku, name, status in [("M1", "无线鼠标", "在售"), ("K1", "机械键盘", "在售"),
-                                           ("R1", "标准耳机", "在售"), ("R2", "标准耳机", "在售"),
-                                           ("OFF", "旧键盘", "下架")]:
-                    session.add(ProductRow(sku=sku, name=name, status=status, price=100,
-                                           category="测试"))
+                for product in CATALOGUE:
+                    session.add(ProductRow(**product, category="测试"))
                 session.commit()
                 for case in fixture["cases"]:
                     started = time.perf_counter()
@@ -57,7 +53,7 @@ def run_regression():
         finally:
             engine.dispose()
     ordered = sorted(durations)
-    return {"suite": "intent-core-engineering-1", "label_status": fixture["label_status"],
+    return {"suite": "intent-core-engineering-1", **checked.metadata(),
             "total": len(results), "passed": sum(r["passed"] for r in results),
             "false_accepts": sum(r["decision"] == "ready" and c["decision"] != "ready"
                                  for r, c in zip(results, fixture["cases"], strict=True)),

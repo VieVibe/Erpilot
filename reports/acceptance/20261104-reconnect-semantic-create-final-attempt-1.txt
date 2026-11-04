@@ -1,0 +1,8 @@
+{"id": "basic", "passed": true, "requests": 1}
+{"id": "multiple", "passed": true, "requests": 1}
+{"id": "missing_quantity", "passed": true, "requests": 1}
+{"id": "repeated_quote", "passed": true, "requests": 1}
+{"id": "ambiguous_catalogue", "passed": true, "requests": 1}
+{"id": "conditional", "passed": true, "requests": 0}
+{"id": "existing_draft", "passed": true, "requests": 0}
+{"passed": true, "provider_requests": 5, "known_spent": "0.001935", "currency": "CNY", "unknown_usage": false}

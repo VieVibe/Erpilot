@@ -3,6 +3,17 @@
 定位：Agent 应用开发 / Python 后端工程作品。业务场景为 mini-ERP 的商品、库存、订单；
 模型通过 MCP 查询事实、保存草稿与提出操作，业务层和人工审批决定是否执行。
 
+2026-11-04 已完成一键运行、实际架构和展示收口，并补上带账号的容器与持久恢复；在仓库根目录运行
+`python scripts/quickstart.py` 即可演示，使用脚本模型、正式 API / MCP 和临时库。
+[本轮验收](../reports/acceptance/2026-11-04-portfolio-maturity.md)含全仓 PostgreSQL、浏览器和源码副本验证；
+当前部署与权限结果见[最新补强验收](../reports/acceptance/2026-11-04-production-readiness.md)。
+最新[可恢复真实验收](../reports/acceptance/2026-11-04-real-model-reconnect.md)为订单 4/4、34/34，
+语义创建 7/7、修改 6/6，并验证带账号的默认 API 建单；原失败与费用仍保留。
+120条工程标签现已完成用户委托的AI审核，6条补充范围说明，不将其表述为真人金标。
+[逐条审核依据](label-review.md)。
+真实 API 现默认接入来源约束的可编辑语义预览，独立候选预算，失败可回退表单。
+[启用理由和面试边界](adr/0013-default-semantic-proposals.md)。
+
 ## 可直接使用的项目描述
 
 **Erpilot｜审批型 ERP 智能体**
@@ -19,6 +30,8 @@ Python、FastAPI、LangGraph、FastMCP、SQLite、PostgreSQL checkpoint、React 
 - 实现可选上下文投影并比较信息保留与真实 token；历史快照实验中输入 token 相对原策略
   减少约 62%，候选答题 GLM 8/10、DeepSeek 9/10。新增连续多轮真实业务验收，结果与
   快照实验分列，详见[连续多轮上下文验收](context-workflow.md)。
+- 实现前端/API 同源镜像和 PostgreSQL 持久恢复；本地账号、会话/草稿归属、只读与审批角色、
+  HttpOnly cookie / CSRF 和操作审计。用真实容器浏览器验证登录切换、越权拦截及重建后审批恢复。
 
 这些是仓库可验证的实现描述。求职者应按本人实际参与范围修改“负责 / 独立完成”等措辞。
 项目没有测量企业节省人力、订单转化或生产吞吐，不填写推算的业务收益。
@@ -42,7 +55,7 @@ Python、FastAPI、LangGraph、FastMCP、SQLite、PostgreSQL checkpoint、React 
 | 上下文与状态 | 业务状态存数据库；请求视图保留用户原话、最新任务快照和工具配对，超过估算预算时停止。摘要仍有事实时效和字段边界 | [连续业务任务](context-workflow.md)、[历史快照实验](context-experiment.md) |
 
 每个话题按“具体故障 → 为什么这样设计 → 怎么测 → 尚有什么边界”讲解。
-历史崩溃恢复的 19 项进程测试是独立验收记录，本轮没有重跑；视频中的刷新只覆盖进程内恢复。
+历史崩溃恢复的 19 项进程测试在 2026-11-04 全仓中重新通过，见[本轮记录](../reports/acceptance/2026-11-04-portfolio-maturity.md)；视频中的刷新仍只覆盖进程内恢复。
 
 ## 面试前自行演练
 
@@ -50,7 +63,8 @@ Python、FastAPI、LangGraph、FastMCP、SQLite、PostgreSQL checkpoint、React 
 2. 解释为什么草稿库存不是实时库存，为什么审批和幂等都不能省略。
 3. 选一份失败报告，从用户原话、工具请求、数据库差异到费用日志，复述定位过程。
 4. 解释上下文输入减少与完整任务成功率的区别，以及为何候选策略继续显式启用。
-5. 说明当前单用户、单进程范围；身份认证、多租户和多 worker 执行权仍需独立设计。
+5. 展示[带账号容器](deployment.md)，说明共享门店、自己的会话/审批、单 API 进程边界；
+   多租户和多 worker 执行权仍需独立设计。讲清完整通过批次、此前真实缺陷修复、重连与未知费用边界。
 
 投递时附仓库地址或交付 ZIP、演示视频及本材料。真实岗位要求、个人经历、联系方式和公开发布
 由本人核对；本轮交付为本地材料和源码快照。

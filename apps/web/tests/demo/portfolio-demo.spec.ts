@@ -35,6 +35,10 @@ for (const width of [320, 1440]) {
     await chooseAndSend(page, '政策证据');
     await expect(page.locator('.policy-search')).toContainText('找到政策依据');
     await expect(page.locator('.policy-search')).toContainText('pricing-policy.md');
+    await expect(page.locator('.md').last()).toContainText('相关政策原文');
+    await expect(page.locator('.md').last()).toContainText('数量梯度折扣');
+    await expect(page.locator('.md').last()).not.toContainText('尚未完成逐问适用性判断');
+    await expect(page.locator('.md').last()).not.toContainText('本轮检索未覆盖这一问题');
     await chooseAndSend(page, '无依据拒答');
     await expect(page.locator('.policy-search').last()).toContainText('未找到相关依据');
     await chooseAndSend(page, '补货建议');
@@ -73,7 +77,7 @@ test('草稿修改后断线恢复同版本审批，拒绝后可重新提交批�
   await expect(panel.getByRole('button', { name: '拒绝', exact: true })).toBeEnabled();
   await expect(input).toBeDisabled();
   await page.reload();
-  await expect(panel.getByText('总金额 ¥3355.00')).toBeVisible();
+  await expect(panel.getByRole('tabpanel', { name: /^审批/ }).getByText('总金额 ¥3355.00')).toBeVisible();
   await expect(panel.getByRole('button', { name: '拒绝', exact: true })).toBeEnabled();
   await panel.getByRole('button', { name: '拒绝', exact: true }).click();
   await expect(input).toBeEnabled();

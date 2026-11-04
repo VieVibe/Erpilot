@@ -2,7 +2,7 @@
 
 from typing import Literal
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Request
 from pydantic import BaseModel
 
 from erpilot_api.service import SessionError
@@ -29,9 +29,10 @@ class SessionPage(BaseModel):
     has_more: bool
 
 
-def register_history_routes(app: FastAPI, store):
+def register_history_routes(app: FastAPI, store, *, authenticated=False):
     @app.get("/api/sessions", response_model=SessionPage)
     def list_sessions(
+        request: Request,
         limit: int = Query(default=20, ge=1, le=50), offset: int = Query(default=0, ge=0)
     ):
         if store is None:
@@ -41,4 +42,7 @@ def register_history_routes(app: FastAPI, store):
                 "当前运行环境未启用历史会话",
                 "请使用配置了会话存储的运行环境",
             )
-        return store.list_sessions(limit=limit, offset=offset)
+        return store.list_sessions(
+            limit=limit, offset=offset,
+            owner_id=request.state.identity.user_id if authenticated else None,
+        )

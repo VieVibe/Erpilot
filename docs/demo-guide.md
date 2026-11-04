@@ -6,12 +6,21 @@
 
 ## 启动与关闭
 
-需要 Python 3.12+、uv、Node.js 和 npm。首次安装依赖需要联网，演示运行不需要模型密钥、嵌入服务或 PostgreSQL；不会加载项目 `.env`。
+需要 Python 3.12+、uv、Node.js 22+ 和 npm。首次安装依赖需要联网，演示运行不需要模型密钥、嵌入服务或 PostgreSQL；不会加载项目 `.env`。
 
 在仓库根目录执行：
 
 ```sh
-uv sync --all-packages
+python scripts/quickstart.py
+```
+
+该入口按锁文件安装、构建前端并启动。若只检查环境，运行 `python scripts/quickstart.py doctor`；
+已安装依赖时可运行 `python scripts/quickstart.py demo --skip-install`。端口冲突可加 `--port 8877`。
+
+等价的手工步骤（用于排查某一步）：
+
+```sh
+uv sync --all-packages --frozen
 npm --prefix apps/web ci
 npm --prefix apps/web run build
 uv run python scripts/demo.py --serve --port 8765
@@ -65,6 +74,8 @@ uv run python scripts/demo.py --serve --port 8765
 ## 离线验收与证据
 
 ```sh
+# 统一工程验收，包含锁定安装、测试、构建、十一场景和浏览器；日志自动保存
+python scripts/quickstart.py verify --browser
 # 十一个场景，各用独立临时 ERP 库；命令行按固定决策自动批准或拒绝
 uv run python scripts/demo.py
 # 只重跑指定场景，不调用真实模型

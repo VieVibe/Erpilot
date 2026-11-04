@@ -25,6 +25,7 @@ async def test_runtime_reports_actual_tool_mode_and_write_capability(tmp_path, m
         response = await client.get("/api/runtime")
     assert response.status_code == 200
     assert response.json() == {
+        "auth_enabled": False,
         "data_source": "demo",
         "writes_enabled": False,
         "reasoning_enabled": True,

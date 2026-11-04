@@ -3,6 +3,19 @@
 - 状态：已接受
 - 日期：2026-09-29
 
+## 实施核对（2026-11-04）
+
+下文保留最初选型，当前实际实现以[架构说明](../architecture.md)为准：
+
+- 业务和 RunStore 使用 SQLite；PostgreSQL 只用于 LangGraph checkpoint。
+- RAG 使用可核对的 JSON 向量索引及真实嵌入接口，没有引入 pgvector。
+- 模型通过 OpenAI 兼容 SDK 和供应商配置切换，没有引入 LiteLLM 服务。
+- trace 默认本地 JSONL，Langfuse 可选；没有完整 OpenTelemetry 管道。
+- 评测为 pytest / 自建 runner、确定性状态断言和质量门槛，没有引入 DeepEval。
+- 工作台使用 React / TypeScript / Ant Design X。
+
+这些取舍用于控制小型作品的复杂度；不把原规划中列出的组件写成已交付技术。
+
 ## 背景
 
 本项目是转岗 agent 应用开发的求职作品集。选型目标不是个人最快上手，而是对齐 2026 年生产环境真实在用的 agent 技术栈（国内 JD 基本盘：Python + FastAPI + LangChain/LangGraph + RAG + MCP），多出的学习成本计入 M1–M2 并用 AI 编程工具对冲。

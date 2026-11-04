@@ -16,7 +16,10 @@ def main() -> None:
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     # Let asyncio.run() honor the Selector policy above; newer Uvicorn versions
     # otherwise pass an explicit Proactor loop factory on Windows.
-    uvicorn.run("erpilot_api.main:app", host="127.0.0.1", port=8000, loop="none")
+    from erpilot_api.bootstrap import build_live_app
+
+    app = asyncio.run(build_live_app())
+    uvicorn.run(app, host="127.0.0.1", port=8000, loop="none", workers=1)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,56 @@
+transport request 1: APIConnectionError; retry=True; known=0, unknown reserve=0.005, limit=0.14 CNY; requests=1/160; unknown=1/8
+budget-denial-restore/1: PASS; known=0.001850 CNY; unknown=1
+budget-denial-restore/2: PASS; known=0.003909 CNY; unknown=1
+budget-denial-restore/3: PASS; known=0.007033 CNY; unknown=1
+Exception ignored in: <async_generator object Response.aiter_raw at 0x000002437D197DE0>
+Traceback (most recent call last):
+  File "C:\Users\1\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\typing.py", line 2187, in cast
+    def cast(typ, val):
+    
+ValueError: async generator already executing
+budget-denial-restore/4: PASS; known=0.009021 CNY; unknown=1
+budget-denial-restore/5: PASS; known=0.009021 CNY; unknown=1
+budget-denial-restore/6: PASS; known=0.009021 CNY; unknown=1
+Exception ignored in: <async_generator object BoundAsyncStream.__aiter__ at 0x000002437CD97A60>
+Traceback (most recent call last):
+  File "F:\VIE\Erpilot\.venv\Lib\site-packages\sqlalchemy\orm\state.py", line 211, in __init__
+    self.expired_attributes = set()
+                              ^^^^^
+ValueError: async generator already executing
+budget-denial-restore/7: PASS; known=0.010809 CNY; unknown=1
+budget-denial-restore/8: PASS; known=0.011693 CNY; unknown=1
+budget-denial-restore/9: PASS; known=0.013553 CNY; unknown=1
+price-change-review/1: PASS; known=0.016172 CNY; unknown=1
+price-change-review/2: PASS; known=0.018128 CNY; unknown=1
+price-change-review/3: PASS; known=0.018128 CNY; unknown=1
+price-change-review/4: PASS; known=0.018128 CNY; unknown=1
+price-change-review/5: PASS; known=0.019870 CNY; unknown=1
+price-change-review/6: PASS; known=0.022722 CNY; unknown=1
+transport request 27: TimeoutError; retry=True; known=0.023744, unknown reserve=0.010, limit=0.14 CNY; requests=27/160; unknown=2/8
+Exception ignored in: <async_generator object AsyncResponseStream.__aiter__ at 0x000002437DA2E340>
+Traceback (most recent call last):
+  File "F:\VIE\Erpilot\.venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 442, in _clone
+    c.__dict__ = self.__dict__.copy()
+                 ^^^^^^^^^^^^^^^^^^^^
+ValueError: async generator already executing
+price-change-review/7: PASS; known=0.024731 CNY; unknown=2
+price-change-review/8: PASS; known=0.025821 CNY; unknown=2
+transport request 31: APIConnectionError; retry=True; known=0.026758, unknown reserve=0.015, limit=0.14 CNY; requests=31/160; unknown=3/8
+price-change-review/9: PASS; known=0.027749 CNY; unknown=3
+ambiguity-and-selection/1: PASS; known=0.029531 CNY; unknown=3
+ambiguity-and-selection/2: PASS; known=0.031519 CNY; unknown=3
+ambiguity-and-selection/3: PASS; known=0.033509 CNY; unknown=3
+ambiguity-and-selection/4: PASS; known=0.038589 CNY; unknown=3
+Exception ignored in: <async_generator object AsyncResponseStream.__aiter__ at 0x000002437BAF8BA0>
+Traceback (most recent call last):
+  File "F:\VIE\Erpilot\.venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 596, in _load_on_pk_identity
+    for id_val, primary_key in zip(
+                               ^^^^
+ValueError: async generator already executing
+ambiguity-and-selection/5: PASS; known=0.041790 CNY; unknown=3
+ambiguity-and-selection/6: PASS; known=0.042808 CNY; unknown=3
+ambiguity-and-selection/7: PASS; known=0.044871 CNY; unknown=3
+transport request 51: APIConnectionError; retry=True; known=0.045680, unknown reserve=0.020, limit=0.14 CNY; requests=51/160; unknown=4/8
+transport request 52: APIConnectionError; retry=True; known=0.045680, unknown reserve=0.025, limit=0.14 CNY; requests=52/160; unknown=5/8
+version-change-and-replay/1: PASS; known=0.046616 CNY; unknown=5
+version-change-and-replay/2: ['approval_boundary', 'required_mutation_missing']; known=0.048571 CNY; unknown=5

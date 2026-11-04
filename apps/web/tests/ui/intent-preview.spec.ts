@@ -37,7 +37,7 @@ async function mock(page: Page, attempts = 2) {
     expire:(expires_at:string)=>{if(preview)preview={...preview,expires_at};}};
 }
 
-for(const width of [320,1440])test(`完整请求预览 ${width}px 可恢复、补齐并一次保存全部字段`,async({page})=>{
+for(const width of [320,1440])test(`完整请求预览 ${width}px 可恢复、补齐并一次保存全部字段`,async({page},testInfo)=>{
   await page.setViewportSize({width,height:1000});
   const {posts}=await mock(page);
   await page.goto('/');
@@ -58,7 +58,7 @@ for(const width of [320,1440])test(`完整请求预览 ${width}px 可恢复、�
   await dialog.getByLabel('核对备注',{exact:true}).scrollIntoViewIfNeeded();
   await expect(dialog.getByLabel('核对备注',{exact:true})).toBeInViewport();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
-  await page.screenshot({path:`../../reports/acceptance/20261031-intent-preview-${width}.png`,fullPage:true,animations:'disabled'});
+  await page.screenshot({path:testInfo.outputPath(`intent-preview-${width}.png`),fullPage:true,animations:'disabled'});
   await save.click();
   await expect(dialog).not.toBeVisible();
   expect(posts).toHaveLength(1);

@@ -17,7 +17,7 @@ import os
 import time
 from collections.abc import AsyncIterator, Callable, Sequence
 from contextlib import asynccontextmanager
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -35,6 +35,8 @@ from pydantic import BaseModel, Field
 from sse_starlette.sse import EventSourceResponse
 from starlette.background import BackgroundTask
 
+from erpilot_api.auth import AuthMiddleware, register_auth
+from erpilot_api.auth_store import AuthStore
 from erpilot_api.checkpoint import open_checkpointer
 from erpilot_api.draft_routes import ConfirmDraftRequest, register_draft_routes
 from erpilot_api.events import encode_event, sse_frame
@@ -60,6 +62,7 @@ class ApproveRequest(BaseModel):
     pending_id: str = Field(min_length=1, description="待审批请求 id")
     approved: bool = Field(description="true=批准执行，false=拒绝")
     reason: str = Field(default="", description="拒绝原因（转述给模型与用户）")
+    session_id: str | None = Field(default=None, min_length=1)
 
 
 class ResumeRequest(ApproveRequest):
@@ -102,6 +105,9 @@ def create_app(
     session_erp_tools=None,
     intent_semantic_settings=None,
     scripted_demo: bool = False,
+    persistent_demo: bool = False,
+    auth_enabled: bool | None = None,
+    auth_store: AuthStore | None = None,
 ) -> FastAPI:
     """应用工厂：测试注入 mock 的 LLMClient 工厂、临时 trace 目录与工具集。"""
     if scripted_demo and client_factory is None:
@@ -134,7 +140,8 @@ def create_app(
         approval_gate=approval_gate or env_gate,
         checkpointer=checkpointer,
         run_store=RunStore(
-            run_store_path or (trace_dir / "runs.db" if trace_dir else Path("data/runs.db"))
+            run_store_path or (trace_dir / "runs.db" if trace_dir else Path(
+                os.getenv("ERPILOT_RUN_STORE_PATH", "data/runs.db")))
         ),
         mutation_reconciler=mutation_reconciler,
         approval_ttl_seconds=(
@@ -166,22 +173,48 @@ def create_app(
         coordinator = SemanticCoordinator(
             analyzer, intent_semantic_settings, service._client_factory)
         analyzer.semantic = service._intent_semantic = coordinator
+        # Let the candidate's own deadline produce its safe fallback before the
+        # graph cancels the resolver. Other tools retain the normal deadline.
+        service._loop_config = replace(service._loop_config, tool_timeouts={
+            **service._loop_config.tool_timeouts,
+            "resolve_order_items": max(service._loop_config.tool_timeout,
+                                       intent_semantic_settings.timeout_seconds + 5),
+        })
 
     @asynccontextmanager
     async def lifespan(app):
-        if checkpointer is not None:
-            yield
-        else:
-            async with open_checkpointer(
-                os.environ.get("ERPILOT_CHECKPOINT_DATABASE_URL", "")
-            ) as saver:
-                service._checkpointer = saver
+        try:
+            if checkpointer is not None:
                 yield
-                service._checkpointer = None
+            else:
+                async with open_checkpointer(
+                    os.environ.get("ERPILOT_CHECKPOINT_DATABASE_URL", "")
+                ) as saver:
+                    service._checkpointer = saver
+                    try:
+                        yield
+                    finally:
+                        service._checkpointer = None
+        finally:
+            if service._intent_semantic is not None:
+                await service._intent_semantic.aclose()
+            if isinstance(service._client, LLMClient):
+                await service._client.aclose()
 
     app = FastAPI(title="Erpilot API", version="0.1.0", lifespan=lifespan)
     app.state.service = service
     app.state.run_store = service._run_store
+    enabled = (os.getenv("ERPILOT_AUTH", "0") == "1" if auth_enabled is None else auth_enabled)
+    auth_store = auth_store or (AuthStore(service._run_store.path) if enabled else None)
+    if auth_store is not None:
+        if auth_store.path.resolve() != service._run_store.path.resolve():
+            raise ValueError("auth and RunStore must share the same SQLite file")
+        original_factory = service._session_tools_factory or (lambda session_id: resolved_tools)
+        service._session_tools_factory = lambda sid: auth_store.session_tools(
+            sid, original_factory(sid))
+        app.add_middleware(AuthMiddleware, store=auth_store, service=service)
+    app.state.auth_store = auth_store
+    register_auth(app, auth_store)
 
     @app.exception_handler(SessionError)
     async def session_error(request: Request, exc: SessionError):
@@ -198,21 +231,27 @@ def create_app(
     def healthz() -> dict[str, str]:
         return {"status": "ok"}
 
-    register_draft_routes(app, session_erp_tools)
+    register_draft_routes(app, session_erp_tools, service)
     register_intent_routes(app, session_erp_tools, service)
     register_operation_routes(app, service._operations)
-    register_history_routes(app, service._run_store)
+    register_history_routes(app, service._run_store, authenticated=auth_store is not None)
 
     @app.get("/api/runtime")
-    def runtime_info() -> dict[str, Any]:
+    def runtime_info(request: Request) -> dict[str, Any]:
         return {
-            **({"scripted_demo": True} if scripted_demo else {}),
+            **getattr(app.state, "semantic_runtime", {}),
+            **({"intent_semantic_available": not service._intent_semantic.budget.exhausted}
+               if service._intent_semantic is not None else {}),
+            "auth_enabled": auth_store is not None,
+            **({"scripted_demo": True, "demo_persistent": persistent_demo}
+               if scripted_demo else {}),
             "data_source": "mcp"
             if session_erp_tools is not None
             else "custom"
             if tools is not None
             else ("mcp" if os.environ.get("ERPILOT_TOOLS", "").lower() == "mcp" else "demo"),
-            "writes_enabled": any(tool.risk is not None for tool in resolved_tools),
+            "writes_enabled": any(tool.risk is not None for tool in resolved_tools) and (
+                auth_store is None or request.state.identity.role == "approver"),
             "reasoning_enabled": os.environ.get("ERPILOT_THINKING", "").lower() in _WRITES_ENV,
             "drafts_enabled": session_erp_tools is not None,
             **({"intent_preview_enabled": True} if service._intent_store is not None else {}),
@@ -228,8 +267,9 @@ def create_app(
         }
 
     @app.post("/api/chat/stream")
-    async def chat_stream(req: ChatRequest) -> EventSourceResponse:
-        session_id = req.session_id or uuid4().hex
+    async def chat_stream(req: ChatRequest, request: Request) -> EventSourceResponse:
+        session_id = req.session_id or (auth_store.new_session(request.state.identity)
+                                       if auth_store is not None else uuid4().hex)
         return event_response(session_id, service.stream_run(session_id, req.message))
 
     @app.post("/api/sessions/{session_id}/order-drafts/{draft_id}/confirm/stream")
@@ -370,7 +410,9 @@ def create_app(
 def __getattr__(name):
     # 保留 uvicorn erpilot_api.main:app；仅导入工厂时不创建默认 RunStore 或发现真实工具。
     if name == "app":
-        app = create_app()
+        from erpilot_api.bootstrap import default_app
+
+        app = default_app()
         globals()[name] = app
         return app
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

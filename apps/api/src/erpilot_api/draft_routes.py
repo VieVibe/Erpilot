@@ -30,7 +30,7 @@ class ConfirmDraftRequest(BaseModel):
     expected_revision: int = Field(strict=True, gt=0)
 
 
-def register_draft_routes(app: FastAPI, session_erp_tools):
+def register_draft_routes(app: FastAPI, session_erp_tools, service):
     @app.exception_handler(MutationError)
     async def draft_error(request: Request, exc: MutationError):
         status = (
@@ -100,7 +100,7 @@ def register_draft_routes(app: FastAPI, session_erp_tools):
 
     @app.post("/api/sessions/{session_id}/order-drafts", status_code=201)
     def prepare_draft(session_id: str, req: DraftRequest):
-        return drafts_service().prepare(
+        draft = drafts_service().prepare(
             session_id,
             req.customer,
             [(item.sku, item.quantity) for item in req.items],
@@ -108,6 +108,8 @@ def register_draft_routes(app: FastAPI, session_erp_tools):
             evidence={"contract": "draft-form-1"},
             budget_limit=req.budget_limit,
         )
+        service.record_draft_form(session_id, draft)
+        return draft
 
     @app.get("/api/sessions/{session_id}/order-drafts/{draft_id}")
     def get_draft(session_id: str, draft_id: str, revision: int | None = Query(default=None, gt=0)):
@@ -125,7 +127,7 @@ def register_draft_routes(app: FastAPI, session_erp_tools):
 
     @app.patch("/api/sessions/{session_id}/order-drafts/{draft_id}")
     def revise_draft(session_id: str, draft_id: str, req: ReviseDraftRequest):
-        return drafts_service().revise(
+        draft = drafts_service().revise(
             session_id,
             draft_id,
             req.expected_revision,
@@ -136,3 +138,5 @@ def register_draft_routes(app: FastAPI, session_erp_tools):
             **({"budget_limit": req.budget_limit}
                if "budget_limit" in req.model_fields_set else {}),
         )
+        service.record_draft_form(session_id, draft)
+        return draft

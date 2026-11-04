@@ -12,6 +12,7 @@ import json
 import math
 import os
 from collections.abc import AsyncIterator, Sequence
+from contextlib import aclosing
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -202,14 +203,19 @@ class LLMClient:
         return LLMClient(self._config, client=self._client.with_options(max_retries=0),
                          request_timeout=self._request_timeout)
 
+    async def aclose(self):
+        await self._client.close()
+
     async def stream_chat(
         self,
         messages: Sequence[ChatCompletionMessageParam],
         tools: Sequence[dict[str, Any]] | None = None,
     ) -> AsyncIterator[StreamEvent]:
         """流式补全：逐段产出 TextDelta / ReasoningDelta / ToolCall，最后恰好产出一个 StreamEnd。"""
-        async with asyncio.timeout(self._request_timeout):
-            async for event in self._stream_chat(messages, tools):
+        async with asyncio.timeout(self._request_timeout), aclosing(
+            self._stream_chat(messages, tools)
+        ) as events:
+            async for event in events:
                 yield event
 
     async def _stream_chat(

@@ -1,0 +1,20 @@
+{
+  "scope": "saved report and billing ledger integrity; no oracle changes or model requests",
+  "ledger_records": 22,
+  "requests": 11,
+  "requests_with_usage": 10,
+  "unknown_requests": 1,
+  "currency": "CNY",
+  "known_estimated_spent": "0.009714",
+  "failed_step_business_unchanged": true,
+  "complete_tasks": 0,
+  "planned_tasks": 4,
+  "passed_stages": 6,
+  "executed_stages": 7,
+  "planned_stages": 34,
+  "generation_frozen": true,
+  "semantic_create_and_revision_started": false,
+  "source_sha256_at_live_run": "4ce2d1cbbd20ccc2913505a5be86550ec5481cac21ed8702cfb622e20ad579cd",
+  "report_sha256": "ee7b416171a386871aadc105d30f53aac3b4043edbd35081b86cd6064598e26e",
+  "ledger_sha256": "fecc5f91499cffdeb407d0568b231b808b075bb8ae16700953e2abdf0f9aad69"
+}

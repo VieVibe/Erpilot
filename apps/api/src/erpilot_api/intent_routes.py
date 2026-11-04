@@ -103,17 +103,21 @@ def register_intent_routes(app: FastAPI, provider, service):
                         k: target[k] for k in ("draft_id", "revision")}:
                     raise SessionError(409, "intent_preview_changed",
                                        "请核对目标草稿和版本后再确认")
-                return provider.drafts.revise(
+                draft = provider.drafts.revise(
                     session_id, req.target.draft_id, req.target.revision,
                     req.customer, [(r.sku, r.quantity) for r in req.items], req.note,
                     budget_limit=req.budget_limit, evidence={
                         "contract": "intent-revise-form-1",
                         "pending_ref": req.pending_ref.model_dump()},
                 )
+                service.record_draft_form(session_id, draft)
+                return draft
             if req.target is not None:
                 raise SessionError(409, "intent_preview_changed", "目标请求已变化，请重新核对")
-            return provider.drafts.prepare(
+            draft = provider.drafts.prepare(
                 session_id, req.customer, [(r.sku, r.quantity) for r in req.items], req.note,
                 budget_limit=req.budget_limit,
                 evidence={"contract": "intent-form-1", "pending_ref": req.pending_ref.model_dump()},
             )
+            service.record_draft_form(session_id, draft)
+            return draft

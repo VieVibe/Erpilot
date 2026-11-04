@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "test:ui": "playwright test",
     "test:demo": "playwright test --config playwright.demo.config.ts",
+    "test:deployment": "playwright test --config playwright.deployment.config.ts",
     "record:demo": "node scripts/record-demo.mjs"
   },
   "dependencies": {

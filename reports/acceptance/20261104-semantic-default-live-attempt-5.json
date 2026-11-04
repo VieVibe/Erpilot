@@ -1,0 +1,16 @@
+{
+  "scope": "Failed terminal evidence write; original harness stderr is preserved beside this file.",
+  "passed": false,
+  "complete": false,
+  "error": {
+    "type": "TypeError",
+    "message": "datetime snapshot was not JSON serializable; this derived terminal record does not claim the lost in-memory checks."
+  },
+  "journal_audit": {
+    "requests": 3,
+    "known_spent": "0.003095",
+    "unknown_requests": 0
+  },
+  "original_report_bytes": 0,
+  "evidence_reconstruction": "Physical request totals only, from the unchanged journal; no assertion outcomes reconstructed."
+}

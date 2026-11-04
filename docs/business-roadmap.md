@@ -1,5 +1,9 @@
 # Erpilot 功能深化里程碑与后续路径
 
+2026-11-04 更新：已在默认业务闭环之外补[带账号容器与持久恢复](deployment.md)，
+新真实模型批次遇到未知 usage 后冻结。下方原有阶段的“不安排部署 / 单用户”保留其历史范围，
+当前实现以[项目状态](project-status.md)和 [ADR-0012](adr/0012-authenticated-container-deployment.md)为准。
+
 2026-10-28 已完成[自然商品输入](natural-order-entry.md)：完整名称 / 明确 SKU 与规范中文件数先只读核对，重名、简称、下架、重复及单位不明先澄清；完整清单约束模型参数，保存事务复核目录，网页留证。支持已有草稿的唯一商品名 / 行号及中文数量修改；本批离线、API、浏览器验证通过，零付费请求，旧真实批次保持原结论。见[本批验收](../reports/acceptance/2026-10-28-natural-order.md)。
 
 政策程序结束 v4 与订单 v2 的独立真实观察见[前批报告](../reports/acceptance/2026-10-28-contracts-and-policy.md)。以下保留原里程碑和历史顺序，当前状态以上述更新及项目状态页为准。

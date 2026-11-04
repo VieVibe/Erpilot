@@ -1,0 +1,194 @@
+{
+  "suite": "intent-revision-live-1",
+  "label_status": "engineering_expectations",
+  "fixture_sha256": "af8b779fc34c19e9cd85de611a805b96f6023ba3ed38251f0e708f00028c0a8c",
+  "model": "glm-5.3-flash",
+  "endpoint_host": "flashcoding.ai",
+  "currency": "CNY",
+  "limit": "0.020",
+  "max_requests": 5,
+  "source_before": {
+    "revision": "e907f42282ee69a35b49fdaff9f0d99a8edfdebc",
+    "working_tree_dirty": true,
+    "source_sha256": "ad4f8c6c9a955a4d132530ab5081c51fa3693b460f78df7a7472f19ddd9b4aed"
+  },
+  "cases": [
+    {
+      "id": "revise_full",
+      "text": "调整机械键盘到六个，预算改为1200元，备注改为『加急😀』。",
+      "expected": {
+        "customer": "原客户",
+        "note": "加急😀",
+        "budget_limit": 1200.0,
+        "items": [
+          [
+            "K1",
+            6
+          ],
+          [
+            "M1",
+            3
+          ]
+        ]
+      },
+      "actual": null,
+      "preview": null,
+      "status": "failed",
+      "passed": false,
+      "requests": 1,
+      "duration_ms": 45032.655
+    },
+    {
+      "id": "revise_quantity",
+      "text": "调整光学鼠标到五个，其他保持不变。",
+      "expected": {
+        "customer": "原客户",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          [
+            "K1",
+            2
+          ],
+          [
+            "M1",
+            5
+          ]
+        ]
+      },
+      "actual": null,
+      "preview": null,
+      "passed": false,
+      "status": "not_run_budget",
+      "requests": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "revise_scalars",
+      "text": "调整预算到800元，备注改为『先别提交😀』。",
+      "expected": {
+        "customer": "原客户",
+        "note": "先别提交😀",
+        "budget_limit": 800.0,
+        "items": [
+          [
+            "K1",
+            2
+          ],
+          [
+            "M1",
+            3
+          ]
+        ]
+      },
+      "actual": null,
+      "preview": null,
+      "passed": false,
+      "status": "not_run_budget",
+      "requests": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "revision_condition",
+      "text": "如果客户确认，调整机械键盘到六个。",
+      "expected": null,
+      "actual": null,
+      "preview": null,
+      "status": "passed",
+      "passed": true,
+      "requests": 0,
+      "duration_ms": 0.98
+    },
+    {
+      "id": "revision_negated",
+      "text": "别改机械键盘，预算改为1200元。",
+      "expected": null,
+      "actual": null,
+      "preview": null,
+      "status": "passed",
+      "passed": true,
+      "requests": 0,
+      "duration_ms": 1.027
+    },
+    {
+      "id": "revision_question",
+      "text": "能不能调整机械键盘到六个？",
+      "expected": null,
+      "actual": null,
+      "preview": null,
+      "status": "passed",
+      "passed": true,
+      "requests": 0,
+      "duration_ms": 0.823
+    }
+  ],
+  "fixture_targets": {
+    "revise_full": {
+      "draft_id": "621904c5eb6a45a0b4c843b4724ea635",
+      "revision": 1
+    },
+    "revise_quantity": {
+      "draft_id": "f9edc83c77474bac88e1ea9f8bcbbd20",
+      "revision": 1
+    },
+    "revise_scalars": {
+      "draft_id": "b11eb22d925e4cdbab728477135849cd",
+      "revision": 1
+    },
+    "revision_condition": {
+      "draft_id": "cd15a6606c7c417a947b3400e6da7253",
+      "revision": 1
+    },
+    "revision_negated": {
+      "draft_id": "407d273849324ba58be152edb4d09330",
+      "revision": 1
+    },
+    "revision_question": {
+      "draft_id": "c9b640fb83ff4339a293f69ec5fc698c",
+      "revision": 1
+    }
+  },
+  "business_unchanged": true,
+  "requests": [
+    {
+      "request": 1,
+      "case_id": null,
+      "status": "unknown",
+      "ts": "2026-11-04T06:44:50.071504+00:00",
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": null,
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "unknown_usage",
+        "complete": false
+      },
+      "session_id": "revise_full",
+      "purpose": "intent",
+      "usage": null,
+      "turn_id": "revise_full",
+      "source_sha256": "63d43184f5188711b681ebc0bf078f80d5cf9276f3ddbdf8ef82a78254426730"
+    }
+  ],
+  "attempts": [
+    {
+      "status": "rejected",
+      "source_sha256": "63d43184f5188711b681ebc0bf078f80d5cf9276f3ddbdf8ef82a78254426730",
+      "ts": "2026-11-04T06:44:05.058606+00:00",
+      "rejection_code": "TimeoutError",
+      "duration_ms": 45017.2482,
+      "semantic_version": "order-revise-proposal-2",
+      "prompt_version": "order-revise-proposal-prompt-3",
+      "prompt_sha256": "fa58e02b69d7869323a3b3620fbe926cb5aed006161d70e02875fbb38122cee7"
+    }
+  ],
+  "known_spent": "0",
+  "unknown_usage": true,
+  "provider_requests": 1,
+  "source_after": {
+    "revision": "e907f42282ee69a35b49fdaff9f0d99a8edfdebc",
+    "working_tree_dirty": true,
+    "source_sha256": "ad4f8c6c9a955a4d132530ab5081c51fa3693b460f78df7a7472f19ddd9b4aed"
+  },
+  "source_unchanged": true,
+  "passed": false
+}

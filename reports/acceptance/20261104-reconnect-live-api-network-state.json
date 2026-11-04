@@ -1,0 +1,139 @@
+{
+  "fixture_seed_quantities": {
+    "A1001": 1000,
+    "B2001": 300
+  },
+  "actual_customer_orders": [
+    {
+      "order_id": "SO20261104-0001",
+      "customer": "真实接口验收客户",
+      "status": "待付款",
+      "created_at": "2026-11-04 14:47:02.903244",
+      "note": "分箱发货"
+    }
+  ],
+  "actual_stock_quantities": {
+    "A1001": 998,
+    "B2001": 297
+  },
+  "actual_business_snapshot": {
+    "business_operations": [],
+    "mutation_requests": [
+      {
+        "client_token": "7cb8fdd71b2d4b15b864d70ed65703de",
+        "request": "[\"submit_order_draft\", \"cce3d7d323554051907aaef46f83524d\", \"950363fd4544417089da613ffbadaf8f\", 1]",
+        "result": "{\"created_at\": \"2026-11-04T14:47:02.903244\", \"customer\": \"真实接口验收客户\", \"items\": [{\"name\": \"青瓷茶具\", \"quantity\": 2, \"sku\": \"A1001\", \"unit_price\": 100.0}, {\"name\": \"宣纸礼盒\", \"quantity\": 3, \"sku\": \"B2001\", \"unit_price\": 50.0}], \"note\": \"分箱发货\", \"order_id\": \"SO20261104-0001\", \"status\": \"待付款\", \"total_amount\": 350.0}"
+      }
+    ],
+    "order_drafts": [
+      {
+        "draft_id": "950363fd4544417089da613ffbadaf8f",
+        "revision": 1,
+        "session_id": "cce3d7d323554051907aaef46f83524d",
+        "snapshot": "{\"customer\": \"真实接口验收客户\", \"note\": \"分箱发货\", \"items\": [{\"sku\": \"A1001\", \"name\": \"青瓷茶具\", \"quantity\": 2, \"base_price\": 100.0, \"discount\": 1.0, \"unit_price\": 100.0, \"line_total\": 200.0, \"stock_before\": 1000, \"stock_after\": 998}, {\"sku\": \"B2001\", \"name\": \"宣纸礼盒\", \"quantity\": 3, \"base_price\": 50.0, \"discount\": 1.0, \"unit_price\": 50.0, \"line_total\": 150.0, \"stock_before\": 300, \"stock_after\": 297}], \"total_amount\": 350.0, \"budget_limit\": 500.0, \"budget_constraint\": {\"currency\": \"CNY\", \"limit\": 500.0, \"origin\": {\"kind\": \"user_literal\", \"quote\": \"预算上限为500元\", \"source_user_sha256\": \"dbbfacc47c132546a9c484969e13439d191319a53466b8840a038a12f46178b7\", \"value\": 500.0, \"revision\": 1}}, \"item_constraint\": {\"value\": [{\"sku\": \"A1001\", \"quantity\": 2}, {\"sku\": \"B2001\", \"quantity\": 3}], \"verified\": true, \"origin\": {\"kind\": \"user_literal\", \"revision\": 1, \"source_user_sha256\": \"dbbfacc47c132546a9c484969e13439d191319a53466b8840a038a12f46178b7\", \"requirements\": [{\"sku\": \"A1001\", \"quantity\": 2, \"quote\": \"A1001 2件\"}, {\"sku\": \"B2001\", \"quantity\": 3, \"quote\": \"B2001 3件\"}]}}, \"task_constraints\": {\"schema_version\": 1, \"fields\": {\"customer\": {\"value\": \"真实接口验收客户\", \"verified\": true, \"origin\": {\"kind\": \"user_literal\", \"quote\": \"给真实接口验收客户保存报价草稿\", \"source_user_sha256\": \"dbbfacc47c132546a9c484969e13439d191319a53466b8840a038a12f46178b7\", \"value\": \"真实接口验收客户\", \"revision\": 1}}, \"note\": {\"value\": \"分箱发货\", \"verified\": true, \"origin\": {\"kind\": \"user_literal\", \"quote\": \"备注原文「分箱发货」\", \"source_user_sha256\": \"dbbfacc47c132546a9c484969e13439d191319a53466b8840a038a12f46178b7\", \"value\": \"分箱发货\", \"revision\": 1}}}, \"unverified_fields\": []}, \"change_record\": {\"schema_version\": 1, \"revision\": 1, \"previous_revision\": null, \"operation\": \"create\", \"source\": {\"kind\": \"agent\", \"user_request\": \"给真实接口验收客户保存报价草稿：A1001 2件，B2001 3件，按此顺序；备注原文「分箱发货」。预算上限为500元。只保存草稿，不提交。\", \"source_user_sha256\": \"dbbfacc47c132546a9c484969e13439d191319a53466b8840a038a12f46178b7\"}, \"confirmed_fields\": [\"customer\", \"note\", \"budget_limit\"], \"changes\": [{\"field\": \"customer\", \"before\": null, \"after\": \"真实接口验收客户\"}, {\"field\": \"note\", \"before\": null, \"after\": \"分箱发货\"}, {\"field\": \"total_amount\", \"before\": null, \"after\": 350.0}, {\"field\": \"budget_limit\", \"before\": null, \"after\": 500.0}, {\"field\": \"item\", \"sku\": \"A1001\", \"before\": null, \"after\": {\"sku\": \"A1001\", \"name\": \"青瓷茶具\", \"quantity\": 2, \"base_price\": 100.0, \"discount\": 1.0, \"unit_price\": 100.0, \"line_total\": 200.0, \"stock_before\": 1000, \"stock_after\": 998}}, {\"field\": \"item\", \"sku\": \"B2001\", \"before\": null, \"after\": {\"sku\": \"B2001\", \"name\": \"宣纸礼盒\", \"quantity\": 3, \"base_price\": 50.0, \"discount\": 1.0, \"unit_price\": 50.0, \"line_total\": 150.0, \"stock_before\": 300, \"stock_after\": 297}}], \"creation_guard\": {\"contract\": \"draft-create-items-1\", \"items\": [{\"sku\": \"A1001\", \"quantity\": 2}, {\"sku\": \"B2001\", \"quantity\": 3}], \"requirements\": [{\"sku\": \"A1001\", \"quantity\": 2, \"quote\": \"A1001 2件\"}, {\"sku\": \"B2001\", \"quantity\": 3, \"quote\": \"B2001 3件\"}]}}}",
+        "expires_at": "2026-11-04T07:16:45.856742+00:00",
+        "created_at": "2026-11-04T06:46:45.856742+00:00",
+        "order_id": "SO20261104-0001",
+        "submission_result": "{\"order_id\":\"SO20261104-0001\",\"customer\":\"真实接口验收客户\",\"status\":\"待付款\",\"created_at\":\"2026-11-04T14:47:02.903244\",\"items\":[{\"sku\":\"A1001\",\"name\":\"青瓷茶具\",\"quantity\":2,\"unit_price\":100.0},{\"sku\":\"B2001\",\"name\":\"宣纸礼盒\",\"quantity\":3,\"unit_price\":50.0}],\"note\":\"分箱发货\",\"total_amount\":350.0}"
+      }
+    ],
+    "order_items": [
+      {
+        "id": 1,
+        "order_id": "DEMO-CANCEL-001",
+        "sku": "A1001",
+        "name": "青瓷茶具",
+        "quantity": 1,
+        "unit_price": 100.0
+      },
+      {
+        "id": 2,
+        "order_id": "DEMO-SALES-001",
+        "sku": "R3001",
+        "name": "补货演示茶杯",
+        "quantity": 60,
+        "unit_price": 20.0
+      },
+      {
+        "id": 3,
+        "order_id": "SO20261104-0001",
+        "sku": "A1001",
+        "name": "青瓷茶具",
+        "quantity": 2,
+        "unit_price": 100.0
+      },
+      {
+        "id": 4,
+        "order_id": "SO20261104-0001",
+        "sku": "B2001",
+        "name": "宣纸礼盒",
+        "quantity": 3,
+        "unit_price": 50.0
+      }
+    ],
+    "orders": [
+      {
+        "order_id": "DEMO-CANCEL-001",
+        "customer": "取消资格演示客户",
+        "status": "待付款",
+        "created_at": "2026-11-03 14:46:20.349382",
+        "note": null
+      },
+      {
+        "order_id": "DEMO-SALES-001",
+        "customer": "销量演示客户",
+        "status": "已发货",
+        "created_at": "2026-11-03 14:46:20.349382",
+        "note": null
+      },
+      {
+        "order_id": "SO20261104-0001",
+        "customer": "真实接口验收客户",
+        "status": "待付款",
+        "created_at": "2026-11-04 14:47:02.903244",
+        "note": "分箱发货"
+      }
+    ],
+    "products": [
+      {
+        "sku": "A1001",
+        "name": "青瓷茶具",
+        "category": "演示商品",
+        "price": 100.0,
+        "status": "在售"
+      },
+      {
+        "sku": "B2001",
+        "name": "宣纸礼盒",
+        "category": "演示商品",
+        "price": 50.0,
+        "status": "在售"
+      },
+      {
+        "sku": "R3001",
+        "name": "补货演示茶杯",
+        "category": "演示商品",
+        "price": 20.0,
+        "status": "在售"
+      }
+    ],
+    "stocks": [
+      {
+        "sku": "A1001",
+        "quantity": 998,
+        "warehouse": "演示仓"
+      },
+      {
+        "sku": "B2001",
+        "quantity": 297,
+        "warehouse": "演示仓"
+      },
+      {
+        "sku": "R3001",
+        "quantity": 5,
+        "warehouse": "演示仓"
+      }
+    ]
+  },
+  "scope": "Synthetic data from final real-network API acceptance"
+}

@@ -1,0 +1,272 @@
+{
+  "scope": "Default real-model startup; authenticated HTTP; semantic creation/revision; manual full forms and independent approval; synthetic ERP; in-memory saver.",
+  "model": "glm-5.3-flash",
+  "endpoint_host": "flashcoding.ai",
+  "source_before": {
+    "revision": "e907f42282ee69a35b49fdaff9f0d99a8edfdebc",
+    "working_tree_dirty": true,
+    "source_sha256": "d2762fe1c4a698ef4efd5f61f13b582729c2ca80f4b8239f7d73b71f419b6a36"
+  },
+  "checks": {
+    "default_enabled_without_startup_model_call": true,
+    "semantic_create_preview_has_exact_fields_and_no_write": true,
+    "full_form_creates_only_one_draft_not_order": true,
+    "semantic_revision_binds_version_and_preserves_fields": true,
+    "confirmed_revision_requires_separate_approval": true,
+    "approved_exact_revised_order_and_stock": true,
+    "replay_cannot_create_another_order": true,
+    "business_calls_do_not_consume_candidate_quota": true
+  },
+  "passed": true,
+  "sdk_automatic_retries": 0,
+  "runtime": {
+    "intent_mode": "enforce",
+    "intent_semantic_enabled": true,
+    "intent_semantic_disabled_reason": null,
+    "intent_semantic_available": true,
+    "auth_enabled": true,
+    "data_source": "mcp",
+    "writes_enabled": true,
+    "reasoning_enabled": false,
+    "drafts_enabled": true,
+    "intent_preview_enabled": true,
+    "intent_semantic_revision_enabled": true,
+    "business_approvals_enabled": true
+  },
+  "final_business_state": {
+    "business_operations": [],
+    "mutation_requests": [
+      {
+        "client_token": "927b456e12ef4be5a432f1b9233a5ede",
+        "request": "[\"submit_order_draft\", \"119ab957e3b34739913bf0cff134d848\", \"ee7110b4b1364b209d9df0c5a0c893a0\", 2]",
+        "result": "{\"created_at\": \"2026-11-04T15:41:41.537444\", \"customer\": \"真实语义验收客户\", \"items\": [{\"name\": \"青瓷茶具\", \"quantity\": 2, \"sku\": \"A1001\", \"unit_price\": 100.0}, {\"name\": \"宣纸礼盒\", \"quantity\": 4, \"sku\": \"B2001\", \"unit_price\": 50.0}], \"note\": \"加急😀\", \"order_id\": \"SO20261104-0001\", \"status\": \"待付款\", \"total_amount\": 400.0}"
+      }
+    ],
+    "order_drafts": [
+      {
+        "draft_id": "ee7110b4b1364b209d9df0c5a0c893a0",
+        "revision": 1,
+        "session_id": "119ab957e3b34739913bf0cff134d848",
+        "snapshot": "{\"customer\": \"真实语义验收客户\", \"note\": \"分箱发货😀\", \"items\": [{\"sku\": \"A1001\", \"name\": \"青瓷茶具\", \"quantity\": 2, \"base_price\": 100.0, \"discount\": 1.0, \"unit_price\": 100.0, \"line_total\": 200.0, \"stock_before\": 1000, \"stock_after\": 998}, {\"sku\": \"B2001\", \"name\": \"宣纸礼盒\", \"quantity\": 3, \"base_price\": 50.0, \"discount\": 1.0, \"unit_price\": 50.0, \"line_total\": 150.0, \"stock_before\": 300, \"stock_after\": 297}], \"total_amount\": 350.0, \"budget_limit\": 500.0, \"budget_constraint\": {\"currency\": \"CNY\", \"limit\": 500.0, \"origin\": {\"kind\": \"manual_form\", \"value\": 500.0, \"revision\": 1}}, \"item_constraint\": {\"value\": [{\"sku\": \"A1001\", \"quantity\": 2}, {\"sku\": \"B2001\", \"quantity\": 3}], \"verified\": true, \"origin\": {\"kind\": \"manual_form\", \"revision\": 1}}, \"task_constraints\": {\"schema_version\": 1, \"fields\": {\"customer\": {\"value\": \"真实语义验收客户\", \"verified\": true, \"origin\": {\"kind\": \"manual_form\", \"value\": \"真实语义验收客户\", \"revision\": 1}}, \"note\": {\"value\": \"分箱发货😀\", \"verified\": true, \"origin\": {\"kind\": \"manual_form\", \"value\": \"分箱发货😀\", \"revision\": 1}}}, \"unverified_fields\": []}, \"change_record\": {\"schema_version\": 1, \"revision\": 1, \"previous_revision\": null, \"operation\": \"create\", \"source\": {\"kind\": \"manual_form\", \"intent_preview\": {\"pending_id\": \"df402c1d14334bc2b8e075d7464fb666\", \"state_version\": 1, \"messages\": [{\"message_id\": \"091ec147e1be092144186f52d79d1621925c2136b07a00e406e414b11dcea14f\", \"text\": \"帮真实语义验收客户列份采购清单：青瓷茶具要两个，宣纸礼盒要三个；预算500元；备注原文『分箱发货😀』。\", \"sha256\": \"82aac2851955d510249ddbcc77f635aafff1bb390fb7afe6d8d138a6f45d354f\"}], \"semantic_proposal\": {\"schema_version\": 1, \"operation\": \"create\", \"action\": {\"message_id\": \"091ec147e1be092144186f52d79d1621925c2136b07a00e406e414b11dcea14f\", \"start\": 9, \"end\": 10, \"quote\": \"列\"}, \"customer\": {\"value\": \"真实语义验收客户\", \"evidence\": {\"message_id\": \"091ec147e1be092144186f52d79d1621925c2136b07a00e406e414b11dcea14f\", \"start\": 1, \"end\": 9, \"quote\": \"真实语义验收客户\"}}, \"note\": {\"value\": \"分箱发货😀\", \"evidence\": {\"message_id\": \"091ec147e1be092144186f52d79d1621925c2136b07a00e406e414b11dcea14f\", \"start\": 44, \"end\": 49, \"quote\": \"分箱发货😀\"}}, \"budget_limit\": {\"value\": \"500\", \"evidence\": {\"message_id\": \"091ec147e1be092144186f52d79d1621925c2136b07a00e406e414b11dcea14f\", \"start\": 34, \"end\": 38, \"quote\": \"500元\"}}, \"items\": [{\"product\": {\"value\": \"青瓷茶具\", \"evidence\": {\"message_id\": \"091ec147e1be092144186f52d79d1621925c2136b07a00e406e414b11dcea14f\", \"start\": 16, \"end\": 20, \"quote\": \"青瓷茶具\"}}, \"quantity\": {\"value\": 2, \"evidence\": {\"message_id\": \"091ec147e1be092144186f52d79d1621925c2136b07a00e406e414b11dcea14f\", \"start\": 21, \"end\": 23, \"quote\": \"两个\"}}}, {\"product\": {\"value\": \"宣纸礼盒\", \"evidence\": {\"message_id\": \"091ec147e1be092144186f52d79d1621925c2136b07a00e406e414b11dcea14f\", \"start\": 24, \"end\": 28, \"quote\": \"宣纸礼盒\"}}, \"quantity\": {\"value\": 3, \"evidence\": {\"message_id\": \"091ec147e1be092144186f52d79d1621925c2136b07a00e406e414b11dcea14f\", \"start\": 29, \"end\": 31, \"quote\": \"三个\"}}}], \"unresolved\": []}, \"verification\": \"explicit_form\", \"semantic_version\": \"order-create-proposal-3\"}}, \"confirmed_fields\": [\"customer\", \"note\", \"budget_limit\"], \"changes\": [{\"field\": \"customer\", \"before\": null, \"after\": \"真实语义验收客户\"}, {\"field\": \"note\", \"before\": null, \"after\": \"分箱发货😀\"}, {\"field\": \"total_amount\", \"before\": null, \"after\": 350.0}, {\"field\": \"budget_limit\", \"before\": null, \"after\": 500.0}, {\"field\": \"item\", \"sku\": \"A1001\", \"before\": null, \"after\": {\"sku\": \"A1001\", \"name\": \"青瓷茶具\", \"quantity\": 2, \"base_price\": 100.0, \"discount\": 1.0, \"unit_price\": 100.0, \"line_total\": 200.0, \"stock_before\": 1000, \"stock_after\": 998}}, {\"field\": \"item\", \"sku\": \"B2001\", \"before\": null, \"after\": {\"sku\": \"B2001\", \"name\": \"宣纸礼盒\", \"quantity\": 3, \"base_price\": 50.0, \"discount\": 1.0, \"unit_price\": 50.0, \"line_total\": 150.0, \"stock_before\": 300, \"stock_after\": 297}}]}}",
+        "expires_at": "2026-11-04T08:10:52.639354+00:00",
+        "created_at": "2026-11-04T07:40:52.639354+00:00",
+        "order_id": null,
+        "submission_result": null
+      },
+      {
+        "draft_id": "ee7110b4b1364b209d9df0c5a0c893a0",
+        "revision": 2,
+        "session_id": "119ab957e3b34739913bf0cff134d848",
+        "snapshot": "{\"customer\": \"真实语义验收客户\", \"note\": \"加急😀\", \"items\": [{\"sku\": \"A1001\", \"name\": \"青瓷茶具\", \"quantity\": 2, \"base_price\": 100.0, \"discount\": 1.0, \"unit_price\": 100.0, \"line_total\": 200.0, \"stock_before\": 1000, \"stock_after\": 998}, {\"sku\": \"B2001\", \"name\": \"宣纸礼盒\", \"quantity\": 4, \"base_price\": 50.0, \"discount\": 1.0, \"unit_price\": 50.0, \"line_total\": 200.0, \"stock_before\": 300, \"stock_after\": 296}], \"total_amount\": 400.0, \"budget_limit\": 500.0, \"budget_constraint\": {\"currency\": \"CNY\", \"limit\": 500.0, \"origin\": {\"kind\": \"manual_form\", \"value\": 500.0, \"revision\": 1}}, \"item_constraint\": {\"value\": [{\"sku\": \"A1001\", \"quantity\": 2}, {\"sku\": \"B2001\", \"quantity\": 4}], \"verified\": true, \"origin\": {\"kind\": \"manual_form\", \"revision\": 2}}, \"task_constraints\": {\"schema_version\": 1, \"fields\": {\"customer\": {\"value\": \"真实语义验收客户\", \"verified\": true, \"origin\": {\"kind\": \"manual_form\", \"value\": \"真实语义验收客户\", \"revision\": 1}}, \"note\": {\"value\": \"加急😀\", \"verified\": true, \"origin\": {\"kind\": \"manual_form\", \"value\": \"加急😀\", \"revision\": 2}}}, \"unverified_fields\": []}, \"change_record\": {\"schema_version\": 1, \"revision\": 2, \"previous_revision\": 1, \"operation\": \"revise\", \"source\": {\"kind\": \"manual_form\", \"intent_preview\": {\"pending_id\": \"db9654a780ba41e2a1778f698d56d09e\", \"state_version\": 1, \"messages\": [{\"message_id\": \"c2824ced086245e6a437916ac7aa8cce\", \"text\": \"调整宣纸礼盒到四个，备注改为『加急😀』。\", \"sha256\": \"f67d03d9e44ac4a38e3468869b01e4e6ccb5f84a0d8aafe57eac40ebf8d8a479\"}], \"semantic_proposal\": {\"schema_version\": 1, \"operation\": \"revise\", \"action\": {\"message_id\": \"c2824ced086245e6a437916ac7aa8cce\", \"start\": 0, \"end\": 2, \"quote\": \"调整\"}, \"customer\": null, \"note\": {\"value\": \"加急😀\", \"evidence\": {\"message_id\": \"c2824ced086245e6a437916ac7aa8cce\", \"start\": 15, \"end\": 18, \"quote\": \"加急😀\"}}, \"budget_limit\": null, \"items\": [{\"product\": {\"value\": \"宣纸礼盒\", \"evidence\": {\"message_id\": \"c2824ced086245e6a437916ac7aa8cce\", \"start\": 2, \"end\": 6, \"quote\": \"宣纸礼盒\"}}, \"quantity\": {\"value\": 4, \"evidence\": {\"message_id\": \"c2824ced086245e6a437916ac7aa8cce\", \"start\": 7, \"end\": 9, \"quote\": \"四个\"}}}], \"unresolved\": []}, \"verification\": \"explicit_form\", \"semantic_version\": \"order-revise-proposal-2\", \"operation\": \"revise\", \"target\": {\"draft_id\": \"ee7110b4b1364b209d9df0c5a0c893a0\", \"revision\": 1, \"snapshot_sha256\": \"b1ca70507156eb51144a6da2589294386b8d2e0fd6a81cf2614cc55d8a03d2cf\"}, \"before_fields\": {\"customer\": \"真实语义验收客户\", \"note\": \"分箱发货😀\", \"budget_limit\": 500.0, \"items\": [{\"sku\": \"A1001\", \"quantity\": 2}, {\"sku\": \"B2001\", \"quantity\": 3}]}}}, \"confirmed_fields\": [\"customer\", \"note\", \"budget_limit\"], \"changes\": [{\"field\": \"note\", \"before\": \"分箱发货😀\", \"after\": \"加急😀\"}, {\"field\": \"total_amount\", \"before\": 350.0, \"after\": 400.0}, {\"field\": \"quantity\", \"sku\": \"B2001\", \"before\": 3, \"after\": 4}, {\"field\": \"line_total\", \"sku\": \"B2001\", \"before\": 150.0, \"after\": 200.0}, {\"field\": \"stock_after\", \"sku\": \"B2001\", \"before\": 297, \"after\": 296}]}}",
+        "expires_at": "2026-11-04T08:11:41.207475+00:00",
+        "created_at": "2026-11-04T07:41:41.207475+00:00",
+        "order_id": "SO20261104-0001",
+        "submission_result": "{\"order_id\":\"SO20261104-0001\",\"customer\":\"真实语义验收客户\",\"status\":\"待付款\",\"created_at\":\"2026-11-04T15:41:41.537444\",\"items\":[{\"sku\":\"A1001\",\"name\":\"青瓷茶具\",\"quantity\":2,\"unit_price\":100.0},{\"sku\":\"B2001\",\"name\":\"宣纸礼盒\",\"quantity\":4,\"unit_price\":50.0}],\"note\":\"加急😀\",\"total_amount\":400.0}"
+      }
+    ],
+    "order_items": [
+      {
+        "id": 1,
+        "order_id": "DEMO-CANCEL-001",
+        "sku": "A1001",
+        "name": "青瓷茶具",
+        "quantity": 1,
+        "unit_price": 100.0
+      },
+      {
+        "id": 2,
+        "order_id": "DEMO-SALES-001",
+        "sku": "R3001",
+        "name": "补货演示茶杯",
+        "quantity": 60,
+        "unit_price": 20.0
+      },
+      {
+        "id": 3,
+        "order_id": "SO20261104-0001",
+        "sku": "A1001",
+        "name": "青瓷茶具",
+        "quantity": 2,
+        "unit_price": 100.0
+      },
+      {
+        "id": 4,
+        "order_id": "SO20261104-0001",
+        "sku": "B2001",
+        "name": "宣纸礼盒",
+        "quantity": 4,
+        "unit_price": 50.0
+      }
+    ],
+    "orders": [
+      {
+        "order_id": "DEMO-CANCEL-001",
+        "customer": "取消资格演示客户",
+        "status": "待付款",
+        "created_at": "2026-11-03 15:40:14.125448",
+        "note": null
+      },
+      {
+        "order_id": "DEMO-SALES-001",
+        "customer": "销量演示客户",
+        "status": "已发货",
+        "created_at": "2026-11-03 15:40:14.125448",
+        "note": null
+      },
+      {
+        "order_id": "SO20261104-0001",
+        "customer": "真实语义验收客户",
+        "status": "待付款",
+        "created_at": "2026-11-04 15:41:41.537444",
+        "note": "加急😀"
+      }
+    ],
+    "products": [
+      {
+        "sku": "A1001",
+        "name": "青瓷茶具",
+        "category": "演示商品",
+        "price": 100.0,
+        "status": "在售"
+      },
+      {
+        "sku": "B2001",
+        "name": "宣纸礼盒",
+        "category": "演示商品",
+        "price": 50.0,
+        "status": "在售"
+      },
+      {
+        "sku": "R3001",
+        "name": "补货演示茶杯",
+        "category": "演示商品",
+        "price": 20.0,
+        "status": "在售"
+      }
+    ],
+    "stocks": [
+      {
+        "sku": "A1001",
+        "quantity": 998,
+        "warehouse": "演示仓"
+      },
+      {
+        "sku": "B2001",
+        "quantity": 296,
+        "warehouse": "演示仓"
+      },
+      {
+        "sku": "R3001",
+        "quantity": 5,
+        "warehouse": "演示仓"
+      }
+    ]
+  },
+  "candidate_budget": {
+    "currency": "CNY",
+    "limit": "1.00",
+    "known_spent": "0.002299",
+    "requests": 2,
+    "unknown_usage": false,
+    "max_requests": 200,
+    "scope": "semantic-proposals-only"
+  },
+  "candidate_requests": [
+    {
+      "request": 1,
+      "case_id": null,
+      "status": "settled",
+      "ts": "2026-11-04T07:40:52.500256+00:00",
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": "0.001061",
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "session_id": "119ab957e3b34739913bf0cff134d848",
+      "purpose": "intent",
+      "usage": {
+        "prompt_tokens": 1433,
+        "completion_tokens": 2716,
+        "total_tokens": 4149
+      },
+      "turn_id": "091ec147e1be092144186f52d79d1621925c2136b07a00e406e414b11dcea14f",
+      "source_sha256": "82aac2851955d510249ddbcc77f635aafff1bb390fb7afe6d8d138a6f45d354f"
+    },
+    {
+      "request": 2,
+      "case_id": null,
+      "status": "settled",
+      "ts": "2026-11-04T07:41:41.143900+00:00",
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": "0.001238",
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "session_id": "119ab957e3b34739913bf0cff134d848",
+      "purpose": "intent",
+      "usage": {
+        "prompt_tokens": 1549,
+        "completion_tokens": 3205,
+        "total_tokens": 4754
+      },
+      "turn_id": "c2824ced086245e6a437916ac7aa8cce",
+      "source_sha256": "f67d03d9e44ac4a38e3468869b01e4e6ccb5f84a0d8aafe57eac40ebf8d8a479"
+    }
+  ],
+  "candidate_attempts": [
+    {
+      "status": "preview",
+      "source_sha256": "82aac2851955d510249ddbcc77f635aafff1bb390fb7afe6d8d138a6f45d354f",
+      "ts": "2026-11-04T07:40:14.861400+00:00",
+      "pending_ref": {
+        "pending_id": "df402c1d14334bc2b8e075d7464fb666",
+        "state_version": 1
+      },
+      "duration_ms": 37651.0405,
+      "semantic_version": "order-create-proposal-3",
+      "prompt_version": "order-create-proposal-prompt-6",
+      "prompt_sha256": "039662df50e8ec0db9d55a9f96a89a028892ba94bc385936c714eb8085d05a3b"
+    },
+    {
+      "status": "preview",
+      "source_sha256": "f67d03d9e44ac4a38e3468869b01e4e6ccb5f84a0d8aafe57eac40ebf8d8a479",
+      "ts": "2026-11-04T07:40:52.699576+00:00",
+      "pending_ref": {
+        "pending_id": "db9654a780ba41e2a1778f698d56d09e",
+        "state_version": 1
+      },
+      "duration_ms": 48458.1781,
+      "semantic_version": "order-revise-proposal-2",
+      "prompt_version": "order-revise-proposal-prompt-3",
+      "prompt_sha256": "fa58e02b69d7869323a3b3620fbe926cb5aed006161d70e02875fbb38122cee7"
+    }
+  ],
+  "physical_budget": {
+    "currency": "CNY",
+    "limit": "0.05",
+    "known_spent": "0.003144",
+    "unknown_usage": false,
+    "unknown_requests": 0,
+    "requests": 3,
+    "unknown_reserve_per_request": "0.005",
+    "unknown_reserve_total": "0.000",
+    "reserve_is_actual_bill": false,
+    "max_unknown": 4,
+    "max_requests": 30
+  },
+  "journal_audit": {
+    "requests": 3,
+    "known_spent": "0.003144",
+    "unknown_requests": 0
+  },
+  "source_after": {
+    "revision": "e907f42282ee69a35b49fdaff9f0d99a8edfdebc",
+    "working_tree_dirty": true,
+    "source_sha256": "d2762fe1c4a698ef4efd5f61f13b582729c2ca80f4b8239f7d73b71f419b6a36"
+  },
+  "source_consistent": true
+}

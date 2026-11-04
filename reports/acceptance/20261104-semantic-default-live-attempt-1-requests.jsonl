@@ -1,0 +1,2 @@
+{"request": 1, "case_id": null, "status": "started", "ts": "2026-11-04T07:22:59.428332+00:00", "billing": null}
+{"request": 1, "case_id": null, "status": "unknown", "ts": "2026-11-04T07:23:29.384764+00:00", "billing": {"currency": "CNY", "estimated_amount": null, "pricing_source": "agent_core.prices", "cache_assumption": "unknown_usage", "complete": false}}

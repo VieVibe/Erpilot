@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 from agent_core.testing import make_client
 from evals.cases import ALL_CASES
@@ -59,7 +60,10 @@ async def test_baseline_checkpoint_survives_later_setup_failure(tmp_path, monkey
         "now": "2026-10-07T12:00:00+08:00",
         "fresh_database_per_case": True,
     }
-    assert payload["suite"]["case_traces"][ALL_CASES[0].id] == tmp_path.resolve().as_posix()
+    # Reports deliberately use relative paths for traces inside the checkout.
+    # Compare their destination so --basetemp works both inside and outside it.
+    trace_ref = payload["suite"]["case_traces"][ALL_CASES[0].id]
+    assert Path(trace_ref).resolve() == tmp_path.resolve()
 
 
 

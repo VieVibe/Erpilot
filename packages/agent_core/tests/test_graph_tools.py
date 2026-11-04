@@ -14,6 +14,26 @@ class Params(BaseModel):
     value: int
 
 
+async def test_per_tool_deadline_does_not_extend_other_tools():
+    async def delayed(args):
+        await asyncio.sleep(0.02)
+        return {"value": args.value}
+
+    tools = {name: Tool(name, name, Params, delayed) for name in ("candidate", "ordinary")}
+    config = LoopConfig(tool_timeout=0.001, tool_timeouts={"candidate": 1},
+                        retry=ToolRetryPolicy(retries=0))
+    call = {"id": "request", "arguments": {"value": 7}}
+    assert (await execute_tool_call({**call, "name": "candidate"}, tools, config))["ok"]
+    result = await execute_tool_call({**call, "name": "ordinary"}, tools, config)
+    assert not result["ok"] and "timeout" in result["content"]
+
+
+@pytest.mark.parametrize("seconds", [0, -1, float("nan"), float("inf"), True, "60"])
+def test_per_tool_deadline_rejects_unsafe_values(seconds):
+    with pytest.raises(ValueError, match="per-tool timeouts"):
+        LoopConfig(tool_timeouts={"candidate": seconds})
+
+
 @pytest.mark.parametrize("risk", [None, "confirm"])
 async def test_application_constraint_rejection_skips_execution_and_approval(risk):
     invoked = []

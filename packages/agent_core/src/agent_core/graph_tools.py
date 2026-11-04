@@ -126,6 +126,7 @@ async def execute_tool_call(call, tools, config, *, allow_retries=True):
         return deepcopy(call)
     tool = tools[call["name"]]
     policy = config.retry
+    timeout = config.tool_timeouts.get(call["name"], config.tool_timeout)
     retries = policy.retries if allow_retries and (tool.risk is None or tool.retry_safe) else 0
     content, ok = "", False
     for attempt in range(retries + 1):
@@ -140,10 +141,10 @@ async def execute_tool_call(call, tools, config, *, allow_retries=True):
                 execution = tool.validated_handler(args, deepcopy(call["argument_evidence"]))
             else:
                 execution = tool.handler(args)
-            result = await asyncio.wait_for(execution, config.tool_timeout)
+            result = await asyncio.wait_for(execution, timeout)
         except TimeoutError:
             kind = "timeout"
-            content = error_payload(kind, f"工具执行超时（>{config.tool_timeout}s）")
+            content = error_payload(kind, f"工具执行超时（>{timeout}s）")
         except Exception as exc:
             kind = "execution"
             content = error_payload(kind, f"工具执行出错：{exc}")

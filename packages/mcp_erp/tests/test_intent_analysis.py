@@ -591,6 +591,37 @@ async def test_display_reference_binds_actual_sku_or_clarifies_before_atomic_sav
     assert next(r for r in order.items if r.sku == sku).quantity == 5
 
 
+@pytest.mark.parametrize("source,allowed", [
+    ("把第二行 K1（机械键盘）改成 2 件，其他不变", True),
+    ("把 K1（机械键盘）改成两件，其他信息保持不变", True),
+    ("把当前版本第二行改成两件，其他信息保持不变", True),
+    ("把第一行 K1（机械键盘）改成两件，其他不变", False),
+    ("把第二行 K1（标准耳机）改成两件，其他不变", False),
+    ("不要把第二行 K1（机械键盘）改成两件，其他不变", False),
+    ("如果需要，把第二行 K1（机械键盘）改成两件，其他不变", False),
+    ("把第二行 K1（机械键盘）改成两件，其他信息保持不变，删除第一行", False),
+])
+async def test_explicit_sku_with_row_and_label_is_verified_as_one_target(store, source, allowed):
+    provider, engine = store
+    draft = provider.drafts.prepare("s", "客户甲", [("R1", 2), ("K1", 1)], "原备注",
+                                    budget_limit=5000, evidence={"contract": "draft-form-1"})
+    history = [{"name": "get_order_task", "ok": True,
+                "content": json.dumps(provider.drafts.task_state("s"))}]
+    args = {"draft_id": draft["draft_id"], "expected_revision": 1,
+            "item_number": 2, "expected_sku": "K1", "quantity": 2}
+    before = snapshot_all(engine)
+    result, _ = await invoke(provider, source, "revise_order_draft_quantity", args, history)
+    assert result["ok"] is allowed, result
+    if allowed:
+        saved = json.loads(result["content"])
+        assert saved["revision"] == 2
+        assert [row["quantity"] for row in saved["items"]] == [2, 2]
+        assert saved["note"] == "原备注" and saved["budget_limit"] == 5000
+        assert snapshot_all(engine)["stocks"] == before["stocks"]
+    else:
+        assert snapshot_all(engine) == before
+
+
 @pytest.mark.parametrize("fault", ["text_only", "fake_snapshot", "wrong_tool", "missing_call"])
 async def test_unqualified_row_needs_a_real_matching_display_observation(store, fault):
     provider, engine = store

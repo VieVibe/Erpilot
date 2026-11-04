@@ -4,7 +4,8 @@ import zhCN from 'antd/locale/zh_CN';
 import 'antd/dist/reset.css';
 import App from './App';
 import { workspaceTheme } from './theme';
+import { AuthBoundary } from './AuthBoundary';
 
 createRoot(document.getElementById('root')!).render(
-  <ConfigProvider locale={zhCN} theme={workspaceTheme} button={{ autoInsertSpace: false }}><App /></ConfigProvider>,
+  <ConfigProvider locale={zhCN} theme={workspaceTheme} button={{ autoInsertSpace: false }}><AuthBoundary><App /></AuthBoundary></ConfigProvider>,
 );

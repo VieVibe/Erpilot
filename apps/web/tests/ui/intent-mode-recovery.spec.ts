@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 
-for(const width of [320,1440])test(`回退恢复 ${width}px 只能重新核对且无保存入口`,async({page})=>{
+for(const width of [320,1440])test(`回退恢复 ${width}px 只能重新核对且无保存入口`,async({page},testInfo)=>{
   await page.setViewportSize({width,height:1000});
   const posts:string[]=[];
   const preview={schema_version:1,pending_id:'a'.repeat(32),state_version:2,status:'needs_recheck',
@@ -24,5 +24,5 @@ for(const width of [320,1440])test(`回退恢复 ${width}px 只能重新核对�
   await expect(page.getByRole('dialog',{name:'核对待完成请求',exact:true})).not.toBeVisible();
   expect(posts).toHaveLength(0);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-  await page.screenshot({path:`../../reports/acceptance/20261102-intent-mode-recovery-${width}.png`,fullPage:true,animations:'disabled'});
+  await page.screenshot({path:testInfo.outputPath(`intent-mode-recovery-${width}.png`),fullPage:true,animations:'disabled'});
 });
