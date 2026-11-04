@@ -1,0 +1,19 @@
+{
+  "passed": false,
+  "complete": false,
+  "scope": "interrupted ASGI test harness, not a model quality failure",
+  "reason": "ASGITransport buffers a pending-approval SSE response; harness interrupted before approval. Replaced by real loopback HTTP.",
+  "journal_audit": {
+    "requests": 2,
+    "known_spent": "0.001966",
+    "unknown_requests": 0
+  },
+  "order_count_for_test_customer": 0,
+  "inventory_unchanged": true,
+  "test_account_revoked": true,
+  "source_at_interruption": {
+    "revision": "e907f42282ee69a35b49fdaff9f0d99a8edfdebc",
+    "working_tree_dirty": true,
+    "source_sha256": "95d18d84cb4cd42aafc194d271070c7eb81aebd9a4dad6c7251a096aee3e51db"
+  }
+}

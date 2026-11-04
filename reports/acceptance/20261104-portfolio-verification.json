@@ -1,0 +1,124 @@
+{
+  "format": "erpilot-offline-verification-1",
+  "status": "passed",
+  "steps": [
+    {
+      "name": "Python 静态检查",
+      "command": [
+        "F:\\VIE\\Erpilot\\.venv\\Scripts\\python.exe",
+        "-m",
+        "ruff",
+        "check",
+        "."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 0.094
+    },
+    {
+      "name": "Python 离线测试",
+      "command": [
+        "F:\\VIE\\Erpilot\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-m",
+        "not eval",
+        "--basetemp=F:\\VIE\\Erpilot\\artifacts\\verification\\20261104T030400Z-52b9e4ca\\tmp",
+        "-o",
+        "cache_dir=F:\\VIE\\Erpilot\\artifacts\\verification\\20261104T030400Z-52b9e4ca\\cache",
+        "--junitxml=F:\\VIE\\Erpilot\\artifacts\\verification\\20261104T030400Z-52b9e4ca\\python.xml"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 508.516
+    },
+    {
+      "name": "前端协议与渲染测试",
+      "command": [
+        "F:\\software\\node-v22.23.3-win-x64\\npm.cmd",
+        "--prefix",
+        "F:\\VIE\\Erpilot\\apps\\web",
+        "test"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 3.453
+    },
+    {
+      "name": "构建前端",
+      "command": [
+        "F:\\software\\node-v22.23.3-win-x64\\npm.cmd",
+        "--prefix",
+        "F:\\VIE\\Erpilot\\apps\\web",
+        "run",
+        "build"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 10.141
+    },
+    {
+      "name": "十一场景离线业务验收",
+      "command": [
+        "F:\\VIE\\Erpilot\\.venv\\Scripts\\python.exe",
+        "scripts/demo.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 7.609
+    },
+    {
+      "name": "安装匹配的 Chromium",
+      "command": [
+        "F:\\software\\node-v22.23.3-win-x64\\npm.cmd",
+        "--prefix",
+        "F:\\VIE\\Erpilot\\apps\\web",
+        "exec",
+        "--",
+        "playwright",
+        "install",
+        "chromium"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 0.937
+    },
+    {
+      "name": "浏览器工作台回归",
+      "command": [
+        "F:\\software\\node-v22.23.3-win-x64\\npm.cmd",
+        "--prefix",
+        "F:\\VIE\\Erpilot\\apps\\web",
+        "run",
+        "test:ui",
+        "--",
+        "--workers=2"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 45.641
+    },
+    {
+      "name": "真实 API 离线浏览器验收",
+      "command": [
+        "F:\\software\\node-v22.23.3-win-x64\\npm.cmd",
+        "--prefix",
+        "F:\\VIE\\Erpilot\\apps\\web",
+        "run",
+        "test:demo"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 11.969
+    }
+  ],
+  "started_at": "2026-11-04T03:04:00.777124+00:00",
+  "live_model_evaluation": false,
+  "postgres_configured": true,
+  "browser_requested": true,
+  "lock_sha256": {
+    "uv.lock": "ac80ad921c60d96f36dae028678b5a9434da08d2d7decc80b28c9bf445063d52",
+    "apps/web/package-lock.json": "c5799bf01fd984fcf77c82876fd759c9153fc34c6333cc7013759fd856a3b06f"
+  },
+  "finished_at": "2026-11-04T03:13:49.123009+00:00"
+}

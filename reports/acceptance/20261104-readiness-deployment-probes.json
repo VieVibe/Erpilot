@@ -1,0 +1,63 @@
+{
+  "project": "erpilot-readiness-20261104",
+  "image_id": "sha256:799a3a721541f8910b5a3716141be0bc5795ee5eff7db04ae8852fa24d574042",
+  "image_created": "2026-11-04T04:44:11.092735124Z",
+  "image_size_bytes": 713597771,
+  "image_credentials_absent": true,
+  "configured_runtime": "scripted",
+  "single_api_process": true,
+  "live_startup": {
+    "mode": "live",
+    "readiness": {
+      "status": "ready",
+      "runtime": "live",
+      "authentication": true
+    },
+    "runtime": {
+      "auth_enabled": true,
+      "data_source": "mcp",
+      "writes_enabled": false,
+      "reasoning_enabled": false,
+      "drafts_enabled": true,
+      "business_approvals_enabled": false
+    },
+    "non_root": true,
+    "read_only_root": true,
+    "loopback_only": true,
+    "no_generation_requests": true,
+    "model_credentials_absent": false
+  },
+  "scripted_startup": {
+    "mode": "scripted",
+    "readiness": {
+      "status": "ready",
+      "runtime": "scripted",
+      "authentication": true
+    },
+    "runtime": {
+      "auth_enabled": true,
+      "scripted_demo": true,
+      "demo_persistent": true,
+      "data_source": "mcp",
+      "writes_enabled": false,
+      "reasoning_enabled": false,
+      "drafts_enabled": true,
+      "business_approvals_enabled": true
+    },
+    "non_root": true,
+    "read_only_root": true,
+    "loopback_only": true,
+    "no_generation_requests": true,
+    "model_credentials_absent": true
+  },
+  "dependency_outage": {
+    "healthz": 200,
+    "readyz": 503
+  },
+  "dependency_recovered": {
+    "status": "ready",
+    "runtime": "scripted",
+    "authentication": true
+  },
+  "scope": "Linux container on Windows Docker Desktop; live probe made no model-generation requests"
+}

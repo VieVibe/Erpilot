@@ -1,0 +1,4 @@
+{"request": 1, "case_id": "authenticated-create-confirm-approve", "status": "started", "ts": "2026-11-04T06:34:12.804711+00:00", "billing": null}
+{"request": 1, "case_id": "authenticated-create-confirm-approve", "status": "settled", "ts": "2026-11-04T06:34:30.421507+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000892", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 2, "case_id": "authenticated-create-confirm-approve", "status": "started", "ts": "2026-11-04T06:34:30.530772+00:00", "billing": null}
+{"request": 2, "case_id": "authenticated-create-confirm-approve", "status": "settled", "ts": "2026-11-04T06:34:55.572561+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.001074", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}

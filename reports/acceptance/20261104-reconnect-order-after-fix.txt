@@ -1,0 +1,64 @@
+budget-denial-restore/1: PASS; known=0.002667 CNY; unknown=0
+budget-denial-restore/2: PASS; known=0.004749 CNY; unknown=0
+budget-denial-restore/3: PASS; known=0.007774 CNY; unknown=0
+Exception ignored in: <async_generator object BoundAsyncStream.__aiter__ at 0x000001848D6662F0>
+Traceback (most recent call last):
+  File "F:\VIE\Erpilot\.venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 324, in _compiler
+    def _compiler(self, dialect: Dialect, **kw: Any) -> Compiled:
+
+ValueError: async generator already executing
+budget-denial-restore/4: PASS; known=0.009801 CNY; unknown=0
+budget-denial-restore/5: PASS; known=0.009801 CNY; unknown=0
+budget-denial-restore/6: PASS; known=0.009801 CNY; unknown=0
+Exception ignored in: <async_generator object AsyncResponseStream.__aiter__ at 0x000001848F1C1B60>
+Traceback (most recent call last):
+  File "F:\VIE\Erpilot\.venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 596, in _load_on_pk_identity
+    for id_val, primary_key in zip(
+                               ^^^^
+ValueError: async generator already executing
+budget-denial-restore/7: PASS; known=0.011498 CNY; unknown=0
+budget-denial-restore/8: PASS; known=0.012388 CNY; unknown=0
+budget-denial-restore/9: PASS; known=0.014320 CNY; unknown=0
+price-change-review/1: PASS; known=0.016101 CNY; unknown=0
+Exception ignored in: <async_generator object Response.aiter_raw at 0x000001848F63A240>
+Traceback (most recent call last):
+  File "F:\VIE\Erpilot\.venv\Lib\site-packages\sqlalchemy\orm\context.py", line 1107, in _create_orm_context
+    @classmethod
+
+ValueError: async generator already executing
+price-change-review/2: PASS; known=0.017980 CNY; unknown=0
+price-change-review/3: PASS; known=0.017980 CNY; unknown=0
+price-change-review/4: PASS; known=0.017980 CNY; unknown=0
+price-change-review/5: PASS; known=0.019731 CNY; unknown=0
+price-change-review/6: PASS; known=0.022681 CNY; unknown=0
+Exception ignored in: <async_generator object Response.aiter_raw at 0x000001848F9908C0>
+Traceback (most recent call last):
+  File "F:\VIE\Erpilot\.venv\Lib\site-packages\sqlalchemy\sql\visitors.py", line 116, in _compiler_dispatch
+    def _compiler_dispatch(
+
+ValueError: async generator already executing
+price-change-review/7: PASS; known=0.024662 CNY; unknown=0
+price-change-review/8: PASS; known=0.025678 CNY; unknown=0
+price-change-review/9: PASS; known=0.027542 CNY; unknown=0
+ambiguity-and-selection/1: PASS; known=0.029290 CNY; unknown=0
+ambiguity-and-selection/2: PASS; known=0.031257 CNY; unknown=0
+ambiguity-and-selection/3: PASS; known=0.033241 CNY; unknown=0
+ambiguity-and-selection/4: PASS; known=0.037965 CNY; unknown=0
+ambiguity-and-selection/5: PASS; known=0.041043 CNY; unknown=0
+ambiguity-and-selection/6: PASS; known=0.042042 CNY; unknown=0
+ambiguity-and-selection/7: PASS; known=0.044064 CNY; unknown=0
+version-change-and-replay/1: PASS; known=0.045848 CNY; unknown=0
+version-change-and-replay/2: PASS; known=0.047709 CNY; unknown=0
+version-change-and-replay/3: PASS; known=0.047709 CNY; unknown=0
+version-change-and-replay/4: PASS; known=0.047709 CNY; unknown=0
+Exception ignored in: <async_generator object BoundAsyncStream.__aiter__ at 0x000001848D68BF10>
+Traceback (most recent call last):
+  File "F:\VIE\Erpilot\.venv\Lib\site-packages\sqlalchemy\sql\selectable.py", line 4955, in _column_naming_convention
+    names = set()
+            ^^^^^
+ValueError: async generator already executing
+version-change-and-replay/5: PASS; known=0.049451 CNY; unknown=0
+version-change-and-replay/6: PASS; known=0.049451 CNY; unknown=0
+version-change-and-replay/7: PASS; known=0.050346 CNY; unknown=0
+version-change-and-replay/8: PASS; known=0.050346 CNY; unknown=0
+version-change-and-replay/9: PASS; known=0.052260 CNY; unknown=0

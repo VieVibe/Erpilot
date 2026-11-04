@@ -1,0 +1,472 @@
+{
+  "suite": "intent-revision-live-1",
+  "label_status": "engineering_expectations",
+  "fixture_sha256": "af8b779fc34c19e9cd85de611a805b96f6023ba3ed38251f0e708f00028c0a8c",
+  "model": "glm-5.3-flash",
+  "endpoint_host": "flashcoding.ai",
+  "currency": "CNY",
+  "limit": "0.020",
+  "max_requests": 5,
+  "source_before": {
+    "revision": "e907f42282ee69a35b49fdaff9f0d99a8edfdebc",
+    "working_tree_dirty": true,
+    "source_sha256": "0fbead5574cde8888a7336df63649d2f54d51a00b7bee7b6175497d86b574c41"
+  },
+  "cases": [
+    {
+      "id": "revise_full",
+      "text": "调整机械键盘到六个，预算改为1200元，备注改为『加急😀』。",
+      "expected": {
+        "customer": "原客户",
+        "note": "加急😀",
+        "budget_limit": 1200.0,
+        "items": [
+          [
+            "K1",
+            6
+          ],
+          [
+            "M1",
+            3
+          ]
+        ]
+      },
+      "actual": {
+        "customer": "原客户",
+        "note": "加急😀",
+        "budget_limit": 1200.0,
+        "items": [
+          [
+            "K1",
+            6
+          ],
+          [
+            "M1",
+            3
+          ]
+        ]
+      },
+      "preview": {
+        "schema_version": 1,
+        "pending_id": "a625e28b485340a494123247da846e20",
+        "state_version": 1,
+        "expires_at": "2026-11-04T06:29:21.942383+00:00",
+        "status": "pending",
+        "can_confirm": true,
+        "clarification_attempts": 0,
+        "customer": "原客户",
+        "note": "加急😀",
+        "budget_limit": 1200.0,
+        "items": [
+          {
+            "sku": "K1",
+            "quantity": 6,
+            "item_number": 1,
+            "product_query": "机械键盘",
+            "name": "机械键盘",
+            "candidates": []
+          },
+          {
+            "sku": "M1",
+            "quantity": 3,
+            "item_number": 2,
+            "product_query": "光学鼠标",
+            "name": "光学鼠标",
+            "candidates": []
+          }
+        ],
+        "message": "以下是待核对的候选字段。请对照完整原话检查全部要求，补齐或修改后按此完整清单保存草稿。",
+        "operation": "revise",
+        "before_fields": {
+          "customer": "原客户",
+          "note": "原备注",
+          "budget_limit": 1000.0,
+          "items": [
+            {
+              "sku": "K1",
+              "quantity": 2
+            },
+            {
+              "sku": "M1",
+              "quantity": 3
+            }
+          ]
+        },
+        "target": {
+          "draft_id": "a50e7038e44043c28d1a7c9928706f63",
+          "revision": 1
+        },
+        "origin": "semantic_proposal",
+        "source_text": "调整机械键盘到六个，预算改为1200元，备注改为『加急😀』。",
+        "unmapped_text": "到  ，预算改为     ，备注改为『   』。"
+      },
+      "status": "passed",
+      "passed": true,
+      "requests": 1,
+      "duration_ms": 21646.559
+    },
+    {
+      "id": "revise_quantity",
+      "text": "调整光学鼠标到五个，其他保持不变。",
+      "expected": {
+        "customer": "原客户",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          [
+            "K1",
+            2
+          ],
+          [
+            "M1",
+            5
+          ]
+        ]
+      },
+      "actual": {
+        "customer": "原客户",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          [
+            "K1",
+            2
+          ],
+          [
+            "M1",
+            5
+          ]
+        ]
+      },
+      "preview": {
+        "schema_version": 1,
+        "pending_id": "1b4dd55230b04fea92c01de0302539a1",
+        "state_version": 1,
+        "expires_at": "2026-11-04T06:29:51.612811+00:00",
+        "status": "pending",
+        "can_confirm": true,
+        "clarification_attempts": 0,
+        "customer": "原客户",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "K1",
+            "quantity": 2,
+            "item_number": 1,
+            "product_query": "机械键盘",
+            "name": "机械键盘",
+            "candidates": []
+          },
+          {
+            "sku": "M1",
+            "quantity": 5,
+            "item_number": 2,
+            "product_query": "光学鼠标",
+            "name": "光学鼠标",
+            "candidates": []
+          }
+        ],
+        "message": "以下是待核对的候选字段。请对照完整原话检查全部要求，补齐或修改后按此完整清单保存草稿。",
+        "operation": "revise",
+        "before_fields": {
+          "customer": "原客户",
+          "note": "原备注",
+          "budget_limit": 1000.0,
+          "items": [
+            {
+              "sku": "K1",
+              "quantity": 2
+            },
+            {
+              "sku": "M1",
+              "quantity": 3
+            }
+          ]
+        },
+        "target": {
+          "draft_id": "b80dde20242243f8a6819f3baf7aeb99",
+          "revision": 1
+        },
+        "origin": "semantic_proposal",
+        "source_text": "调整光学鼠标到五个，其他保持不变。",
+        "unmapped_text": "到  ，其他保持不变。"
+      },
+      "status": "passed",
+      "passed": true,
+      "requests": 1,
+      "duration_ms": 29665.834
+    },
+    {
+      "id": "revise_scalars",
+      "text": "调整预算到800元，备注改为『先别提交😀』。",
+      "expected": {
+        "customer": "原客户",
+        "note": "先别提交😀",
+        "budget_limit": 800.0,
+        "items": [
+          [
+            "K1",
+            2
+          ],
+          [
+            "M1",
+            3
+          ]
+        ]
+      },
+      "actual": {
+        "customer": "原客户",
+        "note": "先别提交😀",
+        "budget_limit": 800.0,
+        "items": [
+          [
+            "K1",
+            2
+          ],
+          [
+            "M1",
+            3
+          ]
+        ]
+      },
+      "preview": {
+        "schema_version": 1,
+        "pending_id": "66095eccf5a54bbd841281daa121a239",
+        "state_version": 1,
+        "expires_at": "2026-11-04T06:30:03.433163+00:00",
+        "status": "pending",
+        "can_confirm": true,
+        "clarification_attempts": 0,
+        "customer": "原客户",
+        "note": "先别提交😀",
+        "budget_limit": 800.0,
+        "items": [
+          {
+            "sku": "K1",
+            "quantity": 2,
+            "item_number": 1,
+            "product_query": "机械键盘",
+            "name": "机械键盘",
+            "candidates": []
+          },
+          {
+            "sku": "M1",
+            "quantity": 3,
+            "item_number": 2,
+            "product_query": "光学鼠标",
+            "name": "光学鼠标",
+            "candidates": []
+          }
+        ],
+        "message": "以下是待核对的候选字段。请对照完整原话检查全部要求，补齐或修改后按此完整清单保存草稿。",
+        "operation": "revise",
+        "before_fields": {
+          "customer": "原客户",
+          "note": "原备注",
+          "budget_limit": 1000.0,
+          "items": [
+            {
+              "sku": "K1",
+              "quantity": 2
+            },
+            {
+              "sku": "M1",
+              "quantity": 3
+            }
+          ]
+        },
+        "target": {
+          "draft_id": "c4734b89a8104a04becf3897de7a82da",
+          "revision": 1
+        },
+        "origin": "semantic_proposal",
+        "source_text": "调整预算到800元，备注改为『先别提交😀』。",
+        "unmapped_text": "预算到    ，备注改为『     』。"
+      },
+      "status": "passed",
+      "passed": true,
+      "requests": 1,
+      "duration_ms": 11823.767
+    },
+    {
+      "id": "revision_condition",
+      "text": "如果客户确认，调整机械键盘到六个。",
+      "expected": null,
+      "actual": null,
+      "preview": null,
+      "status": "passed",
+      "passed": true,
+      "requests": 0,
+      "duration_ms": 1.42
+    },
+    {
+      "id": "revision_negated",
+      "text": "别改机械键盘，预算改为1200元。",
+      "expected": null,
+      "actual": null,
+      "preview": null,
+      "status": "passed",
+      "passed": true,
+      "requests": 0,
+      "duration_ms": 2.777
+    },
+    {
+      "id": "revision_question",
+      "text": "能不能调整机械键盘到六个？",
+      "expected": null,
+      "actual": null,
+      "preview": null,
+      "status": "passed",
+      "passed": true,
+      "requests": 0,
+      "duration_ms": 1.294
+    }
+  ],
+  "fixture_targets": {
+    "revise_full": {
+      "draft_id": "a50e7038e44043c28d1a7c9928706f63",
+      "revision": 1
+    },
+    "revise_quantity": {
+      "draft_id": "b80dde20242243f8a6819f3baf7aeb99",
+      "revision": 1
+    },
+    "revise_scalars": {
+      "draft_id": "c4734b89a8104a04becf3897de7a82da",
+      "revision": 1
+    },
+    "revision_condition": {
+      "draft_id": "3910e263716942028e3a06e6b7580f34",
+      "revision": 1
+    },
+    "revision_negated": {
+      "draft_id": "c3e4b8d406774228b9d8221b5936f357",
+      "revision": 1
+    },
+    "revision_question": {
+      "draft_id": "d68e5d1bed85435e9a4eba48ec98bbb7",
+      "revision": 1
+    }
+  },
+  "business_unchanged": true,
+  "requests": [
+    {
+      "request": 1,
+      "case_id": null,
+      "status": "settled",
+      "ts": "2026-11-04T06:19:21.930864+00:00",
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": "0.000404",
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "session_id": "revise_full",
+      "purpose": "intent",
+      "usage": {
+        "prompt_tokens": 1398,
+        "completion_tokens": 794,
+        "total_tokens": 2192
+      },
+      "turn_id": "revise_full",
+      "source_sha256": "63d43184f5188711b681ebc0bf078f80d5cf9276f3ddbdf8ef82a78254426730"
+    },
+    {
+      "request": 2,
+      "case_id": null,
+      "status": "settled",
+      "ts": "2026-11-04T06:19:51.604413+00:00",
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": "0.000556",
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "session_id": "revise_quantity",
+      "purpose": "intent",
+      "usage": {
+        "prompt_tokens": 1386,
+        "completion_tokens": 1243,
+        "total_tokens": 2629
+      },
+      "turn_id": "revise_quantity",
+      "source_sha256": "ca331a0dfcd3bbf3fcedb5b614d34970634aee14726159f12b3286315be13952"
+    },
+    {
+      "request": 3,
+      "case_id": null,
+      "status": "settled",
+      "ts": "2026-11-04T06:20:03.411659+00:00",
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": "0.000232",
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "session_id": "revise_scalars",
+      "purpose": "intent",
+      "usage": {
+        "prompt_tokens": 1387,
+        "completion_tokens": 292,
+        "total_tokens": 1679
+      },
+      "turn_id": "revise_scalars",
+      "source_sha256": "ad858fcab71ef89729107064affdfe52083838468486064fabda6be65e978b30"
+    }
+  ],
+  "attempts": [
+    {
+      "status": "preview",
+      "source_sha256": "63d43184f5188711b681ebc0bf078f80d5cf9276f3ddbdf8ef82a78254426730",
+      "ts": "2026-11-04T06:19:00.318420+00:00",
+      "pending_ref": {
+        "pending_id": "a625e28b485340a494123247da846e20",
+        "state_version": 1
+      },
+      "duration_ms": 21624.6766,
+      "semantic_version": "order-revise-proposal-1",
+      "prompt_version": "order-revise-proposal-prompt-1",
+      "prompt_sha256": "2f1f83f79130e5170220f2e754a3e52ac3d8068e1ed516c6b01e17e6823a789f"
+    },
+    {
+      "status": "preview",
+      "source_sha256": "ca331a0dfcd3bbf3fcedb5b614d34970634aee14726159f12b3286315be13952",
+      "ts": "2026-11-04T06:19:21.961354+00:00",
+      "pending_ref": {
+        "pending_id": "1b4dd55230b04fea92c01de0302539a1",
+        "state_version": 1
+      },
+      "duration_ms": 29651.1836,
+      "semantic_version": "order-revise-proposal-1",
+      "prompt_version": "order-revise-proposal-prompt-1",
+      "prompt_sha256": "2f1f83f79130e5170220f2e754a3e52ac3d8068e1ed516c6b01e17e6823a789f"
+    },
+    {
+      "status": "preview",
+      "source_sha256": "ad858fcab71ef89729107064affdfe52083838468486064fabda6be65e978b30",
+      "ts": "2026-11-04T06:19:51.626205+00:00",
+      "pending_ref": {
+        "pending_id": "66095eccf5a54bbd841281daa121a239",
+        "state_version": 1
+      },
+      "duration_ms": 11808.1427,
+      "semantic_version": "order-revise-proposal-1",
+      "prompt_version": "order-revise-proposal-prompt-1",
+      "prompt_sha256": "2f1f83f79130e5170220f2e754a3e52ac3d8068e1ed516c6b01e17e6823a789f"
+    }
+  ],
+  "known_spent": "0.001192",
+  "unknown_usage": false,
+  "provider_requests": 3,
+  "source_after": {
+    "revision": "e907f42282ee69a35b49fdaff9f0d99a8edfdebc",
+    "working_tree_dirty": true,
+    "source_sha256": "0fbead5574cde8888a7336df63649d2f54d51a00b7bee7b6175497d86b574c41"
+  },
+  "source_unchanged": true,
+  "passed": true
+}

@@ -1,7 +1,8 @@
 # 意图识别：规则、澄清续接与版本指代
 
 2026-10-28。对应[设计](plans/2026-10-28-intent-analysis-design.md)的 P0/P1 首批实现。
-默认不调用额外意图模型。创建语义候选现提供独立、显式配置的 API 入口；默认模式仍为 `off`。
+本页保留分阶段记录。11-04 收尾后真实 API 默认 enforce 并接入创建/修改语义预览；
+规则完整识别时不调用候选模型。[当前配置与启用依据](semantic-parsing.md)。
 本轮结果及逐例证据见[工程验收](../reports/acceptance/2026-10-28-intent-analysis.md)。
 后续 P1 的增量续接和展示指代见[续接验收](../reports/acceptance/2026-10-28-intent-p1-continuation.md)。
 独立字段补充、直接 SKU 选择与重放保护见[独立补槽验收](../reports/acceptance/2026-10-28-intent-p1-slots.md)。
@@ -15,9 +16,9 @@
 
 ## 使用
 
-API 的真实 ERP 工具源使用 `ERPILOT_INTENT_MODE=off|shadow|enforce`，默认 `off`。
+API 的真实 ERP 工具源使用 `ERPILOT_INTENT_MODE=off|shadow|enforce`，正式入口默认 `enforce`。
 也可在 `SessionErpTools.create(path, intent_mode="enforce")` 显式注入。
-修改环境设置后重启 API；普通 `.env` 和用户数据库未在本批改动。
+修改环境设置后重启 API；低层工厂仍需显式参数接入，独立 CLI/MCP 不隐式增加付费候选。
 
 - `off`：原有工具、参数校验和来源契约。
 - `shadow`：调用旧参数校验，共享规则的 `intent_shadow` 结果同时进入本地诊断；无新增元数据表、供应商请求或新执行行为。
@@ -116,8 +117,10 @@ SKU 与另一商品名称相同仍计为多个匹配，截断候选不能靠编�
 ## 验证及尚未完成的范围
 
 运行 `python -m evals.intent_analysis --output reports/acceptance/intent-core.json` 可离线检查 120 条
-工程样本（60 可推进、60 必须澄清），包括完整期望快照。标签明确为
-`engineering_expectations_pending_human_review`；它们不是已人工复核的语义金标，不能用作真实模型准确率。
+工程样本（60可推进、60需澄清），包括完整期望快照。当前标签为
+`ai_reviewed_engineering_reference`，120条已按用户委托由AI审核完成，无用户待审项。
+原文件的历史标签单列为 `fixture_label_status` 保留。它们不是真人语义金标，不能用作通用模型准确率。
+[审核结果、6条范围说明与验证命令](label-review.md)。
 旧验收、scorer 和金标未改动。专项验证另覆盖跨会话、刷新恢复、过期、候选变化、来源篡改、重复消费、
 事务回滚、原子修改、回退提交和工具阶段限制。
 
@@ -271,6 +274,8 @@ GET 预览与会话恢复可只读展示“需重新核对”，can_confirm=fals
 原有进程硬退出和恢复专项也使用隔离 PostgreSQL 执行，不再因缺配置跳过。
 完整证据及环境清理见[恢复验收](../reports/acceptance/2026-11-02-intent-mode-recovery.md)。
 
-人工复核包位于 [120 例核对表](../reports/review/20261102-intent-core/review.md)，原冻结数据未修改。
-用户本轮明确选择暂未复核，继续保留工程预期标签；默认仍 off。
+历史人工复核包位于 [11-02待审表](../reports/review/20261102-intent-core/review.md)，原冻结数据未修改。
+当前已由用户委托AI完成审核，见[120条已审核表](../reports/review/20261104-intent-label-audit/review.md)。
+11-02 当时选择暂未复核、保持 off；11-04 已按 ADR-0013 默认接入预览，
+原工程预期标签及旧批次判定保持不变。
 真实创建新批次首笔推理连接失败、缺 usage 后停止，修改新批次未启动，没有通过重建账本绕开未知费用。

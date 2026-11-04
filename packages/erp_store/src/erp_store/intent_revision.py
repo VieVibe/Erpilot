@@ -11,8 +11,8 @@ from erp_store.intent_contract import digest
 from erp_store.intent_rules import field_values
 from erp_store.intent_semantic import validate_proposal
 
-REVISION_SEMANTIC_VERSION = "order-revise-proposal-1"
-REVISION_PROMPT_VERSION = "order-revise-proposal-prompt-1"
+REVISION_SEMANTIC_VERSION = "order-revise-proposal-2"
+REVISION_PROMPT_VERSION = "order-revise-proposal-prompt-3"
 
 
 def revision_target(session, session_id, draft_id, revision, now):

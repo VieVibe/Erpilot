@@ -21,6 +21,37 @@ from agent_core.testing import USAGE, chunk, make_client, sse_response, tool_cal
 from pydantic import BaseModel, ValidationError
 
 
+async def test_closing_consumer_immediately_releases_the_http_stream():
+    """Cancellation after a partial answer must not wait for async-generator GC."""
+    from openai import AsyncOpenAI
+
+    class OpenResponse(httpx2.AsyncByteStream):
+        closed = False
+
+        async def __aiter__(self):
+            yield ("data: " + json.dumps(chunk(delta={"content": "partial"})) + "\n\n").encode()
+
+        async def aclose(self):
+            self.closed = True
+
+    wire = OpenResponse()
+    sdk = AsyncOpenAI(api_key="test-key", max_retries=0, http_client=httpx2.AsyncClient(
+        transport=httpx2.MockTransport(lambda request: httpx2.Response(
+            200, stream=wire, headers={"content-type": "text/event-stream"},
+        )),
+    ))
+    client = LLMClient(LLMConfig(api_key="test-key"), sdk)
+    events = client.stream_chat([{"role": "user", "content": "test"}])
+    try:
+        assert await anext(events) == TextDelta("partial")
+        assert not wire.closed
+        await events.aclose()
+        assert wire.closed
+    finally:
+        await events.aclose()
+        await sdk.close()
+
+
 async def _collect(client, *args, **kwargs) -> list:
     return [e async for e in client.stream_chat(*args, **kwargs)]
 

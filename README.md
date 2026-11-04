@@ -1,182 +1,159 @@
-# Erpilot
+# Erpilot · 会请示的 ERP 智能体
 
-> 会请示的 ERP 智能体（an approval-aware ERP agent）—— agent 应用开发求职作品集项目（2026-09 启动，工期 12 个月）
+把“给客户备一份订单”变成可核对的报价草稿，在人工批准指定版本后才真正建单、扣库存。
 
-**一句话**：运行在 mini-ERP（商品 / 库存 / 订单）上的业务智能体：FastMCP 工具层 + 分级人工审批（HITL）+ 全程评测驱动；前端提供流式对话、工具时间线与审批卡片。
+面向 **Agent 应用开发 / Python 后端工程**的求职作品。模型负责提出工具调用，应用负责核对来源、业务规则与审批，数据库负责记录最终事实。
 
-**自然商品输入（2026-10-28）**：[按名称与中文件数下单](docs/natural-order-entry.md)：完整名称 / SKU、两件 / 十二件等数量先核对商品，重名与单位不明先澄清；保存事务复核目录，网页可展开原始要求到实际商品的映射。支持当前草稿唯一商品名 / 行号的中文数量修改。Python **1446 passed / 21 skipped**、前端 97、工作台 44、正式离线浏览器 5、离线演示 11/11；[本批验收](reports/acceptance/2026-10-28-natural-order.md)无付费调用。离线页面新增“商品名称下单”按钮。
+[三分钟演示](docs/demo-guide.md) · [实际架构](docs/architecture.md) · [面试案例](docs/interview-cases.md) · [投递材料](docs/application-kit.md) · [当前状态与证据](docs/project-status.md)
 
-**最新开发与真实观察（2026-10-28）**：[订单契约 v2 与政策答复 v4](reports/acceptance/2026-10-28-contracts-and-policy.md)：政策检索受阻后由程序结束，背景条件留在所属问题中；GLM 新政策批次 **13/13**，22 请求 / usage、估价 CNY 0.015908。订单 v2 通过前三阶段，第四阶段连接中断缺 usage 后冻结，真实整单未完成。全仓 Python 1387 passed / 21 skipped；旧政策两模型各 11/13 及旧订单结果保留，DeepSeek 继续跳过。
+## 解决什么问题
 
-**前批订单真实观察（2026-10-28）**：[P0 / P1 独立 GLM 验收](reports/acceptance/2026-10-28-order-reliability-live.md) **2/4 完整流程通过**，计划 34 阶段、执行 25、通过 23；预算提前停止与同轮事项读取要求两处失败保留，原门槛未通过。38 请求 / 38 usage，估价 CNY 0.035089。
+ERP 操作里，“模型理解了”到“业务可以执行”之间有很长一段距离：商品可能重名，用户会改数量或预算，报价会过期，审批页面会刷新，业务提交后服务也可能中断。
 
-**P0 / P1 工程深化（2026-10-27）**：[创建明细核验与待确认事项](docs/order-reliability-p0-p1.md)：首次创建核对本轮完整 SKU / 件数 / 顺序，来源随版本保存；预算、版本、有效期、商品及库存变化统一回显，申请审批前与建单事务重复检查。新增独立四流程 / 34 阶段任务集；本批仅离线工程验证，真实模型结果继续独立保留。
+Erpilot 把这些问题放进一个可演示的完整流程：
 
-**最新工程深化（2026-10-22）**：[草稿商品变更核验](docs/draft-item-constraints.md)：已有草稿的数量修改须匹配本轮明确目标与件数；刷新报价或调整预算不能顺便改商品。支持明确末尾追加，错误参数在保存前被拒，检查依据与版本原子保存；[本批验收](reports/acceptance/2026-10-22-draft-item-guard.md)独立记录离线验证，不改判旧真实模型结果。
+1. 用户给出客户、商品、件数、备注与预算；应用查询真实商品和库存，生成带版本的草稿。
+2. 多轮修改保留未变字段和来源；超出预算、商品或报价条件变化时提示待确认事项。
+3. 用户核对完整版本并申请审批；批准后，事务再次复核价格、库存、版本及有效期。
+4. 同次提交使用稳定幂等键；断线后恢复原审批，结果不明时先查业务提交事实。
+5. 政策问题展示本轮有效证据和原文；没有依据时拒答。补货建议给出计算依据，不自动采购。
 
-**最新真实验收（2026-10-21 预算专项）**：[GLM 预算完整流程](reports/acceptance/2026-10-21-budget-live-validation.md) **1/1 流程、10/10 受控阶段通过**，16 请求 / 16 usage，估价 CNY 0.015244。覆盖 3000 预算 → 3200 超额停止 → 明确改至 3500 → 恢复审批建单，含备注指令隔离和最终原始预算查询。一次客户名缩写被校验拦截并纠正，未落错误草稿；DeepSeek 继续跳过。
+![离线演示：核对草稿版本 2 的完整明细后，等待独立人工审批](docs/assets/workspace-desktop.png)
 
-**预算加入前的整单验收**：[独立跨模型批次](reports/acceptance/2026-10-21-cross-model-order-acceptance.md) GLM 3/3、28/28 阶段通过；DeepSeek 上游 502 缺 usage 后按用户决定跳过，共同门槛未达成，旧结果和未知费用保留。
+截图来自实际本地离线演示：脚本模型、正式 API / MCP 和临时业务库。
 
-**当前深化（2026-10-21）**：[订单预算与待确认事项](docs/order-budget.md)。预算随版本保存，修改数量 / 刷新报价重新检查；超额展示差额并阻止提交，明确调整后重新核对和审批。[工程验收](reports/acceptance/2026-10-21-order-budget.md)：Python **1206 passed / 21 skipped**、前端 93、浏览器 31、本地正式服务演示 4 项通过；后续 GLM 真实预算专项见上方独立报告。[指定版本确认](docs/draft-confirmation.md)与[草稿来源记录](docs/draft-history.md)继续沿用。
+## 一条命令启动演示
 
-**当前入口（2026-10-19）**：[项目状态](docs/project-status.md) · [求职投递材料](docs/application-kit.md) · [统一作品交付](docs/portfolio-overview.md) · [连续多轮上下文验证](docs/context-workflow.md)。已将快照实验扩展为真实模型 / MCP 连续业务验证，结果与失败独立留证；政策问答最新严格结果仍为两模型各 11/13。
+准备 **Python 3.12+、[uv](https://docs.astral.sh/uv/getting-started/installation/)、Node.js 22+（含 npm）**，在仓库根目录运行：
 
-**求职演示入口**：[三分钟本地演示指南](docs/demo-guide.md)。无需模型密钥或 PostgreSQL，使用临时数据库展示草稿修改 → 指定版本审批 → 建单，以及政策证据、无依据拒答和补货建议。脚本化模型与关键词向量仅用于流程演示；真实模型结果见下方独立验收记录。
-
-**岗位对齐（2026-10-19）**：[近期岗位要求与项目证据](docs/job-readiness-2026-10-19.md)。新增[评测质量门槛](docs/eval-quality-gates.md)：固定用例覆盖、逐轮完整性、危险工具请求、未知计量与同模型跨版本回退检查，支持独立离线审查与 CI。[B6 真实验收](reports/acceptance/2026-10-19-live-model-validation.md)最终 GLM / DeepSeek 同源码各 7/7；[B4 指代专项最终验收](reports/acceptance/2026-10-19-b4-final-validation.md)两模型各 3/3 场景、7/7 轮，gate 与 strict 对照均通过，原失败保留。旧 B4 本地账目复核完成，供应商核销按用户要求跳过，未知费用与冻结预算保留。
-
-**检索实验**：[36 条冻结问答与 BM25/RRF 对照](docs/retrieval-experiment.md)。12 条 dev 校准、24 条 test 评估，记录召回、证据精度、语料外拒答与本地排名延迟。已完成真实查询向量采集（4 请求 / 1,038 token）与完整对照：当前向量策略 test Recall@3 96.9%、语料外空返回 87.5%，RRF 未超过当前策略，默认检索保留；这是片段检索结果，不是 36 条模型回答成功率。
-
-**回答可靠性**：[最新结构化答复与续跑验收](reports/acceptance/2026-10-19-structured-policy-and-resume.md)已实现本轮引用绑定、原文 / 版本 / 哈希校验和程序渲染；两模型完整十三例均严格 11/13，门槛仍未达成。剩余为检索受阻后的结束协议和背景条件分项；旧无观测事实声明、超时与冻结费用保留在[早期验收](reports/acceptance/2026-10-19-rag-answer-reliability.md)，不与最新结果混算。
-
-## 为什么叫 Erpilot
-
-ERP + (co)pilot。产品隐喻是一位**掌柜**：掌柜打理店铺日常——查库存、对订单、算报价，样样精通；但**动账动货的事，必须请示东家**。
-
-这正是本项目的核心设计：只读操作自动执行，低风险操作批量确认，资金相关操作单笔审批。
-
-## 技术栈
-
-当前实现：Python 3.12 · LangGraph · FastAPI · FastMCP · SQLite / SQLAlchemy ·
-PostgreSQL checkpoint · OpenAI 兼容 SDK · GLM-5.3 Flash · 本地 JSONL（可选 Langfuse sink）· React + TypeScript。
-ERP 业务数据与 API RunStore 仍在 SQLite；PostgreSQL 只保存图状态。
-
-选型理由见 [`docs/adr/0001-tech-stack.md`](docs/adr/0001-tech-stack.md)。
-
-## 仓库结构
-
-```
-├── apps/
-│   ├── api/            # FastAPI：agent 宿主、会话管理、SSE
-│   ├── cli/            # erpilot CLI：typer + rich（组合层，默认 MCP 真数据）
-│   └── web/            # React + TS：流式对话、工具时间线、审批卡片（M1 第 4 周初始化）
-├── packages/
-│   ├── agent_core/     # LangGraph 运行时（不依赖任何业务包）
-│   ├── mcp_erp/        # FastMCP Server：ERP 能力 → MCP 工具 + agent 桥
-│   ├── erp_store/      # 领域模型 + 种子数据（商品/库存/订单，SQLite）
-│   └── evals/          # 评测集 + runner + 报告
-└── docs/adr/           # 架构决策记录
+```sh
+python scripts/quickstart.py
 ```
 
-## 快速开始
+入口按 `uv.lock` 和 `package-lock.json` 安装、构建前端，再启动[本地页面](http://127.0.0.1:8765)。首次安装需要网络；演示不需要 `.env`、模型密钥、Docker 或 PostgreSQL。
 
-```bash
-# 安装 uv（若未安装）：https://docs.astral.sh/uv/
-uv sync --all-packages       # 创建虚拟环境并安装全部工作区依赖
-cp .env.example .env         # 填供应商 key，或 LLM_API_KEY + LLM_BASE_URL + LLM_MODEL
-docker compose up -d postgres # API graph checkpoint（本地演示凭据仅供开发）
-uv run pytest                # 单元测试（mock，不消耗 token）
+页面选择“创建草稿”→“修改第二行”→“提交草稿”，刷新后先拒绝，再核对版本并重新批准。也可选“商品名称下单”“政策证据”“无依据拒答”“补货建议”。[逐步讲解及预期金额](docs/demo-guide.md)。
 
-# CLI：默认经 MCP 桥查询真数据（先 seed），trace 自动落盘 traces/*.jsonl
-uv run --package erp-store python -m erp_store seed
-uv run erpilot chat "订单 123 里买了什么？还有货吗？有货的话报个价"
-uv run erpilot chat --tools demo                # 假 ERP 工具，仍调用真实模型
-uv run erpilot chat --writes "给商品 A1001 入库 5 件"  # 终端审批后写入
-uv run erpilot replay traces/<某个>.jsonl        # 把 trace 还原成可读对话
+**演示使用脚本模型、关键词演示向量及独立临时库**，经过正式 API / LangGraph / MCP / 业务事务。只支持页面提供的固定指令；它验证工程流程，真实模型表现另见独立报告。Ctrl+C 关闭，重启清空演示数据。
 
-# API + 前端：SSE 链路
-uv run --package erpilot-api python -m erpilot_api
-# 启用审批写入时再设置 ERPILOT_WRITES=1；缺少/无法连接 checkpoint DB 时 API 会拒绝启动
-# .env 设置 ERPILOT_TOOLS=mcp 连接真实 ERP，ERPILOT_THINKING=1 显示供应商思考增量。
-# 页面顶部显示数据源及写入能力；切换工具模式后使用“新会话”，避免混用旧历史。
-# 验证：http://127.0.0.1:8000/healthz
-cd apps/web && npm install && npm run dev      # http://localhost:5173
-
-# MCP server 独立进程（stdio，给外部 MCP 客户端）
-uv run --package mcp-erp python -m mcp_erp serve
-
-# 统一真实模型基线：29 读 + 3 写拒绝 + 3 脚本化审批 = 35 条（消耗 token）
-uv run python -m evals --budget 0.1 --timeout 30
-uv run python -m evals --budget 0.02 --case app-01 --case app-02  # 定点报告
-# 报告落 reports/evals/；标注标准见 docs/eval-annotation-guide.md
+```sh
+python scripts/quickstart.py doctor                    # 只读环境诊断
+python scripts/quickstart.py demo --skip-install        # 复用依赖，重新构建
+python scripts/quickstart.py demo --port 8877            # 指定端口
+python scripts/quickstart.py verify                     # 离线工程验收及日志
+python scripts/quickstart.py verify --browser            # 另含匹配浏览器与端到端验收
 ```
 
-### 无密钥演示与写入可靠性
+## 带账号和持久恢复的容器演示
 
-```bash
-uv run python scripts/demo.py                  # 十个离线场景，逐项断言并保存 trace
-uv run python scripts/demo.py --scenario order --scenario replenishment
-# 浏览器演示：先在 apps/web 中 npm ci && npm run build，再回到仓库根目录
-uv run python scripts/demo.py --serve --port 8765
-# 打开 http://127.0.0.1:8765；使用页面演示按钮填入指令并发送
-# 草稿 → 修改第二行 → 提交草稿 → 核对版本后批准/拒绝；另有政策证据与补货建议
+安装 Docker / Compose 后，在仓库根目录运行：
+
+```sh
+docker compose up --build -d --wait
+docker compose exec api python -m erpilot_api.users add demo-owner --role approver
 ```
 
-该演示使用脚本化模型和关键词演示向量，执行正式 API → LangGraph → MCP → 审批 → 临时 SQLite；
-不消耗模型 token，不改已有业务与会话库，也不代表真实模型成功率或嵌入质量。trace 与逐项断言结果落
-`traces/demo/`，浏览器 trace 落 `traces/browser-demo/`。刷新页面可恢复当前进程内的历史与审批；重启后清空。
-`npm --prefix apps/web run test:demo` 对构建产物和真实离线 API 运行浏览器验收。完整命令与讲解顺序见[演示指南](docs/demo-guide.md)。
+交互设置密码后，打开 [http://127.0.0.1:8768](http://127.0.0.1:8768) 登录。前端/API 同源，
+账号隔离自己的会话、草稿和审批；操作员只能查询与准备草稿，审批员可执行自己的任务。
+默认仍为无付费请求的脚本模型，但 ERP 数据和 PostgreSQL checkpoint 持久化，可重建容器恢复审批。
+没有默认应用账号；基础镜像不包含密钥。真实模型覆盖配置、备份和浏览器验收见[部署指南](docs/deployment.md)。
 
-四个写工具支持 `client_token`：同键同参数返回原结果，同键不同参数报
-`idempotency_conflict`；bridge 自动为单次调用生成并复用 token。业务变更与
-幂等记录同事务提交，SQLite 写事务在读取库存之前取得写锁，避免并发超卖。
-写工具自动重试只在具备幂等契约时启用；整轮写任务不自动重跑。
+## 架构与执行边界
 
-审批通过 LangGraph `interrupt` 挂起，API 使用 PostgreSQL checkpoint 保存待审批
-参数与稳定 token；页面断连后可读取 session snapshot 并通过恢复 SSE 提交决策。
-节点执行中断后也可从保存的 checkpoint 显式继续，历史工具成功/失败状态会保留。
-ERP 业务数据和 RunStore 仍保存在 SQLite。此版本不实现 ADR-0008 中完整的
-R01–R10 崩溃对账与自动续跑协议，也未加入身份认证和多进程调度；边界见
-[ADR-0009](docs/adr/0009-langgraph-runtime.md)、[ADR-0008](docs/adr/0008-persistent-run-recovery.md)
-与[可靠性复盘](docs/write-reliability.md)。
+```mermaid
+flowchart TD
+    UI[React 工作台 · 草稿 / 时间线 / 审批] <-->|同源 cookie / CSRF| AUTH[账号 · 归属 · 审批权限]
+    AUTH <-->|HTTP / SSE| API[FastAPI 会话宿主]
+    API --> GRAPH[LangGraph · 模型 / 工具 / interrupt]
+    GRAPH <--> LLM[OpenAI 兼容模型接口]
+    GRAPH --> MCP[FastMCP · 会话绑定与参数约束]
+    MCP --> DOMAIN[业务层 · 来源 / 版本 / 预算 / 价格 / 库存]
+    DOMAIN --> ERP[(SQLite · 业务事实与幂等记录)]
+    MCP --> RAG[政策检索 · 有效版本 / 原文 / 引用校验]
+    GRAPH <-->|正式 API| PG[(PostgreSQL · graph checkpoint)]
+    API --> VIEW[(SQLite RunStore · 展示投影 / 账号与审计)]
+    GRAPH --> TRACE[JSONL trace · 可选 Langfuse]
+```
 
-Langfuse 双写（可选）：`.env` 配置 `LANGFUSE_PUBLIC_KEY / LANGFUSE_SECRET_KEY /
-LANGFUSE_HOST` 后，CLI / API / 评测的 trace 在本地 JSONL 兜底之外同步上报远程
-（需 `uv sync --package agent-core --extra langfuse`）；未配置时零成本纯本地。
+离线演示显式使用内存 checkpoint 和临时 SQLite；正式模型 API 要求 PostgreSQL，缺少时拒绝启动。`agent_core` 不依赖 ERP 或 MCP 业务包。完整数据流、失败窗口与限制见[架构说明](docs/architecture.md)。
 
-M1 各周验收入口：第 1–3 周为 `python -m agent_core`（最简演示，多步任务 + 并行工具）；
-第 4 周为上述 `erpilot` CLI 与 API/前端链路。
-
-## 下一阶段规划
-
-当前已补[连续多轮上下文验证](docs/context-workflow.md)和[统一投递材料](docs/application-kit.md)，历史快照实验继续独立保留。候选视图保留用户原话、明确行号，并在受保护消息超过估算预算时停止；仍仅显式启用。真实用量与本地估算分别报告，本阶段沿用本地演示范围。下述 B1–B6 段落是已实施能力及历史批次入口，最新总状态以[项目状态页](docs/project-status.md)为准。
-
-B6 已实现第一版只读补货建议。设置 `ERPILOT_TOOLS=mcp` 后可问「按最近 30 天销量、采购周期 7 天、到货后覆盖 14 天，哪些商品需要补货？」；工具按当前库存和有效订单件数计算目标量、建议量及预计可售天数，网页展示统计窗口、假设和限制。采购周期未知时明确未计入采购等待需求；零销量、下架及异常库存不伪造建议数量。不会采购或调整库存。独立 `--suite b6` 七场景使用固定时点/临时库、全表零变更和原币种预算；2026-10-19 真实验收最终 GLM / DeepSeek 同源码各 7/7，gate 与 strict 通过。下架时明确不建议补货、不推演假设数量，所有分支统一说明未采购、未调整库存；原始失败和措辞敏感失败均保留。见 [B6 设计](docs/superpowers/specs/2026-10-17-replenishment-design.md)、[工程验收](reports/acceptance/2026-10-17-replenishment.md)与[真实验收](reports/acceptance/2026-10-19-live-model-validation.md)。一组通过不代表长期稳定率。B4 指代专项已独立完成最终真实验收，旧未知用量与冻结预算保留。
-
-功能深化路线见 [业务里程碑与后续路径](docs/business-roadmap.md)：计价一致 → 订单草稿与审批闭环 → 业务审批摘要 → 多轮任务与历史会话 → 业务 RAG → 补货建议。本阶段暂不考虑部署。B1 计价一致已完成；B2 支持会话草稿、多商品编辑和固定版本审批，提交时重新校验报价与库存，同一草稿重复提交只建一单。实现和验收入口见 [B2 订单草稿计划](docs/superpowers/plans/2026-10-11-order-draft.md)。
-
-使用订单草稿页面需设置 `ERPILOT_TOOLS=mcp`；保存草稿不扣库存。`ERPILOT_WRITES=true` 且审批启用时才可提交建单。草稿每版有效 30 分钟，价格或库存变化后需刷新并重新确认；跨会话草稿不可读取或提交。直接调用独立 MCP 的原始 `create_order` 仍按执行时现价建单，审批由调用方负责。
-
-B3 取消订单与库存调整先保存业务预览再审批：确认页展示客户、原单金额、状态及库存变化，条件变化会停止执行并提示重新确认；同一预览重复提交只生效一次。取消不执行退款，缺失库存行会明确提示无法回补。设计与开发入口见 [B3 业务审批计划](docs/superpowers/plans/2026-10-11-business-approval.md)。
-
-B4 支持从持久化草稿继续多轮任务：单份未提交草稿可找回客户、商品、数量与备注，多份先澄清；按指定版本的商品行修改数量，不依赖旧聊天文本。网页“历史会话”可分页找回旧任务，切换不会执行或取消待审批操作，恢复失败时保持输入锁定。见 [B4 验收](reports/acceptance/2026-10-11-task-history.md)与[实施计划](docs/superpowers/plans/2026-10-11-task-history.md)。
-
-B4 新增独立多轮模型评测入口：`uv run python -m evals --suite b4 --budget 0.05 --budget-currency CNY --timeout 60`。七个场景共十五轮覆盖行号指代、连续修改、多草稿澄清、指定目标、丢失聊天后的恢复、旧版本商品顺序及会话隔离；报告逐轮记录可见原文、工具、草稿状态和 trace。2026-10-17 新批次 **GLM 7/7、DeepSeek 6/7，均十五轮完整执行**，同源码 strict 对照通过；DeepSeek 在商品顺序变化后先澄清而未修改，原门槛未通过。旧 GLM 超时已完成本地计量审计，用户补充费用 USD 0.000222，原缺失 usage 保留。见[本轮计量与对照验收](reports/acceptance/2026-10-17-b4-model-comparison.md)；[2026-10-16 原始失败与 DeepSeek 7/7 记录](reports/acceptance/2026-10-16-task-model-evaluation.md)不合并成功率。DeepSeek 运行须使用 USD 预算。
-
-2026-10-17 草稿增量区分明确当前行号与旧展示歧义，数量修改可绑定 `expected_sku`；草稿响应及页面明确库存是报价时预计值，保存不预留、不扣减。独立 `--suite b4-reference` 三场景七轮保留旧 B4 原判分；首轮 GLM 1/3、DeepSeek 2/3，修复后 GLM 诊断遇到连接错误、usage 未知，原预算冻结。2026-10-19 独立批次的[最终真实验收](reports/acceptance/2026-10-19-b4-final-validation.md)两模型同源码均 **3/3 场景、7/7 轮**，gate 与 strict 通过，共 32 次请求且 usage 完整，估价分别 CNY 0.011127 / USD 0.005503。旧账单本地证据复核一致，用户选择跳过供应商核销，原未知金额继续保留。评测 `--timeout` 约束连接与整个流，缺用量后停止后续请求。原实现与失败见[草稿增量验收](reports/acceptance/2026-10-17-draft-reference-contract.md)。
-
-B5 已接通只读取消资格查询：`assess_order_cancellation` 返回订单事实、有效政策版本和证据缺口，网页可展开引用；查询不取消订单、不申请审批。明确取消仍使用原预览与审批流程。首次[模型对照验收](reports/acceptance/2026-10-12-model-comparison.md)中，GLM 完整基线 35/35（≈¥0.033）、DeepSeek 34/35（≈$0.021，multi-06 步数超限），B5 七用例 GLM 5/7、DeepSeek 6/7，原失败保留。2026-10-17 的本轮 B5 复测两模型均 7/7，见下文；原 35 条 baseline 未在本轮重跑。对照入口 `uv run python -m evals.compare --strict <报告A> <报告B>`（币种各自列示）。仅补元数据且片段完全一致时可运行 `uv run --package rag python -m rag refresh` 复用原向量；正文或嵌入模型变化须重新 build。
-
-政策问答的 `search_policy` 现以证据卡直接回显查询时间、编号原文、来源、版本、生效区间与检索分数，并高亮查询词的字面匹配；取消资格引用共用相同展示。历史恢复保留原快照，无命中或检索不可用时明确显示证据缺口。此次完成离线工程与浏览器验证，未新增真实模型或嵌入请求。见 [RAG 证据回显验收](reports/acceptance/2026-10-17-rag-evidence.md)。
-
-2026-10-17 补强 B5 选单与回答规则：多笔订单先由用户确认目标，等待选单时不检索 / 概述政策；资格答复说明审批与未执行边界。新评测 JSON 保存 `visible_text`，支持直接复核回答与中断片段。用户提供新嵌入配置后，已重建 `qwen3.7-text-embedding-flash` 索引并校准阈值至 0.57（12/12），配置示例见 `.env.example`。完整 B5 **GLM 7/7、DeepSeek 7/7**，strict 对照通过，零写入尝试；一次完整通过不代表长期稳定率。见[B5 修复验收](reports/acceptance/2026-10-17-b5-response-reliability.md)与[嵌入校准](reports/rag/20261017-qwen-embedding-calibration.md)。
-
-新订单和报价共用数量折扣与十进制舍入口径：同 SKU 合并数量后计算折扣单价，四舍五入到两位再乘数量；历史成交价和幂等重放结果保持原值。报价不锁价或预留库存。政策源文件更新后默认检索会拒绝旧索引，须运行 `uv run --env-file .env --package rag python -m rag build` 重新生成索引（消耗嵌入 token；`--env-file` 显式加载配置）。
-
-M6–8 的 LangGraph + PostgreSQL HITL 已实施。基线验收见[2026-10-07 报告](reports/acceptance/2026-10-07-baseline.md)。崩溃恢复矩阵已在隔离 PostgreSQL 上通过，见[2026-10-08 报告](reports/acceptance/2026-10-08-crash-recovery.md)；[ADR-0010](docs/adr/0010-crash-recovery-reconciliation-scope.md) 仍待评审。下一阶段方向（多模型横向对比 · RAG 政策问答 · 评测迭代曲线 · 可展示部署收口）见 [tasks/plan-next-phase.md](tasks/plan-next-phase.md)，当前批次清单见 [tasks/todo.md](tasks/todo.md)；历史恢复协议见 [tasks/plan.md](tasks/plan.md)，当前运行时边界见 [ADR-0009](docs/adr/0009-langgraph-runtime.md)。
-
-## 路线图
-
-| 里程碑 | 内容 |
+| 技术选择 | 承担的职责与理由 |
 |---|---|
-| M1–2 | 手写 agent loop：流式、工具调用、结构化输出、本地 trace |
-| M3–5 | FastMCP Server + 工具设计精研（15~20 个工具）+ 评测集起步 |
-| M6–8 | ✅ LangGraph 重构编排 + PostgreSQL checkpointer + HITL 审批流 |
-| M9–11 | 评测驱动迭代（成功率曲线、成本优化）+ prompt injection 防护 |
-| M12 | 部署上线、项目档案页与系列文章收口 |
+| Python 3.12 / FastAPI / Pydantic | 异步工具与流式响应，入口和业务结构可验证 |
+| LangGraph | 持久化执行状态和审批中断；保留自定义工具协议与业务约束 |
+| FastMCP | 真实工具发现、参数 schema 和协议调用；风险与会话权限由应用绑定 |
+| SQLite / SQLAlchemy | 小规模业务事实、版本和幂等同事务提交；单进程范围易复现 |
+| PostgreSQL checkpoint | 保存可恢复的图状态；与业务数据库的职责分别明确 |
+| 轻量 JSON 向量索引 | 小型政策语料可直接核对；有 BM25 / RRF 对照后再决定复杂度 |
+| OpenAI 兼容 SDK | 用配置切换供应商；当前无 LiteLLM 路由服务 |
+| React / TypeScript / Ant Design X | 流式工作台、业务卡片和响应式审批界面 |
+| pytest / Playwright / 自建评测 | 分别核对业务事实、用户操作和真实模型表现；保留失败与未知用量 |
 
-## 文章与决策
+[最初选型及实施核对](docs/adr/0001-tech-stack.md) · [当前交付范围决策](docs/adr/0011-local-portfolio-delivery.md)
 
-- 所有架构决策记录在 `docs/adr/`（0001–0010，含 LangGraph/PostgreSQL HITL 与崩溃恢复范围），范围冻结与启动计划见 [`docs/agent-project-plan.md`](docs/agent-project-plan.md)
-- 评测集：人工标注标准 [`docs/eval-annotation-guide.md`](docs/eval-annotation-guide.md) + 工具卡 [`docs/tool-cards.md`](docs/tool-cards.md) + 错误自愈记录 [`docs/error-recovery-log.md`](docs/error-recovery-log.md)
-- 系列“Erpilot 开发实录”见[文章目录](docs/articles/README.md)：首篇已发布于 [Vie](https://vie-vibe.cn/articles/ai/handwritten-agent-loop)，第 2–7 篇文稿已完成、待发布，覆盖 MCP 工具、审批、崩溃恢复、评测、RAG 与多轮上下文。
-- 撰写规则见 [`docs/articles/writing-rules.md`](docs/articles/writing-rules.md)（禁虚构、客观口吻、技术正确性、发布前核对清单）
+## 实现与取舍
 
-政策答复现支持本轮证据绑定的结构化选证与程序原文渲染；真实验收可按用例分段续跑，上游中断与模型失败分别留证，未知费用保留。最新完整两模型均严格 **11/13**，质量门槛未达成；实现、费用和剩余失败见[结构化答复与续跑验收](reports/acceptance/2026-10-19-structured-policy-and-resume.md)，操作方式见[运行契约](docs/resumable-grounding-evaluation.md)。
+- **将写权限放在模型之外**：写工具必须绑定代码审批门；模型请求只产生待批准动作。报价、保存草稿和政策查询都不等于批准订单。
+- **让批准绑定不可变事实**：指定草稿版本、完整参数和稳定 token；批准后仍在业务事务内复核，库存变化时停止，不自行改版继续执行。
+- **恢复先查业务事实**：graph checkpoint 保存执行状态，mutation token 证明业务是否提交，RunStore 只服务展示；三者不互相冒充权威来源。
+- **约束回答的证据来源**：政策答复校验本轮引用、版本、原文及哈希，由程序渲染；仍不宣称已经解决任意自然语言的语义蕴含。
+- **用可重放结果解释模型表现**：固定用例、逐轮 trace、数据库前后状态、原币种费用与缺 usage 熔断；不把不同版本的成功样例拼成一个通过率。
 
-## 崩溃恢复与对账
+具体难点、源码入口、失败归因和面试追问见[三个实现案例](docs/interview-cases.md)。项目描述应按本人实际参与范围使用，见[求职投递材料](docs/application-kit.md)。
 
-graph checkpoint 保存执行状态，ERP mutation token 记录业务提交结果，RunStore 只保存展示投影。契约见 [ADR-0010](docs/adr/0010-crash-recovery-reconciliation-scope.md)。2026-10-08 在隔离 PostgreSQL 上，R01–R06 硬崩溃矩阵 19/19 通过，四种写工具的提交窗口都有同次证据；R07–R10 由确定性组件测试覆盖。ADR 仍是提案、待评审。证据见[崩溃恢复验收报告](reports/acceptance/2026-10-08-crash-recovery.md)。
+## 验证与证据
 
-硬崩溃验收需要显式配置隔离的 `ERPILOT_TEST_CHECKPOINT_DATABASE_URL`。测试为每个场景创建独立 PostgreSQL schema，并使用临时 ERP SQLite 库。多 API worker、分布式执行权和自动业务补偿不在本阶段支持范围内。
+`verify` 默认执行静态检查、Python 离线测试、前端协议与渲染测试、构建及 **11 个离线业务场景**。加 `--browser` 后安装匹配 Chromium，运行工作台和真实 API 的浏览器验收。逐步日志、JUnit 和汇总留在 `artifacts/verification/`；任何步骤失败返回非零状态。
+
+PostgreSQL 恢复测试仅在显式设置隔离的 `ERPILOT_TEST_CHECKPOINT_DATABASE_URL` 后运行；未配置时会标注跳过。真实模型用例默认排除，浏览器中另有两个需独立实验服务的语义预览用例，未配置时单列跳过。[完整检查与故障处理](docs/development.md)。
+
+| 已有真实观察 | 结果与范围 | 原始证据 |
+|---|---|---|
+| 政策答复 v4，GLM | 13/13 受控检索用例；旧 v3 两模型各 11/13 保留 | [独立批次](reports/acceptance/2026-10-28-contracts-and-policy.md) |
+| 预算完整流程，GLM | 1/1 流程、10/10 阶段；超额停止、明确调预算、重新审批 | [预算专项](reports/acceptance/2026-10-21-budget-live-validation.md) |
+| 草稿指代最终专项 | GLM / DeepSeek 各 3/3 场景、7/7 轮 | [指代验收](reports/acceptance/2026-10-19-b4-final-validation.md) |
+| 只读补货建议 | GLM / DeepSeek 各 7/7，一组成对运行 | [B6 验收](reports/acceptance/2026-10-19-live-model-validation.md) |
+| 冻结检索对照 | test Recall@3 96.9%；RRF 未超过当前策略，保留原默认 | [检索实验](docs/retrieval-experiment.md) |
+| 11-04 订单 v2 修复后真实批次 | **4/4 流程、34/34 阶段**；55 请求/usage 齐全，估价 CNY 0.052260；旧失败保留 | [本轮验收](reports/acceptance/2026-11-04-real-model-reconnect.md)、[原始批次](reports/acceptance/20261104-reconnect-corrected-order-v2.json) |
+| 11-04 语义工程专项 | 创建 **7/7**、修改 **6/6**；真实 API 默认开启受约束语义预览；120条标签已完成委托AI审核 | [真实专项与失败历史](reports/acceptance/2026-11-04-real-model-reconnect.md)、[标签审核](docs/label-review.md) |
+| 带登录的真实 HTTP 建单 | 真实模型草稿 → 指定版本核对 → 审批 → 精确库存与重复批准拦截，**6 项检查通过** | [API 证据](reports/acceptance/20261104-reconnect-live-api-network.json)、[业务状态](reports/acceptance/20261104-reconnect-live-api-network-state.json) |
+
+这些数字各自对应报告中的源码、固定样本和运行，不代表通用准确率或生产稳定率。最新工程结果见[项目状态](docs/project-status.md)，历史原始失败和费用冻结继续保留。
+
+## 使用真实模型开发
+
+```sh
+uv sync --all-packages --frozen
+# 将 .env.example 复制成 .env，配置模型 key；Windows 可用 Copy-Item
+docker compose up -d postgres
+uv run --package erp-store python -m erp_store seed
+uv run --package erpilot-api python -m erpilot_api
+# 另开终端
+npm --prefix apps/web ci
+npm --prefix apps/web run dev
+```
+
+访问[开发工作台](http://localhost:5173)。`.env.example` 解释模型、嵌入和 checkpoint 配置；真实模型、嵌入可能收费。默认 `ERPILOT_WRITES=0`，需要演示人工写入时显式设为 `1`；真实 API 默认 `enforce` 并接入语义创建/修改预览，候选仍需逐项核对；新端点需配置价目，缺价目时保留基础解析。[语义配置与降级](docs/semantic-parsing.md)。真实 RAG 索引需使用匹配的嵌入配置，[索引构建方法](docs/development.md)。
+
+CLI：`uv run erpilot chat "查询商品 A1001 的库存"`。独立 MCP：`uv run --package mcp-erp python -m mcp_erp serve`。更多命令见[开发指南](docs/development.md)。
+
+## 仓库导航
+
+```text
+apps/api/             FastAPI：会话、SSE、恢复、业务路由
+apps/web/             React：流式对话、草稿、审批与证据卡
+apps/cli/             终端交互与 trace 回放
+packages/agent_core/  业务无关的图运行时、工具契约、审批和计量
+packages/mcp_erp/     MCP 服务、桥接、会话与来源约束
+packages/erp_store/   业务模型、草稿版本、事务、幂等和意图状态
+packages/rag/         政策语料、检索、版本与引用校验
+packages/evals/       冻结任务、真实模型评测、计量与质量门槛
+scripts/              启动、离线演示和可校验交付
+docs/                 架构、ADR、演示、技术文章和面试材料
+reports/              分批验收及历史失败证据
+```
+
+当前支持**带本地账号的共享门店、单 API 执行进程**及容器复现。账号隔离工作会话，ERP 业务数据共享；
+多租户、跨进程执行权和自动业务补偿未交付。默认核心任务已通过受控真实验收；语义工程专项通过，
+语义预览已默认接入，原120条工程预期已完成委托AI审核，不据小样本宣称通用准确率。
+[能力边界](docs/architecture.md) · [本轮计划](docs/plans/2026-11-04-production-readiness.md) · [文章系列](docs/articles/README.md) · [可校验交付包](docs/portfolio-overview.md)

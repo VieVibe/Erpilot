@@ -1,0 +1,22 @@
+{"request": 1, "case_id": "budget-denial-restore", "status": "started", "ts": "2026-11-04T03:54:59.713154+00:00", "billing": null}
+{"request": 1, "case_id": "budget-denial-restore", "status": "settled", "ts": "2026-11-04T03:55:05.096190+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000763", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 2, "case_id": "budget-denial-restore", "status": "started", "ts": "2026-11-04T03:55:05.206612+00:00", "billing": null}
+{"request": 2, "case_id": "budget-denial-restore", "status": "settled", "ts": "2026-11-04T03:55:08.323866+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000811", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 3, "case_id": "budget-denial-restore", "status": "started", "ts": "2026-11-04T03:55:08.384442+00:00", "billing": null}
+{"request": 3, "case_id": "budget-denial-restore", "status": "settled", "ts": "2026-11-04T03:55:16.310803+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.001049", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 4, "case_id": "budget-denial-restore", "status": "started", "ts": "2026-11-04T03:55:16.350180+00:00", "billing": null}
+{"request": 4, "case_id": "budget-denial-restore", "status": "settled", "ts": "2026-11-04T03:55:22.698759+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000974", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 5, "case_id": "budget-denial-restore", "status": "started", "ts": "2026-11-04T03:55:22.830778+00:00", "billing": null}
+{"request": 5, "case_id": "budget-denial-restore", "status": "settled", "ts": "2026-11-04T03:55:31.591800+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.001099", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 6, "case_id": "budget-denial-restore", "status": "started", "ts": "2026-11-04T03:55:31.631091+00:00", "billing": null}
+{"request": 6, "case_id": "budget-denial-restore", "status": "settled", "ts": "2026-11-04T03:55:46.275477+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000995", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 7, "case_id": "budget-denial-restore", "status": "started", "ts": "2026-11-04T03:55:46.341940+00:00", "billing": null}
+{"request": 7, "case_id": "budget-denial-restore", "status": "settled", "ts": "2026-11-04T03:55:54.147220+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000922", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 8, "case_id": "budget-denial-restore", "status": "started", "ts": "2026-11-04T03:55:54.216833+00:00", "billing": null}
+{"request": 8, "case_id": "budget-denial-restore", "status": "settled", "ts": "2026-11-04T03:56:02.909664+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.001100", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 9, "case_id": "budget-denial-restore", "status": "started", "ts": "2026-11-04T03:56:02.953976+00:00", "billing": null}
+{"request": 9, "case_id": "budget-denial-restore", "status": "settled", "ts": "2026-11-04T03:56:05.624496+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000987", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 10, "case_id": "budget-denial-restore", "status": "started", "ts": "2026-11-04T03:56:05.688812+00:00", "billing": null}
+{"request": 10, "case_id": "budget-denial-restore", "status": "settled", "ts": "2026-11-04T03:56:09.238697+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.001014", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 11, "case_id": "budget-denial-restore", "status": "started", "ts": "2026-11-04T03:56:09.389375+00:00", "billing": null}
+{"request": 11, "case_id": "budget-denial-restore", "status": "unknown", "ts": "2026-11-04T03:56:12.409254+00:00", "billing": {"currency": "CNY", "estimated_amount": null, "pricing_source": "agent_core.prices", "cache_assumption": "unknown_usage", "complete": false}}

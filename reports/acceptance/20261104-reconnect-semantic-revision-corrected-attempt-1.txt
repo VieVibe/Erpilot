@@ -1,0 +1,7 @@
+{"id": "revise_full", "passed": true, "requests": 1}
+{"id": "revise_quantity", "passed": true, "requests": 1}
+{"id": "revise_scalars", "passed": true, "requests": 1}
+{"id": "revision_condition", "passed": true, "requests": 0}
+{"id": "revision_negated", "passed": true, "requests": 0}
+{"id": "revision_question", "passed": true, "requests": 0}
+{"passed": true, "provider_requests": 3, "known_spent": "0.000937", "currency": "CNY", "unknown_usage": false}

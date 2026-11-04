@@ -1,3 +1,4 @@
+import { apiFetch } from './auth-client.js';
 /**
  * SSE 事件协议 v1 的前端镜像——与 apps/api/src/erpilot_api/events.py 必须同步修改。
  * streamChat() 用 fetch + ReadableStream 手解 SSE（EventSource 不支持 POST）。
@@ -296,7 +297,7 @@ async function responseError(resp: Response): Promise<ApiError> {
 export async function loadSessionState(
   sessionId: string, signal?: AbortSignal, allowMissing = false,
 ): Promise<SessionState | null> {
-  const resp = await fetch(`/api/sessions/${encodeURIComponent(sessionId)}/state`, { signal });
+  const resp = await apiFetch(`/api/sessions/${encodeURIComponent(sessionId)}/state`, { signal });
   if (resp.status === 404 && allowMissing) return null;
   if (!resp.ok) throw await responseError(resp);
   const data: unknown = await resp.json();
@@ -310,7 +311,7 @@ export async function loadSessionState(
 export async function* streamApprovalResume(
   sessionId: string, pendingId: string, approved: boolean, reason = "", signal?: AbortSignal,
 ): AsyncGenerator<SSEEvent> {
-  const resp = await fetch("/api/chat/approve/stream", {
+  const resp = await apiFetch("/api/chat/approve/stream", {
     method: "POST", headers: { "content-type": "application/json" },
     body: JSON.stringify({ session_id: sessionId, pending_id: pendingId, approved, reason }), signal,
   });
@@ -318,7 +319,7 @@ export async function* streamApprovalResume(
 }
 
 export async function* streamInterruptedResume(sessionId: string): AsyncGenerator<SSEEvent> {
-  const resp = await fetch(`/api/sessions/${encodeURIComponent(sessionId)}/resume/stream`, {
+  const resp = await apiFetch(`/api/sessions/${encodeURIComponent(sessionId)}/resume/stream`, {
     method: "POST",
   });
   yield* readSSE(resp);
@@ -327,25 +328,25 @@ export async function* streamInterruptedResume(sessionId: string): AsyncGenerato
 export async function* streamRunEvents(
   runId: string, afterSeq: number, signal?: AbortSignal,
 ): AsyncGenerator<SSEEvent> {
-  const resp = await fetch(
+  const resp = await apiFetch(
     `/api/runs/${encodeURIComponent(runId)}/events?after_seq=${afterSeq}`, { signal },
   );
   yield* readSSE(resp);
 }
 
 export async function cancelSession(sessionId: string): Promise<SessionState> {
-  const resp = await fetch(`/api/sessions/${encodeURIComponent(sessionId)}/cancel`, {
+  const resp = await apiFetch(`/api/sessions/${encodeURIComponent(sessionId)}/cancel`, {
     method: "POST",
   });
   if (!resp.ok) throw await responseError(resp);
   return await resp.json() as SessionState;
 }
 
-export async function submitApproval(pendingId: string, approved: boolean): Promise<void> {
-  const resp = await fetch("/api/chat/approve", {
+export async function submitApproval(pendingId: string, approved: boolean, sessionId?: string): Promise<void> {
+  const resp = await apiFetch("/api/chat/approve", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ pending_id: pendingId, approved }),
+    body: JSON.stringify({ pending_id: pendingId, approved, ...(sessionId ? { session_id: sessionId } : {}) }),
   });
   if (!resp.ok) throw await responseError(resp);
   const result: unknown = await resp.json();
@@ -389,7 +390,7 @@ export async function* streamChat(
   sessionId: string,
   signal?: AbortSignal,
 ): AsyncGenerator<SSEEvent> {
-  const resp = await fetch("/api/chat/stream", {
+  const resp = await apiFetch("/api/chat/stream", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ message, session_id: sessionId }),
@@ -400,7 +401,7 @@ export async function* streamChat(
 
 export async function* streamConfirmedDraft(sessionId: string, draftId: string, revision: number): AsyncGenerator<SSEEvent> {
   if (!Number.isSafeInteger(revision) || revision < 1) throw new Error('确认版本无效');
-  const resp = await fetch(`/api/sessions/${encodeURIComponent(sessionId)}/order-drafts/${encodeURIComponent(draftId)}/confirm/stream`, {
+  const resp = await apiFetch(`/api/sessions/${encodeURIComponent(sessionId)}/order-drafts/${encodeURIComponent(draftId)}/confirm/stream`, {
     method: 'POST', headers: {'content-type': 'application/json'},
     body: JSON.stringify({expected_revision: revision}),
   });

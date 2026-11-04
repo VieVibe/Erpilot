@@ -1,3 +1,4 @@
+import { apiFetch } from './auth-client.js';
 import { parseOrderDraft, type OrderDraft } from './drafts.js';
 
 export interface IntentPreview {
@@ -33,7 +34,7 @@ export function parseIntentPreview(value: unknown): IntentPreview | null {
   return value as unknown as IntentPreview;
 }
 async function request(url: string, options: RequestInit) {
-  const response = await fetch(url, options);
+  const response = await apiFetch(url, options);
   const data = await response.json().catch(() => null);
   if (!response.ok) {
     const detail = record(data) && record(data.error) ? data.error : {};

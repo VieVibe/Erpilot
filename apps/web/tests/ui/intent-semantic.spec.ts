@@ -1,6 +1,6 @@
 import {test, expect} from '@playwright/test';
 
-for(const width of [320,1440])test(`语义候选 ${width}px 显示原话且仅完整表单确认会保存`,async({page})=>{
+for(const width of [320,1440])test(`语义候选 ${width}px 显示原话且仅完整表单确认会保存`,async({page},testInfo)=>{
   await page.setViewportSize({width,height:1000});
   const source='帮客户甲列份采购清单：机械键盘要四个，备注『不要提交😀』，另一个商品待确定。';
   const preview={schema_version:1,pending_id:'b'.repeat(32),state_version:1,status:'pending',
@@ -13,7 +13,7 @@ for(const width of [320,1440])test(`语义候选 ${width}px 显示原话且仅�
   await page.route('**/api/**',async route=>{
     const path=new URL(route.request().url()).pathname;
     if(route.request().method()==='POST')posts.push({path,body:route.request().postDataJSON()});
-    if(path==='/api/runtime')return route.fulfill({json:{drafts_enabled:true,intent_preview_enabled:true,data_source:'mcp',writes_enabled:false}});
+    if(path==='/api/runtime')return route.fulfill({json:{drafts_enabled:true,intent_preview_enabled:true,data_source:'mcp',writes_enabled:false,intent_semantic_enabled:true,intent_semantic_available:true}});
     if(path.endsWith('/state'))return route.fulfill({json:{session_id:path.split('/')[3],status:'completed',messages:[],tool_results:[],pending_approvals:[]}});
     if(path==='/api/sessions'||path.endsWith('/order-drafts'))return route.fulfill({json:{items:[],has_more:false}});
     if(path.endsWith('/pending-intent/preview'))return route.fulfill({json:{preview:current}});
@@ -26,6 +26,7 @@ for(const width of [320,1440])test(`语义候选 ${width}px 显示原话且仅�
     return route.fulfill({status:404,json:{error:{message:path}}});
   });
   await page.goto('/');
+  await expect(page.locator(width < 768 ? '.runtime-mobile' : '.header-actions .runtime-label')).toContainText('智能解析已开启');
   if(width<1200)await page.getByRole('button',{name:'业务面板',exact:true}).click();
   await expect(page.getByRole('dialog',{name:'核对待完成请求',exact:true})).not.toBeVisible();
   await page.getByRole('button',{name:'核对完整请求',exact:true}).click();
@@ -37,7 +38,7 @@ for(const width of [320,1440])test(`语义候选 ${width}px 显示原话且仅�
   await dialog.getByLabel('核对第 1 行件数',{exact:true}).fill('5');
   expect(posts).toHaveLength(0);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-  await page.screenshot({path:`../../reports/acceptance/${process.env.ERPILOT_UI_EVIDENCE_PREFIX ?? '20261102-intent-semantic'}-${width}.png`,fullPage:true,animations:'disabled'});
+  await page.screenshot({path:testInfo.outputPath(`${process.env.ERPILOT_UI_EVIDENCE_PREFIX ?? 'intent-semantic'}-${width}.png`),fullPage:true,animations:'disabled'});
   await dialog.getByRole('button',{name:'按此完整清单保存草稿',exact:true}).click();
   await expect(dialog).not.toBeVisible();
   expect(posts).toHaveLength(1);

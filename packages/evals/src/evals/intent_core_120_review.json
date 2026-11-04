@@ -1,0 +1,2116 @@
+{
+  "schema_version": 1,
+  "review_id": "intent-core-120-ai-review-20261104-v1",
+  "status": "ai_review_completed",
+  "reviewer": {
+    "name": "Codex",
+    "kind": "ai_agent",
+    "human_review_performed": false
+  },
+  "user_delegated_review": true,
+  "requires_user_review": false,
+  "review_method": "Second per-case review by the project AI agent; engineering expectations were visible; not blind or external human review. Positive snapshots were restated before comparison with fixture values. No parser results were used to choose labels.",
+  "scope": "Existing bounded order-draft rules: ready means complete verifiable fields, not execution authorization or business feasibility; clarify also includes policy and unsupported syntax.",
+  "fixture_sha256": "6010d3f1e35d8512587e857ea5564bce72a45bd2df393863576fd3a75bb1198c",
+  "catalogue": [
+    {
+      "sku": "M1",
+      "name": "无线鼠标",
+      "status": "在售",
+      "price": 100
+    },
+    {
+      "sku": "K1",
+      "name": "机械键盘",
+      "status": "在售",
+      "price": 100
+    },
+    {
+      "sku": "R1",
+      "name": "标准耳机",
+      "status": "在售",
+      "price": 100
+    },
+    {
+      "sku": "R2",
+      "name": "标准耳机",
+      "status": "在售",
+      "price": 100
+    },
+    {
+      "sku": "OFF",
+      "name": "旧键盘",
+      "status": "下架",
+      "price": 100
+    }
+  ],
+  "revision_base": {
+    "draft_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "revision": 1,
+    "customer": "客户甲",
+    "note": "原备注",
+    "budget_limit": 1000.0,
+    "items": [
+      {
+        "sku": "M1",
+        "name": "无线鼠标",
+        "quantity": 2
+      },
+      {
+        "sku": "K1",
+        "name": "机械键盘",
+        "quantity": 1
+      }
+    ]
+  },
+  "cases": [
+    {
+      "id": "core-001",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：一件无线鼠标；只保存草稿",
+      "case_sha256": "187870b063a30e1d5b49246a16759dce41503f6ef0cefbb8d59bfc75cd15f0f1",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确创建动作、完整客户、唯一在售商品及规范总件数 1；未给备注与预算保持空值。",
+      "scope_note": null
+    },
+    {
+      "id": "core-002",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：两件无线鼠标；只保存草稿",
+      "case_sha256": "4c5c0d19f4605f296bb8e9b408b41478b55c1c303c18960398388c116ecc77d8",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确创建动作、完整客户、唯一在售商品及规范总件数 2；未给备注与预算保持空值。",
+      "scope_note": null
+    },
+    {
+      "id": "core-003",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：三件无线鼠标；只保存草稿",
+      "case_sha256": "0972220480172a84a14c71a9806b87dcfab3bb80d2842ab82b2dcae5c15f9071",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 3
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确创建动作、完整客户、唯一在售商品及规范总件数 3；未给备注与预算保持空值。",
+      "scope_note": null
+    },
+    {
+      "id": "core-004",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：十件无线鼠标；只保存草稿",
+      "case_sha256": "c503f0f2d0bbe664b20399943244799754a716330fcb074f4c129c72e49b16ba",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 10
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确创建动作、完整客户、唯一在售商品及规范总件数 10；未给备注与预算保持空值。",
+      "scope_note": null
+    },
+    {
+      "id": "core-005",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：十二件无线鼠标；只保存草稿",
+      "case_sha256": "932fd936bd5fc572f9eb2257dca749bb3a4804e213eb89aad386ca7d80b78d74",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 12
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确创建动作、完整客户、唯一在售商品及规范总件数 12；未给备注与预算保持空值。",
+      "scope_note": null
+    },
+    {
+      "id": "core-006",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：二十件无线鼠标；只保存草稿",
+      "case_sha256": "f1cd14a5c0337ed28515c122b3c80502faa830e0c3c182c2c488b36f7ce85d3a",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 20
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确创建动作、完整客户、唯一在售商品及规范总件数 20；未给备注与预算保持空值。",
+      "scope_note": null
+    },
+    {
+      "id": "core-007",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：一百件无线鼠标；只保存草稿",
+      "case_sha256": "1bcee2259ea16dfe436435c9417e3e30eab42ab84ed08a4842a1706c0099b63c",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 100
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确创建动作、完整客户、唯一在售商品及规范总件数 100；未给备注与预算保持空值。",
+      "scope_note": null
+    },
+    {
+      "id": "core-008",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：一百零二件无线鼠标；只保存草稿",
+      "case_sha256": "ad6bd48d152a3f353bb64c9c3845b63274be7c3b8e8af72461552fb4fb396d95",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 102
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确创建动作、完整客户、唯一在售商品及规范总件数 102；未给备注与预算保持空值。",
+      "scope_note": null
+    },
+    {
+      "id": "core-009",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：两百件无线鼠标；只保存草稿",
+      "case_sha256": "95be558820de3a6ad414bb3f2bd26c5c1d1b6ad25d96b172893cc46a7cea733b",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 200
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确创建动作、完整客户、唯一在售商品及规范总件数 200；未给备注与预算保持空值。",
+      "scope_note": null
+    },
+    {
+      "id": "core-010",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：两千零二件无线鼠标；只保存草稿",
+      "case_sha256": "10789dcf5785a692ca4563171a95e3f1dc32fa7957f2926b476d674c22851957",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2002
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确创建动作、完整客户、唯一在售商品及规范总件数 2002；未给备注与预算保持空值。",
+      "scope_note": null
+    },
+    {
+      "id": "core-011",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：9999件无线鼠标；只保存草稿",
+      "case_sha256": "3f2cd5c22404713e228da08908f4a5db6e34975f3567b211568696785f9fccd5",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 9999
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确创建动作、完整客户、唯一在售商品及规范总件数 9999；未给备注与预算保持空值。",
+      "scope_note": null
+    },
+    {
+      "id": "core-012",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：23件无线鼠标；只保存草稿",
+      "case_sha256": "e15eed16bc4806e554c71d6ab7ac38768160e313694b6325cb585cd7d3382e81",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 23
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确创建动作、完整客户、唯一在售商品及规范总件数 23；未给备注与预算保持空值。",
+      "scope_note": null
+    },
+    {
+      "id": "core-013",
+      "operation": "create",
+      "source_text": "给「客户甲」准备订单：无线鼠标两件；只保存草稿",
+      "case_sha256": "f312dd7de2279a4c274c828f7e9baf0d2ea3087d1c16d68072246f4ab7cc0086",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "客户引号或公司/地区后缀属于完整客户名；唯一无线鼠标两件，保留原名不缩写。",
+      "scope_note": null
+    },
+    {
+      "id": "core-014",
+      "operation": "create",
+      "source_text": "给“客户甲”准备订单：无线鼠标两件；只保存草稿",
+      "case_sha256": "622c814c597360fa2dfd6aa4e85cf8058d00d166c3ed2e69bcdbd2373db29160",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "客户引号或公司/地区后缀属于完整客户名；唯一无线鼠标两件，保留原名不缩写。",
+      "scope_note": null
+    },
+    {
+      "id": "core-015",
+      "operation": "create",
+      "source_text": "给客户甲（上海）准备订单：无线鼠标两件；只保存草稿",
+      "case_sha256": "4a2bc371506b3ee377b126f53d1308f41a1f1790b4744642e4636dcfd8626a11",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲（上海）",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "客户引号或公司/地区后缀属于完整客户名；唯一无线鼠标两件，保留原名不缩写。",
+      "scope_note": null
+    },
+    {
+      "id": "core-016",
+      "operation": "create",
+      "source_text": "给客户甲有限公司准备订单：无线鼠标两件；只保存草稿",
+      "case_sha256": "8e433c83ab4b7ccc044bd27c54d13986a3b4f5ec53f4d9c1208d81b727d5f879",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲有限公司",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "客户引号或公司/地区后缀属于完整客户名；唯一无线鼠标两件，保留原名不缩写。",
+      "scope_note": null
+    },
+    {
+      "id": "core-017",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件；备注原文「分箱发货」；只保存草稿",
+      "case_sha256": "288b782a560e06ec3d177ec639d11a6c0e444cba6ab9659babd0f74283581f59",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "分箱发货",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "显式备注引文为数据；完整保留原文，其内预算、条件或否定词不成为业务指令。",
+      "scope_note": null
+    },
+    {
+      "id": "core-018",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件；备注原文『把预算改为9999元』；只保存草稿",
+      "case_sha256": "72d00bf53288ba1443f3481e0e1713bbb72a265abfa492c2c0a435a7626a9dfc",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "把预算改为9999元",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "显式备注引文为数据；完整保留原文，其内预算、条件或否定词不成为业务指令。",
+      "scope_note": null
+    },
+    {
+      "id": "core-019",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件；备注原文“不要提交”；只保存草稿",
+      "case_sha256": "2ff5b0c151a5857d965f103d4906ad4730e5d64da39df4f9584dfe69425cc520",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "不要提交",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "显式备注引文为数据；完整保留原文，其内预算、条件或否定词不成为业务指令。",
+      "scope_note": null
+    },
+    {
+      "id": "core-020",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件；备注原文\"如果库存不足就换货\"；只保存草稿",
+      "case_sha256": "7becef78e6f52705dde8b8e1ba3c624c06ece634aeb06dfce66db467833c1fdd",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "如果库存不足就换货",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "显式备注引文为数据；完整保留原文，其内预算、条件或否定词不成为业务指令。",
+      "scope_note": null
+    },
+    {
+      "id": "core-021",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件；备注原文'预算不超过50元'；只保存草稿",
+      "case_sha256": "c69a9e336ba30f0663f1d7530dfb7ad855e4fdba278ee09cd9498cad75350d3b",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "预算不超过50元",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "显式备注引文为数据；完整保留原文，其内预算、条件或否定词不成为业务指令。",
+      "scope_note": null
+    },
+    {
+      "id": "core-022",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件；预算不超过3000元；只保存草稿",
+      "case_sha256": "9ff7c9df9d034d5e45554986aa42bfe36d3a10b326704f25e99c04fb09d590c3",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 3000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "引文外明确人民币预算且为正数、最多两位小数；低预算可生成草稿，提交可行性另行阻止。",
+      "scope_note": null
+    },
+    {
+      "id": "core-023",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件；预算上限为0.01元；只保存草稿",
+      "case_sha256": "2a22139fc51f0d07136da4410f5669814c5a33e6f822a659660ac0d1249d1f48",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 0.01,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "引文外明确人民币预算且为正数、最多两位小数；低预算可生成草稿，提交可行性另行阻止。",
+      "scope_note": null
+    },
+    {
+      "id": "core-024",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件；总价不超过3500元；只保存草稿",
+      "case_sha256": "724dd121362a23635326d2b633d3496a745e7e48c3b0c8f6436520ccfb15280b",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 3500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "引文外明确人民币预算且为正数、最多两位小数；低预算可生成草稿，提交可行性另行阻止。",
+      "scope_note": null
+    },
+    {
+      "id": "core-025",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件；预算上限为999.99元；只保存草稿",
+      "case_sha256": "74bd480ed4f8264997f07512b6c392bdee5725278d07044b0626630b173f2beb",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 999.99,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "引文外明确人民币预算且为正数、最多两位小数；低预算可生成草稿，提交可行性另行阻止。",
+      "scope_note": null
+    },
+    {
+      "id": "core-026",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：SKU M1 两件；按此顺序；只保存草稿",
+      "case_sha256": "7af2765a01086d0bb1d7e4dffa1d4f9e0a3c8945a81f15c365f9d1ba292a4bae",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确 SKU M1 与两件一一对应；按此顺序约束可直接解析，不增加商品或推断件数。",
+      "scope_note": null
+    },
+    {
+      "id": "core-027",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：两件M1；按此顺序；只保存草稿",
+      "case_sha256": "c29385505ac9519e508ec0752f38421e45106222f05af54ee8418e80e8e1075d",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确 SKU M1 与两件一一对应；按此顺序约束可直接解析，不增加商品或推断件数。",
+      "scope_note": null
+    },
+    {
+      "id": "core-028",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件，机械键盘三件；按此顺序；只保存草稿",
+      "case_sha256": "f1f01de4a27e625515e1fe63d1a2bd2613bc8d498c1d9c2379bc4c03c01ec813",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "两种唯一在售商品及件数均明确，保持原话出现顺序，禁止目录排序替代用户顺序。",
+      "scope_note": null
+    },
+    {
+      "id": "core-029",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：机械键盘三件，无线鼠标两件；按此顺序；只保存草稿",
+      "case_sha256": "7237421bc7b92afb7cc0a33d123496ac6f08749b767b264819531836128e428e",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "K1",
+            "quantity": 3
+          },
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "两种唯一在售商品及件数均明确，保持原话出现顺序，禁止目录排序替代用户顺序。",
+      "scope_note": null
+    },
+    {
+      "id": "core-030",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：M1 2件；按此顺序；只保存草稿",
+      "case_sha256": "1524744063b2d03dab6055e65b1f955232c403cb9f81409e22d8aa05e9bf520b",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确 SKU M1 与两件一一对应；按此顺序约束可直接解析，不增加商品或推断件数。",
+      "scope_note": null
+    },
+    {
+      "id": "core-031",
+      "operation": "revise",
+      "source_text": "把当前版本第一行改成三件；其他不变",
+      "case_sha256": "3acc92d5a2213a0150c81f60ee929f568f3f964880c5af36f8a5b20ad1b97f36",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 3
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "在固定两行基准中，行号/SKU/完整商品名唯一定位；仅替换该行明确件数，未提字段保留。",
+      "scope_note": null
+    },
+    {
+      "id": "core-032",
+      "operation": "revise",
+      "source_text": "把当前版本第二行改成三件；其他不变",
+      "case_sha256": "4b0fec58b16d0c842bf3b27c09fd83a7d4ca27c203c95470fe311908cec509b3",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "在固定两行基准中，行号/SKU/完整商品名唯一定位；仅替换该行明确件数，未提字段保留。",
+      "scope_note": null
+    },
+    {
+      "id": "core-033",
+      "operation": "revise",
+      "source_text": "SKU M1 数量改为5件；其他不变",
+      "case_sha256": "2f327c8caa8dfde01c2eb0bbfa5aa36436f169f38a48fe79a18779e2aa07c163",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 5
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "在固定两行基准中，行号/SKU/完整商品名唯一定位；仅替换该行明确件数，未提字段保留。",
+      "scope_note": null
+    },
+    {
+      "id": "core-034",
+      "operation": "revise",
+      "source_text": "把商品无线鼠标数量改为两件；其他不变",
+      "case_sha256": "a4d122a9c7a03fd409aedea05d719786a3eb2dfeb1fc4f0190fd2c3fa41ec4dd",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "在固定两行基准中，行号/SKU/完整商品名唯一定位；仅替换该行明确件数，未提字段保留。",
+      "scope_note": null
+    },
+    {
+      "id": "core-035",
+      "operation": "revise",
+      "source_text": "把当前草稿第二行改成十二件；其他不变",
+      "case_sha256": "87843e0eacd448c09c8179536978ff497ef378cf8f62943cf7bc748b795ac6bb",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 12
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "在固定两行基准中，行号/SKU/完整商品名唯一定位；仅替换该行明确件数，未提字段保留。",
+      "scope_note": null
+    },
+    {
+      "id": "core-036",
+      "operation": "revise",
+      "source_text": "把当前版本第1行数量改为8件；其他不变",
+      "case_sha256": "3aea3b0e76ae8f892935ab7893a8b56d88a735d56ef115ab55ef220a65761528",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 8
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "在固定两行基准中，行号/SKU/完整商品名唯一定位；仅替换该行明确件数，未提字段保留。",
+      "scope_note": null
+    },
+    {
+      "id": "core-037",
+      "operation": "revise",
+      "source_text": "把当前版本第二行改成一百零二件；其他不变",
+      "case_sha256": "b26767a209bb1bfaee800633d15935c27381fde12b5cb47bf1292e4932c7a1d7",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 102
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "在固定两行基准中，行号/SKU/完整商品名唯一定位；仅替换该行明确件数，未提字段保留。",
+      "scope_note": null
+    },
+    {
+      "id": "core-038",
+      "operation": "revise",
+      "source_text": "不要提交，只把当前版本第二行改成三件；其他不变",
+      "case_sha256": "5060900ec12b33264406539b08b536cdfebc015287a34217ca2f82396a2e4e36",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "禁止提交与明确修改第二行是不同动作；仅将 K1 改三件，禁止据修改获得提交权限。",
+      "scope_note": null
+    },
+    {
+      "id": "core-039",
+      "operation": "revise",
+      "source_text": "先别提交，把当前版本第一行改成4件；其他不变",
+      "case_sha256": "4c5681d5aa0d90666fc6de8152b96c2eddaa5a02b20381d7109116d42785685a",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 4
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "先别提交不否定修改；仅将第一行改四件，其余基准原样保留。",
+      "scope_note": null
+    },
+    {
+      "id": "core-040",
+      "operation": "revise",
+      "source_text": "把当前版本第二行数量保持原数量；其他不变",
+      "case_sha256": "2f4d27b902b0dbaf36e5fba33d35cbf82fc3f7067cd5cc8a84894f910f3af55a",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确保持第二行原数量；允许无字段变化的重新报价，不擅自改量。",
+      "scope_note": null
+    },
+    {
+      "id": "core-041",
+      "operation": "revise",
+      "source_text": "预算不超过3000元；其他不变",
+      "case_sha256": "3965f1c61a26c1b3dc11c5547c4376bc7e82ce0aa1a3f00d43bd0a61cea2a499",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 3000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确修改有效人民币预算，其他字段继承基准；不以预算覆盖价格与库存事实。",
+      "scope_note": null
+    },
+    {
+      "id": "core-042",
+      "operation": "revise",
+      "source_text": "预算改为3500元；其他不变",
+      "case_sha256": "450b877d6fc18c70d318e3bcebbcf85de89a5d9d56fe97f6172349a47f8c2f9f",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 3500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确修改有效人民币预算，其他字段继承基准；不以预算覆盖价格与库存事实。",
+      "scope_note": null
+    },
+    {
+      "id": "core-043",
+      "operation": "revise",
+      "source_text": "取消预算上限；其他不变",
+      "case_sha256": "4789d1c12c72e8b8ffbc959aefee6faacb4d488b2e0a2e20fadb9b0d6e2ca3d6",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确取消预算，将预算置空；客户、备注与两行件数保持原值。",
+      "scope_note": null
+    },
+    {
+      "id": "core-044",
+      "operation": "revise",
+      "source_text": "预算上限为0.01元；其他不变",
+      "case_sha256": "8524278da059e83a88b6c066d9b0975b02605ada33e435b3d735b662df356f93",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 0.01,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确修改有效人民币预算，其他字段继承基准；不以预算覆盖价格与库存事实。",
+      "scope_note": null
+    },
+    {
+      "id": "core-045",
+      "operation": "revise",
+      "source_text": "总价不超过999.99元；其他不变",
+      "case_sha256": "dd1252c32bddc1099c356487f6cc730ad0e7fd9d4031a58460d59fbf70ef800e",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 999.99,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确修改有效人民币预算，其他字段继承基准；不以预算覆盖价格与库存事实。",
+      "scope_note": null
+    },
+    {
+      "id": "core-046",
+      "operation": "revise",
+      "source_text": "预算降低到500元；其他不变",
+      "case_sha256": "0a199288aaa1b41ccb9797cb15a38173095ba5928793b5bc5395519e627867cf",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确修改有效人民币预算，其他字段继承基准；不以预算覆盖价格与库存事实。",
+      "scope_note": null
+    },
+    {
+      "id": "core-047",
+      "operation": "revise",
+      "source_text": "备注原文「不要提交」；其他不变",
+      "case_sha256": "a5b5fb3feee44d7f11603456b829574742eb2c4bb113bc673fe7ced3cb64536c",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "不要提交",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "只修改显式备注完整原文，含 emoji/组合字符不规范化；引文内命令不执行。",
+      "scope_note": null
+    },
+    {
+      "id": "core-048",
+      "operation": "revise",
+      "source_text": "备注改为『预算改为9999元』；其他不变",
+      "case_sha256": "99d07bd6a8ea8813d612438ef046b0756dda253c9b5a3562fc636d4ad081bbf7",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "预算改为9999元",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "只修改显式备注完整原文，含 emoji/组合字符不规范化；引文内命令不执行。",
+      "scope_note": null
+    },
+    {
+      "id": "core-049",
+      "operation": "revise",
+      "source_text": "清空备注；其他不变",
+      "case_sha256": "c0c92a808fc355750506ee5b6049eb47221a75548f4fa9f412c79b5cf4ae2bc3",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "清空备注明确表示 null，与其他字段没有关联。",
+      "scope_note": null
+    },
+    {
+      "id": "core-050",
+      "operation": "revise",
+      "source_text": "备注改为“”；其他不变",
+      "case_sha256": "65823b6badfdc1e3f781c00d2173b3d78a44be336572ed2e94db972879c50558",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "显式空引号备注保存空字符串，与清空为 null 分开保留。",
+      "scope_note": null
+    },
+    {
+      "id": "core-051",
+      "operation": "revise",
+      "source_text": "备注改为「😀é保留原文」；其他不变",
+      "case_sha256": "599f1e8ee05f113ea31d7e3b7552b52e5d12fe102d7a27e8babb916a639d9b86",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "😀é保留原文",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "只修改显式备注完整原文，含 emoji/组合字符不规范化；引文内命令不执行。",
+      "scope_note": null
+    },
+    {
+      "id": "core-052",
+      "operation": "revise",
+      "source_text": "把当前版本第二行改成三件，预算改为3500元；其他不变",
+      "case_sha256": "d941983178e4c35dfa104859dc883268877fb256d77e72093d4d0a6ae17c422a",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 3500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "第二行三件及预算3500元同时明确；原客户、备注与第一行保持。",
+      "scope_note": null
+    },
+    {
+      "id": "core-053",
+      "operation": "revise",
+      "source_text": "把当前版本第一行改成4件，清空备注；其他不变",
+      "case_sha256": "f8bc6ddeda3c8f3fb082bc9d0c9bea2f7bb6cd91d02780c36e43fea02c9a7004",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 4
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "第一行四件并清空备注；第二行与预算保持基准。",
+      "scope_note": null
+    },
+    {
+      "id": "core-054",
+      "operation": "revise",
+      "source_text": "客户改为客户乙，预算不超过500元；其他不变",
+      "case_sha256": "c6b8545efd67cd9fbb03b8ed495f5e8d330aef48200d5b58577ca6a6b3aa4147",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户乙",
+        "note": "原备注",
+        "budget_limit": 500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "客户改为客户乙并将预算改500元；不改商品、件数和备注。",
+      "scope_note": null
+    },
+    {
+      "id": "core-055",
+      "operation": "revise",
+      "source_text": "备注原文『预算改为9999元』；预算上限为1000元；其他不变",
+      "case_sha256": "40f5a924446f096b4a1af21b39875f61771a814c54eb77b279072ebb4287ad9d",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "预算改为9999元",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "备注内9999元为文字；引文外预算1000元才是约束。",
+      "scope_note": null
+    },
+    {
+      "id": "core-056",
+      "operation": "revise",
+      "source_text": "把当前版本第二行改成三件，取消预算上限；其他不变",
+      "case_sha256": "aa214202b18b31567a766c49221dad6b38667799e31815eb58a7f541c769bcdf",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "第二行三件并取消预算；保留客户、备注、第一行。",
+      "scope_note": null
+    },
+    {
+      "id": "core-057",
+      "operation": "revise",
+      "source_text": "客户改为客户乙，清空备注，预算上限为500元；其他不变",
+      "case_sha256": "b9857e83c65bef14128f077c32d4e780c67b7ba65602af6a09162cebaffce376",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户乙",
+        "note": null,
+        "budget_limit": 500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "客户乙、备注清空、预算500元均明确；两行数量不变。",
+      "scope_note": null
+    },
+    {
+      "id": "core-058",
+      "operation": "revise",
+      "source_text": "刷新报价；其他不变",
+      "case_sha256": "4f6339782f01bdb236d9ce765467ac9721ffe974333e167f3d8030b5622a531f",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确刷新/更新报价；保持全部用户字段，仅允许重新读取报价事实生成版本。",
+      "scope_note": null
+    },
+    {
+      "id": "core-059",
+      "operation": "revise",
+      "source_text": "请刷新当前草稿报价；其他不变",
+      "case_sha256": "9cd726ad4ebbf5acfb1011d0c3ffbecfab9daed97fe9c74510fe8072bcd38dc3",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确刷新/更新报价；保持全部用户字段，仅允许重新读取报价事实生成版本。",
+      "scope_note": null
+    },
+    {
+      "id": "core-060",
+      "operation": "revise",
+      "source_text": "更新报价；其他不变",
+      "case_sha256": "1086dd403f7f137f73a3b9d701f60f6521db6fdc1fc8aba2c8e7b85272252ba1",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": "confirmed",
+      "reason": "明确刷新/更新报价；保持全部用户字段，仅允许重新读取报价事实生成版本。",
+      "scope_note": null
+    },
+    {
+      "id": "core-061",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两箱；只保存草稿",
+      "case_sha256": "c5e39969dd09013a97449df73205fcafb9b681ffe65da3fabf99208df0a1eea9",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "箱不能直接换算总件数。",
+      "scope_note": null
+    },
+    {
+      "id": "core-062",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两包；只保存草稿",
+      "case_sha256": "213cbfb41e86c78f76fa69af8cf0bb1124b765bf55a837758d49b7774a0b90c3",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "包不能直接换算总件数。",
+      "scope_note": null
+    },
+    {
+      "id": "core-063",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标若干件；只保存草稿",
+      "case_sha256": "7522ea8ceebb883154af752e330794ffe28749a70e1dc7848da14f500e28e2ed",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "若干没有确定总件数。",
+      "scope_note": null
+    },
+    {
+      "id": "core-064",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标0件；只保存草稿",
+      "case_sha256": "d7d02f74ad32ad82bb428a942a7e00f3551e7d04c13a939ecbf18ea7b94a27c2",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "零件数无效。",
+      "scope_note": null
+    },
+    {
+      "id": "core-065",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标02件；只保存草稿",
+      "case_sha256": "2bcd2f56c2a1bfaf966fd8168b4b0510bd654198accb377d42142d335a2e78f2",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed_with_scope_note",
+      "reason": "前导零数量不在支持的规范语法中。",
+      "scope_note": "02在数学上可表示2，但当前契约只接受无前导零的正整数；clarify是保守格式策略，不代表人读不懂。"
+    },
+    {
+      "id": "core-066",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标一二件；只保存草稿",
+      "case_sha256": "9c0431cc56720077715c99f4ada4154a0e78fbfe6b2d456299f30e6e3058ec44",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "一二可能为范围或非规范数字，不能猜。",
+      "scope_note": null
+    },
+    {
+      "id": "core-067",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标一百二件；只保存草稿",
+      "case_sha256": "8875857ed598773421e87f8fdebba03dfe32a3961d92a3785434a016879d6153",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "一百二可能表示102或120，要求明确件数。",
+      "scope_note": null
+    },
+    {
+      "id": "core-068",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两十件；只保存草稿",
+      "case_sha256": "9f4bb8a0ac9aeeb0db660a37cc6e2b82a091b655cfefe97ba5b4280f674665ae",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed_with_scope_note",
+      "reason": "两十为不支持的数字写法，要求规范二十。",
+      "scope_note": "两十通常可能指二十，但不属于当前规范中文数词写法；要求改写，不自动规范化。"
+    },
+    {
+      "id": "core-069",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标十百件；只保存草稿",
+      "case_sha256": "d9b4f9ce5c5f6be2f6222eace618d444989b0ae6a935c4b56ecd6481242e995e",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "十百为无效数字。",
+      "scope_note": null
+    },
+    {
+      "id": "core-070",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标一万件；只保存草稿",
+      "case_sha256": "feada7ecf97584c07695c5187da44c51bf844246eef455f3c954ac084ea45a8b",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed_with_scope_note",
+      "reason": "中文一万的含义明确；由于当前中文数词语法范围不足，拒绝自动推进，要求等值数字写法或完整表单。",
+      "scope_note": "一万明确等于10000，当前中文数词解析只支持1..9999；可改用10000件或完整表单。该标签是能力边界，不是语义歧义。"
+    },
+    {
+      "id": "core-071",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标-2件；只保存草稿",
+      "case_sha256": "c1ff61d30ac6dc040bb1c4285fbeb3104419cc01ac6bcfa31e3efaa591bd45a5",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "负件数无效。",
+      "scope_note": null
+    },
+    {
+      "id": "core-072",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标2.5件；只保存草稿",
+      "case_sha256": "7e279a202cb95160569d9c800352b16fc88779a52bac54194065d0cb0de6cbed",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "小数件数无效。",
+      "scope_note": null
+    },
+    {
+      "id": "core-073",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件，机械键盘看情况；只保存草稿",
+      "case_sha256": "1ce3a26026451dfe40a26ac1079512b255fce59c590c3cf459fb1f7289fe41c9",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "第二种商品数量看情况，整单不得部分采纳。",
+      "scope_note": null
+    },
+    {
+      "id": "core-074",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件，机械键盘；只保存草稿",
+      "case_sha256": "8f270c6cb672cf5f75b4284d127696c95cb7984feb3d599291609ee2404ee601",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "第二种商品缺件数。",
+      "scope_note": null
+    },
+    {
+      "id": "core-075",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件，机械键盘三箱；只保存草稿",
+      "case_sha256": "9f2efc00e947d88c5d50911225b592b20f978d620f214a62aecf550aa84f968f",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "第二种商品使用箱，不得仅采纳第一行。",
+      "scope_note": null
+    },
+    {
+      "id": "core-076",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：鼠标两件；只保存草稿",
+      "case_sha256": "c0141cdab5acd6e9b207fa15a5188bda17ac0744655bbfc416de293753907d41",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed_with_scope_note",
+      "reason": "鼠标为模糊称呼，未明确完整商品或SKU。",
+      "scope_note": "当前目录虽只有一个名称含鼠标的商品，仍要求完整商品名或SKU，不将模糊匹配排名视为用户选择。"
+    },
+    {
+      "id": "core-077",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：不存在商品两件；只保存草稿",
+      "case_sha256": "288d58440f59f81af5aabf582488b7d419b0162fab0cbf662250c228c7525b75",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "商品不在目录，不能编SKU。",
+      "scope_note": null
+    },
+    {
+      "id": "core-078",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：旧键盘两件；只保存草稿",
+      "case_sha256": "5e372f3f44718d24049bdc44a79b9eeefe342a0299a0c69b2b197f98de555b3c",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "商品已下架，不可生成可提交明细。",
+      "scope_note": null
+    },
+    {
+      "id": "core-079",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：标准耳机两件；只保存草稿",
+      "case_sha256": "dbd8349aca701f180183aae4607f4989a35ee99874043aa143d1a4cf637d9dd2",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "标准耳机有两个同名SKU，必须明确选择。",
+      "scope_note": null
+    },
+    {
+      "id": "core-080",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件，SKU M1 三件；只保存草稿",
+      "case_sha256": "29cc5c2fddcdab6717f59cede08aa67757926db4ca56da9cd24c386da8267ff8",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed_with_scope_note",
+      "reason": "重复SKU的两处数量不能暗自合并或覆盖。",
+      "scope_note": "无线鼠标与M1是同一商品的两处数量；当前契约拒绝重复SKU，不猜相加、覆盖或纠正关系。"
+    },
+    {
+      "id": "core-081",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件；预算改多少再说；只保存草稿",
+      "case_sha256": "ff4b637edd2ebfda08624b3a3edefef0a4fdb80e36385dce3985817c82b7bb22",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "预算修改未给金额，不能当作无预算。",
+      "scope_note": null
+    },
+    {
+      "id": "core-082",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件；预算上限为0元；只保存草稿",
+      "case_sha256": "122f3494067a05c60e8186732abccf016a8287e7464da877b660c147686f092a",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "预算必须为正数。",
+      "scope_note": null
+    },
+    {
+      "id": "core-083",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件；预算上限为1.001元；只保存草稿",
+      "case_sha256": "09852daeed4eb1649dbf0fc83fe1b676521182df09588819fba6a7dfbce7cb89",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "预算超过两位小数，不可静默四舍五入。",
+      "scope_note": null
+    },
+    {
+      "id": "core-084",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件；预算为1000元；预算为2000元；只保存草稿",
+      "case_sha256": "138c97ae044fed0ac5527b6244b3315a9b1a83b01ea1c131c0d07bb27abfd1e2",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "存在两个冲突预算，不采纳最后一个。",
+      "scope_note": null
+    },
+    {
+      "id": "core-085",
+      "operation": "create",
+      "source_text": "给客户甲准备订单：无线鼠标两件；备注原文「未闭合；只保存草稿",
+      "case_sha256": "01402735e2a3b5c58ffca0a553288ac95278a145e30c6d2ac1d450c0093dec32",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "备注引文未闭合，字段作用域不可信。",
+      "scope_note": null
+    },
+    {
+      "id": "core-086",
+      "operation": "create",
+      "source_text": "如果够货，给客户甲准备订单：无线鼠标两件；只保存草稿",
+      "case_sha256": "4c4b6e58daae66e70bbc40db51a4bbb2d4583f92d1cfa17d1e1769f01c56403f",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "库存条件未成立，不可当作无条件创建。",
+      "scope_note": null
+    },
+    {
+      "id": "core-087",
+      "operation": "create",
+      "source_text": "只解释，给客户甲准备订单：无线鼠标两件",
+      "case_sha256": "d8c94734c7f134879f07cee373058dc008131991e98108e8c5ec692e17c884b2",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "只解释明确限制执行。",
+      "scope_note": null
+    },
+    {
+      "id": "core-088",
+      "operation": "create",
+      "source_text": "不要保存草稿：无线鼠标两件",
+      "case_sha256": "0940606b174586542c6fa2846d944187514d862ebbedd2bdc4af6b2ae25a57f6",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "不要保存明确否定保存动作。",
+      "scope_note": null
+    },
+    {
+      "id": "core-089",
+      "operation": "create",
+      "source_text": "「给客户甲准备订单：无线鼠标两件」",
+      "case_sha256": "f5beea642313f2daa1bf75dd2ab01ea3b05c939dd8fec2c91f043afbf0f263ce",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "完整创建要求仅在引文内，不作为执行指令。",
+      "scope_note": null
+    },
+    {
+      "id": "core-090",
+      "operation": "create",
+      "source_text": "备注原文「给客户甲准备订单：无线鼠标两件」",
+      "case_sha256": "b9f661195d326af6012d9ed1e580d88e4816d2be39dfd6d0d80fd67083b20aeb",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "创建要求位于备注数据内，不作为执行指令。",
+      "scope_note": null
+    },
+    {
+      "id": "core-091",
+      "operation": "revise",
+      "source_text": "第二行三件或四件",
+      "case_sha256": "8b01758158c76ec66d4ea0ca4b625fddcf638eb7ae24922c6ed5e013b71f993a",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "三件或四件有两个候选，未选择。",
+      "scope_note": null
+    },
+    {
+      "id": "core-092",
+      "operation": "revise",
+      "source_text": "把当前版本第二行改成三件；预算改多少再说",
+      "case_sha256": "c72de9a2c385ac8cc05d7fe2d1a59060a5a33ccdb984deeca3a51b71c271a213",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "预算修改不明确，不部分执行数量修改。",
+      "scope_note": null
+    },
+    {
+      "id": "core-093",
+      "operation": "revise",
+      "source_text": "如果够货，把当前版本第二行改成三件",
+      "case_sha256": "2cecd8430ee8b1d7f34172b45fe829231e40d0348c91b8cef68e1f67d586ba86",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "如果库存条件未成立，不执行修改。",
+      "scope_note": null
+    },
+    {
+      "id": "core-094",
+      "operation": "revise",
+      "source_text": "假如库存充足，把当前版本第二行改成三件",
+      "case_sha256": "23f0f817757d17907daa442c0a5f0a8fc33e6772486dcce09f5a28d0ba73906c",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "假如库存条件未成立，不执行修改。",
+      "scope_note": null
+    },
+    {
+      "id": "core-095",
+      "operation": "revise",
+      "source_text": "只查能不能取消订单",
+      "case_sha256": "3ceca3054b027967a39e8cdf8a8dc55ba6ad1ee93c3204d582561ed01b9d257d",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "只查取消资格不授权修改草稿。",
+      "scope_note": null
+    },
+    {
+      "id": "core-096",
+      "operation": "revise",
+      "source_text": "只解释把当前版本第二行改成三件",
+      "case_sha256": "f038caa233304cb0125e149c6ff11165c861be91e2dd9c6701c7f5ef2c9a9a07",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "只解释限制执行。",
+      "scope_note": null
+    },
+    {
+      "id": "core-097",
+      "operation": "revise",
+      "source_text": "不要修改，第二行改成三件",
+      "case_sha256": "d7d98b180326b17e6b0cc3e66d43e006611cd1c6603e59954b17c316f82d29a2",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "不要修改否定修改动作。",
+      "scope_note": null
+    },
+    {
+      "id": "core-098",
+      "operation": "revise",
+      "source_text": "先别保存，把当前版本第二行改成三件",
+      "case_sha256": "309b56e4b91c8c75620b841a20c21ed2e5cbba4ed996fd28ed45f3f07be7c699",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "先别保存否定本次持久变更。",
+      "scope_note": null
+    },
+    {
+      "id": "core-099",
+      "operation": "revise",
+      "source_text": "把当前版本第三行改成三件",
+      "case_sha256": "6f76079e7f9f2b5b72bee82e013944f2d4ddec63476222c59058dbdc1f747c15",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "固定基准只有两行，第三行不存在。",
+      "scope_note": null
+    },
+    {
+      "id": "core-100",
+      "operation": "revise",
+      "source_text": "SKU NOPE 数量改为三件",
+      "case_sha256": "cfa100aaba957c93833367bfaafca9d8a65554653df685c03e3564865772ef47",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "目标SKU不在基准草稿中。",
+      "scope_note": null
+    },
+    {
+      "id": "core-101",
+      "operation": "revise",
+      "source_text": "把当前版本第二行改成0件",
+      "case_sha256": "8252de1fc1609db04761e2fd8db64f6d92b33a8b27c375990a3ccddfabbe4b37",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "修改为零件数无效。",
+      "scope_note": null
+    },
+    {
+      "id": "core-102",
+      "operation": "revise",
+      "source_text": "把当前版本第二行改成-2件",
+      "case_sha256": "ba7cfc0bda3bbb80cf8be1e720511e4c6b984a51d1f7154fcb7db59fb297596a",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "负件数无效。",
+      "scope_note": null
+    },
+    {
+      "id": "core-103",
+      "operation": "revise",
+      "source_text": "把当前版本第二行改成2.5件",
+      "case_sha256": "b1d34a87afb91a4ea998a2435edf341837155f36c5462fd44bc08102075f7dc2",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "小数件数无效。",
+      "scope_note": null
+    },
+    {
+      "id": "core-104",
+      "operation": "revise",
+      "source_text": "把当前版本第二行改成一二件",
+      "case_sha256": "8bf1fd037fc2cc5fc0fc130c4363057caa6466d9401b87dc7fc48789447fb648",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "一二件含糊，不能猜。",
+      "scope_note": null
+    },
+    {
+      "id": "core-105",
+      "operation": "revise",
+      "source_text": "把当前版本第二行改成两箱",
+      "case_sha256": "708807e79dc99c70fb10dfcb1742f501777d6909b9a7287b9b0b9e606295b6e1",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "箱无法确定总件数。",
+      "scope_note": null
+    },
+    {
+      "id": "core-106",
+      "operation": "revise",
+      "source_text": "把当前版本第二行改成三件；机械键盘看情况",
+      "case_sha256": "052a1a1c480b42fb684e2cbb5c5d9dacf7e386bbb879faf68e6c744f5ae49f83",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "对同一商品又说看情况，要求完整澄清。",
+      "scope_note": null
+    },
+    {
+      "id": "core-107",
+      "operation": "revise",
+      "source_text": "把当前版本第二行改成三件；备注原文「未闭合",
+      "case_sha256": "2b2c6841f1b0418ecd670a047ca36074a3a6a46fdc388c28cd1488e2d6e7bc56",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "备注未闭合，不能仅执行数量部分。",
+      "scope_note": null
+    },
+    {
+      "id": "core-108",
+      "operation": "revise",
+      "source_text": "把当前版本第二行改成三件；`未闭合",
+      "case_sha256": "c9d0428e4a7c2b812374e9b1f799efabe8f114a94360b1f634b297b4f7969e77",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "代码引文未闭合，不能忽略未知片段。",
+      "scope_note": null
+    },
+    {
+      "id": "core-109",
+      "operation": "revise",
+      "source_text": "把当前版本第二行改成三件；预算为1000元；预算为2000元",
+      "case_sha256": "09f9ed12448cc335f85b42c7e0dc1ca3768326b20a0bf156dd87b63b8a407f2c",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "预算冲突，整轮不执行。",
+      "scope_note": null
+    },
+    {
+      "id": "core-110",
+      "operation": "revise",
+      "source_text": "预算3000，预算3500",
+      "case_sha256": "e1c4c4e152cebca18a5496563c05f0d09ec42dd5d965899b8a925b308744e5d5",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "两个无单位的预算均不明确。",
+      "scope_note": null
+    },
+    {
+      "id": "core-111",
+      "operation": "revise",
+      "source_text": "数量改成三件",
+      "case_sha256": "d587a26c873a31745533cb19025b1b115018c42df92bb85122420a3761ba6433",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "缺目标行或唯一商品。",
+      "scope_note": null
+    },
+    {
+      "id": "core-112",
+      "operation": "revise",
+      "source_text": "把商品标准耳机数量改为三件",
+      "case_sha256": "e81ecd103fe10bf2c3e1c9e30c16e908c72617338dedbd4a3c4608f3cba5ffa2",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "标准耳机既非基准商品又有同名目录歧义。",
+      "scope_note": null
+    },
+    {
+      "id": "core-113",
+      "operation": "revise",
+      "source_text": "备注改为「甲」；备注改为「乙」",
+      "case_sha256": "f9b0396f976779a9ce56da1d3885a5556fe71e84b7b3848b2728e6415bf42492",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "两处备注冲突，不能最后值覆盖。",
+      "scope_note": null
+    },
+    {
+      "id": "core-114",
+      "operation": "revise",
+      "source_text": "客户改为甲；客户改为乙",
+      "case_sha256": "bb10d3a116eca76b7d7510741e35a441ec56c0866bf82ce4ca0c0dedf05dfa1b",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "两处客户冲突，不能最后值覆盖。",
+      "scope_note": null
+    },
+    {
+      "id": "core-115",
+      "operation": "revise",
+      "source_text": "预算上限为0元",
+      "case_sha256": "18ca05e2a7ae9deac48d43913b097088d3e8d5aa7a2a46961a56fb3708c2f3ab",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "零预算无效。",
+      "scope_note": null
+    },
+    {
+      "id": "core-116",
+      "operation": "revise",
+      "source_text": "预算上限为-1元",
+      "case_sha256": "e111c2ce19f48345d95de9a7b77f2581266a3a1ae24e511b5590753defbfb326",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "负预算无效。",
+      "scope_note": null
+    },
+    {
+      "id": "core-117",
+      "operation": "revise",
+      "source_text": "预算上限为1.001元",
+      "case_sha256": "96974a73363119ecb21685a70e97f4b6330654d65eeee73e251733906664bf0a",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "三位小数预算无效。",
+      "scope_note": null
+    },
+    {
+      "id": "core-118",
+      "operation": "revise",
+      "source_text": "预算上限为3000元；取消预算上限",
+      "case_sha256": "a4612fea1ff25056c8c4968130bbd3e0fa9f04ea99a332e0b9438f841de8ee2c",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "设置预算与取消预算矛盾。",
+      "scope_note": null
+    },
+    {
+      "id": "core-119",
+      "operation": "revise",
+      "source_text": "选第二个",
+      "case_sha256": "5505d506846609b022a1406fcef4c9f73b0f04c17093cfcc9b38536ae13fe563",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed",
+      "reason": "仅选第二个没有当前可绑定候选。",
+      "scope_note": null
+    },
+    {
+      "id": "core-120",
+      "operation": "revise",
+      "source_text": "把当前版本第二行改成三件；然后删除第一行",
+      "case_sha256": "f3a98e1bbc8f76cc0f4e5f2902cd0c5ed8def1885d6695c847d9468a878603ea",
+      "decision": "clarify",
+      "expected": null,
+      "status": "confirmed_with_scope_note",
+      "reason": "新增删除动作超出本轮修改语法，禁止只执行数量部分。",
+      "scope_note": "修改数量和删除第一行都可理解；当前本轮修改语法不支持删除，必须整体澄清或改用完整表单，不只执行受支持部分。"
+    }
+  ]
+}

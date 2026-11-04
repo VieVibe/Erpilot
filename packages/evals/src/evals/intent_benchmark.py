@@ -90,7 +90,7 @@ def run_benchmark(*, iterations=20, directory=None):
             engine.dispose()
     after = source_provenance()
     return {"suite": "intent-stress-engineering-1", "parser_version": PARSER_VERSION,
-            "label_status": "engineering_expectations_pending_human_review",
+            "label_status": "engineering_stress_expectations",
             "provider_requests": 0, "iterations_per_mode": iterations, "warmup_pairs": 1,
             "platform": platform.platform(), "python": platform.python_version(),
             "catalogue_size": 5102, "source_before": before, "source_after": after,

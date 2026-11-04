@@ -1,3 +1,4 @@
+import { apiFetch } from './auth-client.js';
 export interface DraftLine { sku: string; name: string; quantity: number; base_price: number; discount: number; unit_price: number; line_total: number; stock_before: number; stock_after: number }
 export interface BudgetConstraint { currency: 'CNY'; limit: number | null; origin: {kind: 'user_literal' | 'manual_form' | 'unattributed' | 'not_set'; revision: number; quote?: string; source_user_sha256?: string} }
 export interface DraftIssue {code: string; message: string; required_action: string; revision?: number; blocking?: boolean; sku?: string}
@@ -44,7 +45,7 @@ export function parseOrderDraft(value: unknown): OrderDraft {
 }
 function base(sessionId: string) { return `/api/sessions/${encodeURIComponent(sessionId)}/order-drafts`; }
 async function request(url: string, options?: RequestInit): Promise<unknown> {
-  const response = await fetch(url, options);
+  const response = await apiFetch(url, options);
   const body = await response.json().catch(() => null);
   if (!response.ok) {
     const detail = record(body) && record(body.error) ? body.error : {};

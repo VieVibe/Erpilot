@@ -1,0 +1,28 @@
+{
+  "scope": "Label-review-only source and evidence audit against the immediately preceding delivery.",
+  "prior_source_archive": "artifacts/erpilot-semantic-default-20261104.zip",
+  "application_source_files_compared": 145,
+  "historical_reports_compared": 766,
+  "changes_to_application_sources": 0,
+  "historical_reports_changed": 0,
+  "lockfiles_changed": 0,
+  "original_fixture_changed": false,
+  "annotation_review": {
+    "status": "completed",
+    "reviewer_kind": "ai_agent",
+    "reviewer": "Codex",
+    "review_id": "intent-core-120-ai-review-20261104-v1",
+    "review_sha256": "4f640a266d1653f9db96b5da0301e9e001d0ca4685022b2aa82965f928d0b4f5",
+    "fixture_sha256": "6010d3f1e35d8512587e857ea5564bce72a45bd2df393863576fd3a75bb1198c",
+    "reviewed_cases": 120,
+    "scope_qualified_cases": 6,
+    "label_changes": 0,
+    "requires_user_review": false,
+    "human_review_performed": false,
+    "accuracy_claim_scope": "bounded_rules_engineering_reference"
+  },
+  "regression_passed": 120,
+  "new_model_requests": 0,
+  "new_model_cost": 0,
+  "prior_real_model_acceptance_not_repeated": true
+}

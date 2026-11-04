@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
+import { useIdentity } from './AuthBoundary';
+import { apiFetch, createOwnedSession, sessionStorageKeys, type AuthUser } from './auth-client.js';
 import { Alert, Button, Empty, Input, Space, Tabs, Tag, type GetProps } from "antd";
 import { Bubble, Prompts, Sender } from "@ant-design/x";
 import { ArrowDownOutlined, ArrowUpOutlined, CheckCircleOutlined, InboxOutlined, FileTextOutlined, ShoppingOutlined, ThunderboltOutlined } from "@ant-design/icons";
@@ -48,8 +50,6 @@ function MessageInput(props: GetProps<typeof Input.TextArea>) {
 }
 const SENDER_COMPONENTS = { input: MessageInput };
 
-const SESSION_KEY = "erpilot-session-id";
-const FRESH_SESSION_KEY = "erpilot-fresh-session-id";
 const DEMO_PROMPTS: Record<string, string> = {
   draft: '给演示客户创建草稿：A1001 10 件、B2001 20 件，备注分箱发货',
   natural: '给演示客户准备订单：青瓷茶具两件，三件宣纸礼盒；备注原文「分箱发货」；预算上限为500元；只保存草稿',
@@ -65,18 +65,19 @@ function newSessionId(): string {
   return crypto.randomUUID?.() ?? Math.random().toString(36).slice(2);
 }
 
-function sessionKey(): string {
-  let id = localStorage.getItem(SESSION_KEY);
+function sessionKey(identity: AuthUser | null): string {
+  const keys = sessionStorageKeys(identity);
+  let id = localStorage.getItem(keys.current);
   if (!id) {
     id = newSessionId();
-    localStorage.setItem(SESSION_KEY, id);
-    localStorage.setItem(FRESH_SESSION_KEY, id);
+    localStorage.setItem(keys.current, id);
+    localStorage.setItem(keys.fresh, id);
   }
   return id;
 }
 
-function isFreshSession(sessionId: string): boolean {
-  return localStorage.getItem(FRESH_SESSION_KEY) === sessionId;
+function isFreshSession(sessionId: string, identity: AuthUser | null): boolean {
+  return localStorage.getItem(sessionStorageKeys(identity).fresh) === sessionId;
 }
 
 function isConflict(error: unknown): error is ApiError {
@@ -86,7 +87,9 @@ function isConflict(error: unknown): error is ApiError {
 }
 
 export default function App() {
-  const sessionIdRef = useRef<string>(sessionKey());
+  const identity = useIdentity();
+  const { current: storageCurrentKey, fresh: storageFreshKey } = sessionStorageKeys(identity);
+  const sessionIdRef = useRef<string>(sessionKey(identity));
   const sessionRequests = useRef(new SessionRequests(sessionIdRef.current));
   const [historyOpen, setHistoryOpen] = useState(false);
   const [businessOpen, setBusinessOpen] = useState(() => window.matchMedia("(min-width: 1200px)").matches);
@@ -97,6 +100,7 @@ export default function App() {
   const [runtimeLabel, setRuntimeLabel] = useState("数据源未确认");
   const [intentRevisionEnabled, setIntentRevisionEnabled] = useState(false);
   const [scriptedDemo, setScriptedDemo] = useState(false);
+  const [persistentDemo, setPersistentDemo] = useState(false);
   const [error, setError] = useState<string>("");
   const [busy, setBusy] = useState(false);
   const [restoreState, setRestoreState] = useState<RestoreState>("loading");
@@ -328,7 +332,7 @@ export default function App() {
       if (!liveConnection.current) {
         setTurns(hydrateTurns(snapshot));
       }
-      localStorage.removeItem(FRESH_SESSION_KEY);
+      localStorage.removeItem(storageFreshKey);
       setRestoreState("ready");
     } else {
       setTurns([]);
@@ -345,7 +349,7 @@ export default function App() {
   const refreshSession = useCallback(async (signal?: AbortSignal) => {
     const sessionId = sessionIdRef.current;
     const ticket = sessionRequests.current.refresh();
-    const fresh = isFreshSession(sessionId);
+    const fresh = isFreshSession(sessionId, identity);
     setRestoreState("loading");
     try {
       const snapshot = await loadSessionState(sessionId, signal, fresh);
@@ -365,14 +369,18 @@ export default function App() {
 
   useEffect(() => {
     const controller = new AbortController();
-    void fetch("/api/runtime", {signal: controller.signal}).then(async response => {
+    void apiFetch("/api/runtime", {signal: controller.signal}).then(async response => {
       if (!response.ok) throw new Error("runtime unavailable");
       const runtime = await response.json();
       if (controller.signal.aborted) return;
       setScriptedDemo(runtime.scripted_demo === true);
-      const source = runtime.scripted_demo === true ? "离线演示 · 临时数据" : runtime.data_source === "mcp" ? "真实 ERP" :
+      setPersistentDemo(runtime.demo_persistent === true);
+      const source = runtime.scripted_demo === true ? `离线演示 · ${runtime.demo_persistent === true ? '持久数据' : '临时数据'}` : runtime.data_source === "mcp" ? "真实 ERP" :
         runtime.data_source === "demo" ? "演示数据" : "数据源未确认";
-      setRuntimeLabel(`${source} · ${runtime.writes_enabled ? "写入需审批" : "只读"}`);
+      const parsing = runtime.intent_semantic_enabled === true
+        ? ` · ${runtime.intent_semantic_available === false ? '智能解析暂不可用，可手动核对' : '智能解析已开启'}`
+        : runtime.intent_semantic_disabled_reason ? ' · 使用基础解析' : '';
+      setRuntimeLabel(`${source} · ${runtime.writes_enabled ? "写入需审批" : "只读"}${parsing}`);
       setDraftsEnabled(runtime.drafts_enabled === true);
       setIntentPreviewEnabled(runtime.intent_preview_enabled === true);
       setIntentRecoveryEnabled(runtime.intent_recovery_enabled === true);
@@ -488,7 +496,7 @@ export default function App() {
       setError("");
       try {
         if (liveConnection.current) {
-          await submitApproval(pendingId, approved);
+          await submitApproval(pendingId, approved, identity ? sessionIdRef.current : undefined);
         } else {
           setBusy(true);
           replayConnection.current?.abort();
@@ -551,11 +559,14 @@ export default function App() {
     }
   }, [applySnapshot]);
 
-  const startNewSession = useCallback(() => {
+  const startNewSession = useCallback(async () => {
     if (busy || liveConnection.current || sessionStatus === 'running') return;
-    const sessionId = newSessionId();
-    localStorage.setItem(SESSION_KEY, sessionId);
-    localStorage.setItem(FRESH_SESSION_KEY, sessionId);
+    setBusy(true);
+    let sessionId: string;
+    try { sessionId = identity ? await createOwnedSession() : newSessionId(); }
+    catch (e) { setError(e instanceof Error ? e.message : '创建会话失败'); setBusy(false); return; }
+    localStorage.setItem(storageCurrentKey, sessionId);
+    localStorage.setItem(storageFreshKey, sessionId);
     sessionIdRef.current = sessionId;
     sessionRequests.current.switchTo(sessionId);
     lastSeqByRun.current.clear();
@@ -575,14 +586,15 @@ export default function App() {
     setStatus("");
     setInput("");
     setRestoreState("new");
+    setBusy(false);
   }, [draftsEnabled, refreshDrafts, busy, sessionStatus]);
 
   const selectHistorySession = useCallback((sessionId: string) => {
     if (busy || liveConnection.current || sessionStatus === 'running') return;
     sessionRequests.current.switchTo(sessionId);
     sessionIdRef.current = sessionId;
-    localStorage.setItem(SESSION_KEY, sessionId);
-    localStorage.removeItem(FRESH_SESSION_KEY);
+    localStorage.setItem(storageCurrentKey, sessionId);
+    localStorage.removeItem(storageFreshKey);
     draftRequest.current++;
     operationSnapshots.current.clear();lastSeqByRun.current.clear();
     approvalInFlight.current.clear();setSubmittingApprovals(new Set());
@@ -599,7 +611,7 @@ export default function App() {
     const message = (requestedMessage ?? input).trim();
     if (!message || !canSend || hasPending || interrupted || liveConnection.current) return;
     const ticket = sessionRequests.current.capture();
-    localStorage.removeItem(FRESH_SESSION_KEY);
+    localStorage.removeItem(storageFreshKey);
     setInput("");
     setError("");
     setBusy(true);
@@ -745,7 +757,7 @@ export default function App() {
     <div className="chat" ref={listRef} onScroll={onScroll}>
       <div className="conversation-content">
         {scriptedDemo && <Alert className="demo-notice" type="info" showIcon title="离线脚本化演示"
-          description={<>使用固定指令和临时数据，重启后会话清空。政策使用关键词演示向量；此模式用于查看业务流程，不代表真实模型表现。
+          description={<>{persistentDemo ? '使用固定指令和持久化演示数据，重建容器后可恢复会话与待审批任务。' : '使用固定指令和临时数据，重启后会话清空。'}政策使用关键词演示向量；此模式用于查看业务流程，不代表真实模型表现。
             <Space wrap style={{ marginTop: 8 }}>
               {Object.entries({draft: '创建草稿', natural: '商品名称下单', revise: '修改第二行', submit: '提交草稿', policy: '政策证据',
                 policyMiss: '无依据拒答', cancellation: '取消资格', replenishment: '补货建议'}).map(([key, label]) =>

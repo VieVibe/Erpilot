@@ -26,9 +26,13 @@ class ContextView:
     recent_only: bool = True
     retain_user_messages: bool = False
     fail_on_overflow: bool = False
+    current_projectors: Mapping[str, ToolProjector] | None = None
 
     def __call__(self, history: list[dict], policy: ContextPolicy) -> list[dict]:
         messages = deepcopy(history)
+        current_turn = next(
+            (i for i in range(len(messages) - 1, -1, -1) if messages[i]["role"] == "user"), -1
+        )
         calls = {}
         for i, message in enumerate(messages):
             for call in message.get("tool_calls", []):
@@ -36,7 +40,12 @@ class ContextView:
             if message["role"] != "tool" or not isinstance(message.get("content"), str):
                 continue
             name = calls.get(message.get("tool_call_id"), (None, None))[1]
-            projector = self.projectors.get(name)
+            projectors = (
+                self.current_projectors
+                if self.current_projectors is not None and current_turn >= 0 and i > current_turn
+                else self.projectors
+            )
+            projector = projectors.get(name)
             projected = projector(message["content"]) if projector else None
             # A large structured summary is also omitted, never cut into invalid JSON.
             if projected is not None and (
@@ -46,11 +55,15 @@ class ContextView:
                 continue
             if policy.max_tool_chars > 0 and len(message["content"]) > policy.max_tool_chars:
                 content = message["content"]
-                message["content"] = json.dumps({
-                    "context_view": "omitted", "refresh_required": True,
-                    "original_chars": len(content),
-                    "sha256": hashlib.sha256(content.encode()).hexdigest(),
-                }, ensure_ascii=False)
+                message["content"] = json.dumps(
+                    {
+                        "context_view": "omitted",
+                        "refresh_required": True,
+                        "original_chars": len(content),
+                        "sha256": hashlib.sha256(content.encode()).hexdigest(),
+                    },
+                    ensure_ascii=False,
+                )
 
         # Each unit includes its complete assistant/tool exchange. A recent window
         # may expand to the beginning of a unit rather than split a parallel call.
@@ -70,13 +83,17 @@ class ContextView:
         # Retain the most recent observation, including errors/none/ambiguity.
         # Never resurrect an older successful observation after a newer failure.
         for name in self.remember_tools:
-            indices = [i for i, m in enumerate(messages) if m["role"] == "tool"
-                       and calls.get(m.get("tool_call_id"), (None, None))[1] == name]
+            indices = [
+                i
+                for i, m in enumerate(messages)
+                if m["role"] == "tool" and calls.get(m.get("tool_call_id"), (None, None))[1] == name
+            ]
             if indices:
                 latest = indices[-1]
                 protected.add(latest)
-                user = next((i for i in range(latest - 1, -1, -1)
-                             if messages[i]["role"] == "user"), None)
+                user = next(
+                    (i for i in range(latest - 1, -1, -1) if messages[i]["role"] == "user"), None
+                )
                 if user is not None:
                     protected.add(user)
         for unit in units:

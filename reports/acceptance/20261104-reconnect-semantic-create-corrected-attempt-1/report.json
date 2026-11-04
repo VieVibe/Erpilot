@@ -1,0 +1,223 @@
+{
+  "suite": "intent-semantic-live-1",
+  "label_status": "engineering_expectations",
+  "fixture_sha256": "edd959eace6d900234edd0350de74ed0015d9aa38e2771f9f612d28c19e899bd",
+  "model": "glm-5.3-flash",
+  "endpoint_host": "flashcoding.ai",
+  "currency": "CNY",
+  "limit": "0.020",
+  "max_requests": 5,
+  "source_before": {
+    "revision": "e907f42282ee69a35b49fdaff9f0d99a8edfdebc",
+    "working_tree_dirty": true,
+    "source_sha256": "95d18d84cb4cd42aafc194d271070c7eb81aebd9a4dad6c7251a096aee3e51db"
+  },
+  "cases": [
+    {
+      "id": "basic",
+      "text": "帮客户甲列份采购清单：机械键盘要四个，预算1500元，备注『不要提交😀』。",
+      "expected": {
+        "customer": "客户甲",
+        "note": "不要提交😀",
+        "budget_limit": 1500.0,
+        "items": [
+          [
+            "K1",
+            4
+          ]
+        ]
+      },
+      "actual": null,
+      "preview": null,
+      "status": "failed",
+      "passed": false,
+      "requests": 1,
+      "duration_ms": 16175.734
+    },
+    {
+      "id": "multiple",
+      "text": "帮客户乙列份采购清单：机械键盘要三个，光学鼠标要五个，预算2000元。",
+      "expected": {
+        "customer": "客户乙",
+        "note": null,
+        "budget_limit": 2000.0,
+        "items": [
+          [
+            "K1",
+            3
+          ],
+          [
+            "M1",
+            5
+          ]
+        ]
+      },
+      "actual": null,
+      "preview": null,
+      "status": "failed",
+      "passed": false,
+      "requests": 1,
+      "duration_ms": 45019.584
+    },
+    {
+      "id": "missing_quantity",
+      "text": "帮客户丙列份采购清单：机械键盘，预算800元。",
+      "expected": {
+        "customer": "客户丙",
+        "note": null,
+        "budget_limit": 800.0,
+        "items": [
+          [
+            "K1",
+            null
+          ]
+        ]
+      },
+      "actual": null,
+      "preview": null,
+      "passed": false,
+      "status": "not_run_budget",
+      "requests": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "repeated_quote",
+      "text": "帮客户丁列份采购清单：机械键盘要四个，备注『机械键盘四个仅供核对😀』。",
+      "expected": {
+        "customer": "客户丁",
+        "note": "机械键盘四个仅供核对😀",
+        "budget_limit": null,
+        "items": [
+          [
+            "K1",
+            4
+          ]
+        ]
+      },
+      "actual": null,
+      "preview": null,
+      "passed": false,
+      "status": "not_run_budget",
+      "requests": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "ambiguous_catalogue",
+      "text": "帮客户戊列份采购清单：办公椅要两个。",
+      "expected": {
+        "customer": "客户戊",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          [
+            null,
+            2
+          ]
+        ]
+      },
+      "actual": null,
+      "preview": null,
+      "passed": false,
+      "status": "not_run_budget",
+      "requests": 0,
+      "duration_ms": 0
+    },
+    {
+      "id": "conditional",
+      "text": "如果客户确认，帮客户甲列份采购清单：机械键盘要四个。",
+      "expected": null,
+      "actual": null,
+      "preview": null,
+      "status": "passed",
+      "passed": true,
+      "requests": 0,
+      "duration_ms": 2.232
+    },
+    {
+      "id": "existing_draft",
+      "text": "帮我修改已有草稿，把机械键盘改成四个。",
+      "expected": null,
+      "actual": null,
+      "preview": null,
+      "status": "passed",
+      "passed": true,
+      "requests": 0,
+      "duration_ms": 1.735
+    }
+  ],
+  "business_unchanged": true,
+  "requests": [
+    {
+      "request": 1,
+      "case_id": null,
+      "status": "settled",
+      "ts": "2026-11-04T06:27:30.420480+00:00",
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": "0.000290",
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "uncached_upper_bound",
+        "complete": true
+      },
+      "session_id": "basic",
+      "purpose": "intent",
+      "usage": {
+        "prompt_tokens": 1321,
+        "completion_tokens": 481,
+        "total_tokens": 1802
+      },
+      "turn_id": "basic",
+      "source_sha256": "c4b9305d7341de57276c631db32a4215affdce53a1ea9717a7c9e7d8bf4462b5"
+    },
+    {
+      "request": 2,
+      "case_id": null,
+      "status": "unknown",
+      "ts": "2026-11-04T06:28:15.450599+00:00",
+      "billing": {
+        "currency": "CNY",
+        "estimated_amount": null,
+        "pricing_source": "agent_core.prices",
+        "cache_assumption": "unknown_usage",
+        "complete": false
+      },
+      "session_id": "multiple",
+      "purpose": "intent",
+      "usage": null,
+      "turn_id": "multiple",
+      "source_sha256": "317d640387d69f41cdae782880c52b1c09bf0e349f8b6407d94f9258270a43dd"
+    }
+  ],
+  "attempts": [
+    {
+      "status": "rejected",
+      "source_sha256": "c4b9305d7341de57276c631db32a4215affdce53a1ea9717a7c9e7d8bf4462b5",
+      "ts": "2026-11-04T06:27:14.274068+00:00",
+      "rejection_code": "ValidationError",
+      "duration_ms": 16156.5662,
+      "semantic_version": "order-create-proposal-3",
+      "prompt_version": "order-create-proposal-prompt-5",
+      "prompt_sha256": "938917e615973e009f03ea6c9ee61d560832528e8d7603fb1e4871243b6c5ffb"
+    },
+    {
+      "status": "rejected",
+      "source_sha256": "317d640387d69f41cdae782880c52b1c09bf0e349f8b6407d94f9258270a43dd",
+      "ts": "2026-11-04T06:27:30.448014+00:00",
+      "rejection_code": "TimeoutError",
+      "duration_ms": 45005.3037,
+      "semantic_version": "order-create-proposal-3",
+      "prompt_version": "order-create-proposal-prompt-5",
+      "prompt_sha256": "938917e615973e009f03ea6c9ee61d560832528e8d7603fb1e4871243b6c5ffb"
+    }
+  ],
+  "known_spent": "0.000290",
+  "unknown_usage": true,
+  "provider_requests": 2,
+  "source_after": {
+    "revision": "e907f42282ee69a35b49fdaff9f0d99a8edfdebc",
+    "working_tree_dirty": true,
+    "source_sha256": "95d18d84cb4cd42aafc194d271070c7eb81aebd9a4dad6c7251a096aee3e51db"
+  },
+  "source_unchanged": true,
+  "passed": false
+}

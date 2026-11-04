@@ -287,7 +287,9 @@ class ChatService:
     def _runtime(self, session_id):
         return LangGraphRuntime(
             (_SemanticSessionClient(self._intent_semantic, session_id)
-             if self._intent_semantic is not None else self._runtime_client),
+             if (self._intent_semantic is not None
+                 and self._intent_semantic.settings.include_business)
+             else self._runtime_client),
             self._session_tools_factory(session_id) if self._session_tools_factory else self._tools,
             self._loop_config,
             self._checkpointer,
@@ -310,15 +312,31 @@ class ChatService:
     async def _history(self, session_id):
         snapshot = await self._runtime(session_id).get_state(thread_id_for_session(session_id))
         if snapshot.values:
-            return copy.deepcopy(snapshot.values["messages"])
-        saved = self._run_store.get_session(session_id) if self._run_store else None
-        return (
-            saved["history"]
-            if saved
-            else [
-                {"role": "system", "content": self._system_prompt()},
-            ]
-        )
+            messages = copy.deepcopy(snapshot.values["messages"])
+        else:
+            saved = self._run_store.get_session(session_id) if self._run_store else None
+            messages = (saved["history"] if saved else
+                        [{"role": "system", "content": self._system_prompt()}])
+        observation = (self._run_store.draft_form_observation(session_id)
+                       if self._run_store else [])
+        if observation:
+            call_id = observation[-1]["tool_call_id"]
+            if not any(m.get("tool_call_id") == call_id for m in messages):
+                messages.extend(observation)
+        return messages
+
+    def record_draft_form(self, session_id, draft):
+        if self._run_store is None:
+            return
+        call_id = "form-" + uuid4().hex
+        self._run_store.record_draft_form(session_id, [
+            {"role": "assistant", "content": "页面已保存并展示以下草稿版本。",
+             "tool_calls": [{"id": call_id, "type": "function", "function": {
+                 "name": "get_order_draft", "arguments": json.dumps({
+                     "draft_id": draft["draft_id"], "revision": draft["revision"]})}}]},
+            {"role": "tool", "tool_call_id": call_id,
+             "content": json.dumps(draft, ensure_ascii=False)},
+        ])
 
     async def session_state(self, session_id):
         snapshot = await self._runtime(session_id).get_state(thread_id_for_session(session_id))

@@ -1,0 +1,5 @@
+{"id": "revise_full", "passed": false, "requests": 1}
+{"id": "revision_condition", "passed": true, "requests": 0}
+{"id": "revision_negated", "passed": true, "requests": 0}
+{"id": "revision_question", "passed": true, "requests": 0}
+{"passed": false, "provider_requests": 1, "known_spent": "0", "currency": "CNY", "unknown_usage": true}

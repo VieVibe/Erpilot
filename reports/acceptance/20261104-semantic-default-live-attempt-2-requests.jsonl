@@ -1,0 +1,4 @@
+{"request": 1, "case_id": null, "status": "started", "ts": "2026-11-04T07:26:06.032869+00:00", "billing": null}
+{"request": 1, "case_id": null, "status": "settled", "ts": "2026-11-04T07:27:03.817217+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.001313", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}
+{"request": 2, "case_id": null, "status": "started", "ts": "2026-11-04T07:27:04.030667+00:00", "billing": null}
+{"request": 2, "case_id": null, "status": "settled", "ts": "2026-11-04T07:27:23.817357+00:00", "billing": {"currency": "CNY", "estimated_amount": "0.000741", "pricing_source": "agent_core.prices", "cache_assumption": "uncached_upper_bound", "complete": true}}

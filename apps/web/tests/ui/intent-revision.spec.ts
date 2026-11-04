@@ -1,6 +1,6 @@
 import {test, expect} from '@playwright/test';
 
-for(const width of [320,1440])test(`原话修改 ${width}px 明确目标版本并完整确认`,async({page})=>{
+for(const width of [320,1440])test(`原话修改 ${width}px 明确目标版本并完整确认`,async({page},testInfo)=>{
   await page.setViewportSize({width,height:1000});
   const id='c'.repeat(32), source='调整机械键盘到六个，预算改为1200元。';
   const original={draft_id:id,revision:1,customer:'原客户',note:'原备注',budget_limit:1000,
@@ -51,7 +51,7 @@ for(const width of [320,1440])test(`原话修改 ${width}px 明确目标版本�
   expect(posts).toHaveLength(1);
   expect(posts[0].body).toMatchObject({source,target:{draft_id:id,revision:1}});
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-  await page.screenshot({path:`../../reports/acceptance/20261102-intent-revision-${width}.png`,fullPage:true,animations:'disabled'});
+  await page.screenshot({path:testInfo.outputPath(`intent-revision-${width}.png`),fullPage:true,animations:'disabled'});
   await dialog.getByRole('button',{name:'确认目标并保存新版本',exact:true}).click();
   await expect(dialog).not.toBeVisible();
   expect(posts).toHaveLength(2);

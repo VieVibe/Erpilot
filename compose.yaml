@@ -1,4 +1,31 @@
 services:
+  api:
+    build: .
+    environment:
+      ERPILOT_RUNTIME: scripted
+      ERPILOT_CHECKPOINT_DATABASE_URL: postgresql://erpilot:erpilot_local@postgres:5432/erpilot
+      ERPILOT_WRITES: "1"
+      ERPILOT_AUTH: "1"
+    ports:
+      - "127.0.0.1:8768:8000"
+    volumes:
+      - app_data:/data
+    tmpfs:
+      - /tmp
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+    stop_grace_period: 20s
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://127.0.0.1:8000/readyz', timeout=4)"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
   postgres:
     image: postgres:17
     environment:
@@ -16,3 +43,4 @@ services:
       retries: 12
 volumes:
   checkpoints:
+  app_data:

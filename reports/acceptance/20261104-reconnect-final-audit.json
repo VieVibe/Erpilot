@@ -1,0 +1,569 @@
+{
+  "order_before_fix": {
+    "prefix": "20261104-reconnect-order-v2",
+    "metrics": {
+      "planned_tasks": 4,
+      "planned_stages": 34,
+      "completed_tasks": 3,
+      "passed_tasks": 3,
+      "executed_stages": 27,
+      "passed_stages": 26,
+      "elapsed_seconds": 752.968
+    },
+    "transport": {
+      "logical_requests": 50,
+      "physical_requests": 55,
+      "failed_attempts": 5,
+      "recovered_requests": 4
+    },
+    "billing": {
+      "requests": 55,
+      "known_spent": "0.048571",
+      "unknown_requests": 5
+    },
+    "source_consistent": true,
+    "rescored": [
+      {
+        "journey": "budget-denial-restore",
+        "step": 1,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 2,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 3,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 4,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 5,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 6,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 7,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 8,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 9,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 1,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 2,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 3,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 4,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 5,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 6,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 7,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 8,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 9,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "ambiguity-and-selection",
+        "step": 1,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "ambiguity-and-selection",
+        "step": 2,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "ambiguity-and-selection",
+        "step": 3,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "ambiguity-and-selection",
+        "step": 4,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "ambiguity-and-selection",
+        "step": 5,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "ambiguity-and-selection",
+        "step": 6,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "ambiguity-and-selection",
+        "step": 7,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "version-change-and-replay",
+        "step": 1,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "version-change-and-replay",
+        "step": 2,
+        "passed": false,
+        "failed_checks": [
+          "approval_boundary",
+          "required_mutation_missing"
+        ]
+      }
+    ]
+  },
+  "order_after_fix": {
+    "prefix": "20261104-reconnect-corrected-order-v2",
+    "metrics": {
+      "planned_tasks": 4,
+      "planned_stages": 34,
+      "completed_tasks": 4,
+      "passed_tasks": 4,
+      "executed_stages": 34,
+      "passed_stages": 34,
+      "elapsed_seconds": 738.937
+    },
+    "transport": {
+      "logical_requests": 55,
+      "physical_requests": 55,
+      "failed_attempts": 0,
+      "recovered_requests": 0
+    },
+    "billing": {
+      "requests": 55,
+      "known_spent": "0.052260",
+      "unknown_requests": 0
+    },
+    "source_consistent": true,
+    "rescored": [
+      {
+        "journey": "budget-denial-restore",
+        "step": 1,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 2,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 3,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 4,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 5,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 6,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 7,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 8,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "budget-denial-restore",
+        "step": 9,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 1,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 2,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 3,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 4,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 5,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 6,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 7,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 8,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "price-change-review",
+        "step": 9,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "ambiguity-and-selection",
+        "step": 1,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "ambiguity-and-selection",
+        "step": 2,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "ambiguity-and-selection",
+        "step": 3,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "ambiguity-and-selection",
+        "step": 4,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "ambiguity-and-selection",
+        "step": 5,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "ambiguity-and-selection",
+        "step": 6,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "ambiguity-and-selection",
+        "step": 7,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "version-change-and-replay",
+        "step": 1,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "version-change-and-replay",
+        "step": 2,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "version-change-and-replay",
+        "step": 3,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "version-change-and-replay",
+        "step": 4,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "version-change-and-replay",
+        "step": 5,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "version-change-and-replay",
+        "step": 6,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "version-change-and-replay",
+        "step": 7,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "version-change-and-replay",
+        "step": 8,
+        "passed": true,
+        "failed_checks": []
+      },
+      {
+        "journey": "version-change-and-replay",
+        "step": 9,
+        "passed": true,
+        "failed_checks": []
+      }
+    ]
+  },
+  "semantic": [
+    {
+      "campaign": "20261104-reconnect-semantic-create",
+      "passed": false,
+      "batches": [
+        {
+          "directory": "reports\\acceptance\\20261104-reconnect-semantic-create-attempt-1",
+          "passed": false,
+          "cases": 7,
+          "passed_cases": 6,
+          "provider_requests": 5,
+          "known_spent": "0.002611",
+          "unknown_requests": 0
+        }
+      ],
+      "known_spent": "0.002611",
+      "unknown_requests": 0
+    },
+    {
+      "campaign": "20261104-reconnect-semantic-create-corrected",
+      "passed": false,
+      "batches": [
+        {
+          "directory": "reports\\acceptance\\20261104-reconnect-semantic-create-corrected-attempt-1",
+          "passed": false,
+          "cases": 7,
+          "passed_cases": 2,
+          "provider_requests": 2,
+          "known_spent": "0.000290",
+          "unknown_requests": 1
+        }
+      ],
+      "known_spent": "0.000290",
+      "unknown_requests": 1
+    },
+    {
+      "campaign": "20261104-reconnect-semantic-create-final",
+      "passed": true,
+      "batches": [
+        {
+          "directory": "reports\\acceptance\\20261104-reconnect-semantic-create-final-attempt-1",
+          "passed": true,
+          "cases": 7,
+          "passed_cases": 7,
+          "provider_requests": 5,
+          "known_spent": "0.001935",
+          "unknown_requests": 0
+        }
+      ],
+      "known_spent": "0.001935",
+      "unknown_requests": 0
+    },
+    {
+      "campaign": "20261104-reconnect-semantic-revision",
+      "passed": true,
+      "batches": [
+        {
+          "directory": "reports\\acceptance\\20261104-reconnect-semantic-revision-attempt-1",
+          "passed": true,
+          "cases": 6,
+          "passed_cases": 6,
+          "provider_requests": 3,
+          "known_spent": "0.001192",
+          "unknown_requests": 0
+        }
+      ],
+      "known_spent": "0.001192",
+      "unknown_requests": 0
+    },
+    {
+      "campaign": "20261104-reconnect-semantic-revision-corrected",
+      "passed": true,
+      "batches": [
+        {
+          "directory": "reports\\acceptance\\20261104-reconnect-semantic-revision-corrected-attempt-1",
+          "passed": true,
+          "cases": 6,
+          "passed_cases": 6,
+          "provider_requests": 3,
+          "known_spent": "0.000937",
+          "unknown_requests": 0
+        }
+      ],
+      "known_spent": "0.000937",
+      "unknown_requests": 0
+    },
+    {
+      "campaign": "20261104-reconnect-semantic-revision-final",
+      "passed": true,
+      "batches": [
+        {
+          "directory": "reports\\acceptance\\20261104-reconnect-semantic-revision-final-attempt-1",
+          "passed": false,
+          "cases": 6,
+          "passed_cases": 3,
+          "provider_requests": 1,
+          "known_spent": "0",
+          "unknown_requests": 1
+        },
+        {
+          "directory": "reports\\acceptance\\20261104-reconnect-semantic-revision-final-attempt-2",
+          "passed": true,
+          "cases": 6,
+          "passed_cases": 6,
+          "provider_requests": 3,
+          "known_spent": "0.002145",
+          "unknown_requests": 0
+        }
+      ],
+      "known_spent": "0.002145",
+      "unknown_requests": 1
+    }
+  ],
+  "authenticated_network_api": {
+    "passed": true,
+    "checks": {
+      "authenticated_model_creates_exact_draft": true,
+      "no_order_before_approval": true,
+      "explicit_version_requires_approval": true,
+      "approved_order_and_exact_inventory": true,
+      "replayed_approval_rejected_without_business_changes": true,
+      "operator_identity_audited": true
+    },
+    "billing": {
+      "requests": 2,
+      "known_spent": "0.002148",
+      "unknown_requests": 0
+    }
+  },
+  "source_changes_after_full_order_suite": [
+    "packages/erp_store/src/erp_store/intent_revision.py",
+    "packages/erp_store/src/erp_store/intent_semantic.py",
+    "packages/mcp_erp/src/mcp_erp/intent_semantic.py"
+  ],
+  "scope_note": "Only opt-in semantic proposal prompt/validation files changed after core order suite. Final semantic and real default-context authenticated HTTP probes use the new source.",
+  "new_turn_known_estimated_CNY": "0.114055",
+  "new_turn_unknown_requests": 7,
+  "prior_known_estimated_CNY": "0.009714",
+  "prior_unknown_requests": 1,
+  "combined_known_estimated_CNY": "0.123769",
+  "combined_unknown_requests": 8,
+  "planning_with_unknown_reserves_CNY": "0.163769",
+  "planning_limit_CNY": "0.25",
+  "unknown_is_not_zero": true,
+  "reserve_is_not_actual_bill": true,
+  "current_packages_source_sha256": "ea881fcb3fd4fcf04d4bd1d2f4e15ee8e20a47b6e29bb5d4feab2488b85f7428"
+}

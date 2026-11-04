@@ -1,3 +1,4 @@
+import { apiFetch } from './auth-client.js';
 import {ApiError} from './protocol.js';
 
 const labels = {
@@ -22,7 +23,7 @@ export function parseSessionPage(value: unknown): SessionPage {
   return {items, has_more: value.has_more};
 }
 export async function loadSessionPage(offset = 0, signal?: AbortSignal): Promise<SessionPage> {
-  const response = await fetch(`/api/sessions?limit=20&offset=${offset}`, {signal});
+  const response = await apiFetch(`/api/sessions?limit=20&offset=${offset}`, {signal});
   if (!response.ok) {
     const body = await response.json().catch(() => null);
     throw new ApiError(response.status, body?.error?.code, body?.error?.message ?? `HTTP ${response.status}`);

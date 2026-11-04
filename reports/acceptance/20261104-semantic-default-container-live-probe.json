@@ -1,0 +1,1 @@
+{"readiness": {"status": "ready", "runtime": "live", "authentication": true}, "semantic": {"intent_mode": "enforce", "intent_semantic_enabled": true, "intent_semantic_disabled_reason": null}, "model_calls": 0, "candidate_budget_only": true}

@@ -27,9 +27,12 @@ _PRESERVE = (r"的?\s*(?:数量)?\s*(?:保持|保留)\s*"
              r"(?:(?P<quantity>" + _COUNT
              + r")\s*件|(?:刚才|当前|原来|之前)的数量|原数量|不变)")
 _NAME = _PREFIX + r"商品\s*(?P<name>[^，,。；;\n]{1,128}?)"
+_LABEL = r"\s*(?:（(?P<label>[^（）\n]{1,128})）|\((?P<label_ascii>[^()\n]{1,128})\))?"
+_ROW_SKU = (_ROW + r"\s+(?:SKU\s*)?"
+            r"(?P<sku>[A-Za-z0-9][A-Za-z0-9_.-]{0,31})" + _LABEL)
 _TARGETS = [(re.compile(target), re.compile(target + r"\s*" + _AMOUNT),
              re.compile(target + r"\s*" + _PRESERVE))
-            for target in (_ROW, _DISPLAY_ROW, _NAME, _SKU)]
+            for target in (_ROW_SKU, _ROW, _DISPLAY_ROW, _NAME, _SKU + _LABEL)]
 _QUANTITY = re.compile(r"(?:把)?数量\s*" + _CHANGE)
 _ADD = re.compile(
     r"(?:在当前(?:版本|草稿)(?:中)?)?(?:新增|添加|加入)(?:商品\s*)?(?:SKU\s*)?"
@@ -107,6 +110,23 @@ def needs_display_reference(text):
 
 
 def _target(match, before, *, reference=None, strict_references=False, allow_rows=True):
+    if sku := match.groupdict().get("sku"):
+        line = next((row for row in before if row["sku"] == sku), None)
+        if line is None:
+            raise ValueError("本轮指定 SKU 不在当前草稿中；请在表单中核对新增商品，草稿未保存")
+        if number := match.groupdict().get("number"):
+            if not allow_rows or not 1 <= _row_number(number) <= len(before):
+                raise ValueError("请核对当前草稿行号和 SKU；草稿未保存")
+            if before[_row_number(number) - 1]["sku"] != sku:
+                raise ValueError("本轮指定行号与 SKU 不一致，请核对目标商品；草稿未保存")
+        label = match.groupdict().get("label") or match.groupdict().get("label_ascii")
+        if label:
+            def normalize(value):
+                return re.sub(r"[\s·・（）()]", "", value)
+
+            if normalize(label) != normalize(line.get("name") or ""):
+                raise ValueError("本轮商品名称与 SKU 不一致，请核对目标商品；草稿未保存")
+        return sku
     if match.groupdict().get("number") is not None:
         if not allow_rows:
             raise ValueError("待创建请求没有草稿版本行号，请明确 SKU 或所选商品的件数")

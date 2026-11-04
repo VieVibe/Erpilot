@@ -24,14 +24,16 @@ START = """# Erpilot · 会请示的 ERP 智能体
 视频复用已有录制，使用脚本模型、演示向量和临时库，展示正式 API / LangGraph / MCP
 链路。连续多轮真实模型结果见源码 docs/context-workflow.md 和对应报告；两类证据分别列示。
 最新订单与政策验收、原始失败及后续版本见源码 docs/project-status.md，各批次独立列示。
-项目当前范围为可信单用户、单进程本地服务。
+另可按 docs/deployment.md 运行带账号、持久恢复的同源容器；仍限制单 API 执行进程，ERP 为共享门店。
+已有视频保留临时匿名演示口径；新账号和部署能力以源码及本批验收为准。
 
 核验交付包：在解压的源码目录运行
 `python scripts/portfolio_delivery.py --verify <本交付ZIP绝对路径>`。
 再运行 `python scripts/portfolio_release.py --verify .` 核验解压后的源码。
 
 源码快照包含构建时的工作区内容，内容身份由逐文件 SHA-256 清单确定；Git 提交号只作历史定位。
-包中不包含真实业务库、密钥、安装依赖、真实嵌入索引或原始 trace。
+包中不包含真实业务库、密钥、安装依赖或原始 trace。
+源码保留仓库已跟踪的政策向量索引；真实查询仍需匹配的嵌入配置，离线演示不使用它。
 """
 
 

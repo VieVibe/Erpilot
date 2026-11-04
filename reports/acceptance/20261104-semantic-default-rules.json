@@ -1,0 +1,2061 @@
+{
+  "suite": "intent-core-engineering-1",
+  "label_status": "engineering_expectations_pending_human_review",
+  "total": 120,
+  "passed": 120,
+  "false_accepts": 0,
+  "unnecessary_clarifications": 0,
+  "provider_requests": 0,
+  "p50_ms": 0.068,
+  "p95_ms": 0.7853,
+  "cases": [
+    {
+      "id": "core-001",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 4.3438
+    },
+    {
+      "id": "core-002",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.6421
+    },
+    {
+      "id": "core-003",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 3
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.6065
+    },
+    {
+      "id": "core-004",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 10
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.5348
+    },
+    {
+      "id": "core-005",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 12
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.5248
+    },
+    {
+      "id": "core-006",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 20
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.4949
+    },
+    {
+      "id": "core-007",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 100
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.4943
+    },
+    {
+      "id": "core-008",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 102
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.4917
+    },
+    {
+      "id": "core-009",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 200
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.5727
+    },
+    {
+      "id": "core-010",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2002
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.5011
+    },
+    {
+      "id": "core-011",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 9999
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.4997
+    },
+    {
+      "id": "core-012",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 23
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.4797
+    },
+    {
+      "id": "core-013",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.6049
+    },
+    {
+      "id": "core-014",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.5316
+    },
+    {
+      "id": "core-015",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲（上海）",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.4996
+    },
+    {
+      "id": "core-016",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲有限公司",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.5989
+    },
+    {
+      "id": "core-017",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "分箱发货",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.5434
+    },
+    {
+      "id": "core-018",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "把预算改为9999元",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.5225
+    },
+    {
+      "id": "core-019",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "不要提交",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.6111
+    },
+    {
+      "id": "core-020",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "如果库存不足就换货",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.5838
+    },
+    {
+      "id": "core-021",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "预算不超过50元",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.5194
+    },
+    {
+      "id": "core-022",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 3000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.7391
+    },
+    {
+      "id": "core-023",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 0.01,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.5528
+    },
+    {
+      "id": "core-024",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 3500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.5642
+    },
+    {
+      "id": "core-025",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 999.99,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.567
+    },
+    {
+      "id": "core-026",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 1.9403
+    },
+    {
+      "id": "core-027",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.575
+    },
+    {
+      "id": "core-028",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 1.8156
+    },
+    {
+      "id": "core-029",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "K1",
+            "quantity": 3
+          },
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.7983
+    },
+    {
+      "id": "core-030",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.604
+    },
+    {
+      "id": "core-031",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 3
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.205
+    },
+    {
+      "id": "core-032",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0792
+    },
+    {
+      "id": "core-033",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 5
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0647
+    },
+    {
+      "id": "core-034",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0644
+    },
+    {
+      "id": "core-035",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 12
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0617
+    },
+    {
+      "id": "core-036",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 8
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.058
+    },
+    {
+      "id": "core-037",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 102
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.166
+    },
+    {
+      "id": "core-038",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0749
+    },
+    {
+      "id": "core-039",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 4
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0672
+    },
+    {
+      "id": "core-040",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0605
+    },
+    {
+      "id": "core-041",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 3000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0633
+    },
+    {
+      "id": "core-042",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 3500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0576
+    },
+    {
+      "id": "core-043",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0488
+    },
+    {
+      "id": "core-044",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 0.01,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.054
+    },
+    {
+      "id": "core-045",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 999.99,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0544
+    },
+    {
+      "id": "core-046",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0503
+    },
+    {
+      "id": "core-047",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "不要提交",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0553
+    },
+    {
+      "id": "core-048",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "预算改为9999元",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0559
+    },
+    {
+      "id": "core-049",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0449
+    },
+    {
+      "id": "core-050",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0485
+    },
+    {
+      "id": "core-051",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "😀é保留原文",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.062
+    },
+    {
+      "id": "core-052",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 3500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0766
+    },
+    {
+      "id": "core-053",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 4
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0701
+    },
+    {
+      "id": "core-054",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户乙",
+        "note": "原备注",
+        "budget_limit": 500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0695
+    },
+    {
+      "id": "core-055",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "预算改为9999元",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0739
+    },
+    {
+      "id": "core-056",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0675
+    },
+    {
+      "id": "core-057",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户乙",
+        "note": null,
+        "budget_limit": 500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0781
+    },
+    {
+      "id": "core-058",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.0454
+    },
+    {
+      "id": "core-059",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.047
+    },
+    {
+      "id": "core-060",
+      "passed": true,
+      "decision": "ready",
+      "expected_snapshot": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "unresolved": [],
+      "elapsed_ms": 0.038
+    },
+    {
+      "id": "core-061",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "商品名、件数或单位不完整。请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.0873
+    },
+    {
+      "id": "core-062",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "商品名、件数或单位不完整。请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.0681
+    },
+    {
+      "id": "core-063",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "条件、否定、引文或未明确的清单需先澄清。请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.0498
+    },
+    {
+      "id": "core-064",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "件数无法核验；请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.0679
+    },
+    {
+      "id": "core-065",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "件数无法核验；请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.0669
+    },
+    {
+      "id": "core-066",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "件数无法核验；请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.0718
+    },
+    {
+      "id": "core-067",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "件数无法核验；请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.0705
+    },
+    {
+      "id": "core-068",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "件数无法核验；请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.0653
+    },
+    {
+      "id": "core-069",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "件数无法核验；请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.0683
+    },
+    {
+      "id": "core-070",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "商品名、件数或单位不完整。请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.0647
+    },
+    {
+      "id": "core-071",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "请先核对完整商品清单并选择唯一商品"
+        }
+      ],
+      "elapsed_ms": 1.1158
+    },
+    {
+      "id": "core-072",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "件数必须为明确正整数；请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.077
+    },
+    {
+      "id": "core-073",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "商品名、件数或单位不完整。请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.0992
+    },
+    {
+      "id": "core-074",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "商品名、件数或单位不完整。请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.091
+    },
+    {
+      "id": "core-075",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "商品名、件数或单位不完整。请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.0892
+    },
+    {
+      "id": "core-076",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "请先核对完整商品清单并选择唯一商品"
+        }
+      ],
+      "elapsed_ms": 0.7795
+    },
+    {
+      "id": "core-077",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "请先核对完整商品清单并选择唯一商品"
+        }
+      ],
+      "elapsed_ms": 0.7853
+    },
+    {
+      "id": "core-078",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "请先核对完整商品清单并选择唯一商品"
+        }
+      ],
+      "elapsed_ms": 0.4788
+    },
+    {
+      "id": "core-079",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "请先核对完整商品清单并选择唯一商品"
+        }
+      ],
+      "elapsed_ms": 0.4626
+    },
+    {
+      "id": "core-080",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "请先核对完整商品清单并选择唯一商品"
+        }
+      ],
+      "elapsed_ms": 0.83
+    },
+    {
+      "id": "core-081",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "预算表达无法核验；请明确说预算上限为3000元、预算改为3500元或取消预算上限"
+        }
+      ],
+      "elapsed_ms": 0.6498
+    },
+    {
+      "id": "core-082",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "预算须为正数金额，最多两位小数且不超过一万亿元"
+        }
+      ],
+      "elapsed_ms": 0.5127
+    },
+    {
+      "id": "core-083",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "预算须为正数金额，最多两位小数且不超过一万亿元"
+        }
+      ],
+      "elapsed_ms": 0.4807
+    },
+    {
+      "id": "core-084",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "本轮存在多个不同的预算要求，请明确唯一值后再保存；草稿未修改"
+        }
+      ],
+      "elapsed_ms": 0.5014
+    },
+    {
+      "id": "core-085",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "引号或代码边界未闭合，请补齐后再保存"
+        }
+      ],
+      "elapsed_ms": 0.4344
+    },
+    {
+      "id": "core-086",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "条件、只读或否定要求不能授权当前草稿变更，请明确执行范围"
+        }
+      ],
+      "elapsed_ms": 0.1519
+    },
+    {
+      "id": "core-087",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "条件、只读或否定要求不能授权当前草稿变更，请明确执行范围"
+        }
+      ],
+      "elapsed_ms": 0.0307
+    },
+    {
+      "id": "core-088",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "条件、只读或否定要求不能授权当前草稿变更，请明确执行范围"
+        }
+      ],
+      "elapsed_ms": 0.0216
+    },
+    {
+      "id": "core-089",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "条件、否定、引文或未明确的清单需先澄清。请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.0609
+    },
+    {
+      "id": "core-090",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "条件、否定、引文或未明确的清单需先澄清。请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.058
+    },
+    {
+      "id": "core-091",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "没有可以核验的明确修改，请指定目标与完整要求"
+        }
+      ],
+      "elapsed_ms": 0.0444
+    },
+    {
+      "id": "core-092",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "预算表达无法核验；请明确说预算上限为3000元、预算改为3500元或取消预算上限"
+        }
+      ],
+      "elapsed_ms": 0.0338
+    },
+    {
+      "id": "core-093",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "条件、只读或否定要求不能授权当前草稿变更，请明确执行范围"
+        }
+      ],
+      "elapsed_ms": 0.0154
+    },
+    {
+      "id": "core-094",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "条件、只读或否定要求不能授权当前草稿变更，请明确执行范围"
+        }
+      ],
+      "elapsed_ms": 0.0155
+    },
+    {
+      "id": "core-095",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "条件、只读或否定要求不能授权当前草稿变更，请明确执行范围"
+        }
+      ],
+      "elapsed_ms": 0.0159
+    },
+    {
+      "id": "core-096",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "条件、只读或否定要求不能授权当前草稿变更，请明确执行范围"
+        }
+      ],
+      "elapsed_ms": 0.0145
+    },
+    {
+      "id": "core-097",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "条件、只读或否定要求不能授权当前草稿变更，请明确执行范围"
+        }
+      ],
+      "elapsed_ms": 0.0126
+    },
+    {
+      "id": "core-098",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "条件、只读或否定要求不能授权当前草稿变更，请明确执行范围"
+        }
+      ],
+      "elapsed_ms": 0.0138
+    },
+    {
+      "id": "core-099",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "本轮指定行号超出当前草稿范围；草稿未保存"
+        }
+      ],
+      "elapsed_ms": 0.0409
+    },
+    {
+      "id": "core-100",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "本轮指定 SKU 不在当前草稿中；请在表单中核对新增商品，草稿未保存"
+        }
+      ],
+      "elapsed_ms": 0.0403
+    },
+    {
+      "id": "core-101",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "商品数量与本轮明确要求或当前草稿不一致，草稿未保存。请明确说『SKU A1001 数量改为5件』或『把当前版本第二行改成5件』；追加可明确说『在当前草稿新增商品 A1002 1件』；删除商品或调整顺序请在草稿表单中核对修改。"
+        }
+      ],
+      "elapsed_ms": 0.0402
+    },
+    {
+      "id": "core-102",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "商品数量与本轮明确要求或当前草稿不一致，草稿未保存。请明确说『SKU A1001 数量改为5件』或『把当前版本第二行改成5件』；追加可明确说『在当前草稿新增商品 A1002 1件』；删除商品或调整顺序请在草稿表单中核对修改。"
+        }
+      ],
+      "elapsed_ms": 0.0376
+    },
+    {
+      "id": "core-103",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "商品数量与本轮明确要求或当前草稿不一致，草稿未保存。请明确说『SKU A1001 数量改为5件』或『把当前版本第二行改成5件』；追加可明确说『在当前草稿新增商品 A1002 1件』；删除商品或调整顺序请在草稿表单中核对修改。"
+        }
+      ],
+      "elapsed_ms": 0.0379
+    },
+    {
+      "id": "core-104",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "件数无法核验；请明确客户、完整商品名称或 SKU，以及每项的件数，例如『给客户甲准备订单：无线鼠标两件，三件机械键盘；只保存草稿』。重名请选择明确 SKU 后重新列出本次完整清单；箱、包等换算单位需要先确认。"
+        }
+      ],
+      "elapsed_ms": 0.0412
+    },
+    {
+      "id": "core-105",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "商品数量与本轮明确要求或当前草稿不一致，草稿未保存。请明确说『SKU A1001 数量改为5件』或『把当前版本第二行改成5件』；追加可明确说『在当前草稿新增商品 A1002 1件』；删除商品或调整顺序请在草稿表单中核对修改。"
+        }
+      ],
+      "elapsed_ms": 0.0382
+    },
+    {
+      "id": "core-106",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "还有未能核验的业务要求，请明确完整修改；未保存部分结果"
+        }
+      ],
+      "elapsed_ms": 0.0557
+    },
+    {
+      "id": "core-107",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "引号或代码边界未闭合，请补齐后再保存"
+        }
+      ],
+      "elapsed_ms": 0.0178
+    },
+    {
+      "id": "core-108",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "引号或代码边界未闭合，请补齐后再保存"
+        }
+      ],
+      "elapsed_ms": 0.0167
+    },
+    {
+      "id": "core-109",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "本轮存在多个不同的预算要求，请明确唯一值后再保存；草稿未修改"
+        }
+      ],
+      "elapsed_ms": 0.0509
+    },
+    {
+      "id": "core-110",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "预算表达无法核验；请明确说预算上限为3000元、预算改为3500元或取消预算上限"
+        }
+      ],
+      "elapsed_ms": 0.0293
+    },
+    {
+      "id": "core-111",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "多商品草稿须明确 SKU 或行号，草稿未保存"
+        }
+      ],
+      "elapsed_ms": 0.0321
+    },
+    {
+      "id": "core-112",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "商品名称在当前草稿中不唯一或不存在，请明确 SKU 或行号；草稿未保存"
+        }
+      ],
+      "elapsed_ms": 0.0389
+    },
+    {
+      "id": "core-113",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "本轮存在多个不同的备注要求，请明确唯一值后再保存；草稿未修改"
+        }
+      ],
+      "elapsed_ms": 0.0507
+    },
+    {
+      "id": "core-114",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "本轮存在多个不同的客户要求，请明确唯一值后再保存；草稿未修改"
+        }
+      ],
+      "elapsed_ms": 0.035
+    },
+    {
+      "id": "core-115",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "预算须为正数金额，最多两位小数且不超过一万亿元"
+        }
+      ],
+      "elapsed_ms": 0.0277
+    },
+    {
+      "id": "core-116",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "预算表达无法核验；请明确说预算上限为3000元、预算改为3500元或取消预算上限"
+        }
+      ],
+      "elapsed_ms": 0.0245
+    },
+    {
+      "id": "core-117",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "预算须为正数金额，最多两位小数且不超过一万亿元"
+        }
+      ],
+      "elapsed_ms": 0.027
+    },
+    {
+      "id": "core-118",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "本轮存在多个不同的预算要求，请明确唯一值后再保存；草稿未修改"
+        }
+      ],
+      "elapsed_ms": 0.0377
+    },
+    {
+      "id": "core-119",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "没有可以核验的明确修改，请指定目标与完整要求"
+        }
+      ],
+      "elapsed_ms": 0.0331
+    },
+    {
+      "id": "core-120",
+      "passed": true,
+      "decision": "clarify",
+      "expected_snapshot": null,
+      "unresolved": [
+        {
+          "code": "incomplete_intent",
+          "slot_path": "",
+          "question": "还有未能核验的业务要求，请明确完整修改；未保存部分结果"
+        }
+      ],
+      "elapsed_ms": 0.0576
+    }
+  ]
+}

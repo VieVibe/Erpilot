@@ -1,0 +1,27 @@
+{
+  "source": "final-clean-reproduction",
+  "scripted_demo": true,
+  "viewports": [
+    {
+      "width": 1440,
+      "errors": [],
+      "external": [],
+      "overflow": false,
+      "screenshot": "F:\\VIE\\Erpilot\\artifacts\\verification-20261104\\final-clean-reproduction-1440.png"
+    },
+    {
+      "width": 320,
+      "errors": [],
+      "external": [],
+      "overflow": false,
+      "screenshot": "F:\\VIE\\Erpilot\\artifacts\\verification-20261104\\final-clean-reproduction-320.png"
+    }
+  ],
+  "approval_screenshot": "F:\\VIE\\Erpilot\\artifacts\\verification-20261104\\final-clean-reproduction-approval-1440.png",
+  "order": {
+    "revision": 2,
+    "order_id": "SO20261104-0001",
+    "total": 3355
+  },
+  "verified": true
+}

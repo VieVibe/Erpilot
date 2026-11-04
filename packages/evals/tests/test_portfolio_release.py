@@ -5,6 +5,11 @@ from pathlib import Path
 
 import pytest
 
+
+@pytest.mark.parametrize("name", ["Dockerfile", ".dockerignore", "compose.live.yaml"])
+def test_deployment_entrypoints_are_in_source_snapshot(name):
+    assert release.allowed(name)
+
 SCRIPT = Path(__file__).resolve().parents[3] / "scripts" / "portfolio_release.py"
 spec = importlib.util.spec_from_file_location("portfolio_release", SCRIPT)
 release = importlib.util.module_from_spec(spec)
@@ -33,6 +38,22 @@ def test_snapshot_is_reproducible_and_verifies_after_extraction(tmp_path):
                                  "packages/.aws/credentials", "C:/secrets.json"])
 def test_sensitive_or_escaping_paths_are_rejected(name):
     assert not release.allowed(name)
+
+
+def test_document_screenshots_survive_snapshot_with_their_references(tmp_path):
+    image = tmp_path / "docs/assets/workspace.png"
+    image.parent.mkdir(parents=True)
+    image.write_bytes(b"recorded UI screenshot fixture")
+    (tmp_path / "README.md").write_text("![demo](docs/assets/workspace.png)", encoding="utf-8")
+    (tmp_path / ".gitattributes").write_text("reports/** -text\n", encoding="utf-8")
+    output = tmp_path / "source.zip"
+    release.build(tmp_path, output, names=["README.md", "docs/assets/workspace.png",
+                                         ".gitattributes"])
+    with zipfile.ZipFile(output) as archive:
+        assert archive.read("docs/assets/workspace.png") == image.read_bytes()
+        assert archive.read(".gitattributes") == (tmp_path / ".gitattributes").read_bytes()
+    assert not release.allowed("reports/old-screenshot.png")
+    assert not release.allowed("artifacts/verification/screenshot.png")
 
 
 def test_archive_rejects_extra_entries_and_tampered_manifest(tmp_path):

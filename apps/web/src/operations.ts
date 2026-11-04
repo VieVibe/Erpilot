@@ -1,3 +1,4 @@
+import { apiFetch } from './auth-client.js';
 export interface CancellationLine {sku:string; name:string; quantity:number; unit_price:number; line_total:number; stock_before:number|null; stock_after:number|null; warehouse:string|null}
 export interface CancellationSummary {order_id:string;customer:string;status_before:string;status_after:string;total_amount:number;note:string|null;items:CancellationLine[]}
 export interface AdjustmentSummary {sku:string;name:string;delta:number;quantity_before:number;quantity_after:number;warehouse:string;stock_exists:boolean}
@@ -29,7 +30,7 @@ export function parseOperation(value:unknown):BusinessOperation {
   return value as unknown as BusinessOperation;
 }
 export async function getOperation(sessionId:string,operationId:string,signal?:AbortSignal):Promise<BusinessOperation>{
-  const response=await fetch(`/api/sessions/${encodeURIComponent(sessionId)}/operations/${encodeURIComponent(operationId)}`,{signal});
+  const response=await apiFetch(`/api/sessions/${encodeURIComponent(sessionId)}/operations/${encodeURIComponent(operationId)}`,{signal});
   const body=await response.json().catch(()=>null);
   if(!response.ok){const error=record(body)&&record(body.error)?body.error:{};throw new Error([error.message??`HTTP ${response.status}`,error.hint].filter(Boolean).join('；'));}
   return parseOperation(body);

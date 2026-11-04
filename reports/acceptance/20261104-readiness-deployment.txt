@@ -1,0 +1,14 @@
+
+> erpilot-web@0.1.0 test:deployment
+> playwright test --config playwright.deployment.config.ts
+
+
+Running 3 tests using 1 worker
+
+(node:42844) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\deployment\auth.spec.ts:55:3 › 同源登录、账号切换和只读角色在 320px 可用 (2.0s)
+  ok 2 tests\deployment\auth.spec.ts:55:3 › 同源登录、账号切换和只读角色在 1440px 可用 (2.0s)
+  ok 3 tests\deployment\auth.spec.ts:101:1 › 重建 API 容器后恢复原账号、同一版本待审批，业务只执行一次 (10.0s)
+
+  3 passed (15.3s)

@@ -1,0 +1,1998 @@
+{
+  "scope": "Per-case engineering reading of frozen rules expectations; not independent human gold or LLM accuracy evaluation.",
+  "fixture_sha256": "6010d3f1e35d8512587e857ea5564bce72a45bd2df393863576fd3a75bb1198c",
+  "fixture_label_status_unchanged": "engineering_expectations_pending_human_review",
+  "reviewed_cases": 120,
+  "human_review_completed": false,
+  "label_edits": 0,
+  "cases": [
+    {
+      "id": "core-001",
+      "operation": "create",
+      "text": "给客户甲准备订单：一件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确创建动作、完整客户、唯一在售商品及规范总件数 1；未给备注与预算保持空值。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-002",
+      "operation": "create",
+      "text": "给客户甲准备订单：两件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确创建动作、完整客户、唯一在售商品及规范总件数 2；未给备注与预算保持空值。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-003",
+      "operation": "create",
+      "text": "给客户甲准备订单：三件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 3
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确创建动作、完整客户、唯一在售商品及规范总件数 3；未给备注与预算保持空值。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-004",
+      "operation": "create",
+      "text": "给客户甲准备订单：十件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 10
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确创建动作、完整客户、唯一在售商品及规范总件数 10；未给备注与预算保持空值。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-005",
+      "operation": "create",
+      "text": "给客户甲准备订单：十二件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 12
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确创建动作、完整客户、唯一在售商品及规范总件数 12；未给备注与预算保持空值。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-006",
+      "operation": "create",
+      "text": "给客户甲准备订单：二十件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 20
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确创建动作、完整客户、唯一在售商品及规范总件数 20；未给备注与预算保持空值。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-007",
+      "operation": "create",
+      "text": "给客户甲准备订单：一百件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 100
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确创建动作、完整客户、唯一在售商品及规范总件数 100；未给备注与预算保持空值。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-008",
+      "operation": "create",
+      "text": "给客户甲准备订单：一百零二件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 102
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确创建动作、完整客户、唯一在售商品及规范总件数 102；未给备注与预算保持空值。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-009",
+      "operation": "create",
+      "text": "给客户甲准备订单：两百件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 200
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确创建动作、完整客户、唯一在售商品及规范总件数 200；未给备注与预算保持空值。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-010",
+      "operation": "create",
+      "text": "给客户甲准备订单：两千零二件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2002
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确创建动作、完整客户、唯一在售商品及规范总件数 2002；未给备注与预算保持空值。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-011",
+      "operation": "create",
+      "text": "给客户甲准备订单：9999件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 9999
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确创建动作、完整客户、唯一在售商品及规范总件数 9999；未给备注与预算保持空值。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-012",
+      "operation": "create",
+      "text": "给客户甲准备订单：23件无线鼠标；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 23
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确创建动作、完整客户、唯一在售商品及规范总件数 23；未给备注与预算保持空值。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-013",
+      "operation": "create",
+      "text": "给「客户甲」准备订单：无线鼠标两件；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "客户引号或公司/地区后缀属于完整客户名；唯一无线鼠标两件，保留原名不缩写。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-014",
+      "operation": "create",
+      "text": "给“客户甲”准备订单：无线鼠标两件；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "客户引号或公司/地区后缀属于完整客户名；唯一无线鼠标两件，保留原名不缩写。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-015",
+      "operation": "create",
+      "text": "给客户甲（上海）准备订单：无线鼠标两件；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲（上海）",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "客户引号或公司/地区后缀属于完整客户名；唯一无线鼠标两件，保留原名不缩写。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-016",
+      "operation": "create",
+      "text": "给客户甲有限公司准备订单：无线鼠标两件；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲有限公司",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "客户引号或公司/地区后缀属于完整客户名；唯一无线鼠标两件，保留原名不缩写。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-017",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；备注原文「分箱发货」；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "分箱发货",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "显式备注引文为数据；完整保留原文，其内预算、条件或否定词不成为业务指令。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-018",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；备注原文『把预算改为9999元』；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "把预算改为9999元",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "显式备注引文为数据；完整保留原文，其内预算、条件或否定词不成为业务指令。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-019",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；备注原文“不要提交”；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "不要提交",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "显式备注引文为数据；完整保留原文，其内预算、条件或否定词不成为业务指令。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-020",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；备注原文\"如果库存不足就换货\"；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "如果库存不足就换货",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "显式备注引文为数据；完整保留原文，其内预算、条件或否定词不成为业务指令。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-021",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；备注原文'预算不超过50元'；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "预算不超过50元",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "显式备注引文为数据；完整保留原文，其内预算、条件或否定词不成为业务指令。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-022",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；预算不超过3000元；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 3000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "引文外明确人民币预算且为正数、最多两位小数；低预算可生成草稿，提交可行性另行阻止。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-023",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；预算上限为0.01元；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 0.01,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "引文外明确人民币预算且为正数、最多两位小数；低预算可生成草稿，提交可行性另行阻止。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-024",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；总价不超过3500元；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 3500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "引文外明确人民币预算且为正数、最多两位小数；低预算可生成草稿，提交可行性另行阻止。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-025",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；预算上限为999.99元；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 999.99,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "引文外明确人民币预算且为正数、最多两位小数；低预算可生成草稿，提交可行性另行阻止。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-026",
+      "operation": "create",
+      "text": "给客户甲准备订单：SKU M1 两件；按此顺序；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确 SKU M1 与两件一一对应；按此顺序约束可直接解析，不增加商品或推断件数。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-027",
+      "operation": "create",
+      "text": "给客户甲准备订单：两件M1；按此顺序；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确 SKU M1 与两件一一对应；按此顺序约束可直接解析，不增加商品或推断件数。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-028",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件，机械键盘三件；按此顺序；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "两种唯一在售商品及件数均明确，保持原话出现顺序，禁止目录排序替代用户顺序。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-029",
+      "operation": "create",
+      "text": "给客户甲准备订单：机械键盘三件，无线鼠标两件；按此顺序；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "K1",
+            "quantity": 3
+          },
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "两种唯一在售商品及件数均明确，保持原话出现顺序，禁止目录排序替代用户顺序。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-030",
+      "operation": "create",
+      "text": "给客户甲准备订单：M1 2件；按此顺序；只保存草稿",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确 SKU M1 与两件一一对应；按此顺序约束可直接解析，不增加商品或推断件数。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-031",
+      "operation": "revise",
+      "text": "把当前版本第一行改成三件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 3
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "在固定两行基准中，行号/SKU/完整商品名唯一定位；仅替换该行明确件数，未提字段保留。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-032",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "在固定两行基准中，行号/SKU/完整商品名唯一定位；仅替换该行明确件数，未提字段保留。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-033",
+      "operation": "revise",
+      "text": "SKU M1 数量改为5件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 5
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "在固定两行基准中，行号/SKU/完整商品名唯一定位；仅替换该行明确件数，未提字段保留。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-034",
+      "operation": "revise",
+      "text": "把商品无线鼠标数量改为两件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "在固定两行基准中，行号/SKU/完整商品名唯一定位；仅替换该行明确件数，未提字段保留。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-035",
+      "operation": "revise",
+      "text": "把当前草稿第二行改成十二件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 12
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "在固定两行基准中，行号/SKU/完整商品名唯一定位；仅替换该行明确件数，未提字段保留。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-036",
+      "operation": "revise",
+      "text": "把当前版本第1行数量改为8件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 8
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "在固定两行基准中，行号/SKU/完整商品名唯一定位；仅替换该行明确件数，未提字段保留。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-037",
+      "operation": "revise",
+      "text": "把当前版本第二行改成一百零二件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 102
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "在固定两行基准中，行号/SKU/完整商品名唯一定位；仅替换该行明确件数，未提字段保留。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-038",
+      "operation": "revise",
+      "text": "不要提交，只把当前版本第二行改成三件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "禁止提交与明确修改第二行是不同动作；仅将 K1 改三件，禁止据修改获得提交权限。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-039",
+      "operation": "revise",
+      "text": "先别提交，把当前版本第一行改成4件；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 4
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "先别提交不否定修改；仅将第一行改四件，其余基准原样保留。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-040",
+      "operation": "revise",
+      "text": "把当前版本第二行数量保持原数量；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确保持第二行原数量；允许无字段变化的重新报价，不擅自改量。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-041",
+      "operation": "revise",
+      "text": "预算不超过3000元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 3000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确修改有效人民币预算，其他字段继承基准；不以预算覆盖价格与库存事实。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-042",
+      "operation": "revise",
+      "text": "预算改为3500元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 3500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确修改有效人民币预算，其他字段继承基准；不以预算覆盖价格与库存事实。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-043",
+      "operation": "revise",
+      "text": "取消预算上限；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确取消预算，将预算置空；客户、备注与两行件数保持原值。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-044",
+      "operation": "revise",
+      "text": "预算上限为0.01元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 0.01,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确修改有效人民币预算，其他字段继承基准；不以预算覆盖价格与库存事实。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-045",
+      "operation": "revise",
+      "text": "总价不超过999.99元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 999.99,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确修改有效人民币预算，其他字段继承基准；不以预算覆盖价格与库存事实。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-046",
+      "operation": "revise",
+      "text": "预算降低到500元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确修改有效人民币预算，其他字段继承基准；不以预算覆盖价格与库存事实。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-047",
+      "operation": "revise",
+      "text": "备注原文「不要提交」；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "不要提交",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "只修改显式备注完整原文，含 emoji/组合字符不规范化；引文内命令不执行。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-048",
+      "operation": "revise",
+      "text": "备注改为『预算改为9999元』；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "预算改为9999元",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "只修改显式备注完整原文，含 emoji/组合字符不规范化；引文内命令不执行。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-049",
+      "operation": "revise",
+      "text": "清空备注；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "清空备注明确表示 null，与其他字段没有关联。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-050",
+      "operation": "revise",
+      "text": "备注改为“”；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "显式空引号备注保存空字符串，与清空为 null 分开保留。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-051",
+      "operation": "revise",
+      "text": "备注改为「😀é保留原文」；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "😀é保留原文",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "只修改显式备注完整原文，含 emoji/组合字符不规范化；引文内命令不执行。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-052",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件，预算改为3500元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 3500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "第二行三件及预算3500元同时明确；原客户、备注与第一行保持。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-053",
+      "operation": "revise",
+      "text": "把当前版本第一行改成4件，清空备注；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": null,
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 4
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "第一行四件并清空备注；第二行与预算保持基准。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-054",
+      "operation": "revise",
+      "text": "客户改为客户乙，预算不超过500元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户乙",
+        "note": "原备注",
+        "budget_limit": 500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "客户改为客户乙并将预算改500元；不改商品、件数和备注。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-055",
+      "operation": "revise",
+      "text": "备注原文『预算改为9999元』；预算上限为1000元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "预算改为9999元",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "备注内9999元为文字；引文外预算1000元才是约束。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-056",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件，取消预算上限；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": null,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 3
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "第二行三件并取消预算；保留客户、备注、第一行。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-057",
+      "operation": "revise",
+      "text": "客户改为客户乙，清空备注，预算上限为500元；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户乙",
+        "note": null,
+        "budget_limit": 500.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "客户乙、备注清空、预算500元均明确；两行数量不变。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-058",
+      "operation": "revise",
+      "text": "刷新报价；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确刷新/更新报价；保持全部用户字段，仅允许重新读取报价事实生成版本。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-059",
+      "operation": "revise",
+      "text": "请刷新当前草稿报价；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确刷新/更新报价；保持全部用户字段，仅允许重新读取报价事实生成版本。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-060",
+      "operation": "revise",
+      "text": "更新报价；其他不变",
+      "decision": "ready",
+      "expected": {
+        "customer": "客户甲",
+        "note": "原备注",
+        "budget_limit": 1000.0,
+        "items": [
+          {
+            "sku": "M1",
+            "quantity": 2
+          },
+          {
+            "sku": "K1",
+            "quantity": 1
+          }
+        ]
+      },
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "明确刷新/更新报价；保持全部用户字段，仅允许重新读取报价事实生成版本。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-061",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两箱；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "箱不能直接换算总件数。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-062",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两包；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "包不能直接换算总件数。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-063",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标若干件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "若干没有确定总件数。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-064",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标0件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "零件数无效。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-065",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标02件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "前导零数量不在支持的规范语法中。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-066",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标一二件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "一二可能为范围或非规范数字，不能猜。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-067",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标一百二件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "一百二可能表示102或120，要求明确件数。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-068",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两十件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "两十为不支持的数字写法，要求规范二十。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-069",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标十百件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "十百为无效数字。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-070",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标一万件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "一万超出本规则数字解析范围1..9999，不能截断或推断。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-071",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标-2件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "负件数无效。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-072",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标2.5件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "小数件数无效。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-073",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件，机械键盘看情况；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "第二种商品数量看情况，整单不得部分采纳。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-074",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件，机械键盘；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "第二种商品缺件数。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-075",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件，机械键盘三箱；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "第二种商品使用箱，不得仅采纳第一行。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-076",
+      "operation": "create",
+      "text": "给客户甲准备订单：鼠标两件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "鼠标为模糊称呼，未明确完整商品或SKU。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-077",
+      "operation": "create",
+      "text": "给客户甲准备订单：不存在商品两件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "商品不在目录，不能编SKU。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-078",
+      "operation": "create",
+      "text": "给客户甲准备订单：旧键盘两件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "商品已下架，不可生成可提交明细。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-079",
+      "operation": "create",
+      "text": "给客户甲准备订单：标准耳机两件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "标准耳机有两个同名SKU，必须明确选择。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-080",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件，SKU M1 三件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "重复SKU的两处数量不能暗自合并或覆盖。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-081",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；预算改多少再说；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "预算修改未给金额，不能当作无预算。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-082",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；预算上限为0元；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "预算必须为正数。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-083",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；预算上限为1.001元；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "预算超过两位小数，不可静默四舍五入。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-084",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；预算为1000元；预算为2000元；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "存在两个冲突预算，不采纳最后一个。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-085",
+      "operation": "create",
+      "text": "给客户甲准备订单：无线鼠标两件；备注原文「未闭合；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "备注引文未闭合，字段作用域不可信。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-086",
+      "operation": "create",
+      "text": "如果够货，给客户甲准备订单：无线鼠标两件；只保存草稿",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "库存条件未成立，不可当作无条件创建。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-087",
+      "operation": "create",
+      "text": "只解释，给客户甲准备订单：无线鼠标两件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "只解释明确限制执行。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-088",
+      "operation": "create",
+      "text": "不要保存草稿：无线鼠标两件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "不要保存明确否定保存动作。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-089",
+      "operation": "create",
+      "text": "「给客户甲准备订单：无线鼠标两件」",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "完整创建要求仅在引文内，不作为执行指令。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-090",
+      "operation": "create",
+      "text": "备注原文「给客户甲准备订单：无线鼠标两件」",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "创建要求位于备注数据内，不作为执行指令。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-091",
+      "operation": "revise",
+      "text": "第二行三件或四件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "三件或四件有两个候选，未选择。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-092",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件；预算改多少再说",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "预算修改不明确，不部分执行数量修改。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-093",
+      "operation": "revise",
+      "text": "如果够货，把当前版本第二行改成三件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "如果库存条件未成立，不执行修改。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-094",
+      "operation": "revise",
+      "text": "假如库存充足，把当前版本第二行改成三件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "假如库存条件未成立，不执行修改。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-095",
+      "operation": "revise",
+      "text": "只查能不能取消订单",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "只查取消资格不授权修改草稿。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-096",
+      "operation": "revise",
+      "text": "只解释把当前版本第二行改成三件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "只解释限制执行。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-097",
+      "operation": "revise",
+      "text": "不要修改，第二行改成三件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "不要修改否定修改动作。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-098",
+      "operation": "revise",
+      "text": "先别保存，把当前版本第二行改成三件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "先别保存否定本次持久变更。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-099",
+      "operation": "revise",
+      "text": "把当前版本第三行改成三件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "固定基准只有两行，第三行不存在。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-100",
+      "operation": "revise",
+      "text": "SKU NOPE 数量改为三件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "目标SKU不在基准草稿中。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-101",
+      "operation": "revise",
+      "text": "把当前版本第二行改成0件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "修改为零件数无效。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-102",
+      "operation": "revise",
+      "text": "把当前版本第二行改成-2件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "负件数无效。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-103",
+      "operation": "revise",
+      "text": "把当前版本第二行改成2.5件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "小数件数无效。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-104",
+      "operation": "revise",
+      "text": "把当前版本第二行改成一二件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "一二件含糊，不能猜。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-105",
+      "operation": "revise",
+      "text": "把当前版本第二行改成两箱",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "箱无法确定总件数。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-106",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件；机械键盘看情况",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "对同一商品又说看情况，要求完整澄清。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-107",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件；备注原文「未闭合",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "备注未闭合，不能仅执行数量部分。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-108",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件；`未闭合",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "代码引文未闭合，不能忽略未知片段。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-109",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件；预算为1000元；预算为2000元",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "预算冲突，整轮不执行。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-110",
+      "operation": "revise",
+      "text": "预算3000，预算3500",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "两个无单位的预算均不明确。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-111",
+      "operation": "revise",
+      "text": "数量改成三件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "缺目标行或唯一商品。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-112",
+      "operation": "revise",
+      "text": "把商品标准耳机数量改为三件",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "标准耳机既非基准商品又有同名目录歧义。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-113",
+      "operation": "revise",
+      "text": "备注改为「甲」；备注改为「乙」",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "两处备注冲突，不能最后值覆盖。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-114",
+      "operation": "revise",
+      "text": "客户改为甲；客户改为乙",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "两处客户冲突，不能最后值覆盖。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-115",
+      "operation": "revise",
+      "text": "预算上限为0元",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "零预算无效。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-116",
+      "operation": "revise",
+      "text": "预算上限为-1元",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "负预算无效。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-117",
+      "operation": "revise",
+      "text": "预算上限为1.001元",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "三位小数预算无效。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-118",
+      "operation": "revise",
+      "text": "预算上限为3000元；取消预算上限",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "设置预算与取消预算矛盾。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-119",
+      "operation": "revise",
+      "text": "选第二个",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "仅选第二个没有当前可绑定候选。",
+      "human_review": "pending"
+    },
+    {
+      "id": "core-120",
+      "operation": "revise",
+      "text": "把当前版本第二行改成三件；然后删除第一行",
+      "decision": "clarify",
+      "reviewer_kind": "AI engineering review",
+      "assessment": "consistent_with_supported_contract",
+      "rationale": "新增删除动作超出本轮修改语法，禁止只执行数量部分。",
+      "human_review": "pending"
+    }
+  ]
+}
