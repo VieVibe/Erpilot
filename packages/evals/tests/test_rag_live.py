@@ -10,7 +10,6 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 import pytest
-from agent_core.dotenv import find_dotenv, load_dotenv
 from agent_core.llm import LLMClient, LLMConfig
 from agent_core.trace import load_records
 from erp_store.seed import seed_database
@@ -163,15 +162,7 @@ class _UsageMeter:
 
 
 @pytest.fixture(scope="module")
-def _load_environment() -> None:
-    dotenv = find_dotenv(Path(__file__).resolve())
-    if dotenv is None:
-        raise RuntimeError("仓库根目录未找到 .env")
-    load_dotenv(dotenv)
-
-
-@pytest.fixture(scope="module")
-def _acceptance_context(tmp_path_factory, _load_environment):
+def _acceptance_context(tmp_path_factory, live_environment):
     llm_config = LLMConfig.from_env()
     embed_config = EmbedConfig.from_env()
     meter = _UsageMeter(embed_config)

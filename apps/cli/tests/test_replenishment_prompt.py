@@ -22,6 +22,7 @@ def test_cli_replenishment_guidance_follows_tool_surface(monkeypatch, tmp_path, 
     tools = [Tool("suggest_replenishment", "只读建议", Params, handler)] if mode == "mcp" else []
     monkeypatch.setattr(main, "_resolve_tools", lambda *args, **kwargs: tools)
     monkeypatch.setattr(main, "_trace_sinks", lambda: [])
+    monkeypatch.setattr(main, "find_dotenv", lambda *args: None)
     monkeypatch.setattr(main.LLMConfig, "from_env", lambda: LLMConfig(api_key="test"))
     captured = []
 

@@ -12,6 +12,7 @@ import {
   type SSEEvent,
   type SessionState,
   ApiError,
+  MAX_MESSAGE_LENGTH,
   cancelSession,
   loadSessionState,
   streamInterruptedResume,
@@ -46,7 +47,7 @@ import { SessionRequests } from './history';
 import { SessionHistory } from './components/SessionHistory';
 
 function MessageInput(props: GetProps<typeof Input.TextArea>) {
-  return <Input.TextArea {...props} aria-label="消息" />;
+  return <Input.TextArea {...props} aria-label="消息" maxLength={MAX_MESSAGE_LENGTH} />;
 }
 const SENDER_COMPONENTS = { input: MessageInput };
 
@@ -610,6 +611,10 @@ export default function App() {
   const send = useCallback(async (requestedMessage?: string, confirmedDraft?: OrderDraft) => {
     const message = (requestedMessage ?? input).trim();
     if (!message || !canSend || hasPending || interrupted || liveConnection.current) return;
+    if ([...message].length > MAX_MESSAGE_LENGTH) {
+      setError(`消息最多 ${MAX_MESSAGE_LENGTH} 字，请缩短后重试`);
+      return;
+    }
     const ticket = sessionRequests.current.capture();
     localStorage.removeItem(storageFreshKey);
     setInput("");
@@ -747,7 +752,7 @@ export default function App() {
       suffix={(_, { components: { SendButton } }) => <SendButton type="primary" shape="circle" icon={<ArrowUpOutlined />} aria-label="发送"
         disabled={inputLocked || !input.trim()} />}
       footer={<div className="composer-footer"><span>{hasPending ? '操作等待你的确认' : busy ? '正在处理，请稍候' : 'Enter 发送 · Shift + Enter 换行'}</span>
-        <span><CheckCircleOutlined /> 写入操作需审批</span></div>} />
+        <span>{input.length >= MAX_MESSAGE_LENGTH * .9 ? `${input.length} / ${MAX_MESSAGE_LENGTH} 字` : <><CheckCircleOutlined /> 写入操作需审批</>}</span></div>} />
   </>;
   return <WorkspaceShell sidebar={<SessionHistory currentId={sessionIdRef.current} locked={busy || sessionStatus === 'running'} onSelect={selectHistorySession} />}
     composer={composer} business={business} runtimeLabel={runtimeLabel}

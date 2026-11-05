@@ -290,6 +290,8 @@ async def test_partial_task_cannot_be_reported_as_complete(tmp_path):
 
 def test_task_cli_selects_b4_without_changing_baseline(monkeypatch, tmp_path):
     import evals.__main__ as cli
+
+    monkeypatch.setattr(cli, "find_dotenv", lambda *args: None)
     from evals.baseline import BASELINE_CASES
 
     baseline_ids = [c.id for c in BASELINE_CASES]

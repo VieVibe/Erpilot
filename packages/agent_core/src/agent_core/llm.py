@@ -1,7 +1,7 @@
 """M1 第 1–2 周产出：最小 LLM client——AsyncOpenAI 流式补全 + usage 统计 + 工具调用 + 结构化输出。
 
-与 loop.py 的分工：本模块只封装"一次对话补全"的流式调用与计量；
-多轮工具调用循环、防护策略是 loop.py 的内容。
+与 graph.py 的分工：本模块只封装"一次对话补全"的流式调用与计量；
+多轮工具编排、防护策略由 LangGraph 图负责。
 
 事件模型：stream_chat 产出 StreamEvent（TextDelta | ToolCall | StreamEnd），
 保证恰好以一个 StreamEnd 结束——第 4 周 FastAPI SSE 只需把事件逐个转发。

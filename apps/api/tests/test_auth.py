@@ -127,7 +127,7 @@ async def test_resource_ownership_history_events_and_legacy_adoption(secured):
         f"/api/sessions/{sid}/order-drafts/{draft['draft_id']}/history",
         f"/api/runs/{run_id}/events",
     ):
-        denied = await bob.get(path)
+        denied = await bob.get(path, headers={"X-Erpilot-Allow-Missing": "1"})
         assert denied.status_code == 404 and "private customer" not in denied.text
     assert (
         await bob.post("/api/chat/stream", json={"session_id": sid, "message": "提交当前草稿"})
@@ -152,6 +152,8 @@ async def test_invalid_login_envelopes_and_secure_cookie_configuration(secured, 
         ({}, 422),
         ({"json": []}, 422),
         ({"content": b"{broken", "headers": {"content-type": "application/json"}}, 422),
+        ({"content": b'{"nested":' + b"[" * 20000 + b"0" + b"]" * 20000 + b"}",
+          "headers": {"content-type": "application/json"}}, 422),
         ({"content": b"<xml/>", "headers": {"content-type": "text/xml"}}, 415),
         ({"content": b"x" * (2 * 1024 * 1024 + 1)}, 413),
     ):

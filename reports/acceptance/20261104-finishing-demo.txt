@@ -1,0 +1,18 @@
+
+> erpilot-web@0.1.0 test:demo
+> playwright test --config playwright.demo.config.ts
+
+[WebServer] INFO:     Started server process [29280]
+[WebServer] INFO:     Waiting for application startup.
+[WebServer] INFO:     Application startup complete.
+[WebServer] INFO:     Uvicorn running on http://127.0.0.1:8766 (Press CTRL+C to quit)
+
+Running 5 tests using 1 worker
+
+  ok 1 tests\demo\portfolio-demo.spec.ts:24:1 › 商品名称和中文件数经正式 API 保存完整草稿并恢复原始要求 (1.6s)
+  ok 2 tests\demo\portfolio-demo.spec.ts:43:3 › 真实离线服务在 320px 展示证据、拒答及补货依据 (1.3s)
+  ok 3 tests\demo\portfolio-demo.spec.ts:43:3 › 真实离线服务在 1440px 展示证据、拒答及补货依据 (1.4s)
+  ok 4 tests\demo\portfolio-demo.spec.ts:75:1 › 草稿修改后断线恢复同版本审批，拒绝后可重新提交批准 (2.6s)
+  ok 5 tests\demo\portfolio-demo.spec.ts:115:1 › 表单预算超限后明确提高预算，刷新恢复并批准正确版本 (1.3s)
+
+  5 passed (11.7s)

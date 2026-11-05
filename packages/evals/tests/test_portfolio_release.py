@@ -52,8 +52,23 @@ def test_document_screenshots_survive_snapshot_with_their_references(tmp_path):
     with zipfile.ZipFile(output) as archive:
         assert archive.read("docs/assets/workspace.png") == image.read_bytes()
         assert archive.read(".gitattributes") == (tmp_path / ".gitattributes").read_bytes()
-    assert not release.allowed("reports/old-screenshot.png")
+    assert release.allowed("reports/old-screenshot.png")
     assert not release.allowed("artifacts/verification/screenshot.png")
+
+
+def test_report_images_survive_snapshot_with_their_references(tmp_path):
+    names = ["reports/acceptance/review.md", "reports/acceptance/assets/evidence.JPG"]
+    report, image = (tmp_path / name for name in names)
+    image.parent.mkdir(parents=True)
+    report.write_text("![review](assets/evidence.JPG)", encoding="utf-8")
+    image.write_bytes(b"recorded acceptance evidence")
+    output = tmp_path / "source.zip"
+    release.build(tmp_path, output, names=names)
+    with zipfile.ZipFile(output) as archive:
+        assert archive.read(names[1]) == image.read_bytes()
+    assert release.verify(output)
+    assert not release.allowed("traces/evidence.png")
+    assert not release.allowed("reports/acceptance/erp.sqlite3")
 
 
 def test_archive_rejects_extra_entries_and_tampered_manifest(tmp_path):

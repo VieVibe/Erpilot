@@ -6,6 +6,7 @@
 
 | 项目 | 当前状态 | 证据 |
 |---|---|---|
+| 最终打磨与可展示交付 | 输入边界、加载锁定、初次会话空态、录屏确认与报告图片补齐；Python **1861 / 0 skipped**、前端116、UI60/2实验跳过、正式离线浏览器5、容器3、场景11/11；干净源码复现及浏览器零错误/告警、依赖审计零已知漏洞，新字幕录屏与交付包 | [本轮清单与验收](../reports/acceptance/2026-11-04-finishing.md)、[作品入口](portfolio-overview.md) |
 | 标签委托审核 | **120/120已审核**，6条补充范围说明，判定/字段改动0；无用户待审项。审核后规则120/120，评测专项449通过、无付费调用 | [审核说明](label-review.md)、[逐条记录](../reports/review/20261104-intent-label-audit/review.md)、[专项JUnit](../reports/acceptance/20261104-intent-label-review-evals.xml) |
 | 语义默认启用收尾 | 真实 API 默认创建/修改预览；完整 HTTP **8/8**，该轮全仓 PG17 **1817 passed**、前端112、UI58、离线浏览器5、容器3、场景11/11；随后120条标签委托AI审核完成 | [默认启用收尾](../reports/acceptance/2026-11-04-semantic-default.md)、[当前标签审核](label-review.md) |
 | 最新真实验收 | 订单同批 **4/4 / 34/34**、55 请求/usage；创建 **7/7**、修改 **6/6**；默认上下文的带登录真实 HTTP 六项检查通过。模型/字段失败与未知费用保留 | [最终验收](../reports/acceptance/2026-11-04-real-model-reconnect.md)、[独立审计](../reports/acceptance/20261104-reconnect-final-audit.json) |

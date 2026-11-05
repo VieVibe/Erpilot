@@ -18,6 +18,8 @@ def test_cli_uses_explicit_graph_saver(monkeypatch, tmp_path):
         return LangGraphRuntime(*args, **kwargs)
 
     monkeypatch.setattr(main, "LangGraphRuntime", runtime, raising=False)
+    monkeypatch.setattr(main, "find_dotenv", lambda *args: None)
+    monkeypatch.setattr(main, "_trace_sinks", lambda: [])
     monkeypatch.setattr(main.LLMConfig, "from_env", lambda: LLMConfig(api_key="test"))
     monkeypatch.setattr(
         main,

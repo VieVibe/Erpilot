@@ -1,0 +1,164 @@
+{
+  "format": "erpilot-offline-verification-1",
+  "status": "passed",
+  "steps": [
+    {
+      "name": "Python 静态检查",
+      "command": [
+        "F:\\VIE\\Erpilot\\.venv\\Scripts\\python.exe",
+        "-m",
+        "ruff",
+        "check",
+        "."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 0.75
+    },
+    {
+      "name": "Python 离线测试",
+      "command": [
+        "F:\\VIE\\Erpilot\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-m",
+        "not eval",
+        "--basetemp=F:\\VIE\\Erpilot\\artifacts\\verification\\20261104T094039Z-8045781a\\tmp",
+        "-o",
+        "cache_dir=F:\\VIE\\Erpilot\\artifacts\\verification\\20261104T094039Z-8045781a\\cache",
+        "--junitxml=F:\\VIE\\Erpilot\\artifacts\\verification\\20261104T094039Z-8045781a\\python.xml"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 510.891
+    },
+    {
+      "name": "前端协议与渲染测试",
+      "command": [
+        "F:\\software\\node-v22.23.3-win-x64\\npm.cmd",
+        "--prefix",
+        "F:\\VIE\\Erpilot\\apps\\web",
+        "test"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 3.703
+    },
+    {
+      "name": "构建前端",
+      "command": [
+        "F:\\software\\node-v22.23.3-win-x64\\npm.cmd",
+        "--prefix",
+        "F:\\VIE\\Erpilot\\apps\\web",
+        "run",
+        "build"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 9.469
+    },
+    {
+      "name": "十一场景离线业务验收",
+      "command": [
+        "F:\\VIE\\Erpilot\\.venv\\Scripts\\python.exe",
+        "scripts/demo.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 8.172
+    },
+    {
+      "name": "安装匹配的 Chromium",
+      "command": [
+        "F:\\software\\node-v22.23.3-win-x64\\npm.cmd",
+        "--prefix",
+        "F:\\VIE\\Erpilot\\apps\\web",
+        "exec",
+        "--",
+        "playwright",
+        "install",
+        "chromium"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 0.812
+    },
+    {
+      "name": "浏览器工作台回归",
+      "command": [
+        "F:\\software\\node-v22.23.3-win-x64\\npm.cmd",
+        "--prefix",
+        "F:\\VIE\\Erpilot\\apps\\web",
+        "run",
+        "test:ui",
+        "--",
+        "--workers=2"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 49.735
+    },
+    {
+      "name": "真实 API 离线浏览器验收",
+      "command": [
+        "F:\\software\\node-v22.23.3-win-x64\\npm.cmd",
+        "--prefix",
+        "F:\\VIE\\Erpilot\\apps\\web",
+        "run",
+        "test:demo"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "duration_seconds": 12.328
+    }
+  ],
+  "started_at": "2026-11-04T09:40:39.664107+00:00",
+  "live_model_evaluation": false,
+  "postgres_configured": true,
+  "browser_requested": true,
+  "lock_sha256": {
+    "uv.lock": "2fe71fb0a4bab628241ff5aca066c830a8929fc574898bc7fc612294d9b2798d",
+    "apps/web/package-lock.json": "01283b4ba93d7f1684a4b45a5b3df88fe6a65b008773acb5ef7321f32647ddd0"
+  },
+  "finished_at": "2026-11-04T09:50:35.533428+00:00",
+  "python_counts": {
+    "tests": 1861,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "frontend_counts": {
+    "passed": 116,
+    "failed": 0
+  },
+  "ui_counts": {
+    "passed": 60,
+    "failed": 0,
+    "skipped": 2,
+    "skip_reason": "separate ERPILOT_PREVIEW_TEST_API experiment service not configured"
+  },
+  "real_offline_api_browser": {
+    "passed": 5,
+    "failed": 0,
+    "browser_console_assertions": true
+  },
+  "authenticated_container_browser": {
+    "passed": 3,
+    "failed": 0
+  },
+  "offline_business_scenarios": {
+    "passed": 11,
+    "failed": 0
+  },
+  "supplier_model_requests": 0,
+  "fresh_source_reproduction_passed": true,
+  "dependency_audit_known_vulnerabilities": {
+    "python": 0,
+    "npm": 0
+  },
+  "live_fixture_setup_smoke": {
+    "suites": 4,
+    "configured_budget_verified": true,
+    "model_transport_available": false
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "installation": {
+    "source": "F:\\VIE\\Erpilot\\artifacts\\finishing\\clean checkout final with spaces",
+    "fresh_install": true,
+    "has_dotenv": false,
+    "passed": true,
+    "runtime_matches_current_checkout": true,
+    "runtime_files_checked": 219,
+    "source_snapshot_content_sha256": "99075034e747172562307565de7c6f526a992fd3a953360aeb194652bfddf66f"
+  },
+  "browser": {
+    "source": "clean-source-snapshot",
+    "mocked_routes": false,
+    "checks": [
+      "fresh API and MCP create then revise exact quote",
+      "review specified revision then independently approve and create order",
+      "320px drawer and refresh restore without resubmitting",
+      "no browser console warnings or errors"
+    ],
+    "passed": true,
+    "browser_diagnostics": []
+  },
+  "initial_probe": "initial-fresh-browser.json preserves the initial viewport-assumption failure"
+}

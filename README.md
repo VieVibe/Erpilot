@@ -107,6 +107,11 @@ flowchart TD
 
 PostgreSQL 恢复测试仅在显式设置隔离的 `ERPILOT_TEST_CHECKPOINT_DATABASE_URL` 后运行；未配置时会标注跳过。真实模型用例默认排除，浏览器中另有两个需独立实验服务的语义预览用例，未配置时单列跳过。[完整检查与故障处理](docs/development.md)。
 
+2026-11-04 最终打磨验收：Python **1861 passed / 0 skipped**（含独立 PostgreSQL）、前端 116、
+工作台浏览器 60、正式离线 API 浏览器 5、容器浏览器 3、业务场景 11/11；上述两个专用实验用例跳过。
+干净源码副本从锁定安装到实际建单、320/1440px 和刷新恢复通过，正常离线流程浏览器错误及告警为 0。
+依赖审计无已知漏洞，已重新录制字幕演示。[打磨清单与证据](reports/acceptance/2026-11-04-finishing.md)。
+
 | 已有真实观察 | 结果与范围 | 原始证据 |
 |---|---|---|
 | 政策答复 v4，GLM | 13/13 受控检索用例；旧 v3 两模型各 11/13 保留 | [独立批次](reports/acceptance/2026-10-28-contracts-and-policy.md) |

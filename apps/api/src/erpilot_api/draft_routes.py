@@ -11,7 +11,7 @@ from erpilot_api.service import SessionError
 
 class DraftItemRequest(BaseModel):
     sku: str = Field(min_length=1, max_length=32)
-    quantity: int = Field(strict=True, gt=0)
+    quantity: int = Field(strict=True, gt=0, le=999999999)
 
 
 class DraftRequest(BaseModel):
@@ -65,6 +65,15 @@ def register_draft_routes(app: FastAPI, session_erp_tools, service):
 
     @app.exception_handler(RequestValidationError)
     async def validation_error(request: Request, exc: RequestValidationError):
+        if request.url.path.startswith("/api/chat/"):
+            return JSONResponse(
+                status_code=422,
+                content={"error": {
+                    "code": "invalid_argument",
+                    "message": "对话或审批参数无效",
+                    "hint": "消息须为 1~32000 字符且不能全为空白；拒绝原因最多 2000 字符",
+                }},
+            )
         if "/order-drafts" in request.url.path or "/pending-intent" in request.url.path:
             return JSONResponse(
                 status_code=422,

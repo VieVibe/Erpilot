@@ -46,6 +46,50 @@ test('桌面工作台把历史、对话和业务表单分开', async ({ page }) 
   await expect(page.getByRole('textbox', { name: '消息', exact: true })).toBeEnabled();
 });
 
+test('草稿加载期间锁定表单，返回后才可填写', async ({ page }) => {
+  await mockWorkspace(page);
+  let release!: () => void;
+  const loaded = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/api/sessions/*/order-drafts', async route => {
+    await loaded;
+    return route.fulfill({ json: { items: [] } });
+  });
+  await page.goto('/');
+  const customer = page.getByRole('textbox', { name: '草稿客户', exact: true });
+  await expect(page.getByText('正在核对草稿…', { exact: true })).toBeVisible();
+  await expect(customer).toBeDisabled();
+  await expect(page.getByRole('button', { name: '新建草稿', exact: true })).toBeDisabled();
+  release();
+  await expect(customer).toBeEnabled();
+});
+
+test('超长输入、重复商品和超大数量在提交前处理', async ({ page }) => {
+  const mutations = await mockWorkspace(page);
+  await page.goto('/');
+  const input = page.getByRole('textbox', { name: '消息', exact: true });
+  await expect(input).toBeEnabled();
+  await expect(input).toHaveAttribute('maxlength', '32000');
+  const customer = page.getByRole('textbox', { name: '草稿客户', exact: true });
+  await expect(customer).toBeEnabled();
+  await expect(customer).toHaveAttribute('maxlength', '64');
+  await expect(page.getByRole('textbox', { name: '草稿备注', exact: true })).toHaveAttribute('maxlength', '255');
+  const sku = page.getByRole('textbox', { name: '第 1 行 SKU', exact: true });
+  await expect(sku).toHaveAttribute('maxlength', '32');
+  await customer.fill('核对客户'); await sku.fill('A');
+  const save = page.getByRole('button', { name: '创建草稿', exact: true });
+  await expect(save).toBeEnabled();
+  const quantity = page.getByRole('spinbutton', { name: '第 1 行数量', exact: true });
+  await quantity.fill('1000000000'); await expect(save).toBeDisabled();
+  await quantity.fill('2');
+  await page.getByRole('button', { name: '添加商品', exact: true }).click();
+  const secondSku = page.getByRole('textbox', { name: '第 2 行 SKU', exact: true });
+  await secondSku.fill(' A ');
+  await expect(page.getByText('同一商品只能填写一行，请合并重复 SKU 的数量。', { exact: true })).toBeVisible();
+  await expect(save).toBeDisabled();
+  await secondSku.fill('B'); await expect(save).toBeEnabled();
+  expect(mutations).toEqual([]);
+});
+
 test('报价库存显示为预计提交值，打开草稿不会发送写请求', async ({ page }) => {
   const mutations = await mockWorkspace(page);
   const draft = { draft_id: 'projection', revision: 1, customer: '报价客户', note: null,

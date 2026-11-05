@@ -1,4 +1,18 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test as base, expect, type Page } from '@playwright/test';
+
+const test = base.extend<{ browserDiagnostics: void }>({
+  browserDiagnostics: [async ({ page }, use) => {
+    const diagnostics: string[] = [];
+    page.on('pageerror', error => diagnostics.push(error.message));
+    page.on('console', message => {
+      if (message.type() === 'warning' || message.type() === 'error') {
+        diagnostics.push(`${message.type()}: ${message.text()}`);
+      }
+    });
+    await use();
+    expect(diagnostics, '正式离线演示不应产生浏览器错误或告警').toEqual([]);
+  }, { auto: true }],
+});
 
 async function chooseAndSend(page: Page, label: string) {
   const input = page.getByRole('textbox', { name: '消息', exact: true });

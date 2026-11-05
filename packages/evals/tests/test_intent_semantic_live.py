@@ -30,6 +30,7 @@ async def test_unknown_usage_stops_paid_cases_but_checks_no_request_guards(
             yield TextDelta("{}")
             yield StreamEnd(None)
 
+    monkeypatch.setattr(probe, "load_dotenv", lambda: None)
     monkeypatch.setattr(probe, "LLMClient", Client)
     monkeypatch.setattr(probe.LLMConfig, "from_env", lambda: config)
     monkeypatch.setattr(probe, "endpoint_rate", lambda *args: rate)

@@ -30,7 +30,7 @@ from agent_core.llm import DEFAULT_MODEL, LLMClient, LLMConfig
 from agent_core.prices import cost_of
 from agent_core.tools import Tool
 from fastapi import FastAPI, Query, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, Field
 from sse_starlette.sse import EventSourceResponse
 from starlette.background import BackgroundTask
@@ -52,8 +52,10 @@ _WRITES_ENV = ("1", "true", "yes")
 
 
 class ChatRequest(BaseModel):
-    message: str = Field(min_length=1, description="用户本轮输入")
-    session_id: str | None = Field(default=None, description="缺省则新建会话")
+    message: str = Field(min_length=1, max_length=32000, pattern=r"\S",
+                         description="用户本轮输入，最多 32000 字符且不能全为空白")
+    session_id: str | None = Field(default=None, min_length=1, max_length=128,
+                                   description="缺省则新建会话")
 
 
 class ApproveRequest(BaseModel):
@@ -61,12 +63,13 @@ class ApproveRequest(BaseModel):
 
     pending_id: str = Field(min_length=1, description="待审批请求 id")
     approved: bool = Field(description="true=批准执行，false=拒绝")
-    reason: str = Field(default="", description="拒绝原因（转述给模型与用户）")
-    session_id: str | None = Field(default=None, min_length=1)
+    reason: str = Field(default="", max_length=2000,
+                        description="拒绝原因（转述给模型与用户）")
+    session_id: str | None = Field(default=None, min_length=1, max_length=128)
 
 
 class ResumeRequest(ApproveRequest):
-    session_id: str = Field(min_length=1)
+    session_id: str = Field(min_length=1, max_length=128)
 
 
 def _resolve_tools(
@@ -224,8 +227,15 @@ def create_app(
         )
 
     @app.get("/api/sessions/{session_id}/state")
-    async def session_state(session_id: str):
-        return await service.session_state(session_id)
+    async def session_state(session_id: str, request: Request):
+        try:
+            return await service.session_state(session_id)
+        except SessionError as exc:
+            # A fresh local session may not exist yet; existing/owned sessions fail closed.
+            if (auth_store is None and exc.code == "session_not_found"
+                    and request.headers.get("X-Erpilot-Allow-Missing") == "1"):
+                return Response(status_code=204, headers={"Cache-Control": "no-store"})
+            raise
 
     @app.get("/healthz")
     def healthz() -> dict[str, str]:

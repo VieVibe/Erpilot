@@ -22,6 +22,7 @@ def test_cli_guidance_matches_available_surface(monkeypatch, tmp_path, mode):
     tools = [Tool("assess_order_cancellation", "query", Params, handler)] if mode == "mcp" else []
     monkeypatch.setattr(main, "_resolve_tools", lambda *args, **kwargs: tools)
     monkeypatch.setattr(main, "_trace_sinks", lambda: [])
+    monkeypatch.setattr(main, "find_dotenv", lambda *args: None)
     monkeypatch.setattr(main.LLMConfig, "from_env", lambda: LLMConfig(api_key="test"))
     captured = []
 

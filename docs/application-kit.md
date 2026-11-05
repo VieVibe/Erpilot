@@ -42,15 +42,17 @@ Python、FastAPI、LangGraph、FastMCP、SQLite、PostgreSQL checkpoint、React 
 批准、政策原文和无依据拒答。视频使用脚本化模型和临时库；真实模型数据从报告解释。
 可校验源码和视频统一打包方式见[作品入口](portfolio-overview.md)。
 
-2026-10-28 新交付见[本批报告](../reports/acceptance/2026-10-28-contracts-and-policy.md)：
-订单 v2 明确超预算只读停止及本轮实查，真实批次连接中断缺 usage 后冻结，不能宣称整单通过。
-展示时使用演示指南的新版三分钟顺序；已有视频为历史脚本录制，真实 13/13 来自独立报告。
+订单 v2 在 2026-10-28 的[历史批次](../reports/acceptance/2026-10-28-contracts-and-policy.md)
+因连接中断缺 usage 冻结，该批次没有整单通过。
+2026-11-04 的[独立修复批次](../reports/acceptance/2026-11-04-real-model-reconnect.md)
+已通过 4/4 流程、34/34 阶段；展示时分别解释新旧结果，不合并成绩。
+使用演示指南的三分钟顺序；已有视频为历史脚本录制，政策 13/13 来自独立受控检索报告。
 
 ## 三个技术取舍
 
 | 话题 | 可以这样解释 | 证据 |
 |---|---|---|
-| 审批、版本与幂等 | 模型提出操作；批准绑定具体版本，执行时再次校验。幂等解决重复提交，条件变化则重新确认 | [订单案例](interview-cases.md)、[恢复边界](write-reliability.md) |
+| 审批、版本与幂等 | 模型提出操作；批准绑定具体版本，执行时再次校验。幂等解决重复提交，条件变化则重新确认 | [订单案例](interview-cases.md)、[当前恢复边界](architecture.md)、[历史修复](write-reliability.md) |
 | RAG 来源与回答 | 命中与充分性分别验证；程序从本轮取证并复制原文，受阻后直接结束；问题与证据的语义选择仍可能失败 | [检索对照](retrieval-experiment.md)、[GLM 新批次与旧结果边界](../reports/acceptance/2026-10-28-contracts-and-policy.md) |
 | 上下文与状态 | 业务状态存数据库；请求视图保留用户原话、最新任务快照和工具配对，超过估算预算时停止。摘要仍有事实时效和字段边界 | [连续业务任务](context-workflow.md)、[历史快照实验](context-experiment.md) |
 

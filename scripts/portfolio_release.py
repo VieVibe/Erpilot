@@ -34,7 +34,8 @@ def allowed(name):
             and not set(path.parts).intersection(EXCLUDED)
             and not any(part.startswith(".env") for part in path.parts)
             and (path.suffix in SUFFIXES
-                 or (path.parts[:2] == ("docs", "assets") and path.suffix in {".png", ".webp"})))
+                 or ((path.parts[:2] == ("docs", "assets") or path.parts[0] == "reports")
+                     and path.suffix.lower() in {".png", ".jpg", ".jpeg", ".webp"})))
 
 
 def source_names(root):

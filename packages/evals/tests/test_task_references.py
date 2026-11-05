@@ -167,6 +167,8 @@ async def test_reference_suite_records_its_own_version_and_seven_turns(tmp_path)
 def test_cli_selects_reference_suite_without_changing_legacy_cases(monkeypatch, tmp_path):
     import evals.__main__ as cli
 
+    monkeypatch.setattr(cli, "find_dotenv", lambda *args: None)
+
     monkeypatch.setattr(cli.LLMConfig, "from_env", lambda: reference_client().config)
     monkeypatch.setattr(cli, "AsyncOpenAI", lambda **kwargs: object())
 

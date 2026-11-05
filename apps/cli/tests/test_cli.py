@@ -19,6 +19,8 @@ def test_cli_writes_uses_write_prompt(monkeypatch, tmp_path):
     write = Tool(original.name, original.description, original.params_model,
                  original.handler, risk=RISK_SINGLE_CONFIRM)
     client = make_client(handler)
+    monkeypatch.setattr(main, "find_dotenv", lambda *args: None)
+    monkeypatch.setattr(main, "_trace_sinks", lambda: [])
     monkeypatch.setattr(main.LLMConfig, "from_env", lambda: client.config)
     monkeypatch.setattr(main, "LLMClient", lambda config: client)
     monkeypatch.setattr(main, "build_agent_tools", lambda **kwargs: [write])

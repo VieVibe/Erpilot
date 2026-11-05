@@ -62,6 +62,12 @@ def test_from_env_explicit_embed_key_wins(monkeypatch) -> None:
     assert EmbedConfig.from_env().api_key == "ek"
 
 
+def test_config_repr_does_not_expose_api_key() -> None:
+    config = EmbedConfig(api_key="secret-embedding-credential")
+    assert config.api_key == "secret-embedding-credential"
+    assert "secret-embedding-credential" not in repr(config)
+
+
 def test_from_env_model_and_base_url_override(monkeypatch) -> None:
     _clear_embed_env(monkeypatch)
     monkeypatch.setenv("EMBED_API_KEY", "ek")

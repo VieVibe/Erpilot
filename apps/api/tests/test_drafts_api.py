@@ -111,6 +111,20 @@ async def test_disabled_drafts_return_structured_error(tmp_path):
         assert set(response.json()["error"]) == {"code", "message", "hint"}
 
 
+async def test_oversized_draft_quantity_is_rejected_before_business_lookup(tmp_path, erp):
+    app, provider = await host(tmp_path, erp)
+    async with httpx2.AsyncClient(
+        transport=httpx2.ASGITransport(app), base_url="http://test"
+    ) as client:
+        response = await client.post("/api/sessions/s1/order-drafts", json={
+            "customer": "客户", "items": [{"sku": "A", "quantity": 1000000000}],
+        })
+    assert response.status_code == 422
+    assert response.json()["error"]["code"] == "invalid_argument"
+    assert provider.drafts.list_latest("s1") == []
+    assert erp[2].get_stock("A").quantity == 1000
+
+
 @pytest.mark.parametrize("approved", [False, True])
 async def test_restored_host_hydrates_exact_version_and_approval(tmp_path, erp, approved):
     provider = await SessionErpTools.create(erp[0], writes=True, gate=StreamApprovalGate())

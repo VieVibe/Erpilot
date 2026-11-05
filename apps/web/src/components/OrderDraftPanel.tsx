@@ -86,18 +86,19 @@ export function OrderDraftPanel({ sessionId, drafts, loading, error, busy, canSu
   const original = draft ? JSON.stringify({ customer: draft.customer, note: draft.note ?? '', items: draft.items.map(item => ({ sku: item.sku, quantity: String(item.quantity) })) }) : '';
   const dirty = original !== JSON.stringify({ customer, note, items: lines }) || budget !== (draft?.budget_limit == null ? '' : String(draft.budget_limit));
   const budgetValid = budget === '' || (/^\d+(?:\.\d{1,2})?$/.test(budget) && Number(budget) > 0 && Number(budget) <= 1e12);
-  const valid = budgetValid && !!customer.trim() && lines.length > 0 && lines.every(line => !!line.sku.trim() && Number.isSafeInteger(Number(line.quantity)) && Number(line.quantity) > 0);
+  const duplicateSku = new Set(lines.map(line => line.sku.trim()).filter(Boolean)).size !== lines.filter(line => line.sku.trim()).length;
+  const valid = budgetValid && !!customer.trim() && customer.trim().length <= 64 && note.length <= 255 && lines.length > 0 && lines.length <= 100 && !duplicateSku && lines.every(line => !!line.sku.trim() && line.sku.trim().length <= 32 && Number.isSafeInteger(Number(line.quantity)) && Number(line.quantity) > 0 && Number(line.quantity) <= 999999999);
   const needsSelection = selected === undefined && drafts.filter(item => item.status !== 'submitted').length > 1;
-  const locked = busy || saving || needsSelection || draft?.status === 'submitted';
+  const locked = busy || saving || loading || needsSelection || draft?.status === 'submitted';
   const reviewedCurrent = review && drafts.find(item => item.draft_id === review.draft_id);
   const reviewStale = !!review && (!reviewedCurrent || reviewedCurrent.revision !== review.revision || reviewedCurrent.status !== 'open' || Date.parse(review.expires_at) <= clock);
   const reviewIssue = review ? draftSubmissionIssue(reviewedCurrent ?? review, clock) : null;
   return <section className="draft-panel" aria-label="订单草稿" aria-busy={loading || saving}>
     <div className="draft-heading"><h2>准备订单</h2><div>
-      <Button size="small" icon={<PlusOutlined />} onClick={() => { setSelected(null); setCustomer(''); setNote(''); setBudget(''); setLines([{ sku: '', quantity: '1' }]); setSaveError(''); }} disabled={busy || saving}>新建草稿</Button>
+      <Button size="small" aria-label="新建草稿" icon={<PlusOutlined />} onClick={() => { setSelected(null); setCustomer(''); setNote(''); setBudget(''); setLines([{ sku: '', quantity: '1' }]); setSaveError(''); }} disabled={busy || saving || loading}>新建草稿</Button>
       <Tooltip title="刷新草稿"><Button type="text" size="small" icon={<ReloadOutlined />} aria-label="刷新草稿" onClick={onRefresh} disabled={loading || saving} /></Tooltip>
     </div></div>
-    {drafts.length > 0 && <label>选择草稿<Select aria-label="选择草稿" placeholder="请选择目标草稿" value={needsSelection ? undefined : draft?.draft_id ?? ''} onChange={value => setSelected(value || null)} disabled={saving}
+    {drafts.length > 0 && <label>选择草稿<Select aria-label="选择草稿" placeholder="请选择目标草稿" value={needsSelection ? undefined : draft?.draft_id ?? ''} onChange={value => setSelected(value || null)} disabled={busy || saving || loading}
       options={[{ value: '', label: '新草稿' }, ...drafts.map(item => ({ value: item.draft_id, label: item.customer + ' · 版本 ' + item.revision }))]} /></label>}
     {needsSelection && <Alert type="info" showIcon title="有多份未提交草稿，请先在上方明确选择目标。" />}
     {loading && <p className="secondary-text" role="status">正在核对草稿…</p>}{error && <Alert type="error" title={error} showIcon />}
@@ -116,16 +117,17 @@ export function OrderDraftPanel({ sessionId, drafts, loading, error, busy, canSu
       try { const saved = await onSave(draft, { customer: customer.trim(), note, budget_limit: budget === '' ? null : Number(budget), items: lines.map(line => ({ sku: line.sku.trim(), quantity: Number(line.quantity) })) }); if (saved) setSelected(saved.draft_id); }
       catch (error) { setSaveError(error instanceof Error ? error.message : String(error)); } finally { setSaving(false); }
     }}>
-      <label>客户<Input aria-label="草稿客户" placeholder="输入客户名称" value={customer} onChange={event => setCustomer(event.target.value)} disabled={locked} required /></label>
+      <label>客户<Input aria-label="草稿客户" placeholder="输入客户名称" value={customer} maxLength={64} onChange={event => setCustomer(event.target.value)} disabled={locked} required /></label>
       {lines.map((line, index) => <div className="draft-line" key={index}>
-        <label>商品 SKU<Input aria-label={'第 ' + (index + 1) + ' 行 SKU'} placeholder="商品编码" value={line.sku} onChange={event => setLines(prev => prev.map((item, i) => i === index ? { ...item, sku: event.target.value } : item))} disabled={locked} required /></label>
-        <label>数量<Input aria-label={'第 ' + (index + 1) + ' 行数量'} type="number" min="1" step="1" value={line.quantity} onChange={event => setLines(prev => prev.map((item, i) => i === index ? { ...item, quantity: event.target.value } : item))} disabled={locked} required /></label>
+        <label>商品 SKU<Input aria-label={'第 ' + (index + 1) + ' 行 SKU'} placeholder="商品编码" value={line.sku} maxLength={32} onChange={event => setLines(prev => prev.map((item, i) => i === index ? { ...item, sku: event.target.value } : item))} disabled={locked} required /></label>
+        <label>数量<Input aria-label={'第 ' + (index + 1) + ' 行数量'} type="number" min="1" max="999999999" step="1" value={line.quantity} onChange={event => setLines(prev => prev.map((item, i) => i === index ? { ...item, quantity: event.target.value } : item))} disabled={locked} required /></label>
         <Button type="text" icon={<DeleteOutlined />} aria-label={'删除第 ' + (index + 1) + ' 行'} onClick={() => setLines(prev => prev.filter((_, i) => i !== index))} disabled={locked || lines.length === 1} />
       </div>)}
-      <label>备注<Input.TextArea aria-label="草稿备注" placeholder="补充订单要求（选填）" value={note} onChange={event => setNote(event.target.value)} disabled={locked} autoSize={{ minRows: 2, maxRows: 4 }} /></label>
+      {duplicateSku && <Alert type="warning" showIcon title="同一商品只能填写一行，请合并重复 SKU 的数量。" />}
+      <label>备注<Input.TextArea aria-label="草稿备注" placeholder="补充订单要求（选填）" value={note} maxLength={255} showCount onChange={event => setNote(event.target.value)} disabled={locked} autoSize={{ minRows: 2, maxRows: 4 }} /></label>
       <label>预算上限（元，选填）<Input aria-label="预算上限" inputMode="decimal" value={budget} onChange={event => setBudget(event.target.value)} disabled={locked} placeholder="例如 3000.00" status={budgetValid ? undefined : 'error'} /></label>
       <p className="secondary-text">留空表示未设置预算；清空已保存预算后，需要保存新版本。超预算可继续编辑，不能提交。</p>
-      <div className="draft-actions"><Button icon={<PlusOutlined />} onClick={() => setLines(prev => [...prev, { sku: '', quantity: '1' }])} disabled={locked}>添加商品</Button>
+      <div className="draft-actions"><Button aria-label="添加商品" icon={<PlusOutlined />} onClick={() => setLines(prev => [...prev, { sku: '', quantity: '1' }])} disabled={locked || lines.length >= 100}>添加商品</Button>
         <Button type="primary" htmlType="submit" loading={saving} disabled={locked || !valid}>{draft ? '保存 / 刷新报价' : '创建草稿'}</Button></div>
     </form>
     {saveError && <Alert type="error" title={saveError} showIcon />}
