@@ -17,8 +17,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
-from agent_core.dotenv import find_dotenv, load_dotenv
-from agent_core.llm import LLMClient, LLMConfig
+from agent_core.llm import LLMClient
 from agent_core.observability import langfuse_sink_from_env
 from erp_store.db import make_engine
 from erp_store.repository import ErpRepository
@@ -27,18 +26,16 @@ from evals.cases import ALL_CASES
 from evals.report import write_report
 from mcp_erp import build_agent_tools
 
-# evals 包内测试也要拿到仓库根的 .env（CLI 有自己的加载入口，pytest 没有）
-if (dotenv := find_dotenv(Path(__file__).resolve())) is not None:
-    load_dotenv(dotenv)
+pytestmark = pytest.mark.eval
+BUDGET_CNY: float
 
-pytestmark = [
-    pytest.mark.eval,
-    pytest.mark.skipif(
-        not os.environ.get("ZHIPU_API_KEY"), reason="无 ZHIPU_API_KEY，跳过真实链路评测"
-    ),
-]
 
-BUDGET_CNY = float(os.environ.get("ERPILOT_EVAL_BUDGET", "1.0"))
+@pytest.fixture(scope="module", autouse=True)
+def _live_settings(live_llm_config):
+    global BUDGET_CNY
+    BUDGET_CNY = float(os.environ.get("ERPILOT_EVAL_BUDGET", "1.0"))
+
+
 _REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
@@ -63,12 +60,12 @@ def live_resolved(live_db) -> dict[str, str]:
 
 
 @pytest.fixture(scope="module")
-def live_client() -> LLMClient:
-    return LLMClient(LLMConfig.from_env())
+def live_client(live_llm_config) -> LLMClient:
+    return LLMClient(live_llm_config)
 
 
 @pytest.fixture(scope="module")
-def live_sink():
+def live_sink(_live_settings):
     """Langfuse keys 齐全 → 评测 trace 同步双写远程；未配置/未装 SDK 返回 None。"""
     try:
         return langfuse_sink_from_env()
@@ -78,7 +75,7 @@ def live_sink():
 
 
 @pytest.fixture(scope="module")
-def acc() -> SimpleNamespace:
+def acc(_live_settings) -> SimpleNamespace:
     """模块级记账：Budget + 逐 case 结果 + 起始时间（报告 fixture 消费）。"""
     from evals import Budget
 

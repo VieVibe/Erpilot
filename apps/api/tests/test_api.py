@@ -8,6 +8,7 @@ import json
 import re
 
 import httpx2
+import pytest
 from agent_core.demo_tools import DEMO_TOOLS
 from agent_core.testing import USAGE, chunk, make_client, sse_response, tool_call_chunks
 from erpilot_api.main import create_app
@@ -61,6 +62,38 @@ def _app(requests: list[httpx2.Request], tmp_path):
     )
 
 
+async def test_only_fresh_local_missing_state_returns_uncacheable_empty_response(tmp_path):
+    app = _app([], tmp_path)
+    headers = {"X-Erpilot-Allow-Missing": "1"}
+    async with httpx2.AsyncClient(
+        transport=httpx2.ASGITransport(app), base_url="http://test",
+    ) as client:
+        assert (await client.get("/api/sessions/new/state")).status_code == 404
+        empty = await client.get("/api/sessions/new/state", headers=headers)
+        assert empty.status_code == 204 and empty.content == b""
+        assert empty.headers["Cache-Control"] == "no-store"
+        await client.post("/api/chat/stream", json={"session_id": "new", "message": "查订单"})
+        restored = await client.get("/api/sessions/new/state", headers=headers)
+        assert restored.status_code == 200 and restored.json()["messages"]
+
+
+async def test_fresh_session_hint_never_hides_checkpoint_failure(tmp_path, monkeypatch):
+    from erpilot_api.service import SessionError
+
+    app = _app([], tmp_path)
+
+    async def unavailable(session_id):
+        raise SessionError(503, "checkpoint_unavailable", "状态暂不可用")
+
+    monkeypatch.setattr(app.state.service, "session_state", unavailable)
+    async with httpx2.AsyncClient(
+        transport=httpx2.ASGITransport(app), base_url="http://test",
+    ) as client:
+        response = await client.get("/api/sessions/new/state",
+                                    headers={"X-Erpilot-Allow-Missing": "1"})
+        assert response.status_code == 503
+
+
 async def _post_sse(app, payload: dict) -> list[tuple[str, dict]]:
     transport = httpx2.ASGITransport(app=app)
     async with httpx2.AsyncClient(transport=transport, base_url="http://test") as client:
@@ -82,6 +115,41 @@ async def test_healthz(tmp_path) -> None:
     async with httpx2.AsyncClient(transport=transport, base_url="http://test") as client:
         resp = await client.get("/healthz")
     assert resp.status_code == 200 and resp.json() == {"status": "ok"}
+
+
+@pytest.mark.parametrize("payload", [
+    {"message": ""},
+    {"message": " \n\t\u3000"},
+    {"message": "长" * 32001},
+    {"message": "查询库存", "session_id": "x" * 129},
+])
+async def test_invalid_chat_is_rejected_before_model_or_run_creation(tmp_path, payload):
+    requests = []
+    app = _app(requests, tmp_path)
+    async with httpx2.AsyncClient(
+        transport=httpx2.ASGITransport(app), base_url="http://test"
+    ) as client:
+        response = await client.post("/api/chat/stream", json=payload)
+    assert response.status_code == 422
+    assert response.json()["error"]["code"] == "invalid_argument"
+    assert requests == [] and app.state.service._client is None
+    with app.state.run_store._connect() as db:
+        assert db.execute("SELECT COUNT(*) FROM run").fetchone()[0] == 0
+
+
+async def test_oversized_approval_reason_is_rejected_before_execution(tmp_path):
+    app = _app([], tmp_path)
+    async with httpx2.AsyncClient(
+        transport=httpx2.ASGITransport(app), base_url="http://test"
+    ) as client:
+        for route in ("/api/chat/approve", "/api/chat/approve/stream"):
+            response = await client.post(route, json={
+                "pending_id": "pending", "session_id": "s1", "approved": False,
+                "reason": "x" * 2001,
+            })
+            assert response.status_code == 422
+            assert response.json()["error"]["code"] == "invalid_argument"
+    assert app.state.service._client is None
 
 
 async def test_chat_stream_emits_protocol_events(tmp_path) -> None:

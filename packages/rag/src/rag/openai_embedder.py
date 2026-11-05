@@ -5,7 +5,7 @@ embeddings）。默认走智谱 embedding-3；可用 EMBED_* 环境变量覆盖�
 """
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from openai import OpenAI
 
@@ -17,7 +17,7 @@ EMBED_BATCH_SIZE = 10
 
 @dataclass(frozen=True, slots=True)
 class EmbedConfig:
-    api_key: str
+    api_key: str = field(repr=False)
     model: str = DEFAULT_EMBED_MODEL
     base_url: str = DEFAULT_EMBED_BASE_URL
 

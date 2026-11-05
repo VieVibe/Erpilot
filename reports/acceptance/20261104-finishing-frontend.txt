@@ -1,0 +1,710 @@
+
+> erpilot-web@0.1.0 test
+> tsc src/protocol.ts src/session.ts src/intent-preview.ts --outDir .test-build --target ES2022 --module ESNext --skipLibCheck && node --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: CSRF is attached only to local mutations and preserves caller headers
+ok 1 - CSRF is attached only to local mutations and preserves caller headers
+  ---
+  duration_ms: 35.1358
+  type: 'test'
+  ...
+# Subtest: clearing identity removes its CSRF token from subsequent requests
+ok 2 - clearing identity removes its CSRF token from subsequent requests
+  ---
+  duration_ms: 0.5742
+  type: 'test'
+  ...
+# Subtest: expired protected requests notify the login boundary without recursive login errors
+ok 3 - expired protected requests notify the login boundary without recursive login errors
+  ---
+  duration_ms: 1.9398
+  type: 'test'
+  ...
+# Subtest: owned sessions accept only server-issued IDs and propagate failed creation
+ok 4 - owned sessions accept only server-issued IDs and propagate failed creation
+  ---
+  duration_ms: 4.3558
+  type: 'test'
+  ...
+# Subtest: a delayed 401 from the previous account cannot log out a newly accepted identity
+ok 5 - a delayed 401 from the previous account cannot log out a newly accepted identity
+  ---
+  duration_ms: 1.2185
+  type: 'test'
+  ...
+# Subtest: account storage namespaces preserve each owner and the trusted-local legacy path
+ok 6 - account storage namespaces preserve each owner and the trusted-local legacy path
+  ---
+  duration_ms: 0.8928
+  type: 'test'
+  ...
+# Subtest: budget checks use the exact displayed amount, preserve legacy and enforce approval
+ok 7 - budget checks use the exact displayed amount, preserve legacy and enforce approval
+  ---
+  duration_ms: 1.7783
+  type: 'test'
+  ...
+# Subtest: corrupt budget values and mismatching origins cannot appear as valid quotes
+ok 8 - corrupt budget values and mismatching origins cannot appear as valid quotes
+  ---
+  duration_ms: 0.9665
+  type: 'test'
+  ...
+# Subtest: business cancellation approval shows exact original impact including missing stock
+ok 9 - business cancellation approval shows exact original impact including missing stock
+  ---
+  duration_ms: 63.6931
+  type: 'test'
+  ...
+# Subtest: business approval blocks uncertain, invalid and disabled approvals but preserves rejection
+ok 10 - business approval blocks uncertain, invalid and disabled approvals but preserves rejection
+  ---
+  duration_ms: 38.5056
+  type: 'test'
+  ...
+# Subtest: custom legacy tool approval stays actionable while fixed-reference or current-provider raw approval fails closed
+ok 11 - custom legacy tool approval stays actionable while fixed-reference or current-provider raw approval fails closed
+  ---
+  duration_ms: 12.5161
+  type: 'test'
+  ...
+# Subtest: cancel business results show success and meaningful failed or denied reasons
+ok 12 - cancel business results show success and meaningful failed or denied reasons
+  ---
+  duration_ms: 7.9645
+  type: 'test'
+  ...
+# Subtest: draft summary shows exact approved customer, prices and stock impact
+ok 13 - draft summary shows exact approved customer, prices and stock impact
+  ---
+  duration_ms: 15.5308
+  type: 'test'
+  ...
+# Subtest: pending approval locks new submission and editor controls have accessible labels
+ok 14 - pending approval locks new submission and editor controls have accessible labels
+  ---
+  duration_ms: 26.3533
+  type: 'test'
+  ...
+# Subtest: a submitted draft still offers an accessible new draft action
+ok 15 - a submitted draft still offers an accessible new draft action
+  ---
+  duration_ms: 21.195
+  type: 'test'
+  ...
+# Subtest: read-only runtime keeps saving available and explains disabled order submission
+ok 16 - read-only runtime keeps saving available and explains disabled order submission
+  ---
+  duration_ms: 13.2724
+  type: 'test'
+  ...
+# Subtest: live reasoning is expanded while completed reasoning is collapsed
+ok 17 - live reasoning is expanded while completed reasoning is collapsed
+  ---
+  duration_ms: 1.2685
+  type: 'test'
+  ...
+# Subtest: invalid business cards retain raw result details
+ok 18 - invalid business cards retain raw result details
+  ---
+  duration_ms: 6.3288
+  type: 'test'
+  ...
+# Subtest: history validates version order, bound ownership, source labels and exclusive cursor
+ok 19 - history validates version order, bound ownership, source labels and exclusive cursor
+  ---
+  duration_ms: 5.7463
+  type: 'test'
+  ...
+# Subtest: legacy snapshots remain readable without claiming a verified source
+ok 20 - legacy snapshots remain readable without claiming a verified source
+  ---
+  duration_ms: 0.4601
+  type: 'test'
+  ...
+# Subtest: history client encodes session and draft, uses only GET, passes cancellation and checks target
+ok 21 - history client encodes session and draft, uses only GET, passes cancellation and checks target
+  ---
+  duration_ms: 40.5029
+  type: 'test'
+  ...
+# Subtest: history failures preserve domain messages and invalid cursors send no request
+ok 22 - history failures preserve domain messages and invalid cursors send no request
+  ---
+  duration_ms: 1.0676
+  type: 'test'
+  ...
+# Subtest: business differences distinguish quantity, order, quote projections and added items
+ok 23 - business differences distinguish quantity, order, quote projections and added items
+  ---
+  duration_ms: 1.1541
+  type: 'test'
+  ...
+# Subtest: live blockers disable both submission and approval without changing the quote
+ok 24 - live blockers disable both submission and approval without changing the quote
+  ---
+  duration_ms: 2.8122
+  type: 'test'
+  ...
+# Subtest: inconsistent current checks and wrong revision issues cannot appear actionable
+ok 25 - inconsistent current checks and wrong revision issues cannot appear actionable
+  ---
+  duration_ms: 2.3443
+  type: 'test'
+  ...
+# Subtest: item verification must match the actual complete list and valid origin
+ok 26 - item verification must match the actual complete list and valid origin
+  ---
+  duration_ms: 0.8558
+  type: 'test'
+  ...
+# Subtest: catalogue resolution preserves the original name request and rejects corrupt mappings
+ok 27 - catalogue resolution preserves the original name request and rejects corrupt mappings
+  ---
+  duration_ms: 0.7429
+  type: 'test'
+  ...
+# Subtest: draft parser rejects unsafe totals and malformed line items
+ok 28 - draft parser rejects unsafe totals and malformed line items
+  ---
+  duration_ms: 4.2554
+  type: 'test'
+  ...
+# Subtest: draft client preserves session ownership and exact revision URLs
+ok 29 - draft client preserves session ownership and exact revision URLs
+  ---
+  duration_ms: 42.3886
+  type: 'test'
+  ...
+# Subtest: revision saves send optimistic version and propagate domain hints
+ok 30 - revision saves send optimistic version and propagate domain hints
+  ---
+  duration_ms: 1.6009
+  type: 'test'
+  ...
+# Subtest: approval requires exact snapshot and a current live revision, while stale requests explain rejection
+ok 31 - approval requires exact snapshot and a current live revision, while stale requests explain rejection
+  ---
+  duration_ms: 0.9226
+  type: 'test'
+  ...
+# Subtest: create draft sends only customer line requests and optional note
+ok 32 - create draft sends only customer line requests and optional note
+  ---
+  duration_ms: 2.4421
+  type: 'test'
+  ...
+# Subtest: expired or missing current drafts cannot be approved
+ok 33 - expired or missing current drafts cannot be approved
+  ---
+  duration_ms: 0.5386
+  type: 'test'
+  ...
+# Subtest: malformed lists fail closed and cancellation is passed through to fetch
+ok 34 - malformed lists fail closed and cancellation is passed through to fetch
+  ---
+  duration_ms: 1.3113
+  type: 'test'
+  ...
+# Subtest: history validates empty pages, titles, dates and every RunStore status
+ok 35 - history validates empty pages, titles, dates and every RunStore status
+  ---
+  duration_ms: 1.5754
+  type: 'test'
+  ...
+# Subtest: history paging sends only limit and offset and preserves structured unavailable errors
+ok 36 - history paging sends only limit and offset and preserves structured unavailable errors
+  ---
+  duration_ms: 17.6683
+  type: 'test'
+  ...
+# Subtest: session requests invalidate old success, failure and stream frames even when returning to the same session
+ok 37 - session requests invalidate old success, failure and stream frames even when returning to the same session
+  ---
+  duration_ms: 0.1949
+  type: 'test'
+  ...
+# Subtest: multi-message item provenance preserves Unicode offsets and final quantities
+ok 38 - multi-message item provenance preserves Unicode offsets and final quantities
+  ---
+  duration_ms: 2.9957
+  type: 'test'
+  ...
+# Subtest: invalid message references and incomplete provenance cannot appear verified
+ok 39 - invalid message references and incomplete provenance cannot appear verified
+  ---
+  duration_ms: 3.0296
+  type: 'test'
+  ...
+# Subtest: a bounded multi-turn source can include both a choice and quantity span per reply
+ok 40 - a bounded multi-turn source can include both a choice and quantity span per reply
+  ---
+  duration_ms: 1.3882
+  type: 'test'
+  ...
+# Subtest: rollback recovery is a readable preview with no confirmation capability
+ok 41 - rollback recovery is a readable preview with no confirmation capability
+  ---
+  duration_ms: 4.184
+  type: 'test'
+  ...
+# Subtest: preview preserves unresolved rows and requires consistent capabilities and bounded candidates
+ok 42 - preview preserves unresolved rows and requires consistent capabilities and bounded candidates
+  ---
+  duration_ms: 1.4361
+  type: 'test'
+  ...
+# Subtest: semantic candidates preserve original and unmapped text and reject incomplete source displays
+ok 43 - semantic candidates preserve original and unmapped text and reject incomplete source displays
+  ---
+  duration_ms: 0.4429
+  type: 'test'
+  ...
+# Subtest: GET restore is read only; POST binds the displayed request and all form fields
+ok 44 - GET restore is read only; POST binds the displayed request and all form fields
+  ---
+  duration_ms: 37.6528
+  type: 'test'
+  ...
+# Subtest: expired previews send no writes; mismatching success and stale failures retain explicit errors
+ok 45 - expired previews send no writes; mismatching success and stale failures retain explicit errors
+  ---
+  duration_ms: 2.2105
+  type: 'test'
+  ...
+# Subtest: revision preview requires target and base fields and confirmation checks same draft next revision
+ok 46 - revision preview requires target and base fields and confirmation checks same draft next revision
+  ---
+  duration_ms: 2.2055
+  type: 'test'
+  ...
+# Subtest: the upstream Markdown plugin renders inline and block math with the patched KaTeX
+ok 47 - the upstream Markdown plugin renders inline and block math with the patched KaTeX
+  ---
+  duration_ms: 11.6213
+  type: 'test'
+  ...
+# Subtest: the patched math renderer preserves the upstream default trust boundary
+ok 48 - the patched math renderer preserves the upstream default trust boundary
+  ---
+  duration_ms: 1.9494
+  type: 'test'
+  ...
+# Subtest: legacy custom approvals keep generic decisions while scoped or current-provider approvals fail closed
+ok 49 - legacy custom approvals keep generic decisions while scoped or current-provider approvals fail closed
+  ---
+  duration_ms: 3.1762
+  type: 'test'
+  ...
+# Subtest: operation client validates exact session reference and malformed snapshots
+ok 50 - operation client validates exact session reference and malformed snapshots
+  ---
+  duration_ms: 41.787
+  type: 'test'
+  ...
+# Subtest: approval fails closed without verification or matching operation type and reference
+ok 51 - approval fails closed without verification or matching operation type and reference
+  ---
+  duration_ms: 0.6897
+  type: 'test'
+  ...
+# Subtest: refresh preserves immutable approved business impact and refuses replacement snapshots
+ok 52 - refresh preserves immutable approved business impact and refuses replacement snapshots
+  ---
+  duration_ms: 1.5431
+  type: 'test'
+  ...
+# Subtest: operation API errors expose actionable domain hints
+ok 53 - operation API errors expose actionable domain hints
+  ---
+  duration_ms: 1.3506
+  type: 'test'
+  ...
+# Subtest: cancel snapshots validate nullable stock impact as one complete missing-record state
+ok 54 - cancel snapshots validate nullable stock impact as one complete missing-record state
+  ---
+  duration_ms: 0.4613
+  type: 'test'
+  ...
+# Subtest: query card shows authoritative facts, policy version and no cancel controls
+ok 55 - query card shows authoritative facts, policy version and no cancel controls
+  ---
+  duration_ms: 34.9067
+  type: 'test'
+  ...
+# Subtest: policy gaps and domain prohibition are distinct query outcomes
+ok 56 - policy gaps and domain prohibition are distinct query outcomes
+  ---
+  duration_ms: 2.5872
+  type: 'test'
+  ...
+# Subtest: reference text is escaped and never becomes markup or an executable link
+ok 57 - reference text is escaped and never becomes markup or an executable link
+  ---
+  duration_ms: 1.7618
+  type: 'test'
+  ...
+# Subtest: bad versions, numbers and inconsistent decisions fall back to raw detail
+ok 58 - bad versions, numbers and inconsistent decisions fall back to raw detail
+  ---
+  duration_ms: 8.824
+  type: 'test'
+  ...
+# Subtest: retrieved evidence shows query, numbered sources, version, time, score and literal highlights
+ok 59 - retrieved evidence shows query, numbered sources, version, time, score and literal highlights
+  ---
+  duration_ms: 33.695
+  type: 'test'
+  ...
+# Subtest: highlights preserve source exactly, handle repeated Chinese terms and bound English and numeric terms
+ok 60 - highlights preserve source exactly, handle repeated Chinese terms and bound English and numeric terms
+  ---
+  duration_ms: 1.3923
+  type: 'test'
+  ...
+# Subtest: no-match and unavailable states never manufacture sources
+ok 61 - no-match and unavailable states never manufacture sources
+  ---
+  duration_ms: 5.7659
+  type: 'test'
+  ...
+# Subtest: unsafe evidence is escaped; malformed, stale, conflicting or mismatched evidence falls back
+ok 62 - unsafe evidence is escaped; malformed, stale, conflicting or mismatched evidence falls back
+  ---
+  duration_ms: 1.7372
+  type: 'test'
+  ...
+# Subtest: reviewed draft confirmation sends only the exact revision and retains SSE mode
+ok 63 - reviewed draft confirmation sends only the exact revision and retains SSE mode
+  ---
+  duration_ms: 42.7297
+  type: 'test'
+  ...
+# Subtest: confirmation conflicts are surfaced once without silently choosing a new version
+ok 64 - confirmation conflicts are surfaced once without silently choosing a new version
+  ---
+  duration_ms: 2.5491
+  type: 'test'
+  ...
+# Subtest: approval decision sends the pending id and boolean
+ok 65 - approval decision sends the pending id and boolean
+  ---
+  duration_ms: 1.0775
+  type: 'test'
+  ...
+# Subtest: an expired decision is shown as a failure despite HTTP 200
+ok 66 - an expired decision is shown as a failure despite HTTP 200
+  ---
+  duration_ms: 0.7146
+  type: 'test'
+  ...
+# Subtest: HTTP and transport failures are propagated for retry
+ok 67 - HTTP and transport failures are propagated for retry
+  ---
+  duration_ms: 1.1835
+  type: 'test'
+  ...
+# Subtest: request validation keeps the actionable server hint
+ok 68 - request validation keeps the actionable server hint
+  ---
+  duration_ms: 1.2637
+  type: 'test'
+  ...
+# Subtest: snapshot hydrates messages and fixed approval payloads
+ok 69 - snapshot hydrates messages and fixed approval payloads
+  ---
+  duration_ms: 1.1553
+  type: 'test'
+  ...
+# Subtest: only a newly-created session requests and accepts an empty snapshot
+ok 70 - only a newly-created session requests and accepts an empty snapshot
+  ---
+  duration_ms: 2.0926
+  type: 'test'
+  ...
+# Subtest: resume sends only decision fields and consumes the existing SSE union
+ok 71 - resume sends only decision fields and consumes the existing SSE union
+  ---
+  duration_ms: 1.7219
+  type: 'test'
+  ...
+# Subtest: resume rejects a stale approval before parsing SSE
+ok 72 - resume rejects a stale approval before parsing SSE
+  ---
+  duration_ms: 1.4795
+  type: 'test'
+  ...
+# Subtest: interrupted session continuation uses its session resume stream
+ok 73 - interrupted session continuation uses its session resume stream
+  ---
+  duration_ms: 1.1681
+  type: 'test'
+  ...
+# Subtest: run event replay parses the durable sequence cursor and run identity
+ok 74 - run event replay parses the durable sequence cursor and run identity
+  ---
+  duration_ms: 1.0795
+  type: 'test'
+  ...
+# Subtest: cancel endpoint returns the refreshed session snapshot
+ok 75 - cancel endpoint returns the refreshed session snapshot
+  ---
+  duration_ms: 0.8648
+  type: 'test'
+  ...
+# Subtest: blank or oversized messages fail before any model request
+ok 76 - blank or oversized messages fail before any model request
+  ---
+  duration_ms: 4.4899
+  type: 'test'
+  ...
+# Subtest: tool_executing events are parsed and forwarded
+ok 77 - tool_executing events are parsed and forwarded
+  ---
+  duration_ms: 2.5032
+  type: 'test'
+  ...
+# Subtest: network fragmentation and UTF-8 splits never corrupt events
+ok 78 - network fragmentation and UTF-8 splits never corrupt events
+  ---
+  duration_ms: 1.4599
+  type: 'test'
+  ...
+# Subtest: multi-line data joins per the SSE spec; comment heartbeats are ignored
+ok 79 - multi-line data joins per the SSE spec; comment heartbeats are ignored
+  ---
+  duration_ms: 0.953
+  type: 'test'
+  ...
+# Subtest: unknown events are ignored with a diagnostic instead of crashing the page
+ok 80 - unknown events are ignored with a diagnostic instead of crashing the page
+  ---
+  duration_ms: 0.8483
+  type: 'test'
+  ...
+# Subtest: invalid JSON on a known event becomes an explainable protocol error
+ok 81 - invalid JSON on a known event becomes an explainable protocol error
+  ---
+  duration_ms: 0.6349
+  type: 'test'
+  ...
+# Subtest: heartbeat and reasoning_delta are recognized events; reasoning carries the step
+ok 82 - heartbeat and reasoning_delta are recognized events; reasoning carries the step
+  ---
+  duration_ms: 0.7598
+  type: 'test'
+  ...
+# Subtest: replenishment card shows quantities, time, assumptions and no mutation controls
+ok 83 - replenishment card shows quantities, time, assumptions and no mutation controls
+  ---
+  duration_ms: 31.9093
+  type: 'test'
+  ...
+# Subtest: unknown lead and zero sales do not appear as zero advice or infinite coverage
+ok 84 - unknown lead and zero sales do not appear as zero advice or infinite coverage
+  ---
+  duration_ms: 2.3911
+  type: 'test'
+  ...
+# Subtest: malformed suggestion falls back and data strings are escaped
+ok 85 - malformed suggestion falls back and data strings are escaped
+  ---
+  duration_ms: 2.2979
+  type: 'test'
+  ...
+# Subtest: message sending stays blocked until recovery succeeds and while server reports unfinished work
+ok 86 - message sending stays blocked until recovery succeeds and while server reports unfinished work
+  ---
+  duration_ms: 1.6539
+  type: 'test'
+  ...
+# Subtest: event replay de-duplicates by run id and sequence while leaving live events alone
+ok 87 - event replay de-duplicates by run id and sequence while leaving live events alone
+  ---
+  duration_ms: 0.3779
+  type: 'test'
+  ...
+# Subtest: unknown recovery snapshot stays pending and is not presented as failure or success
+ok 88 - unknown recovery snapshot stays pending and is not presented as failure or success
+  ---
+  duration_ms: 0.9372
+  type: 'test'
+  ...
+# Subtest: hydration pairs tool results and restores normalized pending arguments
+ok 89 - hydration pairs tool results and restores normalized pending arguments
+  ---
+  duration_ms: 1.1686
+  type: 'test'
+  ...
+# Subtest: hydration marks denied results and never shows running cursors on finished history
+ok 90 - hydration marks denied results and never shows running cursors on finished history
+  ---
+  duration_ms: 0.3337
+  type: 'test'
+  ...
+# Subtest: a later tool result with a reused call id does not replace an earlier turn
+ok 91 - a later tool result with a reused call id does not replace an earlier turn
+  ---
+  duration_ms: 0.5233
+  type: 'test'
+  ...
+# Subtest: a send creates a connecting placeholder before any server event arrives
+ok 92 - a send creates a connecting placeholder before any server event arrives
+  ---
+  duration_ms: 0.2282
+  type: 'test'
+  ...
+# Subtest: deltas merge into one text block per step and split after tool boundaries
+ok 93 - deltas merge into one text block per step and split after tool boundaries
+  ---
+  duration_ms: 2.1944
+  type: 'test'
+  ...
+# Subtest: tool_executing marks running only after preparation and before results
+ok 94 - tool_executing marks running only after preparation and before results
+  ---
+  duration_ms: 0.5878
+  type: 'test'
+  ...
+# Subtest: parallel tools keep request order while finishing out of order
+ok 95 - parallel tools keep request order while finishing out of order
+  ---
+  duration_ms: 0.6979
+  type: 'test'
+  ...
+# Subtest: a denied call never flips to business success even when the backfill returns ok
+ok 96 - a denied call never flips to business success even when the backfill returns ok
+  ---
+  duration_ms: 0.4932
+  type: 'test'
+  ...
+# Subtest: approved flow distinguishes waiting-for-execution from actually running
+ok 97 - approved flow distinguishes waiting-for-execution from actually running
+  ---
+  duration_ms: 0.3638
+  type: 'test'
+  ...
+# Subtest: done separates normal completion from the max_steps guard; errors and EOF keep received content
+ok 98 - done separates normal completion from the max_steps guard; errors and EOF keep received content
+  ---
+  duration_ms: 0.3244
+  type: 'test'
+  ...
+# Subtest: reducers never mutate the previous turn
+ok 99 - reducers never mutate the previous turn
+  ---
+  duration_ms: 0.13
+  type: 'test'
+  ...
+# Subtest: known tool titles and verified argument summaries
+ok 100 - known tool titles and verified argument summaries
+  ---
+  duration_ms: 0.3769
+  type: 'test'
+  ...
+# Subtest: reasoning deltas become separate blocks and never merge into answer text
+ok 101 - reasoning deltas become separate blocks and never merge into answer text
+  ---
+  duration_ms: 0.2498
+  type: 'test'
+  ...
+# Subtest: heartbeat events never touch turn content
+ok 102 - heartbeat events never touch turn content
+  ---
+  duration_ms: 0.125
+  type: 'test'
+  ...
+# Subtest: tool_finished stores the business display payload
+ok 103 - tool_finished stores the business display payload
+  ---
+  duration_ms: 0.2766
+  type: 'test'
+  ...
+# Subtest: hydration prefers the presentation projection and falls back to messages
+ok 104 - hydration prefers the presentation projection and falls back to messages
+  ---
+  duration_ms: 0.8944
+  type: 'test'
+  ...
+# Subtest: an unfinished projection run is marked as partially unsaved, not completed
+ok 105 - an unfinished projection run is marked as partially unsaved, not completed
+  ---
+  duration_ms: 0.4284
+  type: 'test'
+  ...
+# Subtest: a waiting-approval tool in the projection restores the approval card
+ok 106 - a waiting-approval tool in the projection restores the approval card
+  ---
+  duration_ms: 0.2115
+  type: 'test'
+  ...
+# Subtest: a partial projection preserves older messages including repeated questions
+ok 107 - a partial projection preserves older messages including repeated questions
+  ---
+  duration_ms: 0.2232
+  type: 'test'
+  ...
+# Subtest: completed checkpoint replaces stale failure output after retry
+ok 108 - completed checkpoint replaces stale failure output after retry
+  ---
+  duration_ms: 0.177
+  type: 'test'
+  ...
+# Subtest: completed checkpoint clears a stale pending approval without losing tool results
+ok 109 - completed checkpoint clears a stale pending approval without losing tool results
+  ---
+  duration_ms: 0.3738
+  type: 'test'
+  ...
+# Subtest: legacy hydration groups model steps and recovers results from tool messages
+ok 110 - legacy hydration groups model steps and recovers results from tool messages
+  ---
+  duration_ms: 0.2351
+  type: 'test'
+  ...
+# Subtest: an active checkpoint retains streamed projection text without claiming disconnection
+ok 111 - an active checkpoint retains streamed projection text without claiming disconnection
+  ---
+  duration_ms: 0.2174
+  type: 'test'
+  ...
+# Subtest: tool summaries tolerate null, arrays, scalars and malformed JSON
+ok 112 - tool summaries tolerate null, arrays, scalars and malformed JSON
+  ---
+  duration_ms: 0.2443
+  type: 'test'
+  ...
+# Subtest: business failures and unknown outcomes are never transport successes
+ok 113 - business failures and unknown outcomes are never transport successes
+  ---
+  duration_ms: 0.3789
+  type: 'test'
+  ...
+# Subtest: legacy business errors are classified from content without display
+ok 114 - legacy business errors are classified from content without display
+  ---
+  duration_ms: 0.2569
+  type: 'test'
+  ...
+# Subtest: known business tools with unconfirmed results stay unknown without display
+ok 115 - known business tools with unconfirmed results stay unknown without display
+  ---
+  duration_ms: 0.3058
+  type: 'test'
+  ...
+# Subtest: an interrupted checkpoint preserves committed tools when the journal lags
+ok 116 - an interrupted checkpoint preserves committed tools when the journal lags
+  ---
+  duration_ms: 0.4094
+  type: 'test'
+  ...
+1..116
+# tests 116
+# suites 0
+# pass 116
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2767.3473

@@ -7,6 +7,8 @@ import { apiFetch } from './auth-client.js';
 import type { OrderDraft } from './drafts';
 import type { BusinessOperation } from './operations';
 
+export const MAX_MESSAGE_LENGTH = 32000;
+
 export interface StartPayload {
   session_id: string;
   model: string;
@@ -291,13 +293,18 @@ export class ApiError extends Error {
 
 async function responseError(resp: Response): Promise<ApiError> {
   const body = await resp.json().catch(() => null);
-  return new ApiError(resp.status, body?.error?.code, body?.error?.message ?? `HTTP ${resp.status}`);
+  const message = typeof body?.error?.message === 'string' ? body.error.message : `HTTP ${resp.status}`;
+  const hint = typeof body?.error?.hint === 'string' ? body.error.hint : '';
+  return new ApiError(resp.status, body?.error?.code, [message, hint].filter(Boolean).join('；'));
 }
 
 export async function loadSessionState(
   sessionId: string, signal?: AbortSignal, allowMissing = false,
 ): Promise<SessionState | null> {
-  const resp = await apiFetch(`/api/sessions/${encodeURIComponent(sessionId)}/state`, { signal });
+  const resp = await apiFetch(`/api/sessions/${encodeURIComponent(sessionId)}/state`, {
+    signal, headers: allowMissing ? { 'X-Erpilot-Allow-Missing': '1' } : undefined,
+  });
+  if (resp.status === 204 && allowMissing) return null;
   if (resp.status === 404 && allowMissing) return null;
   if (!resp.ok) throw await responseError(resp);
   const data: unknown = await resp.json();
@@ -390,6 +397,8 @@ export async function* streamChat(
   sessionId: string,
   signal?: AbortSignal,
 ): AsyncGenerator<SSEEvent> {
+  if (!message.trim()) throw new Error('请输入要处理的业务');
+  if ([...message].length > MAX_MESSAGE_LENGTH) throw new Error(`消息最多 ${MAX_MESSAGE_LENGTH} 字，请缩短后重试`);
   const resp = await apiFetch("/api/chat/stream", {
     method: "POST",
     headers: { "content-type": "application/json" },

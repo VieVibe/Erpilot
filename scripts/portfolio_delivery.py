@@ -21,11 +21,11 @@ START = """# Erpilot · 会请示的 ERP 智能体
 2. 解压 erpilot-source.zip，阅读 docs/application-kit.md：简历表述、三个技术取舍和证据入口。
 3. 按源码 docs/demo-guide.md 启动无密钥本地演示。
 
-视频复用已有录制，使用脚本模型、演示向量和临时库，展示正式 API / LangGraph / MCP
+视频使用脚本模型、演示向量和临时库，展示正式 API / LangGraph / MCP
 链路。连续多轮真实模型结果见源码 docs/context-workflow.md 和对应报告；两类证据分别列示。
 最新订单与政策验收、原始失败及后续版本见源码 docs/project-status.md，各批次独立列示。
 另可按 docs/deployment.md 运行带账号、持久恢复的同源容器；仍限制单 API 执行进程，ERP 为共享门店。
-已有视频保留临时匿名演示口径；新账号和部署能力以源码及本批验收为准。
+视频展示临时匿名演示；账号和部署能力以源码及对应验收为准。
 
 核验交付包：在解压的源码目录运行
 `python scripts/portfolio_delivery.py --verify <本交付ZIP绝对路径>`。
@@ -37,13 +37,16 @@ START = """# Erpilot · 会请示的 ERP 智能体
 """
 
 
-def build(root, output):
+def build(root, output, *, media_dir=None):
     root, output = Path(root).resolve(), Path(output).resolve()
     if output.exists():
         raise ValueError("delivery already exists; use a new output path")
+    directory = (root / (media_dir or "artifacts/portfolio")).resolve()
+    if not directory.is_relative_to(root):
+        raise ValueError("media path escapes source root")
     payloads = {"START-HERE.md": START.encode("utf-8")}
     for name in MEDIA:
-        path = root / "artifacts" / "portfolio" / name
+        path = directory / name
         if path.is_symlink() or not path.resolve().is_relative_to(root):
             raise ValueError("media path escapes source root")
         payloads[name] = path.read_bytes()
@@ -101,9 +104,11 @@ def main():
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--output", type=Path)
     mode.add_argument("--verify", type=Path)
+    parser.add_argument("--media-dir", type=Path,
+                        help="录屏目录（相对仓库根目录，默认 artifacts/portfolio）")
     args = parser.parse_args()
     result = ({"verified": True, "content_sha256": verify(args.verify)} if args.verify
-              else build(source.ROOT, args.output))
+              else build(source.ROOT, args.output, media_dir=args.media_dir))
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 

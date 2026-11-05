@@ -272,6 +272,8 @@ def test_cli_produces_machine_readable_decision_and_preserves_raw_report(tmp_pat
 def test_live_cli_rejects_subset_gate_before_resolving_model_config(tmp_path, monkeypatch):
     from evals import __main__ as cli
 
+    monkeypatch.setattr(cli, "find_dotenv", lambda *args: None)
+
     def forbidden():
         raise AssertionError("must validate the gate before resolving any provider")
 
@@ -285,6 +287,8 @@ def test_live_cli_rejects_subset_gate_before_resolving_model_config(tmp_path, mo
 
 def test_live_cli_rejects_incomplete_reference_before_provider_config(tmp_path, monkeypatch):
     from evals import __main__ as cli
+
+    monkeypatch.setattr(cli, "find_dotenv", lambda *args: None)
 
     rules = load_policy(ROOT / "configs/evals/baseline.json")
     previous = report(*[row(case_id) for case_id in rules.case_ids])
@@ -307,6 +311,8 @@ def test_live_cli_uses_policy_threshold_and_writes_gate_artifact(tmp_path, monke
     from types import SimpleNamespace
 
     from evals import __main__ as cli
+
+    monkeypatch.setattr(cli, "find_dotenv", lambda *args: None)
 
     rules = load_policy(ROOT / "configs/evals/baseline.json").model_copy(
         update={"name": "test-threshold", "min_success_rate": 0.95},

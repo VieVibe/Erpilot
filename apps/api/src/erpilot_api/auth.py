@@ -45,7 +45,7 @@ class AuthMiddleware:
                         raise AuthError(415, "json_required", "请使用 JSON 请求")
                     try:
                         body = json.loads(data)
-                    except (ValueError, UnicodeDecodeError) as exc:
+                    except (ValueError, UnicodeDecodeError, RecursionError) as exc:
                         raise AuthError(422, "invalid_json", "请求内容无效") from exc
                     if not isinstance(body, dict):
                         raise AuthError(422, "invalid_json", "请求须为 JSON 对象")

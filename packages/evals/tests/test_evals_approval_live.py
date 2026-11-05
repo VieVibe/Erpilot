@@ -17,8 +17,7 @@ from types import SimpleNamespace
 
 import pytest
 from agent_core.demo_tools import WRITES_PROMPT
-from agent_core.dotenv import find_dotenv, load_dotenv
-from agent_core.llm import LLMClient, LLMConfig
+from agent_core.llm import LLMClient
 from agent_core.observability import langfuse_sink_from_env
 from erp_store.db import make_engine
 from erp_store.repository import ErpRepository
@@ -28,17 +27,16 @@ from evals.approval_policy import ScriptedPolicyGate
 from evals.report import write_report
 from mcp_erp import build_agent_tools
 
-if (dotenv := find_dotenv(Path(__file__).resolve())) is not None:
-    load_dotenv(dotenv)
+pytestmark = pytest.mark.eval
+BUDGET_CNY: float
 
-pytestmark = [
-    pytest.mark.eval,
-    pytest.mark.skipif(
-        not os.environ.get("ZHIPU_API_KEY"), reason="无 ZHIPU_API_KEY，跳过真实链路评测"
-    ),
-]
 
-BUDGET_CNY = float(os.environ.get("ERPILOT_EVAL_BUDGET", "1.0"))
+@pytest.fixture(scope="module", autouse=True)
+def _live_settings(live_llm_config):
+    global BUDGET_CNY
+    BUDGET_CNY = float(os.environ.get("ERPILOT_EVAL_BUDGET", "1.0"))
+
+
 _REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
@@ -67,12 +65,12 @@ def policy_resolved(policy_db) -> dict[str, str]:
 
 
 @pytest.fixture(scope="module")
-def policy_client() -> LLMClient:
-    return LLMClient(LLMConfig.from_env())
+def policy_client(live_llm_config) -> LLMClient:
+    return LLMClient(live_llm_config)
 
 
 @pytest.fixture(scope="module")
-def policy_sink():
+def policy_sink(_live_settings):
     try:
         return langfuse_sink_from_env()
     except Exception as exc:
@@ -81,7 +79,7 @@ def policy_sink():
 
 
 @pytest.fixture(scope="module")
-def acc() -> SimpleNamespace:
+def acc(_live_settings) -> SimpleNamespace:
     from evals import Budget
 
     return SimpleNamespace(budget=Budget(BUDGET_CNY), results=[], t0=time.monotonic())

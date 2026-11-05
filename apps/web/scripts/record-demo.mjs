@@ -89,6 +89,8 @@ try {
   await caption('05 / 拒绝后保持业务未执行', '本次拒绝不建单、不扣库存。草稿仍可继续编辑或重新请求提交。', 12);
   await panel.getByRole('tab', { name: '订单草稿', exact: true }).click();
   await panel.getByRole('button', { name: '请求提交版本 2 并审批', exact: true }).click();
+  await page.getByRole('dialog', { name: '核对草稿版本 2' })
+    .getByRole('button', { name: '确认此版本并申请审批', exact: true }).click();
   await panel.getByRole('button', { name: '批准', exact: true }).click();
   await textVisible('.md', '已创建');
   await caption('06 / 明确批准后建单', '批准版本 2 后创建待付款订单，业务层再次校验价格、库存与版本。', 14);
@@ -106,7 +108,7 @@ try {
   await page.locator('.replenishment-suggestion').last().scrollIntoViewIfNeeded();
   await caption('09 / 只读补货建议', '最近 30 天销量 60、库存 5；采购周期 7 天、到货后覆盖 14 天，建议补 37 件。未采购、未调库存。', 14);
   await page.screenshot({ path: resolve(output, 'replenishment.png'), fullPage: true });
-  await caption('实现、实测与限制各自留证', '真实模型结果、上下文实验、故障恢复证据见仓库报告。本地可信单用户范围；政策答复严格门槛仍未通过。', 12);
+  await caption('实现、实测与限制各自留证', '真实模型与故障恢复证据见仓库独立报告。容器支持账号隔离与持久恢复；本片只演示临时数据与固定脚本流程。', 12);
   if (errors.length) throw new Error(`Browser errors: ${errors.join('; ')}`);
   const video = page.video();
   await context.close(); context = null;

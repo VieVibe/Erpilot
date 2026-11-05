@@ -11,8 +11,7 @@ from types import SimpleNamespace
 
 import pytest
 from agent_core.approval import ApprovalDecision, ApprovalRequest
-from agent_core.dotenv import find_dotenv, load_dotenv
-from agent_core.llm import DEFAULT_PROVIDER, PROVIDERS, LLMClient, LLMConfig
+from agent_core.llm import LLMClient
 from erp_store.db import OrderRow, StockRow, make_engine
 from erp_store.models import OrderStatus
 from erp_store.repository import ErpRepository
@@ -33,27 +32,23 @@ from evals.state import snapshot
 from mcp_erp import build_agent_tools_async
 from sqlalchemy.orm import Session
 
-if (dotenv := find_dotenv(Path(__file__).resolve())) is not None:
-    load_dotenv(dotenv)
-
 _REPO_ROOT = Path(__file__).resolve().parents[3]
-_VARIANT = os.environ.get("ERPILOT_INJECTION_VARIANT", "treatment")
-if _VARIANT not in {"control", "treatment"}:
-    raise RuntimeError("ERPILOT_INJECTION_VARIANT must be control or treatment")
-_PROVIDER = os.environ.get("LLM_PROVIDER", DEFAULT_PROVIDER).lower()
-_PROFILE = PROVIDERS.get(_PROVIDER)
-_HAS_KEY = bool(_PROFILE and os.environ.get(_PROFILE.api_key_env))
-_HAS_EXPLICIT_BUDGET = bool(os.environ.get("ERPILOT_EVAL_BUDGET"))
-pytestmark = [
-    pytest.mark.eval,
-    pytest.mark.skipif(not _HAS_KEY, reason="无 ZHIPU_API_KEY，跳过真实链路评测"),
-    pytest.mark.skipif(
-        not _HAS_EXPLICIT_BUDGET, reason="需显式设置 ERPILOT_EVAL_BUDGET 才运行真实评测"
-    ),
-]
+pytestmark = pytest.mark.eval
+_VARIANT: str
+BUDGET_CNY: float
+TIMEOUT_SECONDS: float
 
-BUDGET_CNY = float(os.environ.get("ERPILOT_EVAL_BUDGET", "0"))
-TIMEOUT_SECONDS = float(os.environ.get("ERPILOT_EVAL_TIMEOUT", "30"))
+
+@pytest.fixture(scope="module", autouse=True)
+def _live_settings(live_llm_config):
+    global _VARIANT, BUDGET_CNY, TIMEOUT_SECONDS
+    _VARIANT = os.environ.get("ERPILOT_INJECTION_VARIANT", "treatment")
+    if _VARIANT not in {"control", "treatment"}:
+        raise ValueError("ERPILOT_INJECTION_VARIANT must be control or treatment")
+    if not os.environ.get("ERPILOT_EVAL_BUDGET"):
+        pytest.skip("需显式设置 ERPILOT_EVAL_BUDGET 才运行真实评测")
+    BUDGET_CNY = float(os.environ["ERPILOT_EVAL_BUDGET"])
+    TIMEOUT_SECONDS = float(os.environ.get("ERPILOT_EVAL_TIMEOUT", "30"))
 
 
 class CaptureDenyGate:
@@ -77,12 +72,12 @@ def live_db(tmp_path: Path) -> Path:
 
 
 @pytest.fixture(scope="module")
-def live_client() -> LLMClient:
-    return LLMClient(LLMConfig.from_env())
+def live_client(live_llm_config) -> LLMClient:
+    return LLMClient(live_llm_config)
 
 
 @pytest.fixture(scope="module")
-def acc(live_client: LLMClient) -> SimpleNamespace:
+def acc(live_client: LLMClient, _live_settings) -> SimpleNamespace:
     from evals import Budget
 
     state = SimpleNamespace(

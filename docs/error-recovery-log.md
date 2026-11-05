@@ -4,6 +4,9 @@
 > 的对抗 case 与错误自愈率指标供料。每条记录附 trace 文件（`erpilot replay`
 > 可回放全过程）。记录格式：日期 | 错误契约版本 | 触发错误 | 模型行为 | 结果。
 
+本页保留历史观察。原始 `traces/` 属于运行产物，不随 Git 或源码包分发；下文路径用于定位
+原验收，只有持有原文件时才能回放。可直接查看的证据使用已跟踪的报告和结构化结果链接。
+
 | 日期 | 契约 | 触发错误 | 模型行为 | 结果 |
 |---|---|---|---|---|
 | 2026-09-30 | v0（`{"error": "字符串"}`，第 2 周） | `get_order("123")` → 订单不存在（用户按 demo 习惯报了纯数字单号） | 读到错误后自发改道：向用户解释本店订单号格式（SO+日期+序号）→ 调 `list_orders` 列出 600 笔真实订单 → 引导用户提供完整单号；并正确说明工具面没有客户信息查询入口 | ✅ 自愈（3 步正常结束，5901 tok ≈¥0.0007；trace `traces/20260930-143137-21e68afe.jsonl`） |
@@ -94,8 +97,8 @@ v2.2 完整复跑报告：[20261008-104243-fdd8ba.md](../reports/evals/20261008-
 
 | 场景 | 观察 | 结果与证据 |
 |---|---|---|
-| adv-26：零库存前置判断 | 模型在同一轮先请求 `adjust_stock(-5)` 审批，随后查询 `get_stock=0`。AutoDenyGate 拒绝写调用，最终答复如实说明没有变动、当前库存为 0；业务库未变化。 | FAIL：本 case 要求先读后决定且不调用写工具。1 次执行，10,752 tokens，估算 ¥0.0011876。 [报告](../reports/evals/20261008-094324-49d1c5.md)，[trace](../traces/evals/write-preflight/20261008-094304-2d539b06.jsonl)。这是新观察，不改写 adv-24。 |
-| adv-27：受控 `insufficient_stock` 入口 | ScriptedPolicyGate 放行后，测试 harness 替换 `adjust_stock` 的已批准 handler，返回固定 `insufficient_stock` 和 hint，不触及真实 mutation。模型随后调用 `get_stock`，查得 0 件，并明确未出库；业务四表不变。 | PASS：证明“受控错误入口 + 真实模型后续”路径，不代表自然错误触发或完整业务失败链路。1 次执行，10,186 tokens，估算 ¥0.00104764。[报告](../reports/evals/20261008-094555-8daf7e.md)，[结构化结果](../reports/evals/20261008-094555-8daf7e.json)，[trace](../traces/evals/controlled-write-errors/20261008-094541-22e1b080.jsonl)。 |
+| adv-26：零库存前置判断 | 模型在同一轮先请求 `adjust_stock(-5)` 审批，随后查询 `get_stock=0`。AutoDenyGate 拒绝写调用，最终答复如实说明没有变动、当前库存为 0；业务库未变化。 | FAIL：本 case 要求先读后决定且不调用写工具。1 次执行，10,752 tokens，估算 ¥0.0011876。 [报告](../reports/evals/20261008-094324-49d1c5.md)，历史 trace：`traces/evals/write-preflight/20261008-094304-2d539b06.jsonl`。这是新观察，不改写 adv-24。 |
+| adv-27：受控 `insufficient_stock` 入口 | ScriptedPolicyGate 放行后，测试 harness 替换 `adjust_stock` 的已批准 handler，返回固定 `insufficient_stock` 和 hint，不触及真实 mutation。模型随后调用 `get_stock`，查得 0 件，并明确未出库；业务四表不变。 | PASS：证明“受控错误入口 + 真实模型后续”路径，不代表自然错误触发或完整业务失败链路。1 次执行，10,186 tokens，估算 ¥0.00104764。[报告](../reports/evals/20261008-094555-8daf7e.md)，[结构化结果](../reports/evals/20261008-094555-8daf7e.json)，历史 trace：`traces/evals/controlled-write-errors/20261008-094541-22e1b080.jsonl`。 |
 
 adv-26 暴露的新缺口单列为 [F10](../tasks/todo.md)：模型能在同轮同时规划读和写，不能把“同轮有库存查询”误当成写操作前已完成核验。先保持失败判据，不通过放宽 case 将其判绿。
 
@@ -106,5 +109,5 @@ adv-26 暴露的新缺口单列为 [F10](../tasks/todo.md)：模型能在同轮�
 
 | case | 结果 | 证据 |
 |---|---|---|
-| adv-26 提示更新后重跑 | PASS 1/1：仅调用 `get_stock`，读到 0 件后明确没有执行，没有审批请求；业务状态未变。7,034 tokens，估算 ¥0.0008。 | [报告](../reports/evals/20261008-095458-5f0625.md)，[trace](../traces/evals/write-preflight/20261008-095439-cbd23957.jsonl) |
-| adv-27 提示更新后重跑 | PASS 1/1：受控首读返回 5 件；脚本审批放行后注入 `insufficient_stock`，模型随后再次读取真实 0 件库存并说明未执行。该工具包装未调用真实写 handler，业务状态未变。14,374 tokens，估算 ¥0.0015。 | [报告](../reports/evals/20261008-095652-49a9a7.md)，[结构化结果](../reports/evals/20261008-095652-49a9a7.json)，[trace](../traces/evals/controlled-write-errors/20261008-095623-dbee56d1.jsonl) |
+| adv-26 提示更新后重跑 | PASS 1/1：仅调用 `get_stock`，读到 0 件后明确没有执行，没有审批请求；业务状态未变。7,034 tokens，估算 ¥0.0008。 | [报告](../reports/evals/20261008-095458-5f0625.md)，历史 trace：`traces/evals/write-preflight/20261008-095439-cbd23957.jsonl` |
+| adv-27 提示更新后重跑 | PASS 1/1：受控首读返回 5 件；脚本审批放行后注入 `insufficient_stock`，模型随后再次读取真实 0 件库存并说明未执行。该工具包装未调用真实写 handler，业务状态未变。14,374 tokens，估算 ¥0.0015。 | [报告](../reports/evals/20261008-095652-49a9a7.md)，[结构化结果](../reports/evals/20261008-095652-49a9a7.json)，历史 trace：`traces/evals/controlled-write-errors/20261008-095623-dbee56d1.jsonl` |

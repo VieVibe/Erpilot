@@ -56,6 +56,13 @@ test("HTTP and transport failures are propagated for retry", async () => {
   await assert.rejects(submitApproval("p1", true), /offline/);
 });
 
+test('request validation keeps the actionable server hint', async () => {
+  globalThis.fetch = async () => Response.json({error: {
+    code: 'invalid_argument', message: '对话或审批参数无效', hint: '消息不能全为空白',
+  }}, {status: 422});
+  await assert.rejects(submitApproval('p1', false), error => error.status === 422 && /消息不能全为空白/.test(error.message));
+});
+
 test("snapshot hydrates messages and fixed approval payloads", async () => {
   const snapshot = { session_id: "s1", status: "waiting_approval",
     messages: [{role: "user", content: "write"}], pending_approvals: [{
@@ -68,10 +75,14 @@ test("snapshot hydrates messages and fixed approval payloads", async () => {
   assert.deepEqual(await loadSessionState("s1"), snapshot);
 });
 
-test("only a newly-created session may treat 404 as an empty snapshot", async () => {
-  globalThis.fetch = async () => Response.json({error: {code: "session_not_found", message: "missing"}}, {status: 404});
+test("only a newly-created session requests and accepts an empty snapshot", async () => {
+  globalThis.fetch = async (url, options) => options.headers?.['X-Erpilot-Allow-Missing'] === '1'
+    ? new Response(null, {status: 204})
+    : Response.json({error: {code: "session_not_found", message: "missing"}}, {status: 404});
   assert.equal(await loadSessionState("new", undefined, true), null);
   await assert.rejects(loadSessionState("existing"), /missing/);
+  globalThis.fetch = async () => Response.json({error: {message: "missing"}}, {status: 404});
+  assert.equal(await loadSessionState("older-api", undefined, true), null);
   globalThis.fetch = async () => Response.json({error: {code: "db_error", message: "unavailable"}}, {status: 503});
   await assert.rejects(loadSessionState("s1"), /unavailable/);
 });
@@ -131,6 +142,15 @@ test("cancel endpoint returns the refreshed session snapshot", async () => {
 });
 
 import { streamChat, ProtocolError } from "../.test-build/protocol.js";
+
+test('blank or oversized messages fail before any model request', async () => {
+  let requests = 0;
+  globalThis.fetch = async () => { requests++; return new Response(); };
+  for (const message of ['   \n', '需'.repeat(32001)]) {
+    await assert.rejects(async () => { for await (const _ of streamChat(message, 's1')) {} }, /请输入|最多 32000 字/);
+  }
+  assert.equal(requests, 0);
+});
 
 function sseResponse(chunks) {
   const encoder = new TextEncoder();

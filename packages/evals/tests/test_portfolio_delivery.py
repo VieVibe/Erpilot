@@ -43,3 +43,18 @@ def test_delivery_rejects_media_tampering(delivery, tmp_path):
             outgoing.writestr(name, data)
     with pytest.raises(ValueError, match="content mismatch"):
         module.verify(changed)
+
+
+def test_selected_recording_is_packaged_without_replacing_historical_media(delivery, tmp_path):
+    module, root = delivery
+    current = root / "artifacts" / "current-recording"
+    current.mkdir()
+    for name in module.MEDIA:
+        (current / name).write_bytes(b"current recording")
+    output = tmp_path / "current.zip"
+    module.build(root, output, media_dir="artifacts/current-recording")
+    with zipfile.ZipFile(output) as archive:
+        assert archive.read("erpilot-demo.webm") == b"current recording"
+    assert (root / "artifacts/portfolio/erpilot-demo.webm").read_bytes() != b"current recording"
+    with pytest.raises(ValueError, match="escapes"):
+        module.build(root, tmp_path / "outside.zip", media_dir=tmp_path)

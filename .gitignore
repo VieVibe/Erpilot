@@ -10,6 +10,8 @@ build/
 
 # 环境与密钥
 .env
+.env.*
+!.env.example
 
 # 本地数据（SQLite / trace 落盘 / 种子数据快照）
 *.db

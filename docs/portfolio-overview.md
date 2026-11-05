@@ -10,14 +10,11 @@ Erpilot 是运行在 mini-ERP 上的审批型业务智能体：模型通过 MCP 
 2026-11-04 的[最新真实验收](../reports/acceptance/2026-11-04-real-model-reconnect.md)为订单 4/4、34/34，
 语义创建/修改 7/7、6/6，以及带账号的真实 HTTP 建单。随后完成[语义默认启用收尾](semantic-parsing.md)。
 随后完成[120条委托AI标签审核](label-review.md)，当前已无用户待审项。
-当前源码包为 `artifacts/erpilot-label-review-20261104.zip`，
-带已有字幕录屏的交付包为 `artifacts/erpilot-delivery-label-review-20261104.zip`；视频保留原录制口径。
-前批 `erpilot-semantic-default-20261104.zip` 及对应交付包保留。
-前批 `erpilot-real-validation-20261104.zip` 及对应交付包继续保留。
-账号/同源容器/重建恢复的[前批补强](../reports/acceptance/2026-11-04-production-readiness.md)与
-`erpilot-readiness-20261104.zip` / `erpilot-delivery-readiness-20261104.zip` 继续保留。
-前一阶段 `erpilot-portfolio-20261104.zip` / `erpilot-delivery-20261104.zip` 继续保留，
-[原收口验收](../reports/acceptance/2026-11-04-portfolio-maturity.md)含当时源码副本从零安装证据。
+最终打磨源码包为 `artifacts/erpilot-finished-20261104.zip`，
+带本轮新录制字幕视频的交付包为 `artifacts/erpilot-delivery-finished-20261104.zip`。
+视频使用脚本模型和临时库，旧录屏与交付包继续保留。
+这些是本机构建产物，不随 Git 分发；clone 后按下文命令重新生成。
+标签审核、语义默认启用、真实验收和部署补强的旧包继续保留，历史结果见[项目状态](project-status.md)。
 
 1. 按[演示指南](demo-guide.md)启动本地页面，展示草稿创建、修改、固定版本审批、拒绝后重提与建单。
 2. 展示政策原文与无依据拒答、只读补货建议，区分模型判断、工具事实和业务执行。
@@ -47,34 +44,25 @@ Erpilot 是运行在 mini-ERP 上的审批型业务智能体：模型通过 MCP 
 
 ## 统一投递包
 
-2026-10-28 更新的材料与源码包为 `artifacts/erpilot-portfolio-20261028.zip`，复用既有字幕视频，
-包含新的订单契约、政策程序结束实现及独立验收。订单 v2 真实验收因连接错误缺 usage 冻结；
-政策 GLM v4 13/13 是受控检索单批观察。构建与核验方式：
+先生成源码快照（不需要录屏文件）：
 
 ```sh
-python scripts/portfolio_delivery.py --output artifacts/erpilot-portfolio-20261028.zip
-python scripts/portfolio_delivery.py --verify artifacts/erpilot-portfolio-20261028.zip
+python scripts/portfolio_release.py --output artifacts/erpilot-finished-20261104.zip
+python scripts/portfolio_release.py --verify artifacts/erpilot-finished-20261104.zip
 ```
 
-以下保留此前交付路径，输出存在时使用新的文件名。
-
-复用已有视频、字幕、章节和两张业务截图，连同当前源码组成一个交付 ZIP：
+视频、字幕和截图同样不随 Git 分发。本轮录屏位于 `artifacts/finishing/recording-final/`，
+可连同当前源码组成交付 ZIP；全新 clone 请先按本页末尾的录屏命令生成这些文件。
+输出存在时改用新的文件名，避免覆盖历史交付。
 
 ```sh
-python scripts/portfolio_delivery.py --output artifacts/erpilot-portfolio-workflows-20261019.zip
-python scripts/portfolio_delivery.py --verify artifacts/erpilot-portfolio-workflows-20261019.zip
+python scripts/portfolio_delivery.py --output artifacts/erpilot-delivery-finished-20261104.zip --media-dir artifacts/finishing/recording-final
+python scripts/portfolio_delivery.py --verify artifacts/erpilot-delivery-finished-20261104.zip
 ```
 
 交付包以 `START-HERE.md` 为入口，内含 `erpilot-source.zip`、媒体及
 `DELIVERY-MANIFEST.json`。外层清单逐文件记录 SHA-256，核验时同时检查内部源码清单。
 输出已存在时拒绝覆盖。视频为已有脚本化演示，连续多轮真实模型证据在源码报告中分别列示。
-
-下面的命令用于单独生成源码快照：
-
-```sh
-python scripts/portfolio_release.py --output artifacts/erpilot-portfolio-20261019.zip
-python scripts/portfolio_release.py --verify artifacts/erpilot-portfolio-20261019.zip
-```
 
 ZIP 内 `RELEASE-MANIFEST.json` 逐文件记录路径、大小和 SHA-256；相同文件字节及压缩环境重复构建可得到相同 ZIP。解压后先执行 `python scripts/portfolio_release.py --verify .`，再运行：
 
@@ -89,11 +77,14 @@ uv run python scripts/demo.py --serve --port 8765
 仓库已跟踪的政策向量索引会随源码打包，但不能替代匹配的嵌入配置或授权查询；离线演示不读取该索引。
 报告中的旧 trace 路径只作原验收定位，不能在源码包中重新查阅不存在的文件。完整源码复现与逐字节重现模型答复是不同范围。
 
-重新录屏前安装 Playwright 对应的 Chromium / FFmpeg，然后执行：
+新 clone 或重新录屏前先同步 Python / 前端依赖、完成前端构建，再安装 Playwright 对应的 Chromium / FFmpeg：
 
 ```sh
+uv sync --all-packages --frozen
+npm --prefix apps/web ci
+npm --prefix apps/web run build
 npm --prefix apps/web exec -- playwright install chromium ffmpeg
-npm --prefix apps/web run record:demo -- artifacts/portfolio-recapture
+npm --prefix apps/web run record:demo -- artifacts/finishing/recording-final
 ```
 
 已有兼容浏览器可通过 `PLAYWRIGHT_CHROMIUM_EXECUTABLE` 指定。`PLAYWRIGHT_BROWSERS_PATH` 可将录屏依赖安装到项目临时目录。录屏脚本使用独立端口 8767，拒绝连接已有服务，结束时关闭自己启动的服务。
