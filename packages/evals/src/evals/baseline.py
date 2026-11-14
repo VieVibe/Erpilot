@@ -223,13 +223,17 @@ async def run_baseline(
                 if isinstance(case, TaskCase):
                     result, trace_path = await run_task_case(
                         case, client=client, tools=tools, engine=engine,
-                        resolved=resolve(ErpRepository(engine)), trace_dir=trace_dir,
+                        resolved=resolve(ErpRepository(
+                            engine, clock=lambda: BASELINE_SEED_NOW.replace(tzinfo=None)
+                        )), trace_dir=trace_dir,
                         session_id=f"eval:{case.id}", budget=active,
                     )
                 else:
                     result, trace_path = await run_case(
                         case, client=client, tools=tools,
-                        resolved={} if case.id in b6_ids else resolve(ErpRepository(engine)),
+                        resolved={} if case.id in b6_ids else resolve(ErpRepository(
+                            engine, clock=lambda: BASELINE_SEED_NOW.replace(tzinfo=None)
+                        )),
                         trace_dir=trace_dir, system_prompt=prompt,
                         state_engine=engine if writes else None,
                     )

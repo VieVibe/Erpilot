@@ -2,11 +2,10 @@
 
 import asyncio
 import copy
-import json
 import os
 import time
 from collections.abc import AsyncIterator, Callable, Sequence
-from contextlib import aclosing, suppress
+from contextlib import aclosing
 from dataclasses import asdict
 from datetime import UTC, datetime
 from pathlib import Path
@@ -27,7 +26,7 @@ from agent_core.events import (
     ToolExecuting,
 )
 from agent_core.graph_runtime import LangGraphRuntime
-from agent_core.llm import LLMClient, ToolCall
+from agent_core.llm import LLMClient
 from agent_core.prices import cost_of
 from agent_core.runtime_config import LoopConfig
 from agent_core.tools import Tool
@@ -245,14 +244,12 @@ class ChatService:
         clock=None,
         session_tools_factory=None,
         session_reconciler_factory=None,
-        drafts=None,
-        operations=None,
-        intent_store=None,
-        intent_recovery=None,
-        intent_diagnostics=None,
+        business_hooks=None,
         trace_sinks: Sequence[TraceSink] | None = None,
+        business_instructions: str | None = None,
     ):
         self._client_factory = client_factory
+        self._business_instructions = business_instructions
         self._model, self._trace_dir = model, trace_dir
         self._tools, self._loop_config = list(tools), loop_config or LoopConfig()
         self._approval_gate = approval_gate
@@ -262,11 +259,13 @@ class ChatService:
         self._mutation_reconciler = mutation_reconciler
         self._session_tools_factory = session_tools_factory
         self._session_reconciler_factory = session_reconciler_factory
-        self._drafts = drafts
-        self._operations = operations
-        self._intent_store = intent_store
-        self._intent_recovery = intent_recovery
-        self._intent_diagnostics = intent_diagnostics
+        self._business_hooks = business_hooks
+        # Compatibility attributes for existing scripts; module behavior uses hooks.
+        self._drafts = getattr(business_hooks, "drafts", None)
+        self._operations = getattr(business_hooks, "operations", None)
+        self._intent_store = getattr(business_hooks, "intent_store", None)
+        self._intent_recovery = getattr(business_hooks, "intent_recovery", None)
+        self._intent_diagnostics = getattr(business_hooks, "intent_diagnostics", None)
         self._intent_semantic = None
         self._approval_ttl_seconds, self._clock = approval_ttl_seconds, clock
         self._sinks = _sinks_from_env() if trace_sinks is None else list(trace_sinks)
@@ -326,17 +325,9 @@ class ChatService:
         return messages
 
     def record_draft_form(self, session_id, draft):
-        if self._run_store is None:
+        if self._business_hooks is None:
             return
-        call_id = "form-" + uuid4().hex
-        self._run_store.record_draft_form(session_id, [
-            {"role": "assistant", "content": "页面已保存并展示以下草稿版本。",
-             "tool_calls": [{"id": call_id, "type": "function", "function": {
-                 "name": "get_order_draft", "arguments": json.dumps({
-                     "draft_id": draft["draft_id"], "revision": draft["revision"]})}}]},
-            {"role": "tool", "tool_call_id": call_id,
-             "content": json.dumps(draft, ensure_ascii=False)},
-        ])
+        self._business_hooks.record_draft_form(self, session_id, draft)
 
     async def session_state(self, session_id):
         snapshot = await self._runtime(session_id).get_state(thread_id_for_session(session_id))
@@ -356,28 +347,6 @@ class ChatService:
             pending = [
                 copy.deepcopy(p) for p in interrupts if p.get("kind") != "reconciliation_required"
             ]
-            if self._drafts is not None:
-                from erp_store.mutations import MutationError
-
-                for approval in pending:
-                    if approval.get("tool") == "submit_order_draft":
-                        args = approval.get("arguments", {})
-                        # Missing or foreign drafts cannot expose another session's data.
-                        with suppress(MutationError):
-                            approval["draft"] = self._drafts.get(
-                                session_id, args["draft_id"], revision=args["revision"]
-                            )
-            if self._operations is not None:
-                from erp_store.mutations import MutationError
-
-                for approval in pending:
-                    kind = approval.get("tool")
-                    operation_id = approval.get("arguments", {}).get("operation_id")
-                    if kind in {"cancel_order", "adjust_stock"} and isinstance(operation_id, str):
-                        with suppress(MutationError):
-                            operation = self._operations.get(session_id, operation_id)
-                            if operation["kind"] == kind:
-                                approval["operation"] = operation
             reconciliation = next(
                 (p for p in interrupts if p.get("kind") == "reconciliation_required"), None
             )
@@ -406,14 +375,8 @@ class ChatService:
                 "pending_reconciliation": reconciliation,
                 "tool_results": snapshot.values.get("tool_history", []),
             }
-        if self._drafts is not None:
-            state["order_task"] = self._drafts.task_state(session_id)
-        if self._intent_store is not None:
-            state["pending_intent"] = self._intent_store.view(session_id)
-        if self._intent_recovery is not None and not state.get("pending_intent"):
-            recovery = self._intent_recovery.view(session_id)
-            if recovery is not None:
-                state["pending_intent"] = recovery
+        if self._business_hooks is not None:
+            self._business_hooks.enrich_state(session_id, state)
         presentation = self._presentation(session_id)
         if presentation is not None:
             state["presentation"] = presentation
@@ -426,6 +389,15 @@ class ChatService:
         return state
 
     def _system_prompt(self):
+        if self._business_hooks is not None:
+            return self._business_hooks.prompt(self._tools)
+        if self._business_instructions is not None:
+            return (
+                "你是企业业务助手。根据已注册工具帮助用户处理业务。"
+                "缺少必填信息时先询问。以工具返回的数据为依据，明确报告失败或未知结果。"
+                "写操作需经过系统的人工确认。只有执行结果确认成功后才能声称完成。\n"
+                + self._business_instructions
+            )
         prompt = system_prompt(any(t.risk for t in self._tools))
         if any(t.name == "suggest_replenishment" for t in self._tools):
             from mcp_erp.replenishment_tools import REPLENISHMENT_GUIDANCE
@@ -435,22 +407,6 @@ class ChatService:
             from mcp_erp.policy_tools import CANCELLATION_GUIDANCE
 
             prompt += "\n" + CANCELLATION_GUIDANCE
-        if self._drafts is not None:
-            from mcp_erp.draft_tools import DRAFT_GUIDANCE
-
-            prompt += "\n" + DRAFT_GUIDANCE
-        if self._operations is not None:
-            prompt += (
-                "\n取消订单前先使用 prepare_cancel_order 保存业务预览；"
-                "调整库存前先使用 prepare_stock_adjustment 保存业务预览。"
-                "用户确认后使用 cancel_order 或 adjust_stock 提交对应的 operation_id，等待审批。"
-                "若业务数据已变化或预览过期，说明原因并重新预览，重新取得用户确认和审批；"
-                "不得静默更换已批准的操作引用。"
-            )
-        if self._intent_store is not None:
-            from mcp_erp.intent_analysis import INTENT_GUIDANCE
-
-            prompt += "\n" + INTENT_GUIDANCE
         return prompt
 
     def _presentation(self, session_id):
@@ -579,8 +535,8 @@ class ChatService:
             snapshot = await runtime.get_state(thread)
             if snapshot.next:
                 raise SessionError(409, "unfinished_run", "会话尚未完成，请先处理待审批操作")
-            if self._intent_store is not None:
-                self._intent_store.abandon_unrelated(session_id, message)
+            if self._business_hooks is not None:
+                self._business_hooks.before_message(session_id, message)
             previous = await self._history(session_id)
             # New turns use current workflow rules, including older persisted sessions.
             rules = {"role": "system", "content": self._system_prompt()}
@@ -594,57 +550,19 @@ class ChatService:
                     yield event
 
     async def reserve_draft_submission(self, session_id, draft_id, expected_revision):
-        lock = self.lock(session_id)
-        if lock.locked():
-            raise SessionError(409, "session_busy", "会话已有活动执行")
-        await lock.acquire()
-        released = False
-
-        def release():
-            nonlocal released
-            if not released:
-                released = True
-                lock.release()
-
-        try:
-            if self._drafts is None:
-                raise SessionError(503, "drafts_disabled", "当前环境未启用订单草稿")
-            tools = (self._session_tools_factory(session_id)
-                     if self._session_tools_factory else self._tools)
-            if not any(t.name == "submit_order_draft" and t.risk and t.direct_response
-                       for t in tools):
-                raise SessionError(403, "writes_disabled", "当前环境未开放订单提交")
-            if type(expected_revision) is not int or expected_revision < 1:
-                raise SessionError(422, "invalid_argument", "确认版本须为正整数")
-            state = await self._runtime(session_id).get_state(thread_id_for_session(session_id))
-            if state.next:
-                raise SessionError(409, "unfinished_run", "请先处理当前待审批或中断的操作")
-            draft = self._drafts.get(session_id, draft_id)
-            if draft["revision"] != expected_revision:
-                raise SessionError(409, "draft_changed", "草稿已有新版本，请重新核对后确认")
-            if draft["status"] != "open":
-                raise SessionError(409, "draft_unavailable", "草稿已过期或已提交，请重新核对")
-            draft = self._drafts.check_submission(session_id, draft_id, expected_revision)
-            return copy.deepcopy(draft), release
-        except BaseException:
-            release()
-            raise
+        if self._business_hooks is None:
+            raise SessionError(503, "drafts_disabled", "当前环境未启用订单草稿")
+        return await self._business_hooks.reserve_draft_submission(
+            self, session_id, draft_id, expected_revision,
+        )
 
     async def stream_confirmed_draft(self, session_id, draft):
-        """Called only after reservation; the reviewed immutable revision goes to HITL."""
-        runtime = self._runtime(session_id)
-        previous = await self._history(session_id)
-        message = (f"已核对并确认草稿版本 {draft['revision']}"
-                   f"（总金额 ¥{draft['total_amount']:.2f}），申请人工审批。"
-                   f"草稿标识：{draft['draft_id']}")
-        messages = [*previous, {"role": "user", "content": message}]
-        call = ToolCall("application-confirmation-" + uuid4().hex, "submit_order_draft",
-                        json.dumps({"draft_id": draft["draft_id"], "revision": draft["revision"]}))
-        async with aclosing(self._record_run(
-            runtime, messages, session_id, message, direct_call=call,
-        )) as events:
-            async for event in events:
-                yield event
+        if self._business_hooks is None:
+            raise SessionError(503, "drafts_disabled", "当前环境未启用订单草稿")
+        async for event in self._business_hooks.stream_confirmed_draft(
+            self, session_id, draft,
+        ):
+            yield event
 
     async def stream_resume(self, session_id, pending_id, approved, reason="", *, reserved=False):
         release = None if reserved else await self.reserve_resume(session_id, pending_id)

@@ -43,8 +43,9 @@ VALID_SALES_STATUSES = (
 
 
 class ErpRepository:
-    def __init__(self, engine: Engine) -> None:
+    def __init__(self, engine: Engine, *, clock=None) -> None:
         self._engine = engine
+        self._clock = clock or datetime.now
 
     @contextmanager
     def _session(self) -> Iterator[Session]:
@@ -193,7 +194,7 @@ class ErpRepository:
 
     def daily_sales(self, *, days: int = 14) -> list[DailySalesPoint]:
         """近 days 天逐日销量（有效口径），按日期升序。"""
-        cutoff = datetime.now() - timedelta(days=days)
+        cutoff = self._clock() - timedelta(days=days)
         stmt = (
             select(
                 func.date(OrderRow.created_at).label("d"),
@@ -316,7 +317,7 @@ class ErpRepository:
 
     def sales_summary(self, *, days: int = 30) -> SalesSummary:
         """近 days 天有效订单（VALID_SALES_STATUSES）数与金额（快照价口径）。"""
-        cutoff = datetime.now() - timedelta(days=days)
+        cutoff = self._clock() - timedelta(days=days)
         stmt = (
             select(func.count(func.distinct(OrderRow.order_id)),
                    func.sum(OrderItemRow.quantity * OrderItemRow.unit_price))
@@ -334,7 +335,7 @@ class ErpRepository:
 
     def top_products(self, *, days: int = 30, limit: int = 10) -> list[ProductSales]:
         """近 days 天畅销榜，按销量（件数）降序；只统计有效订单。"""
-        cutoff = datetime.now() - timedelta(days=days)
+        cutoff = self._clock() - timedelta(days=days)
         stmt = (
             select(
                 OrderItemRow.sku,

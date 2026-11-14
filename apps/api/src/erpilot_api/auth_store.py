@@ -202,16 +202,24 @@ class AuthStore:
         if row is None or row[0] != identity.user_id:
             raise AuthError(404, "session_not_found", "会话不存在或无权访问")
 
-    def session_tools(self, session_id, tools):
+    def session_identity(self, session_id):
+        """Return the active owner of a host-issued conversation session."""
         with self.connect() as db:
             row = db.execute(
-                "SELECT u.role,u.active FROM auth_user u JOIN auth_owned_session s "
-                "ON s.user_id=u.user_id WHERE s.session_id=?",
+                "SELECT u.user_id,u.username,u.role FROM auth_user u "
+                "JOIN auth_owned_session s ON s.user_id=u.user_id "
+                "WHERE s.session_id=? AND u.active=1",
                 (session_id,),
             ).fetchone()
-        if row is None or not row["active"]:
+        if row is None:
+            return None
+        return Identity(row["user_id"], row["username"], row["role"])
+
+    def session_tools(self, session_id, tools):
+        identity = self.session_identity(session_id)
+        if identity is None:
             return []
-        return tools if row["role"] == "approver" else [t for t in tools if t.risk is None]
+        return tools if identity.role == "approver" else [t for t in tools if t.risk is None]
 
     def audit(self, identity, action, target, detail):
         with self.connect() as db:

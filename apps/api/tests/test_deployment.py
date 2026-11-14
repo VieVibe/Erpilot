@@ -1,5 +1,9 @@
 """Deployment initialization cannot replace real data or publish partial seed data."""
 
+import sqlite3
+from contextlib import contextmanager
+from types import SimpleNamespace
+
 import pytest
 from erpilot_api import deployment
 
@@ -40,3 +44,37 @@ def test_concurrent_seed_never_replaces_a_database_created_during_initialization
     deployment.initialize_database(database)
     assert database.read_bytes() == b"existing business data"
     assert not list(tmp_path.glob(".seed-*.db"))
+
+
+async def test_readiness_includes_selected_business_module_health():
+    calls = []
+
+    class Checkpointer:
+        async def aget_tuple(self, config):
+            calls.append(config["configurable"]["thread_id"])
+
+    class Auth:
+        @contextmanager
+        def connect(self):
+            database = sqlite3.connect(":memory:")
+            try:
+                yield database
+            finally:
+                database.close()
+
+    async def module_health():
+        calls.append("module")
+
+    app = SimpleNamespace(state=SimpleNamespace(
+        service=SimpleNamespace(_checkpointer=Checkpointer()),
+        auth_store=Auth(), module_health_check=module_health,
+    ))
+    await deployment.check_dependencies(app, timeout_seconds=1)
+    assert calls == ["deployment-readiness", "module"]
+
+    async def unavailable():
+        raise RuntimeError("ERP unavailable")
+
+    app.state.module_health_check = unavailable
+    with pytest.raises(RuntimeError, match="ERP unavailable"):
+        await deployment.check_dependencies(app, timeout_seconds=1)

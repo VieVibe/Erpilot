@@ -14,6 +14,8 @@ from mcp_erp.intent_semantic import SemanticSettings
 from mcp_erp.session_tools import SessionErpTools
 
 from erpilot_api.main import create_app
+from erpilot_api.modules import load_module
+from erpilot_api.order_module import create_order_module
 
 
 def semantic_settings(config, mode):
@@ -60,6 +62,18 @@ async def build_live_app(
     policy_resolver=None,
 ):
     config = config or LLMConfig.from_env()
+    module_spec = os.getenv("ERPILOT_MODULE", "").strip()
+    if module_spec:
+        module = await load_module(module_spec)
+        return create_app(
+            business_module=module,
+            client_factory=client_factory or (lambda: LLMClient(config)),
+            model=config.model,
+            run_store_path=run_store_path,
+            trace_dir=trace_dir,
+            auth_enabled=auth_enabled,
+            checkpointer=checkpointer,
+        )
     mode = os.getenv("ERPILOT_INTENT_MODE", "enforce")
     settings, reason = semantic_settings(config, mode)
     provider = await SessionErpTools.create(
@@ -72,7 +86,7 @@ async def build_live_app(
     app = create_app(
         client_factory=client_factory or (lambda: LLMClient(config)),
         model=config.model,
-        session_erp_tools=provider,
+        business_module=create_order_module(provider),
         intent_semantic_settings=settings,
         run_store_path=run_store_path,
         trace_dir=trace_dir,

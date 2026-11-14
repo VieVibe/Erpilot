@@ -1,4 +1,20 @@
 import { test, expect, type Page } from '@playwright/test';
+
+test('自定义业务模块显示自身示例并使用通用审批面板', async ({ page }) => {
+  await mockWorkspace(page);
+  const suggestion = '提交一笔交通费报销，用途为客户拜访，金额为 38 元';
+  await page.route('**/api/runtime', route => route.fulfill({ json: {
+    data_source: 'custom', writes_enabled: true, drafts_enabled: false,
+    module: { name: 'expense-example', title: '报销接入示例', suggestions: [suggestion] },
+  } }));
+  await page.goto('/');
+  await expect(page.getByRole('tab', { name: '订单草稿' })).toHaveCount(0);
+  await expect(page.getByRole('tab', { name: '审批' })).toHaveAttribute('aria-selected', 'true');
+  await page.getByText(suggestion, { exact: true }).click();
+  await expect(page.getByRole('textbox', { name: '消息', exact: true })).toHaveValue(suggestion);
+  await expect(page.getByText('查询订单', { exact: true })).toHaveCount(0);
+});
+
 async function mockWorkspace(page: Page, approval = false) {
   const mutationRequests: string[] = [];
   const operation = { operation_id: 'op-original', kind: 'adjust_stock', status: 'open',

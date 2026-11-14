@@ -38,10 +38,11 @@ from starlette.background import BackgroundTask
 from erpilot_api.auth import AuthMiddleware, register_auth
 from erpilot_api.auth_store import AuthStore
 from erpilot_api.checkpoint import open_checkpointer
-from erpilot_api.draft_routes import ConfirmDraftRequest, register_draft_routes
+from erpilot_api.draft_routes import register_draft_routes
 from erpilot_api.events import encode_event, sse_frame
 from erpilot_api.history_routes import register_history_routes
 from erpilot_api.intent_routes import register_intent_routes
+from erpilot_api.modules import BusinessModule, BusinessSessionContext, validate_module
 from erpilot_api.operation_routes import register_operation_routes
 from erpilot_api.run_store import RunStore
 from erpilot_api.service import ChatService, SessionError
@@ -111,12 +112,18 @@ def create_app(
     persistent_demo: bool = False,
     auth_enabled: bool | None = None,
     auth_store: AuthStore | None = None,
+    business_module: BusinessModule | None = None,
 ) -> FastAPI:
     """应用工厂：测试注入 mock 的 LLMClient 工厂、临时 trace 目录与工具集。"""
     if scripted_demo and client_factory is None:
         raise ValueError("scripted_demo requires an explicit offline client_factory")
+    if (business_module is not None
+            and (tools is not None or session_erp_tools is not None
+                 or mutation_reconciler is not None)):
+        raise ValueError("business_module owns tool and recovery configuration")
     if (
         session_erp_tools is None
+        and business_module is None
         and tools is None
         and os.environ.get("ERPILOT_TOOLS", "").lower() == "mcp"
     ):
@@ -129,12 +136,23 @@ def create_app(
             )
         )
     if session_erp_tools is not None:
-        resolved_tools, env_gate = session_erp_tools.tools, session_erp_tools.gate
+        from erpilot_api.order_module import create_order_module
+
+        business_module = create_order_module(session_erp_tools)
+        session_erp_tools = None
+    if business_module is not None:
+        validate_module(business_module)
+        resolved_tools = list(business_module.tools)
+        env_gate = business_module.approval_gate
+        if any(tool.risk is not None for tool in resolved_tools) and approval_gate is None:
+            approval_gate = env_gate or StreamApprovalGate()
     else:
         resolved_tools, env_gate = _resolve_tools(tools)
-    if getattr(getattr(session_erp_tools, "intent_analysis", None), "semantic", None) is not None:
+    analyzer = business_module.semantic_analyzer if business_module is not None else None
+    if getattr(analyzer, "semantic", None) is not None:
         raise ValueError("semantic provider already belongs to an API host; "
                          "create a fresh provider")
+    service_options = dict(business_module.service_options or {}) if business_module else {}
     service = ChatService(
         client_factory=client_factory or (lambda: LLMClient(LLMConfig.from_env())),
         model=model,
@@ -153,22 +171,23 @@ def create_app(
             else int(os.environ.get("ERPILOT_APPROVAL_TTL_SECONDS", "1800"))
         ),
         clock=clock,
-        session_tools_factory=session_erp_tools.for_session if session_erp_tools else None,
-        session_reconciler_factory=session_erp_tools.reconciler if session_erp_tools else None,
-        drafts=session_erp_tools.drafts if session_erp_tools else None,
-        operations=getattr(session_erp_tools, "operations", None),
-        intent_store=getattr(getattr(session_erp_tools, "intent_analysis", None), "store", None),
-        intent_recovery=getattr(
-            getattr(session_erp_tools, "intent_analysis", None), "recovery", None),
-        intent_diagnostics=getattr(
-            getattr(session_erp_tools, "intent_analysis", None), "diagnostics", None,
+        session_tools_factory=(
+            (lambda session_id: business_module.tools_for(
+                BusinessSessionContext(session_id)
+            )) if business_module else None
         ),
+        session_reconciler_factory=(
+            (lambda session_id: business_module.reconciler_for(
+                BusinessSessionContext(session_id)
+            )) if business_module else None
+        ),
+        business_instructions=business_module.instructions if business_module else None,
         trace_sinks=[] if scripted_demo else None,
+        **service_options,
     )
     if intent_semantic_settings is not None:
         from mcp_erp.intent_semantic import SemanticCoordinator
 
-        analyzer = getattr(session_erp_tools, "intent_analysis", None)
         if analyzer is None or analyzer.mode != "enforce":
             raise ValueError("semantic proposals require a session ERP provider in enforce mode")
         if model.lower() != intent_semantic_settings.rate.model.lower():
@@ -178,11 +197,13 @@ def create_app(
         analyzer.semantic = service._intent_semantic = coordinator
         # Let the candidate's own deadline produce its safe fallback before the
         # graph cancels the resolver. Other tools retain the normal deadline.
-        service._loop_config = replace(service._loop_config, tool_timeouts={
-            **service._loop_config.tool_timeouts,
-            "resolve_order_items": max(service._loop_config.tool_timeout,
-                                       intent_semantic_settings.timeout_seconds + 5),
-        })
+        semantic_tool = business_module.semantic_tool_name if business_module else None
+        if semantic_tool:
+            service._loop_config = replace(service._loop_config, tool_timeouts={
+                **service._loop_config.tool_timeouts,
+                semantic_tool: max(service._loop_config.tool_timeout,
+                                   intent_semantic_settings.timeout_seconds + 5),
+            })
 
     @asynccontextmanager
     async def lifespan(app):
@@ -206,15 +227,49 @@ def create_app(
 
     app = FastAPI(title="Erpilot API", version="0.1.0", lifespan=lifespan)
     app.state.service = service
+    app.state.business_module = business_module
+    app.state.module_health_check = (
+        business_module.health_check if business_module is not None else None
+    )
     app.state.run_store = service._run_store
     enabled = (os.getenv("ERPILOT_AUTH", "0") == "1" if auth_enabled is None else auth_enabled)
     auth_store = auth_store or (AuthStore(service._run_store.path) if enabled else None)
     if auth_store is not None:
         if auth_store.path.resolve() != service._run_store.path.resolve():
             raise ValueError("auth and RunStore must share the same SQLite file")
-        original_factory = service._session_tools_factory or (lambda session_id: resolved_tools)
-        service._session_tools_factory = lambda sid: auth_store.session_tools(
-            sid, original_factory(sid))
+        if business_module is not None:
+            def authenticated_context(session_id):
+                identity = auth_store.session_identity(session_id)
+                if identity is None:
+                    return None
+                return BusinessSessionContext(
+                    session_id=session_id,
+                    user_id=identity.user_id,
+                    username=identity.username,
+                    role=identity.role,
+                )
+
+            def authenticated_tools(session_id):
+                context = authenticated_context(session_id)
+                if context is None:
+                    return []
+                return auth_store.session_tools(
+                    session_id, business_module.tools_for(context)
+                )
+
+            def authenticated_reconciler(session_id):
+                context = authenticated_context(session_id)
+                return None if context is None else business_module.reconciler_for(context)
+
+            service._session_tools_factory = authenticated_tools
+            service._session_reconciler_factory = authenticated_reconciler
+        else:
+            original_factory = service._session_tools_factory or (
+                lambda session_id: resolved_tools
+            )
+            service._session_tools_factory = lambda sid: auth_store.session_tools(
+                sid, original_factory(sid)
+            )
         app.add_middleware(AuthMiddleware, store=auth_store, service=service)
     app.state.auth_store = auth_store
     register_auth(app, auth_store)
@@ -241,37 +296,44 @@ def create_app(
     def healthz() -> dict[str, str]:
         return {"status": "ok"}
 
-    register_draft_routes(app, session_erp_tools, service)
-    register_intent_routes(app, session_erp_tools, service)
-    register_operation_routes(app, service._operations)
+    if business_module is None:
+        register_draft_routes(app, session_erp_tools, service)
+        register_intent_routes(app, session_erp_tools, service)
+        register_operation_routes(app, service._operations)
     register_history_routes(app, service._run_store, authenticated=auth_store is not None)
+    module_features = {
+        "drafts_enabled": False,
+        **(dict(business_module.runtime_features or {}) if business_module else {}),
+    }
 
     @app.get("/api/runtime")
     def runtime_info(request: Request) -> dict[str, Any]:
         return {
+            **({"module": {**business_module.manifest(),
+                           "suggestions": business_module.suggestions,
+                           **({"connector": dict(business_module.connector_summary)}
+                              if business_module.connector_summary is not None else {})}}
+               if business_module is not None else {}),
             **getattr(app.state, "semantic_runtime", {}),
             **({"intent_semantic_available": not service._intent_semantic.budget.exhausted}
                if service._intent_semantic is not None else {}),
             "auth_enabled": auth_store is not None,
             **({"scripted_demo": True, "demo_persistent": persistent_demo}
                if scripted_demo else {}),
-            "data_source": "mcp"
-            if session_erp_tools is not None
-            else "custom"
-            if tools is not None
-            else ("mcp" if os.environ.get("ERPILOT_TOOLS", "").lower() == "mcp" else "demo"),
+            "data_source": (
+                business_module.data_source if business_module is not None else
+                "custom" if tools is not None else "demo"
+            ),
             "writes_enabled": any(tool.risk is not None for tool in resolved_tools) and (
                 auth_store is None or request.state.identity.role == "approver"),
             "reasoning_enabled": os.environ.get("ERPILOT_THINKING", "").lower() in _WRITES_ENV,
-            "drafts_enabled": session_erp_tools is not None,
-            **({"intent_preview_enabled": True} if service._intent_store is not None else {}),
-            **({"intent_recovery_enabled": True}
-               if service._intent_store is None and service._intent_recovery is not None
-               and service._intent_recovery.available else {}),
+            **module_features,
             **({"intent_semantic_revision_enabled": True}
                if intent_semantic_settings is not None else {}),
-            "business_approvals_enabled": (
-                service._operations is not None
+            "business_approvals_enabled": bool(
+                business_module
+                and (business_module.runtime_features or {}).get(
+                    "business_approvals_enabled", False)
                 and any(tool.risk is not None for tool in resolved_tools)
             ),
         }
@@ -281,16 +343,6 @@ def create_app(
         session_id = req.session_id or (auth_store.new_session(request.state.identity)
                                        if auth_store is not None else uuid4().hex)
         return event_response(session_id, service.stream_run(session_id, req.message))
-
-    @app.post("/api/sessions/{session_id}/order-drafts/{draft_id}/confirm/stream")
-    async def confirm_draft(session_id: str, draft_id: str, req: ConfirmDraftRequest):
-        draft, release = await service.reserve_draft_submission(
-            session_id, draft_id, req.expected_revision,
-        )
-        return event_response(
-            session_id, service.stream_confirmed_draft(session_id, draft), release,
-            execution_mode="confirmed_action",
-        )
 
     @app.post("/api/chat/approve/stream")
     async def resume_approval(req: ResumeRequest) -> EventSourceResponse:
@@ -413,6 +465,9 @@ def create_app(
             req.pending_id, ApprovalDecision(approved=req.approved, reason=req.reason)
         )
         return {"ok": ok}  # False = 未知或已决的 pending_id
+
+    if business_module is not None and business_module.install_routes is not None:
+        business_module.install_routes(app, service, event_response)
 
     return app
 

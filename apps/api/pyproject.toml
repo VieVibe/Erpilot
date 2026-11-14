@@ -13,6 +13,9 @@ dependencies = [
     "psycopg[binary]>=3.3.6",
 ]
 
+[project.entry-points."erpilot.business_modules"]
+expense-example = "erpilot_api.examples.expense:create_module"
+
 [tool.uv.sources]
 agent-core = { workspace = true }
 mcp-erp = { workspace = true }

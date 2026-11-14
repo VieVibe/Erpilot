@@ -99,6 +99,7 @@ export default function App() {
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<string>("");
   const [runtimeLabel, setRuntimeLabel] = useState("数据源未确认");
+  const [businessModule, setBusinessModule] = useState<{title: string; suggestions: string[]} | null>(null);
   const [intentRevisionEnabled, setIntentRevisionEnabled] = useState(false);
   const [scriptedDemo, setScriptedDemo] = useState(false);
   const [persistentDemo, setPersistentDemo] = useState(false);
@@ -374,6 +375,10 @@ export default function App() {
       if (!response.ok) throw new Error("runtime unavailable");
       const runtime = await response.json();
       if (controller.signal.aborted) return;
+      if (runtime.module && runtime.module.name !== 'mini-erp') {
+        setBusinessModule(runtime.module);
+        setBusinessTab('approvals');
+      }
       setScriptedDemo(runtime.scripted_demo === true);
       setPersistentDemo(runtime.demo_persistent === true);
       const source = runtime.scripted_demo === true ? `离线演示 · ${runtime.demo_persistent === true ? '持久数据' : '临时数据'}` : runtime.data_source === "mcp" ? "真实 ERP" :
@@ -381,7 +386,7 @@ export default function App() {
       const parsing = runtime.intent_semantic_enabled === true
         ? ` · ${runtime.intent_semantic_available === false ? '智能解析暂不可用，可手动核对' : '智能解析已开启'}`
         : runtime.intent_semantic_disabled_reason ? ' · 使用基础解析' : '';
-      setRuntimeLabel(`${source} · ${runtime.writes_enabled ? "写入需审批" : "只读"}${parsing}`);
+      setRuntimeLabel(`${runtime.module?.title ?? source} · ${runtime.writes_enabled ? "写入需审批" : "只读"}${parsing}`);
       setDraftsEnabled(runtime.drafts_enabled === true);
       setIntentPreviewEnabled(runtime.intent_preview_enabled === true);
       setIntentRecoveryEnabled(runtime.intent_recovery_enabled === true);
@@ -732,7 +737,7 @@ export default function App() {
     {pendingReconciliation && <Alert type="warning" showIcon title="操作结果待核对" description="请再次核对后继续处理，避免重复写入。" />}
   </div>;
   const business = <Tabs className="business-tabs" activeKey={businessTab} onChange={setBusinessTab} items={[
-    { key: 'drafts', label: '订单草稿', children: orderPanel },
+    ...(!businessModule ? [{ key: 'drafts', label: '订单草稿', children: orderPanel }] : []),
     { key: 'approvals', label: <span>审批 {pendingApprovals.length > 0 && <span className="tab-count">{pendingApprovals.length}</span>}</span>, children: approvalPanel },
     { key: 'results', label: '业务结果', children: <div className="business-results">
       {results.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="查询或操作完成后，结果会显示在这里" /> :
@@ -770,8 +775,8 @@ export default function App() {
             </Space></>} />}
         {turns.length === 0 && restoreState !== 'recovery_failed' && <div className="welcome">
           <div className="welcome-symbol"><ThunderboltOutlined /></div>
-          <h2>今天，想处理什么业务？</h2><p>查询订单、核对库存、整理报价。<br />把需求告诉我，我们一步步完成。</p>
-          <Prompts className="welcome-prompts" items={scriptedDemo ? [
+          <h2>今天，想处理什么业务？</h2><p>{businessModule?.title ?? '查询订单、核对库存、整理报价。'}<br />把需求告诉我，我们一步步完成。</p>
+          <Prompts className="welcome-prompts" items={businessModule ? businessModule.suggestions.map((text, index) => ({key: String(index), label: text})) : scriptedDemo ? [
             { key: 'draft', icon: <ShoppingOutlined />, label: '草稿到审批', description: '创建、修改，再批准建单' },
             { key: 'policy', icon: <FileTextOutlined />, label: '查看政策证据', description: '核对来源、版本与原文' },
             { key: 'replenishment', icon: <InboxOutlined />, label: '补货建议', description: '查看销量、库存和测算假设' },
@@ -779,7 +784,7 @@ export default function App() {
             { key: 'order', icon: <ShoppingOutlined />, label: '查询订单', description: '查看商品与订单明细' },
             { key: 'stock', icon: <InboxOutlined />, label: '核对库存', description: '确认可售数量' },
             { key: 'quote', icon: <FileTextOutlined />, label: '整理报价', description: '核对价格与商品数量' },
-          ]} onItemClick={({ data }) => setInput(scriptedDemo ? DEMO_PROMPTS[String(data.key)] : data.key === 'order' ? '帮我查询订单：' : data.key === 'stock' ? '帮我查询商品库存，SKU：' : '帮我整理商品报价，商品与数量：')} />
+          ]} onItemClick={({ data }) => setInput(businessModule ? businessModule.suggestions[Number(data.key)] : scriptedDemo ? DEMO_PROMPTS[String(data.key)] : data.key === 'order' ? '帮我查询订单：' : data.key === 'stock' ? '帮我查询商品库存，SKU：' : '帮我整理商品报价，商品与数量：')} />
         </div>}
         {turns.map((turn, i) => turn.role === 'user' ? <Bubble key={i} className="user-message" placement="end" content={turn.text} /> :
           <AssistantMessage key={i} turn={turn} now={now} live={busy} stalled={stalled}

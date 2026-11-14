@@ -28,6 +28,19 @@ def initialize_database(database: Path):
         temporary.unlink(missing_ok=True)
 
 
+async def check_dependencies(app, *, timeout_seconds=3):
+    """Verify checkpoint, identity store and the selected ERP module dependency."""
+    async with asyncio.timeout(timeout_seconds):
+        await app.state.service._checkpointer.aget_tuple(
+            {"configurable": {"thread_id": "deployment-readiness"}}
+        )
+        with app.state.auth_store.connect() as db:
+            db.execute("SELECT 1")
+        module_health_check = getattr(app.state, "module_health_check", None)
+        if module_health_check is not None:
+            await module_health_check()
+
+
 async def build_app():
     mode = os.getenv("ERPILOT_RUNTIME", "scripted")
     if mode not in {"scripted", "live"}:
@@ -35,7 +48,8 @@ async def build_app():
     directory = Path(os.getenv("ERPILOT_DATA_DIR", "data/deployed"))
     directory.mkdir(parents=True, exist_ok=True)
     database = directory / "erpilot.db"
-    initialize_database(database)  # Only this deployment's new synthetic database.
+    if mode == "scripted" or not os.getenv("ERPILOT_MODULE", "").strip():
+        initialize_database(database)
     trace_dir = directory / "traces"
     if mode == "scripted":
         app = await create_demo_app(database, trace_dir, persistent=True, auth_enabled=True)
@@ -51,12 +65,7 @@ async def build_app():
     @app.get("/readyz")
     async def ready():
         try:
-            async with asyncio.timeout(3):
-                await app.state.service._checkpointer.aget_tuple(
-                    {"configurable": {"thread_id": "deployment-readiness"}}
-                )
-                with app.state.auth_store.connect() as db:
-                    db.execute("SELECT 1")
+            await check_dependencies(app)
             return {"status": "ready", "runtime": mode, "authentication": True}
         except Exception:
             return JSONResponse({"status": "dependencies_unavailable"}, status_code=503)

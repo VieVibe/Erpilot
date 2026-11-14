@@ -21,6 +21,7 @@ from agent_core.trace import JsonlTraceRecorder
 from erp_store.db import ProductRow, StockRow, init_db, make_engine
 from erp_store.mutations import MutationError
 from erpilot_api.checkpoint import thread_id_for_session
+from erpilot_api.order_module import OrderServiceHooks
 from erpilot_api.service import ChatService
 from evals import context_workflow as cw
 from evals.billing import BudgetedClient, CurrencyBudget, endpoint_rate
@@ -221,7 +222,7 @@ async def journey(client, directory, traces, on_step):
                     service = ChatService(client_factory=lambda: client, model=client.config.model,
                         trace_dir=traces, tools=factory.tools, approval_gate=factory.gate,
                         checkpointer=saver, session_tools_factory=factory.for_session,
-                        drafts=factory.drafts, trace_sinks=[])
+                        business_hooks=OrderServiceHooks(factory), trace_sinks=[])
                     draft = factory.drafts.list_latest(SESSION)[0]
                     try:
                         _, release = await service.reserve_draft_submission(
