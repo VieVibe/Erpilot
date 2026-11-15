@@ -13,9 +13,9 @@ MANIFEST = "DELIVERY-MANIFEST.json"
 MEDIA = ("erpilot-demo.webm", "erpilot-demo.vtt", "chapters.json",
          "order-approved.png", "replenishment.png")
 NAMES = {"START-HERE.md", "erpilot-source.zip", *MEDIA}
-START = """# Erpilot · 会请示的 ERP 智能体
+START = """# Erpilot · 面向企业业务系统的可插拔 Agent 框架
 
-面向 Agent 应用 / Python 后端工程的求职作品。
+通过业务模块接入企业业务系统。随附视频展示 ERP 订单参考实现。
 
 1. 播放 [演示视频](erpilot-demo.webm)，中文字幕见 erpilot-demo.vtt。
 2. 解压 erpilot-source.zip，阅读 docs/application-kit.md：简历表述、三个技术取舍和证据入口。

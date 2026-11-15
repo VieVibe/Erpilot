@@ -1,6 +1,6 @@
 # Erpilot 实际架构与边界
 
-更新：2026-11-04。本页描述当前源码；早期 ADR 的未来选型不作为已实现能力。
+更新于 2026-11-15。Erpilot 宿主通过业务模块接入企业业务系统，下面以订单参考实现说明执行链路和已验证的边界。
 
 ## 场景与信任边界
 
@@ -13,13 +13,12 @@
 | 身份与权限 | `apps/api/src/erpilot_api/auth.py`、`auth_store.py` | 账号、服务端登录、CSRF、资源归属、角色与操作审计；容器模式强制启用 |
 | API 宿主 | `apps/api/src/erpilot_api/main.py`、`service.py` | 会话级串行执行、运行 / 审批 / 恢复路由、持久化展示事件 |
 | 业务无关运行时 | `packages/agent_core/src/agent_core/graph.py` | 模型、参数校验、并行只读工具、审批写入、对账、结果收集 |
-| 工具适配 | `packages/mcp_erp/src/mcp_erp/session_tools.py`、`bridge.py` | MCP 发现与调用、可信会话绑定、风险和来源约束；绑定恢复查询 |
+| 业务模块 | `apps/api/src/erpilot_api/modules.py` | 注册工具、会话身份绑定、就绪检查和提交结果核对。订单示例用 `mcp_erp` 适配 MCP 工具 |
 | 业务事实 | `packages/erp_store/src/erp_store/` | 价格、预算、草稿不可变版本、库存、订单、幂等事务 |
 | 政策证据 | `packages/rag/src/rag/`、`mcp_erp/policy_answer.py` | 语料、有效期筛选、检索、引用 / 原文校验和可信渲染 |
 | 评测 | `packages/evals/src/evals/` | 固定任务、状态断言、模型用量、预算、报告和独立质量门槛 |
 
-依赖方向：`agent_core` 不导入 `erp_store` 或 `mcp_erp`，具体工具和对账适配由宿主注入。
-ERP 规则集中于业务层；前端禁用按钮用于交互，不能替代服务端与事务检查。
+`agent_core` 由宿主注入工具和对账适配器。每个应用实例在启动时选择一个业务模块，对应目标系统的权限映射、参数和业务规则由插件负责。订单示例在服务端和事务中执行 ERP 规则检查。 [模块接入契约](business-modules.md)
 
 ## 一次订单执行
 
@@ -70,7 +69,7 @@ PostgreSQL；临时无密钥演示使用 `InMemorySaver`，只支持进程内刷
 
 ## 工具、上下文与政策
 
-工具 schema 来自 MCP，Pydantic 校验规范化参数；风险、会话和来源由应用注册表绑定。
+订单示例的工具 schema 来自 MCP，其他业务模块可直接声明工具和 Pydantic 参数模型。风险、会话和来源由应用注册表绑定。
 只读调用可并行，写入由图节点顺序处理并等待审批。工具参数错误、业务拒绝、结果未知和成功分别记录。
 
 订单修改查询持久化草稿，以具体版本与 SKU 定位行；旧聊天文本不充当最新报价。
@@ -87,8 +86,8 @@ PostgreSQL；临时无密钥演示使用 `InMemorySaver`，只支持进程内刷
 |---|---|---|---|
 | 无密钥演示 | 内存 MockTransport 脚本模型、关键词向量 | 临时 SQLite、内存 checkpoint | 展示固定业务流程与卡片 |
 | 带账号容器演示 | 同一脚本模型和关键词向量；前端/API 同源 | 持久 SQLite、账号与 PostgreSQL checkpoint | 登录隔离、只读角色、重建后原审批恢复 |
-| 默认真实 API | OpenAI 兼容 SDK、独立嵌入配置 | 本地 SQLite、必需 PostgreSQL checkpoint | 自由输入与真实模型观察 |
-| 默认语义预览（真实 API） | 规则优先、单次严格候选、独立原币种预算 | 版本化待完成请求、完整预览确认 | 默认开启；无价目/失败/额度用尽退回基础路径 |
+| 真实 API | 选择业务模块后使用 OpenAI 兼容 SDK | 独立 RunStore 和 PostgreSQL checkpoint，业务数据由模块处理 | 未配置模块时只启动宿主服务和工作台 |
+| 订单示例语义预览 | 规则优先、单次严格候选、独立原币种预算 | 版本化待完成请求、完整预览确认 | 订单示例真实模式默认开启；无价目/失败/额度用尽退回基础路径 |
 
 真实 API 没有 LiteLLM 服务、pgvector、DeepEval 或完整 OpenTelemetry 管道。
 本地 JSONL 为默认 trace；Langfuse 是可选 sink。当前职责不需要再叠加网关或向量数据库。
@@ -103,7 +102,7 @@ PostgreSQL 故障专项显式使用隔离连接，每个场景创建独立 schem
 可恢复验收按物理请求留账，只在完整模型响应后放行工具事件；连接异常可有限重连，业务/评分失败不随机重抽。
 上下文投影区分本轮与历史观测，历史 `refresh_required` 表示需重新查询，不等于刷新报价。
 语义候选备注必须来自显式完整字段，动作来源结构强校验；工程专项不替代人工金标准确率。
-真实 API 统一启动并默认接入，候选预算与普通聊天隔离；仅解析工具覆盖候选截止时间。
+订单示例的真实 API 默认启用语义预览，候选预算与普通聊天隔离；仅解析工具覆盖候选截止时间。
 [启用依据与边界](adr/0013-default-semantic-proposals.md)。
 [本轮源码范围、真实失败、费用及结果](../reports/acceptance/2026-11-04-real-model-reconnect.md)。
 

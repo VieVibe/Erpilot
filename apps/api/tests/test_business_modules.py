@@ -1,11 +1,13 @@
 import json
 import sqlite3
+from dataclasses import replace
 from types import SimpleNamespace
 
 import httpx2
 import pytest
 from agent_core.events import ApprovalPending
 from agent_core.llm import LLMConfig
+from agent_core.runtime_config import LoopConfig
 from agent_core.testing import USAGE, chunk, make_client, sse_response, tool_call_chunks
 from agent_core.tools import Tool
 from erpilot_api.auth_store import AuthStore
@@ -14,7 +16,12 @@ from erpilot_api.connectors import HttpConnectorConfig
 from erpilot_api.examples.expense import ExpenseInput, create_module
 from erpilot_api.examples.expense_backend import create_app as backend_app
 from erpilot_api.main import create_app
-from erpilot_api.modules import BusinessModule, BusinessSessionContext, load_module
+from erpilot_api.modules import (
+    BusinessModule,
+    BusinessRuntimeFeatures,
+    BusinessSessionContext,
+    load_module,
+)
 from langgraph.checkpoint.memory import InMemorySaver
 from pydantic import BaseModel
 
@@ -26,6 +33,93 @@ def expense_llm(request):
     return sse_response(tool_call_chunks(
         "expense-write", "submit_expense", '{"purpose":"客户拜访","amount_cents":3800}',
     ))
+
+
+async def test_other_module_or_instance_cannot_resume_and_original_can(tmp_path, monkeypatch):
+    transport = httpx2.ASGITransport(backend_app(tmp_path / "expenses.db"))
+    saver = InMemorySaver()
+    module = create_module(writes=True, transport=transport)
+
+    def host(selected=module, database="runs.db", checkpointer=saver):
+        return create_app(
+            business_module=selected, client_factory=lambda: make_client(expense_llm),
+            trace_dir=tmp_path / "trace", checkpointer=checkpointer,
+            run_store_path=tmp_path / database, auth_enabled=False,
+        )
+
+    monkeypatch.setenv("ERPILOT_INSTANCE_ID", "erp-a")
+    original = host()
+    stream = original.state.service.stream_run("shared", "submit expense")
+    async for event in stream:
+        if isinstance(event, ApprovalPending):
+            await stream.aclose()
+            pending = event
+            break
+    body = {"session_id": "shared", "pending_id": pending.pending_id, "approved": True}
+    token, arguments = pending.arguments["client_token"], pending.arguments
+    reconciler = module.reconciler("shared")
+    changed = (
+        host(replace(module, name="other-module")),
+        host(replace(module, version="2")),
+        host(create_module(writes=False, transport=transport)),
+        host(replace(module, name="other-module"), database="other-runs.db"),
+    )
+    monkeypatch.setenv("ERPILOT_INSTANCE_ID", "erp-b")
+    for app in (*changed, host()):
+        async with httpx2.AsyncClient(
+            transport=httpx2.ASGITransport(app), base_url="http://host",
+        ) as client:
+            assert (await client.get("/api/sessions")).json()["items"] == []
+            result = await client.post("/api/chat/approve/stream", json=body)
+            assert result.status_code == 409
+            assert result.json()["error"]["code"] == "module_binding_mismatch"
+    assert (await reconciler.lookup("submit_expense", arguments, token)).status == "absent"
+
+    monkeypatch.setenv("ERPILOT_INSTANCE_ID", "erp-a")
+    async with httpx2.AsyncClient(
+        transport=httpx2.ASGITransport(host(checkpointer=InMemorySaver())),
+        base_url="http://host",
+    ) as client:
+        result = await client.post("/api/chat/approve/stream", json=body)
+        assert result.status_code == 409
+        assert result.json()["error"]["code"] == "module_checkpoint_missing"
+
+    async with httpx2.AsyncClient(
+        transport=httpx2.ASGITransport(host()), base_url="http://host",
+    ) as client:
+        result = await client.post("/api/chat/approve/stream", json=body)
+        assert result.status_code == 200 and "event: done" in result.text
+    assert (await reconciler.lookup("submit_expense", arguments, token)).status == "found"
+
+
+async def test_unbound_legacy_history_can_be_viewed_but_cannot_run_a_plugin(tmp_path):
+    saver = InMemorySaver()
+    legacy = create_app(
+        tools=[], checkpointer=saver, trace_dir=tmp_path, auth_enabled=False,
+        client_factory=lambda: make_client(
+            lambda _: sse_response([chunk(delta={"content": "legacy history"})]),
+        ),
+    )
+    async with httpx2.AsyncClient(
+        transport=httpx2.ASGITransport(legacy), base_url="http://host",
+    ) as client:
+        response = await client.post(
+            "/api/chat/stream", json={"session_id": "legacy", "message": "history"},
+        )
+        assert "event: done" in response.text
+    current = create_app(
+        business_module=create_module(writes=False), checkpointer=saver, trace_dir=tmp_path,
+        auth_enabled=False, client_factory=lambda: pytest.fail("legacy execution reached model"),
+    )
+    async with httpx2.AsyncClient(
+        transport=httpx2.ASGITransport(current), base_url="http://host",
+    ) as client:
+        state = await client.get("/api/sessions/legacy/state")
+        assert state.status_code == 200 and "legacy history" in state.text
+        response = await client.post(
+            "/api/chat/stream", json={"session_id": "legacy", "message": "continue"},
+        )
+        assert "legacy_session_binding_missing" in response.text
 
 
 @pytest.mark.parametrize("approved", [True, False])
@@ -293,6 +387,116 @@ async def test_module_rejects_session_schema_drift_and_unreconciled_writes(tmp_p
     with pytest.raises(ValueError, match="must provide a reconciler"):
         create_app(business_module=unreconciled, trace_dir=tmp_path,
                    checkpointer=InMemorySaver())
+
+
+def test_typed_options_preserve_supported_legacy_options_and_reject_host_overrides(tmp_path):
+    module = create_module(writes=False)
+    config = LoopConfig(max_steps=4)
+    configured = replace(
+        module, loop_config=config, features=BusinessRuntimeFeatures(intent_preview_enabled=False),
+    )
+    app = create_app(
+        business_module=configured, trace_dir=tmp_path, checkpointer=InMemorySaver(),
+    )
+    assert app.state.service._loop_config is config
+    assert configured.manifest()["contract"] == module.manifest()["contract"]
+    legacy = replace(
+        module, service_options={"loop_config": config}, runtime_features={"drafts_enabled": True},
+    )
+    assert legacy.runtime_loop_config is config
+    assert legacy.runtime_capabilities.drafts_enabled
+    with pytest.raises(ValueError, match="unsupported service_options"):
+        replace(module, service_options={"trace_sinks": []})
+    with pytest.raises(ValueError, match="unsupported runtime_features"):
+        replace(module, runtime_features={"auth_enabled": False})
+    with pytest.raises(ValueError, match="configure loop_config once"):
+        replace(legacy, loop_config=config)
+
+
+@pytest.mark.parametrize("change", ["risk", "schema", "invalid_schema", "duplicate", "retry"])
+async def test_actual_operator_binding_cannot_drift_from_startup_catalog(tmp_path, change):
+    class ChangedArgs(BaseModel):
+        other_value: int
+
+    module = create_module(writes=True)
+    declared = module.tools
+
+    def bind(context):
+        tools = list(module.tools_for(context))
+        if context.role != "operator":
+            return tools
+        write, = [tool for tool in tools if tool.risk is not None]
+        if change == "duplicate":
+            return [*tools, write]
+        changes = {
+            "risk": {"risk": None},
+            "schema": {"params_model": ChangedArgs},
+            "invalid_schema": {"params_model": BaseModel},
+            "retry": {"retry_safe": not write.retry_safe},
+        }
+        return [replace(tool, **changes[change]) if tool is write else tool for tool in tools]
+
+    database = tmp_path / "runs.db"
+    auth = AuthStore(database)
+    operator = auth.add_user("operator-test", "test password for operator", "operator")
+    app = create_app(
+        business_module=replace(module, tools=declared, for_context=bind),
+        auth_store=auth, run_store_path=database, trace_dir=tmp_path,
+        checkpointer=InMemorySaver(),
+        client_factory=lambda: pytest.fail("drifted tool reached the model"),
+    )
+    session_id = auth.new_session(operator)
+    async with httpx2.AsyncClient(
+        transport=httpx2.ASGITransport(app), base_url="http://host",
+    ) as client:
+        login = await client.post("/api/auth/login", json={
+            "username": operator.username, "password": "test password for operator",
+        })
+        assert login.status_code == 200
+        result = await client.post(
+            "/api/chat/stream",
+            json={"session_id": session_id, "message": "query ERP"},
+            headers={"X-CSRF-Token": login.json()["csrf_token"]},
+        )
+        assert "module_contract_mismatch" in result.text
+        assert "event: done" not in result.text
+        assert app.state.run_store.latest_run(session_id) is None
+
+
+async def test_missing_session_reconciler_blocks_pending_approval(tmp_path):
+    transport = httpx2.ASGITransport(backend_app(tmp_path / "expenses.db"))
+    saver = InMemorySaver()
+    module = create_module(writes=True, transport=transport)
+
+    def host(selected):
+        return create_app(
+            business_module=selected, client_factory=lambda: make_client(expense_llm),
+            trace_dir=tmp_path, checkpointer=saver, auth_enabled=False,
+        )
+
+    stream = host(module).state.service.stream_run("pending", "submit expense")
+    async for event in stream:
+        if isinstance(event, ApprovalPending):
+            await stream.aclose()
+            pending = event
+            break
+
+    def reconcile(context):
+        return None if context.session_id == "pending" else module.reconciler_for(context)
+
+    async with httpx2.AsyncClient(
+        transport=httpx2.ASGITransport(host(replace(module, reconciler_for_context=reconcile))),
+        base_url="http://host",
+    ) as client:
+        response = await client.post("/api/chat/approve/stream", json={
+            "session_id": "pending", "pending_id": pending.pending_id, "approved": True,
+        })
+        assert response.status_code == 503
+        assert response.json()["error"]["code"] == "module_contract_mismatch"
+    lookup = await module.reconciler("pending").lookup(
+        "submit_expense", pending.arguments, pending.arguments["client_token"],
+    )
+    assert lookup.status == "absent"
 
 
 async def test_committed_write_with_lost_response_recovers_from_backend(tmp_path):

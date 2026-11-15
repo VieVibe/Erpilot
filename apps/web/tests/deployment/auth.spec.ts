@@ -78,7 +78,7 @@ for (const width of [320, 1440]) {
     expect((await context.request.get(`/api/sessions/${ownSession}/state`)).status()).toBe(404);
     await page.getByRole('button', { name: '退出登录', exact: true }).click();
     await login(page, 2);
-    await expect(page.locator('.account-bar')).toContainText('查询与准备草稿');
+    await expect(page.locator('.account-bar')).toContainText('查询与准备任务');
     // Drafts remain useful for operators, while the server and UI prohibit execution.
     await sendDemo(page, '创建草稿');
     await expect(page.locator('.md').last()).toContainText('第 1 版');

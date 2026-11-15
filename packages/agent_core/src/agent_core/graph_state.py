@@ -1,7 +1,7 @@
 """Checkpoint state contains JSON values, never runtime objects."""
 
 from copy import deepcopy
-from typing import Any, Literal, TypedDict
+from typing import Any, Literal, NotRequired, TypedDict
 
 
 class InvocationState(TypedDict, total=False):
@@ -32,6 +32,7 @@ class InvocationState(TypedDict, total=False):
 
 
 class AgentState(TypedDict):
+    session_binding: NotRequired[str]
     messages: list[dict[str, Any]]
     step: int
     usage: dict[str, int] | None

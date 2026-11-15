@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 import { useIdentity } from './AuthBoundary';
 import { apiFetch, createOwnedSession, sessionStorageKeys, type AuthUser } from './auth-client.js';
@@ -38,13 +38,18 @@ import {
 } from "./session";
 import { AssistantMessage } from "./components/AssistantMessage";
 import { approvalDraftIssue, createOrderDraft, draftConfirmationText, getOrderDraft, listOrderDrafts, parseOrderDraft, reviseOrderDraft, type OrderDraft } from './drafts';
-import { DraftSummary, OrderDraftPanel } from './components/OrderDraftPanel';
-import { IntentPreviewPanel } from './components/IntentPreviewPanel';
 import { requestIntentRevisionPreview } from './intent-preview';
 import { approvalOperationIssue, getOperation, requiresBusinessSummary, parseOperation, retainOperationSnapshot, type BusinessOperation } from './operations';
 import { BusinessApprovalSummary } from './components/BusinessApprovalSummary';
 import { SessionRequests } from './history';
 import { SessionHistory } from './components/SessionHistory';
+
+const DraftSummary = lazy(() => import('./components/OrderDraftPanel')
+  .then(module => ({ default: module.DraftSummary })));
+const OrderDraftPanel = lazy(() => import('./components/OrderDraftPanel')
+  .then(module => ({ default: module.OrderDraftPanel })));
+const IntentPreviewPanel = lazy(() => import('./components/IntentPreviewPanel')
+  .then(module => ({ default: module.IntentPreviewPanel })));
 
 function MessageInput(props: GetProps<typeof Input.TextArea>) {
   return <Input.TextArea {...props} aria-label="消息" maxLength={MAX_MESSAGE_LENGTH} />;
@@ -100,6 +105,7 @@ export default function App() {
   const [status, setStatus] = useState<string>("");
   const [runtimeLabel, setRuntimeLabel] = useState("数据源未确认");
   const [businessModule, setBusinessModule] = useState<{title: string; suggestions: string[]} | null>(null);
+  const [moduleUnconfigured, setModuleUnconfigured] = useState(false);
   const [intentRevisionEnabled, setIntentRevisionEnabled] = useState(false);
   const [scriptedDemo, setScriptedDemo] = useState(false);
   const [persistentDemo, setPersistentDemo] = useState(false);
@@ -375,10 +381,8 @@ export default function App() {
       if (!response.ok) throw new Error("runtime unavailable");
       const runtime = await response.json();
       if (controller.signal.aborted) return;
-      if (runtime.module && runtime.module.name !== 'mini-erp') {
-        setBusinessModule(runtime.module);
-        setBusinessTab('approvals');
-      }
+      setBusinessModule(runtime.module ?? null);
+      setModuleUnconfigured(runtime.data_source === 'unconfigured');
       setScriptedDemo(runtime.scripted_demo === true);
       setPersistentDemo(runtime.demo_persistent === true);
       const source = runtime.scripted_demo === true ? `离线演示 · ${runtime.demo_persistent === true ? '持久数据' : '临时数据'}` : runtime.data_source === "mcp" ? "真实 ERP" :
@@ -386,7 +390,8 @@ export default function App() {
       const parsing = runtime.intent_semantic_enabled === true
         ? ` · ${runtime.intent_semantic_available === false ? '智能解析暂不可用，可手动核对' : '智能解析已开启'}`
         : runtime.intent_semantic_disabled_reason ? ' · 使用基础解析' : '';
-      setRuntimeLabel(`${runtime.module?.title ?? source} · ${runtime.writes_enabled ? "写入需审批" : "只读"}${parsing}`);
+      setRuntimeLabel(runtime.data_source === 'unconfigured' ? '尚未配置业务模块' :
+        `${runtime.module?.title ?? source} · ${runtime.writes_enabled ? "写入需审批" : "只读"}${parsing}`);
       setDraftsEnabled(runtime.drafts_enabled === true);
       setIntentPreviewEnabled(runtime.intent_preview_enabled === true);
       setIntentRecoveryEnabled(runtime.intent_recovery_enabled === true);
@@ -431,6 +436,7 @@ export default function App() {
     return ()=>controller.abort();
   },[pendingApprovals,operationRefresh,businessEnabled]);
   useEffect(() => {
+    if (!draftsEnabled) return;
     const sessionId = sessionIdRef.current;
     const ticket = sessionRequests.current.capture();
     const controller = new AbortController();
@@ -446,7 +452,7 @@ export default function App() {
       }).catch(()=>{});
     }
     return ()=>controller.abort();
-  }, [pendingApprovals]);
+  }, [draftsEnabled, pendingApprovals]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -487,7 +493,7 @@ export default function App() {
     sessionStatus === "reconciliation_required" || pendingApprovals.length > 0 ||
     turns.some(t => isAssistantTurn(t) &&
       Object.values(t.tools).some(tool => tool.approval && !tool.approvalResolved));
-  const canSend = canSendMessage(restoreState, sessionStatus, pendingApprovals.length, busy);
+  const canSend = !moduleUnconfigured && canSendMessage(restoreState, sessionStatus, pendingApprovals.length, busy);
   const respondApproval = useCallback(
     async (pendingId: string, approved: boolean) => {
       const ticket = sessionRequests.current.capture();
@@ -495,7 +501,7 @@ export default function App() {
       if(approved&&!pending)return;
       const operationState=approvalOperations[pendingId];
       if(approved&&pending&&requiresBusinessSummary(pending,businessEnabled)&&(!businessEnabled||operationState?.loading||approvalOperationIssue(pending,operationState?.operation,operationState?.verified===true)))return;
-      if (approved && pending?.tool==='submit_order_draft' && (draftsLoading || approvalDraftIssue(pending,approvalDrafts[pendingId],drafts))) return;
+      if (draftsEnabled && approved && pending?.tool==='submit_order_draft' && (draftsLoading || approvalDraftIssue(pending,approvalDrafts[pendingId],drafts))) return;
       if (approvalInFlight.current.has(pendingId)) return;
       approvalInFlight.current.add(pendingId);
       setSubmittingApprovals(new Set(approvalInFlight.current));
@@ -526,7 +532,7 @@ export default function App() {
         setSubmittingApprovals(new Set(approvalInFlight.current));
       }
     },
-    [consumeEvents, refreshSession, pendingApprovals, approvalDrafts, drafts, draftsLoading, approvalOperations, businessEnabled],
+    [consumeEvents, refreshSession, pendingApprovals, approvalDrafts, drafts, draftsEnabled, draftsLoading, approvalOperations, businessEnabled],
   );
 
   const continueInterrupted = useCallback(async () => {
@@ -670,7 +676,7 @@ export default function App() {
     const issue = approvalDraftIssue(pending,draft,drafts,now);
     const expired = pending.expires_at != null && Date.parse(pending.expires_at)<=now;
     return <div className="approval draft-approval"><span className="approval-label">待审批 · 提交订单 · 原版本 {String(pending.arguments.revision)}</span>
-      {draft && <DraftSummary draft={draft}/>}{(issue || expired) && <p role="status">{expired?'审批已过期，请拒绝后重新提交。':issue}</p>}
+      {draft && <Suspense fallback={null}><DraftSummary draft={draft}/></Suspense>}{(issue || expired) && <p role="status">{expired?'审批已过期，请拒绝后重新提交。':issue}</p>}
       <Button type="primary" className="approve" disabled={!!issue||expired||draftsLoading||submittingApprovals.has(pending.pending_id)} onClick={()=>void respondApproval(pending.pending_id,true)}>批准</Button>
       <Button className="deny" disabled={submittingApprovals.has(pending.pending_id)} onClick={()=>void respondApproval(pending.pending_id,false)}>拒绝</Button>
     </div>;
@@ -690,7 +696,7 @@ export default function App() {
   const sessionLocked = busy || hasPending || interrupted || sessionStatus === 'running';
   const inputLocked = !canSend || hasPending || interrupted;
   const inspectApprovals = () => { setBusinessTab('approvals'); setBusinessOpen(true); };
-  const orderPanel = draftsEnabled ? <>
+  const orderPanel = draftsEnabled && <Suspense fallback={<p role="status">正在加载订单草稿…</p>}>
     {(intentPreviewEnabled || intentRecoveryEnabled) && <IntentPreviewPanel key={`intent:${sessionIdRef.current}`} sessionId={sessionIdRef.current}
       refresh={intentRefresh} busy={sessionLocked || restoreState === 'loading' || restoreState === 'recovery_failed'} onBusy={setBusy} onSaved={() => void refreshDrafts()} />}
     <OrderDraftPanel key={sessionIdRef.current} sessionId={sessionIdRef.current} drafts={drafts} loading={draftsLoading} error={draftsError} busy={busy && !hasPending} canSubmit={writesEnabled&&canSend&&!hasPending&&!interrupted} writesEnabled={writesEnabled} hasPending={hasPending}
@@ -716,13 +722,12 @@ export default function App() {
           }} onSubmit={draft=>{
             if (Date.parse(draft.expires_at)<=Date.now()) {void refreshDrafts();return;}
             void send(draftConfirmationText(draft), draft);
-          }} /></> :
-    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="当前环境尚未开放订单草稿" />;
+          }} /></Suspense>;
   const approvalPanel = <div className="approval-list">
     {pendingApprovals.length === 0 ? <Empty image={<CheckCircleOutlined />} description="暂无待处理审批" /> :
       pendingApprovals.map(pending => <div key={pending.pending_id}>
         {requiresBusinessSummary(pending, businessEnabled) ? renderBusinessApproval(pending) :
-          pending.tool === 'submit_order_draft' ? renderDraftApproval(pending) :
+          draftsEnabled && pending.tool === 'submit_order_draft' ? renderDraftApproval(pending) :
           <section className="approval" aria-label="操作审批">
             <h3>待审批 · {pending.tool}</h3><Tag>风险等级 {pending.risk}</Tag>
             <pre className="args">{JSON.stringify(pending.arguments, null, 2)}</pre>
@@ -736,8 +741,10 @@ export default function App() {
       </div>)}
     {pendingReconciliation && <Alert type="warning" showIcon title="操作结果待核对" description="请再次核对后继续处理，避免重复写入。" />}
   </div>;
-  const business = <Tabs className="business-tabs" activeKey={businessTab} onChange={setBusinessTab} items={[
-    ...(!businessModule ? [{ key: 'drafts', label: '订单草稿', children: orderPanel }] : []),
+  const business = <Tabs className="business-tabs"
+    activeKey={!draftsEnabled && businessTab === 'drafts' ? 'approvals' : businessTab}
+    onChange={setBusinessTab} items={[
+    ...(draftsEnabled ? [{ key: 'drafts', label: '订单草稿', children: orderPanel }] : []),
     { key: 'approvals', label: <span>审批 {pendingApprovals.length > 0 && <span className="tab-count">{pendingApprovals.length}</span>}</span>, children: approvalPanel },
     { key: 'results', label: '业务结果', children: <div className="business-results">
       {results.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="查询或操作完成后，结果会显示在这里" /> :
@@ -752,15 +759,15 @@ export default function App() {
       {(pendingApprovals.length > 0 || pendingReconciliation) && <Button onClick={() => void cancelPending()} disabled={busy}>取消待处理操作</Button>}
     </div>
     <Sender value={input} onChange={setInput} onSubmit={message => void send(message)} disabled={inputLocked}
-      autoSize={{ minRows: 2, maxRows: 6 }} placeholder={hasPending ? '请先处理待审批操作' : interrupted ? '请先恢复或核对当前任务' : '描述你要处理的业务…'}
+      autoSize={{ minRows: 2, maxRows: 6 }} placeholder={moduleUnconfigured ? '配置业务模块后可开始对话' : hasPending ? '请先处理待审批操作' : interrupted ? '请先恢复或核对当前任务' : '描述你要处理的业务…'}
       components={SENDER_COMPONENTS}
       suffix={(_, { components: { SendButton } }) => <SendButton type="primary" shape="circle" icon={<ArrowUpOutlined />} aria-label="发送"
         disabled={inputLocked || !input.trim()} />}
       footer={<div className="composer-footer"><span>{hasPending ? '操作等待你的确认' : busy ? '正在处理，请稍候' : 'Enter 发送 · Shift + Enter 换行'}</span>
-        <span>{input.length >= MAX_MESSAGE_LENGTH * .9 ? `${input.length} / ${MAX_MESSAGE_LENGTH} 字` : <><CheckCircleOutlined /> 写入操作需审批</>}</span></div>} />
+        <span>{input.length >= MAX_MESSAGE_LENGTH * .9 ? `${input.length} / ${MAX_MESSAGE_LENGTH} 字` : writesEnabled && <><CheckCircleOutlined /> 写入操作需审批</>}</span></div>} />
   </>;
   return <WorkspaceShell sidebar={<SessionHistory currentId={sessionIdRef.current} locked={busy || sessionStatus === 'running'} onSelect={selectHistorySession} />}
-    composer={composer} business={business} runtimeLabel={runtimeLabel}
+    composer={composer} business={business} runtimeLabel={runtimeLabel} orderWorkspace={draftsEnabled}
     status={status || (restoreState === 'loading' ? '正在恢复会话…' : busy ? '正在处理…' : '')}
     historyOpen={historyOpen} businessOpen={businessOpen} sessionLocked={sessionLocked}
     onHistoryOpen={setHistoryOpen} onBusinessOpen={setBusinessOpen} onNewSession={startNewSession}>
@@ -773,23 +780,25 @@ export default function App() {
                 policyMiss: '无依据拒答', cancellation: '取消资格', replenishment: '补货建议'}).map(([key, label]) =>
                 <Button key={key} size="small" disabled={inputLocked} onClick={() => setInput(DEMO_PROMPTS[key])}>{label}</Button>)}
             </Space></>} />}
-        {turns.length === 0 && restoreState !== 'recovery_failed' && <div className="welcome">
+        {moduleUnconfigured && <Alert type="info" showIcon title="尚未配置业务模块"
+          description={<>在服务端设置 <code>ERPILOT_MODULE</code> 并重启后，即可使用已接入的业务能力。</>} />}
+        {!moduleUnconfigured && turns.length === 0 && restoreState !== 'recovery_failed' && <div className="welcome">
           <div className="welcome-symbol"><ThunderboltOutlined /></div>
-          <h2>今天，想处理什么业务？</h2><p>{businessModule?.title ?? '查询订单、核对库存、整理报价。'}<br />把需求告诉我，我们一步步完成。</p>
-          <Prompts className="welcome-prompts" items={businessModule ? businessModule.suggestions.map((text, index) => ({key: String(index), label: text})) : scriptedDemo ? [
+          <h2>今天，想处理什么业务？</h2><p>{businessModule?.title ?? (draftsEnabled ? '查询订单、核对库存、整理报价。' : '输入你要处理的业务。')}</p>
+          <Prompts className="welcome-prompts" items={businessModule?.suggestions.length ? businessModule.suggestions.map((text, index) => ({key: String(index), label: text})) : scriptedDemo ? [
             { key: 'draft', icon: <ShoppingOutlined />, label: '草稿到审批', description: '创建、修改，再批准建单' },
             { key: 'policy', icon: <FileTextOutlined />, label: '查看政策证据', description: '核对来源、版本与原文' },
             { key: 'replenishment', icon: <InboxOutlined />, label: '补货建议', description: '查看销量、库存和测算假设' },
-          ] : [
+          ] : draftsEnabled ? [
             { key: 'order', icon: <ShoppingOutlined />, label: '查询订单', description: '查看商品与订单明细' },
             { key: 'stock', icon: <InboxOutlined />, label: '核对库存', description: '确认可售数量' },
             { key: 'quote', icon: <FileTextOutlined />, label: '整理报价', description: '核对价格与商品数量' },
-          ]} onItemClick={({ data }) => setInput(businessModule ? businessModule.suggestions[Number(data.key)] : scriptedDemo ? DEMO_PROMPTS[String(data.key)] : data.key === 'order' ? '帮我查询订单：' : data.key === 'stock' ? '帮我查询商品库存，SKU：' : '帮我整理商品报价，商品与数量：')} />
+          ] : []} onItemClick={({ data }) => setInput(businessModule?.suggestions.length ? businessModule.suggestions[Number(data.key)] : scriptedDemo ? DEMO_PROMPTS[String(data.key)] : data.key === 'order' ? '帮我查询订单：' : data.key === 'stock' ? '帮我查询商品库存，SKU：' : '帮我整理商品报价，商品与数量：')} />
         </div>}
         {turns.map((turn, i) => turn.role === 'user' ? <Bubble key={i} className="user-message" placement="end" content={turn.text} /> :
-          <AssistantMessage key={i} turn={turn} now={now} live={busy} stalled={stalled}
+          <AssistantMessage key={i} turn={turn} assistantName={draftsEnabled ? '掌柜助手' : undefined} now={now} live={busy} stalled={stalled}
             submittingApprovals={submittingApprovals} onRespond={(id, approved) => void respondApproval(id, approved)}
-            renderDraftApproval={renderDraftApproval} renderBusinessApproval={renderBusinessApproval}
+            renderDraftApproval={draftsEnabled ? renderDraftApproval : undefined} renderBusinessApproval={renderBusinessApproval}
             businessApprovalsEnabled={businessEnabled} onInspectApproval={inspectApprovals} />)}
         {hasPending && <Alert className="pending-notice" type="warning" showIcon title={pendingReconciliation ? '有操作结果需要核对' : '有操作等待你确认'}
           description="请查看业务面板中的明细，再继续处理。" action={<Button size="small" onClick={inspectApprovals}>查看审批</Button>} />}

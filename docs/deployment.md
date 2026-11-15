@@ -65,15 +65,15 @@ HTTP 接受不代表业务成功，业务结果仍查图状态和 ERP 幂等记�
 
 ## 显式使用真实模型
 
-复制 `.env.example` 为 `.env` 并配置模型和独立嵌入密钥，再运行：
+复制 `.env.example` 为 `.env`。要用真实模型运行订单示例，在 `.env` 设置 `ERPILOT_MODULE=order-example` 并配置模型密钥。使用政策检索时另配嵌入密钥。配置后运行：
 
 ```sh
 docker compose -f compose.yaml -f compose.live.yaml up --build -d --wait
 ```
 
-此时才将 `.env` 注入容器，`ERPILOT_RUNTIME=live`，认证仍强制启用。覆盖文件默认 `ERPILOT_WRITES=0`，
+此时将 `.env` 注入容器并使用 `ERPILOT_RUNTIME=live`，认证仍强制启用。`ERPILOT_MODULE` 留空时启动尚未配置业务模块的工作台。覆盖文件默认 `ERPILOT_WRITES=0`，
 自由输入会使用真实模型并可能收费；确需写演示时在覆盖文件中显式改为 `1`，仍须账号权限和逐次审批。
-真实模式默认开启语义创建/修改预览，仍需完整表单核对和独立审批。新端点缺价目时
+订单示例默认开启语义创建/修改预览，仍需完整表单核对和独立审批。新端点缺价目时
 保留基础解析，候选额度用尽不影响普通聊天。[配置、关闭与恢复](semantic-parsing.md)。
 基础脚本演示免付费；真实模式启动和健康检查也不调用模型。
 RAG 使用的模型和索引须匹配，配置及构建见[开发指南](development.md)。

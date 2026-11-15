@@ -128,6 +128,7 @@ function ApprovalActions({
 
 export function AssistantMessage({
   turn,
+  assistantName = '业务助手',
   now,
   live,
   stalled,
@@ -139,6 +140,7 @@ export function AssistantMessage({
   onInspectApproval,
 }: {
   turn: AssistantTurn;
+  assistantName?: string;
   now: number;
   live: boolean;
   stalled: boolean;
@@ -151,7 +153,7 @@ export function AssistantMessage({
 }) {
   const showCursor = live && turn.phase === "generating";
   return (
-    <Bubble className="assistant-message" variant="borderless" header={<span className="assistant-name">掌柜助手</span>}
+    <Bubble className="assistant-message" variant="borderless" header={<span className="assistant-name">{assistantName}</span>}
       avatar={<span className="assistant-avatar">e</span>} content={<div className="assistant-body">
       <WorkTimeline turn={turn} now={now} stalled={stalled} />
       {turn.blocks.map(block => {

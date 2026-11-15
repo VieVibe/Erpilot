@@ -233,7 +233,10 @@ async def test_active_or_unfinished_session_blocks_confirmation(host, monkeypatc
 
     async def state(_):
         await asyncio.sleep(0)
-        return SimpleNamespace(next=("pending_execution",))
+        return SimpleNamespace(
+            values={"session_binding": app.state.service._session_binding},
+            next=("pending_execution",),
+        )
 
     monkeypatch.setattr(app.state.service, "_runtime", lambda _: SimpleNamespace(get_state=state))
     response = await client.post(BASE + "/confirm", json=form(provider))

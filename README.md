@@ -1,8 +1,8 @@
-# Erpilot · 可扩展的 ERP Agent 开发底座
+# Erpilot · 面向企业业务系统的可插拔 Agent 框架
 
-提供会话、工具调用、人工确认、执行恢复和操作记录，通过业务模块接入不同 ERP。开发者定义业务动作、规则和接口映射，使用同一套工作台完成执行与核对。
+通过可安装的业务模块，将自然语言交互接入 ERP、CRM、OA、工单系统和企业自建服务。Erpilot 提供会话、工具调用、人工确认、执行恢复和操作记录，业务模块定义工具、接口映射、权限规则与提交结果核对，用户通过同一套工作台完成查询和确认。
 
-内置订单与库存参考实现，以及连接独立 HTTP 服务的报销示例。插件宿主统一提供登录身份上下文、服务端连接凭据、幂等恢复和 ERP 就绪检查；订单示例把“给客户备一份订单”变成可核对的报价草稿，在人工批准指定版本后才真正建单、扣库存。[业务模块开发与接入](docs/business-modules.md)
+仓库提供订单与库存参考实现、连接独立 HTTP 服务的报销示例，以及基于固定示例数据的工单查询插件脚手架。每个应用实例启动时加载一个业务模块，CRM、OA 和其他目标系统通过实现同一插件契约接入。 [业务模块开发与接入](docs/business-modules.md)
 
 面向 **Agent 应用开发 / Python 后端工程**的求职作品。模型负责提出工具调用，应用负责核对来源、业务规则与审批，数据库负责记录最终事实。
 
@@ -10,9 +10,9 @@
 
 ## 解决什么问题
 
-ERP 操作里，“模型理解了”到“业务可以执行”之间有很长一段距离：商品可能重名，用户会改数量或预算，报价会过期，审批页面会刷新，业务提交后服务也可能中断。
+业务系统需要验证模型提出的操作能否执行。应用先校验参数和权限，写入前等待人工确认，提交结果不明时按原请求号核对目标系统的记录。
 
-Erpilot 把这些问题放进一个可演示的完整流程：
+下面以 ERP 订单演示说明这套流程。
 
 1. 用户给出客户、商品、件数、备注与预算；应用查询真实商品和库存，生成带版本的草稿。
 2. 多轮修改保留未变字段和来源；超出预算、商品或报价条件变化时提示待确认事项。
@@ -64,17 +64,14 @@ docker compose exec api python -m erpilot_api.users add demo-owner --role approv
 
 ```mermaid
 flowchart TD
-    UI[React 工作台 · 草稿 / 时间线 / 审批] <-->|同源 cookie / CSRF| AUTH[账号 · 归属 · 审批权限]
-    AUTH <-->|HTTP / SSE| API[FastAPI 会话宿主]
-    API --> GRAPH[LangGraph · 模型 / 工具 / interrupt]
-    GRAPH <--> LLM[OpenAI 兼容模型接口]
-    GRAPH --> MCP[FastMCP · 会话绑定与参数约束]
-    MCP --> DOMAIN[业务层 · 来源 / 版本 / 预算 / 价格 / 库存]
-    DOMAIN --> ERP[(SQLite · 业务事实与幂等记录)]
-    MCP --> RAG[政策检索 · 有效版本 / 原文 / 引用校验]
-    GRAPH <-->|正式 API| PG[(PostgreSQL · graph checkpoint)]
-    API --> VIEW[(SQLite RunStore · 展示投影 / 账号与审计)]
-    GRAPH --> TRACE[JSONL trace · 可选 Langfuse]
+    UI[React 业务工作台] <-->|HTTP / SSE| API[FastAPI 宿主]
+    API --> GRAPH[LangGraph 运行时]
+    API --> VIEW[(RunStore · 会话与操作记录)]
+    GRAPH <--> LLM[OpenAI 兼容模型]
+    GRAPH <--> PG[(PostgreSQL checkpoint)]
+    GRAPH --> MODULE[业务模块 · 工具 / 权限 / 结果核对]
+    GRAPH --> TRACE[执行追踪]
+    MODULE --> SYSTEM[目标系统 · ERP / CRM / OA / 工单 / 自建服务]
 ```
 
 离线演示显式使用内存 checkpoint 和临时 SQLite；正式模型 API 要求 PostgreSQL，缺少时拒绝启动。`agent_core` 不依赖 ERP 或 MCP 业务包。完整数据流、失败窗口与限制见[架构说明](docs/architecture.md)。
@@ -133,14 +130,15 @@ PostgreSQL 恢复测试仅在显式设置隔离的 `ERPILOT_TEST_CHECKPOINT_DATA
 uv sync --all-packages --frozen
 # 将 .env.example 复制成 .env，配置模型 key；Windows 可用 Copy-Item
 docker compose up -d postgres
-uv run --package erp-store python -m erp_store seed
 uv run --package erpilot-api python -m erpilot_api
 # 另开终端
 npm --prefix apps/web ci
 npm --prefix apps/web run dev
 ```
 
-访问[开发工作台](http://localhost:5173)。`.env.example` 解释模型、嵌入和 checkpoint 配置；真实模型、嵌入可能收费。默认 `ERPILOT_WRITES=0`，需要演示人工写入时显式设为 `1`；真实 API 默认 `enforce` 并接入语义创建/修改预览，候选仍需逐项核对；新端点需配置价目，缺价目时保留基础解析。[语义配置与降级](docs/semantic-parsing.md)。真实 RAG 索引需使用匹配的嵌入配置，[索引构建方法](docs/development.md)。
+访问[开发工作台](http://localhost:5173)。`ERPILOT_MODULE` 留空时，工作台显示「尚未配置业务模块」。该模式依然使用配置的 PostgreSQL checkpoint，业务对话在接入插件后启用。
+
+要运行订单示例，先执行 `uv run --package erp-store python -m erp_store seed`，然后在 `.env` 设置 `ERPILOT_MODULE=order-example` 并重启 API。订单示例默认只读，显式设置 `ERPILOT_WRITES=1` 可演示写入审批。模型、嵌入及语义解析配置见[开发指南](docs/development.md)和[语义配置](docs/semantic-parsing.md)。接入目标系统的配置和工单插件脚手架见[业务模块开发指南](docs/business-modules.md)。
 
 CLI：`uv run erpilot chat "查询商品 A1001 的库存"`。独立 MCP：`uv run --package mcp-erp python -m mcp_erp serve`。更多命令见[开发指南](docs/development.md)。
 
@@ -160,7 +158,7 @@ docs/                 架构、ADR、演示、技术文章和面试材料
 reports/              分批验收及历史失败证据
 ```
 
-当前支持**带本地账号的共享门店、单 API 执行进程**及容器复现。账号隔离工作会话，ERP 业务数据共享；
+当前支持**本地账号、单 API 执行进程**及容器复现。账号隔离工作会话，目标系统的数据权限由插件和目标系统共同执行。订单演示使用共享门店数据；
 多租户、跨进程执行权和自动业务补偿未交付。默认核心任务已通过受控真实验收；语义工程专项通过，
 语义预览已默认接入，原120条工程预期已完成委托AI审核，不据小样本宣称通用准确率。
 [能力边界](docs/architecture.md) · [本轮计划](docs/plans/2026-11-04-production-readiness.md) · [文章系列](docs/articles/README.md) · [可校验交付包](docs/portfolio-overview.md)

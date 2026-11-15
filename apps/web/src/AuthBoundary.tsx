@@ -81,15 +81,15 @@ export function AuthBoundary({ children }: { children: ReactNode }) {
   if (enabled && user && ready) return <IdentityContext.Provider value={user}>
     <div className="authenticated-workspace">
       <div className="account-bar"><Space wrap><strong>{user.username}</strong>
-        <Tag>{user.role === 'approver' ? '可审批自己的任务' : '查询与准备草稿'}</Tag>
+        <Tag>{user.role === 'approver' ? '可审批自己的任务' : '查询与准备任务'}</Tag>
         <Button size="small" onClick={() => void logout()} loading={busy}>退出登录</Button></Space>
         {error && <span role="alert">{error}</span>}</div>
       <div className="authenticated-content" key={user.user_id}>{children}</div>
     </div>
   </IdentityContext.Provider>;
-  return <main className="login-page"><Card className="login-card" title="Erpilot · 掌柜助手">
+  return <main className="login-page"><Card className="login-card" title="Erpilot · 业务助手">
     {enabled === null ? <><Spin spinning={busy}/>{error && <Alert type="error" title={error}/>}<Button onClick={() => void initialize()}>重新连接</Button></> : <>
-      <p>登录后查看自己的会话、草稿与审批。访问账号由项目负责人创建。</p>
+      <p>登录后查看自己的会话与审批。访问账号由项目负责人创建。</p>
       {error && <Alert type="error" title={error} showIcon/>}
       <Form layout="vertical" onFinish={login} autoComplete="off">
         <Form.Item name="username" label="账号" rules={[{ required: true, message: '请输入账号' }]}>

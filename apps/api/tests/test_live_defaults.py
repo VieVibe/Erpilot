@@ -4,7 +4,7 @@ import httpx2
 import pytest
 from agent_core.llm import LLMConfig
 from erp_store.db import ProductRow, StockRow, init_db, make_engine
-from erpilot_api.bootstrap import build_live_app, semantic_settings
+from erpilot_api.bootstrap import ORDER_EXAMPLE, build_live_app, semantic_settings
 from evals.context_workflow import snapshot_all
 from langgraph.checkpoint.memory import InMemorySaver
 from sqlalchemy.orm import Session
@@ -40,6 +40,7 @@ def configured(monkeypatch, tmp_path):
 
 async def build(tmp_path, model):
     return await build_live_app(
+        module_spec=ORDER_EXAMPLE,
         config=model.config,
         database=tmp_path / "erp.db",
         client_factory=lambda: model,
@@ -49,7 +50,37 @@ async def build(tmp_path, model):
     )
 
 
-async def test_default_startup_previews_before_save_and_quota_never_blocks_chat(
+async def test_unconfigured_startup_exposes_no_tools_or_business_routes(tmp_path, monkeypatch):
+    monkeypatch.delenv("ERPILOT_MODULE", raising=False)
+    monkeypatch.setenv("ERPILOT_TOOLS", "mcp")
+    monkeypatch.setenv("ERPILOT_WRITES", "1")
+    for key in ("LLM_API_KEY", "ZHIPU_API_KEY", "DEEPSEEK_API_KEY", "DASHSCOPE_API_KEY"):
+        monkeypatch.delenv(key, raising=False)
+    database = tmp_path / "erp.db"
+    app = await build_live_app(
+        database=database, trace_dir=tmp_path, checkpointer=InMemorySaver(), auth_enabled=False,
+    )
+    assert app.state.business_module is None
+    assert app.state.service._tools == []
+    assert not database.exists()
+    async with (
+        app.router.lifespan_context(app),
+        httpx2.AsyncClient(transport=httpx2.ASGITransport(app), base_url="http://test") as http,
+    ):
+        assert (await http.get("/healthz")).status_code == 200
+        runtime = (await http.get("/api/runtime")).json()
+        assert runtime["data_source"] == "unconfigured"
+        assert "module" not in runtime
+        assert not runtime["drafts_enabled"] and not runtime["writes_enabled"]
+        assert (await http.get("/api/sessions/s/order-drafts")).status_code == 404
+        response = await http.post("/api/chat/stream", json={"message": "查库存"})
+        assert response.status_code == 503
+        error = response.json()["error"]
+        assert error["code"] == "erp_not_configured"
+        assert error["message"] == "尚未配置业务模块，请设置 ERPILOT_MODULE"
+
+
+async def test_order_example_previews_before_save_and_quota_never_blocks_chat(
     configured,
     tmp_path,
     monkeypatch,

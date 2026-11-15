@@ -1,4 +1,4 @@
-"""Single-process, authenticated deployment with persistent ERP and checkpoints."""
+"""Single-process, authenticated deployment with persistent checkpoints."""
 
 import asyncio
 import os
@@ -11,13 +11,14 @@ import uvicorn
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from erpilot_api.bootstrap import build_live_app
-from erpilot_api.offline import create_demo_app, seed_demo_database
+from erpilot_api.bootstrap import ORDER_EXAMPLE, build_live_app
 
 
 def initialize_database(database: Path):
     if database.exists():
         return
+    from erpilot_api.offline import seed_demo_database
+
     temporary = database.with_name(f".seed-{uuid4().hex}.db")
     try:
         seed_demo_database(temporary)
@@ -29,7 +30,7 @@ def initialize_database(database: Path):
 
 
 async def check_dependencies(app, *, timeout_seconds=3):
-    """Verify checkpoint, identity store and the selected ERP module dependency."""
+    """Verify checkpoint, identity store and the selected business module dependency."""
     async with asyncio.timeout(timeout_seconds):
         await app.state.service._checkpointer.aget_tuple(
             {"configurable": {"thread_id": "deployment-readiness"}}
@@ -42,16 +43,19 @@ async def check_dependencies(app, *, timeout_seconds=3):
 
 
 async def build_app():
-    mode = os.getenv("ERPILOT_RUNTIME", "scripted")
+    mode = os.getenv("ERPILOT_RUNTIME", "live")
     if mode not in {"scripted", "live"}:
         raise ValueError("ERPILOT_RUNTIME must be scripted or live")
     directory = Path(os.getenv("ERPILOT_DATA_DIR", "data/deployed"))
     directory.mkdir(parents=True, exist_ok=True)
     database = directory / "erpilot.db"
-    if mode == "scripted" or not os.getenv("ERPILOT_MODULE", "").strip():
+    module_spec = os.getenv("ERPILOT_MODULE", "").strip()
+    if mode == "scripted" or module_spec == ORDER_EXAMPLE:
         initialize_database(database)
     trace_dir = directory / "traces"
     if mode == "scripted":
+        from erpilot_api.offline import create_demo_app
+
         app = await create_demo_app(database, trace_dir, persistent=True, auth_enabled=True)
     else:
         app = await build_live_app(
@@ -59,6 +63,7 @@ async def build_app():
             run_store_path=database.with_name("erpilot-runs.db"),
             trace_dir=trace_dir,
             auth_enabled=True,
+            module_spec=module_spec,
         )
     app.state.deployment_mode = mode
 

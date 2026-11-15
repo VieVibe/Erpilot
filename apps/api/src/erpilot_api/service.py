@@ -6,7 +6,7 @@ import os
 import time
 from collections.abc import AsyncIterator, Callable, Sequence
 from contextlib import aclosing
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from uuid import uuid4
@@ -35,6 +35,12 @@ from agent_core.trace import JsonlTraceRecorder, TraceSink, new_trace_path
 from erpilot_api.checkpoint import thread_id_for_session
 from erpilot_api.presentation import build_presentation
 from erpilot_api.run_store import RunStore
+
+
+@dataclass(frozen=True, slots=True)
+class RunFinished(LoopEnd):
+    trace_path: str | None = None
+    run_id: str | None = None
 
 
 class SessionError(RuntimeError):
@@ -247,9 +253,11 @@ class ChatService:
         business_hooks=None,
         trace_sinks: Sequence[TraceSink] | None = None,
         business_instructions: str | None = None,
+        session_binding: str | None = None,
     ):
         self._client_factory = client_factory
         self._business_instructions = business_instructions
+        self._session_binding = session_binding
         self._model, self._trace_dir = model, trace_dir
         self._tools, self._loop_config = list(tools), loop_config or LoopConfig()
         self._approval_gate = approval_gate
@@ -272,7 +280,6 @@ class ChatService:
         self._client = None
         self._runtime_client = _LazyClient(self._load_client)
         self._locks: dict[str, asyncio.Lock] = {}
-        self.last_trace: Path | None = None
 
     @property
     def model(self):
@@ -300,7 +307,40 @@ class ChatService:
             ),
             approval_ttl_seconds=self._approval_ttl_seconds,
             clock=self._clock,
+            session_binding=self._session_binding,
         )
+
+    def check_session_binding(self, session_id):
+        stored = self._run_store.session_binding(session_id) if self._run_store else None
+        if stored is not None and stored != self._session_binding:
+            raise SessionError(
+                409, "module_binding_mismatch", "此会话绑定的业务实例或模块契约与当前配置不匹配"
+            )
+        return stored
+
+    async def session_snapshot(self, session_id, runtime=None, *, for_execution=False):
+        stored = self.check_session_binding(session_id)
+        runtime = runtime if runtime is not None else self._runtime(session_id)
+        snapshot = await runtime.get_state(thread_id_for_session(session_id))
+        checkpoint_binding = snapshot.values.get("session_binding")
+        if checkpoint_binding is not None and checkpoint_binding != self._session_binding:
+            raise SessionError(
+                409, "module_binding_mismatch", "此会话绑定的业务实例或模块契约与当前配置不匹配"
+            )
+        if for_execution and self._session_binding is not None and checkpoint_binding is None:
+            saved = self._run_store.get_session(session_id) if self._run_store else None
+            if snapshot.values or (stored is None and saved):
+                raise SessionError(
+                    409, "legacy_session_binding_missing", "旧会话缺少业务模块绑定，请新建会话"
+                )
+            if stored is not None and saved:
+                latest = self._run_store.latest_run(session_id)
+                if (saved["active_run_id"] is not None
+                        or (latest and latest["status"] != "completed")):
+                    raise SessionError(
+                        409, "module_checkpoint_missing", "缺少会话对应的 checkpoint"
+                    )
+        return snapshot
 
     def lock(self, session_id):
         return self._locks.setdefault(session_id, asyncio.Lock())
@@ -309,7 +349,7 @@ class ChatService:
         return bool(self._approval_gate and self._approval_gate.respond(pending_id, decision))
 
     async def _history(self, session_id):
-        snapshot = await self._runtime(session_id).get_state(thread_id_for_session(session_id))
+        snapshot = await self.session_snapshot(session_id)
         if snapshot.values:
             messages = copy.deepcopy(snapshot.values["messages"])
         else:
@@ -317,7 +357,7 @@ class ChatService:
             messages = (saved["history"] if saved else
                         [{"role": "system", "content": self._system_prompt()}])
         observation = (self._run_store.draft_form_observation(session_id)
-                       if self._run_store else [])
+                       if self._run_store and self._business_hooks is not None else [])
         if observation:
             call_id = observation[-1]["tool_call_id"]
             if not any(m.get("tool_call_id") == call_id for m in messages):
@@ -330,7 +370,7 @@ class ChatService:
         self._business_hooks.record_draft_form(self, session_id, draft)
 
     async def session_state(self, session_id):
-        snapshot = await self._runtime(session_id).get_state(thread_id_for_session(session_id))
+        snapshot = await self.session_snapshot(session_id)
         if not snapshot.values:
             saved = self._run_store.get_session(session_id) if self._run_store else None
             if not saved:
@@ -441,7 +481,7 @@ class ChatService:
 
         try:
             runtime = self._runtime(session_id)
-            snapshot = await runtime.get_state(thread_id_for_session(session_id))
+            snapshot = await self.session_snapshot(session_id, runtime, for_execution=True)
             pending = [
                 i.value
                 for task in snapshot.tasks
@@ -484,8 +524,7 @@ class ChatService:
             raise SessionError(409, "session_busy", "会话已有活动执行，无法取消")
         async with lock:
             runtime = self._runtime(session_id)
-            thread = thread_id_for_session(session_id)
-            snapshot = await runtime.get_state(thread)
+            snapshot = await self.session_snapshot(session_id, runtime, for_execution=True)
             if not snapshot.values:
                 raise SessionError(404, "session_not_found", "会话不存在")
             interrupts = [i.value for task in snapshot.tasks for i in task.interrupts]
@@ -531,8 +570,7 @@ class ChatService:
     async def stream_run(self, session_id, message) -> AsyncIterator[AgentEvent]:
         async with self.lock(session_id):
             runtime = self._runtime(session_id)
-            thread = thread_id_for_session(session_id)
-            snapshot = await runtime.get_state(thread)
+            snapshot = await self.session_snapshot(session_id, runtime, for_execution=True)
             if snapshot.next:
                 raise SessionError(409, "unfinished_run", "会话尚未完成，请先处理待审批操作")
             if self._business_hooks is not None:
@@ -582,8 +620,7 @@ class ChatService:
     async def stream_retry(self, session_id):
         async with self.lock(session_id):
             runtime = self._runtime(session_id)
-            thread = thread_id_for_session(session_id)
-            snapshot = await runtime.get_state(thread)
+            snapshot = await self.session_snapshot(session_id, runtime, for_execution=True)
             if not snapshot.next:
                 raise SessionError(409, "not_interrupted", "会话没有可继续的中断任务")
             reconciliation = next(
@@ -681,20 +718,26 @@ class ChatService:
         direct_call=None,
     ):
         thread = thread_id_for_session(session_id)
-        self.last_trace = new_trace_path(self._trace_dir, self._model)
-        recorder = JsonlTraceRecorder(self.last_trace, self._model, sinks=self._sinks)
+        await self.session_snapshot(session_id, runtime, for_execution=True)
+        if (self._session_binding is not None and self._run_store is not None
+                and not self._run_store.bind_session(session_id, self._session_binding)):
+            self.check_session_binding(session_id)
+        trace_path = new_trace_path(self._trace_dir, self._model)
+        recorder = JsonlTraceRecorder(trace_path, self._model, sinks=self._sinks)
         run_id = None
         if self._run_store:
             saved = self._run_store.get_session(session_id)
             run_id = saved["active_run_id"] if saved else None
-            if run_id is None and message is not None:
+            if run_id:
+                self._run_store.update_trace_path(run_id, str(trace_path))
+            elif message is not None:
                 run_id = self._run_store.create_run(
-                    session_id, message, messages[:-1], str(self.last_trace)
+                    session_id, message, messages[:-1], str(trace_path)
                 )
-            elif run_id is None and (
-                decision is not None or continuation or reconciliation_call_id
-            ):
+            elif decision is not None or continuation or reconciliation_call_id:
                 run_id = self._run_store.resume_run(session_id)
+                if run_id:
+                    self._run_store.update_trace_path(run_id, str(trace_path))
         stream = recorder.record(
             self._drive(
                 runtime,
@@ -721,7 +764,7 @@ class ChatService:
         diagnostic = None
         if self._intent_diagnostics is not None:
             diagnostic = self._intent_diagnostics.begin(
-                session_id, messages, self.last_trace.with_suffix(".intent.jsonl"),
+                session_id, messages, trace_path.with_suffix(".intent.jsonl"),
                 kind="user_turn" if message is not None else "execution_continuation",
                 model=self._model, run_id=run_id,
             )
@@ -753,6 +796,9 @@ class ChatService:
                         elif event.completed and self._run_store:
                             self._run_store.update_session_history(session_id, messages)
                         finished = True
+                        event = RunFinished(
+                            event.steps, event.usage, event.completed, str(trace_path), run_id,
+                        )
                     yield event
         except BaseException as exc:
             diagnostic_error = exc

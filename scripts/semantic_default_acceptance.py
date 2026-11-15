@@ -22,7 +22,7 @@ from erp_store.db import make_engine
 from erp_store.intent_semantic_state import IntentRequestRow, SemanticAttemptRow
 from erp_store.repository import ErpRepository
 from erpilot_api.auth_store import AuthStore
-from erpilot_api.bootstrap import build_live_app
+from erpilot_api.bootstrap import ORDER_EXAMPLE, build_live_app
 from erpilot_api.offline import demo_policy_resolver, seed_demo_database
 from evals import context_workflow as cw
 from evals.campaign import request_totals
@@ -132,6 +132,7 @@ async def run(output, limit=Decimal("0.05")):
                 )
             )
             app = await build_live_app(
+                module_spec=ORDER_EXAMPLE,
                 config=config,
                 database=database,
                 trace_dir=directory / "traces",

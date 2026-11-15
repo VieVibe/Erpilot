@@ -61,6 +61,10 @@ class RunStore:
                     ON run(session_id)
                     WHERE status IN ('running', 'waiting_approval', 'recovering',
                                      'reconciliation_required', 'unknown');
+                CREATE TABLE IF NOT EXISTS session_binding (
+                    session_id TEXT PRIMARY KEY,
+                    binding TEXT NOT NULL
+                );
             """)
             # 展示事件表（设计 5.3）：UI 投影数据，不替代 LangGraph checkpoint，
             # 不参与写操作决策。event_id 供客户端去重；seq 在运行内单调递增。
@@ -133,6 +137,27 @@ class RunStore:
                 (session_id,),
             ).fetchone()
         return json.loads(row[0]) if row else []
+
+    def session_binding(self, session_id: str) -> str | None:
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT binding FROM session_binding WHERE session_id=?", (session_id,)
+            ).fetchone()
+        return row["binding"] if row else None
+
+    def bind_session(self, session_id: str, binding: str) -> bool:
+        with self._connect() as conn:
+            conn.execute(
+                "INSERT OR IGNORE INTO session_binding VALUES (?, ?)", (session_id, binding)
+            )
+            row = conn.execute(
+                "SELECT binding FROM session_binding WHERE session_id=?", (session_id,)
+            ).fetchone()
+        return row["binding"] == binding
+
+    def update_trace_path(self, run_id: str, trace_path: str) -> None:
+        with self._connect() as conn:
+            conn.execute("UPDATE run SET trace_path=? WHERE run_id=?", (trace_path, run_id))
 
     def create_run(
         self, session_id: str, user_input: str, history: list, trace_path: str | None
@@ -280,7 +305,8 @@ class RunStore:
         return result
 
     def list_sessions(self, *, limit: int = 20, offset: int = 0,
-                      owner_id: str | None = None) -> dict[str, Any]:
+                      owner_id: str | None = None,
+                      session_binding: str | None = None) -> dict[str, Any]:
         """Read-only navigation projection; opening uses checkpoint execution state."""
         if type(limit) is not int or not 1 <= limit <= 50 or type(offset) is not int or offset < 0:
             raise ValueError("invalid history page")
@@ -293,10 +319,12 @@ class RunStore:
                 "ORDER BY r.rowid DESC LIMIT 1) AS status "
                 "FROM run_session s WHERE EXISTS (SELECT 1 FROM run r "
                 "WHERE r.session_id=s.session_id) "
+                "AND NOT EXISTS (SELECT 1 FROM session_binding b "
+                "WHERE b.session_id=s.session_id AND b.binding IS NOT ?) "
                 + ("AND EXISTS (SELECT 1 FROM auth_owned_session a "
                    "WHERE a.session_id=s.session_id AND a.user_id=?) " if owner_id else "")
                 + "ORDER BY s.updated_at DESC, s.session_id DESC LIMIT ? OFFSET ?",
-                (*((owner_id,) if owner_id else ()), limit + 1, offset),
+                (session_binding, *((owner_id,) if owner_id else ()), limit + 1, offset),
             ).fetchall()
         return {"items": [dict(row) for row in rows[:limit]], "has_more": len(rows) > limit}
 

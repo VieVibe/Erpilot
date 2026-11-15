@@ -91,13 +91,12 @@ uv run pytest apps/api/tests/test_process_recovery.py apps/api/tests/test_intent
 ```sh
 uv sync --all-packages --frozen
 docker compose up -d postgres
-uv run --package erp-store python -m erp_store seed
 uv run --package erpilot-api python -m erpilot_api
 ```
 
 另开终端执行 `npm --prefix apps/web ci`、`npm --prefix apps/web run dev`，访问
-[开发工作台](http://localhost:5173)。种子操作针对本地 `data/erpilot.db`，演示入口使用独立临时库。
-首次启用正式业务库前先确认路径；有既有数据时不要为了展示反复 seed。
+[开发工作台](http://localhost:5173)。若要运行订单参考实现，先在 `.env` 设置 `ERPILOT_MODULE=order-example`。
+新建示例库时，执行一次 `uv run --package erp-store python -m erp_store seed` 并启动 API。种子操作针对本地 `data/erpilot.db`，离线演示入口使用独立临时库。
 
 真实嵌入会产生供应商请求和费用。配置 `EMBED_*` 后显式构建：
 
@@ -116,7 +115,7 @@ uv run --package mcp-erp python -m mcp_erp serve
 ```
 
 正式 API 默认 `ERPILOT_WRITES=0`；开启后写工具仍需要独立人工审批。
-真实 API 启动自动接入语义预览，默认 `ERPILOT_INTENT_MODE=enforce`、`ERPILOT_SEMANTIC=1`。
+订单示例的真实 API 自动接入语义预览，默认 `ERPILOT_INTENT_MODE=enforce`、`ERPILOT_SEMANTIC=1`。
 候选预算独立于普通聊天，配置与关闭见[使用指南](semantic-parsing.md)。离线演示仍免付费；
 新真实验收另建报告，不覆盖旧冻结批次。
 [意图分析范围](intent-analysis.md) · [模型评测门槛](eval-quality-gates.md)。

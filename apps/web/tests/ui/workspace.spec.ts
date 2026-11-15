@@ -1,11 +1,30 @@
 import { test, expect, type Page } from '@playwright/test';
 
-test('自定义业务模块显示自身示例并使用通用审批面板', async ({ page }) => {
+test('未配置业务模块时禁用对话并显示配置提示', async ({ page }) => {
   await mockWorkspace(page);
-  const suggestion = '提交一笔交通费报销，用途为客户拜访，金额为 38 元';
+  const requestedDrafts: string[] = [];
+  page.on('request', request => {
+    if (request.url().includes('/order-drafts')) requestedDrafts.push(request.url());
+  });
+  await page.route('**/api/runtime', route => route.fulfill({ json: {
+    data_source: 'unconfigured', writes_enabled: false, drafts_enabled: false,
+  } }));
+  await page.goto('/');
+  const notice = page.getByRole('alert').filter({ hasText: '尚未配置业务模块' });
+  await expect(notice).toContainText('ERPILOT_MODULE');
+  await expect(page.getByRole('textbox', { name: '消息', exact: true })).toBeDisabled();
+  await expect(page.getByRole('tab', { name: '订单草稿' })).toHaveCount(0);
+  await expect(page.getByText('查询订单', { exact: true })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: '业务助手' })).toBeVisible();
+  expect(requestedDrafts).toEqual([]);
+});
+
+test('工单模块显示自身示例并使用通用审批面板', async ({ page }) => {
+  await mockWorkspace(page);
+  const suggestion = '查询工单 DEMO-001';
   await page.route('**/api/runtime', route => route.fulfill({ json: {
     data_source: 'custom', writes_enabled: true, drafts_enabled: false,
-    module: { name: 'expense-example', title: '报销接入示例', suggestions: [suggestion] },
+    module: { name: 'acme-ticketing', title: '工单接入示例', suggestions: [suggestion] },
   } }));
   await page.goto('/');
   await expect(page.getByRole('tab', { name: '订单草稿' })).toHaveCount(0);

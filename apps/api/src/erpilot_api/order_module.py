@@ -3,16 +3,17 @@
 import copy
 import json
 from contextlib import aclosing, suppress
+from dataclasses import replace
 from uuid import uuid4
 
 from agent_core.demo_tools import system_prompt
 from agent_core.llm import ToolCall
 from erp_store.mutations import MutationError
+from mcp_erp.intent_analysis import INTENT_GUIDANCE
 
-from erpilot_api.checkpoint import thread_id_for_session
 from erpilot_api.draft_routes import ConfirmDraftRequest, register_draft_routes
 from erpilot_api.intent_routes import register_intent_routes
-from erpilot_api.modules import BusinessModule
+from erpilot_api.modules import BusinessModule, BusinessRuntimeFeatures, tool_contract_digest
 from erpilot_api.operation_routes import register_operation_routes
 from erpilot_api.service import SessionError
 
@@ -76,8 +77,6 @@ class OrderServiceHooks:
             "不得静默更换已批准的操作引用。"
         )
         if self.intent_store is not None:
-            from mcp_erp.intent_analysis import INTENT_GUIDANCE
-
             prompt += "\n" + INTENT_GUIDANCE
         return prompt
 
@@ -115,7 +114,7 @@ class OrderServiceHooks:
                 raise SessionError(403, "writes_disabled", "当前环境未开放订单提交")
             if type(expected_revision) is not int or expected_revision < 1:
                 raise SessionError(422, "invalid_argument", "确认版本须为正整数")
-            state = await service._runtime(session_id).get_state(thread_id_for_session(session_id))
+            state = await service.session_snapshot(session_id, for_execution=True)
             if state.next:
                 raise SessionError(409, "unfinished_run", "请先处理当前待审批或中断的操作")
             draft = self.drafts.get(session_id, draft_id)
@@ -160,6 +159,12 @@ def create_order_module(provider) -> BusinessModule:
         )
 
     analyzer = provider.intent_analysis
+    # Intent rollout modes change only the resolver and planning guidance.
+    # The existing approval recovery flow supports switching between these modes.
+    recovery_contract = tool_contract_digest([
+        replace(tool, description=tool.description.removesuffix("\n" + INTENT_GUIDANCE))
+        for tool in provider.tools if tool.name != "resolve_order_items"
+    ])
     return BusinessModule(
         name="mini-erp",
         title="订单与库存参考实现",
@@ -169,21 +174,20 @@ def create_order_module(provider) -> BusinessModule:
         reconciler=provider.reconciler,
         data_source="mcp",
         approval_gate=provider.gate,
-        service_options={
-            "business_hooks": hooks,
-        },
-        runtime_features={
-            "drafts_enabled": True,
-            "intent_preview_enabled": analyzer.store is not None,
-            "intent_recovery_enabled": (
+        order_hooks=hooks,
+        features=BusinessRuntimeFeatures(
+            drafts_enabled=True,
+            intent_preview_enabled=analyzer.store is not None,
+            intent_recovery_enabled=(
                 analyzer.store is None and analyzer.recovery is not None
                 and analyzer.recovery.available
             ),
-            "business_approvals_enabled": provider.operations is not None,
-        },
+            business_approvals_enabled=provider.operations is not None,
+        ),
         install_routes=install_routes,
         semantic_analyzer=analyzer,
         semantic_tool_name="resolve_order_items",
+        recovery_contract=recovery_contract,
     )
 
 

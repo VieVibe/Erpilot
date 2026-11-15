@@ -2,20 +2,21 @@ import type { ReactNode } from 'react';
 import { Button, Drawer, Grid, Layout, Tooltip } from 'antd';
 import { AppstoreOutlined, CloseOutlined, MenuOutlined, PlusOutlined } from '@ant-design/icons';
 
-export function WorkspaceShell({ sidebar, children, composer, business, runtimeLabel, status, historyOpen,
+export function WorkspaceShell({ sidebar, children, composer, business, runtimeLabel, orderWorkspace, status, historyOpen,
   businessOpen, sessionLocked, onHistoryOpen, onBusinessOpen, onNewSession }: {
   sidebar: ReactNode; children: ReactNode; composer: ReactNode; business: ReactNode;
-  runtimeLabel: string; status: string; historyOpen: boolean; businessOpen: boolean; sessionLocked: boolean;
+  runtimeLabel: string; orderWorkspace: boolean; status: string; historyOpen: boolean; businessOpen: boolean; sessionLocked: boolean;
   onHistoryOpen: (open: boolean) => void; onBusinessOpen: (open: boolean) => void; onNewSession: () => void;
 }) {
   const screens = Grid.useBreakpoint();
+  const title = orderWorkspace ? '掌柜助手' : '业务助手';
   const sidebarContent = <div className="sidebar-inner">
-    <a className="brand" href="#main-content" aria-label="Erpilot 掌柜助手，跳到对话">
-      <span className="brand-mark">e</span><span>Erpilot<small>掌柜助手</small></span>
+    <a className="brand" href="#main-content" aria-label={`Erpilot ${title}，跳到对话`}>
+      <span className="brand-mark">e</span><span>Erpilot<small>{title}</small></span>
     </a>
     <Button className="new-conversation" aria-label="新会话" icon={<PlusOutlined />} onClick={onNewSession} disabled={sessionLocked}>新会话</Button>
     {sidebar}
-    <div className="sidebar-bottom"><span className="workspace-avatar">掌</span><div><strong>业务工作台</strong><p>{runtimeLabel}</p></div></div>
+    <div className="sidebar-bottom"><span className="workspace-avatar">{orderWorkspace ? '掌' : 'e'}</span><div><strong>业务工作台</strong><p>{runtimeLabel}</p></div></div>
   </div>;
   return <Layout className="app workspace">
     <a className="skip-link" href="#main-content">跳到对话</a>
@@ -24,11 +25,11 @@ export function WorkspaceShell({ sidebar, children, composer, business, runtimeL
       <header className="workspace-header">
         <div className="header-title">
           {!screens.lg && <Button type="text" icon={<MenuOutlined />} aria-label="历史会话" onClick={() => onHistoryOpen(true)} />}
-          <div><h1>掌柜助手</h1><p>订单、库存与报价，一起处理。</p></div>
+          <div><h1>{title}</h1>{orderWorkspace && <p>订单、库存与报价，一起处理。</p>}</div>
         </div>
         <div className="header-actions">
           <span className="runtime-label">{runtimeLabel}</span>
-          <Tooltip title={businessOpen ? '收起业务面板' : '查看订单、审批和结果'}>
+          <Tooltip title={businessOpen ? '收起业务面板' : '打开业务面板'}>
             <Button icon={<AppstoreOutlined />} aria-label="业务面板" aria-expanded={businessOpen}
               onClick={() => onBusinessOpen(!businessOpen)} className={businessOpen ? 'panel-toggle active' : 'panel-toggle'}>业务面板</Button>
           </Tooltip>

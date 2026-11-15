@@ -1,7 +1,7 @@
 # 默认语义解析：使用、降级与验证
 
-2026-11-04 起，真实模型 API 正式入口默认 enforce，并自动接入创建/修改语义候选。
-`python -m erpilot_api`、兼容的 `erpilot_api.main:app`、`compose.live.yaml` 共用启动策略。
+设置 `ERPILOT_MODULE=order-example` 后，真实模型订单示例默认使用 enforce，并接入创建/修改语义候选。
+`python -m erpilot_api`、兼容的 `erpilot_api.main:app` 和 `compose.live.yaml` 共用此启动策略。
 一键离线演示和基础 Compose 继续使用脚本模型，免密钥、免付费调用。
 
 ![语义候选的完整原话与可编辑核对表](assets/semantic-preview-desktop.png)

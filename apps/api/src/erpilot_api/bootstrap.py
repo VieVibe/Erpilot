@@ -6,19 +6,18 @@ from concurrent.futures import ThreadPoolExecutor
 from decimal import Decimal
 from urllib.parse import urlsplit
 
-from agent_core.approval import StreamApprovalGate
 from agent_core.billing import EndpointRate, endpoint_rate
 from agent_core.llm import LLMClient, LLMConfig
-from erp_store.db import DEFAULT_DB
-from mcp_erp.intent_semantic import SemanticSettings
-from mcp_erp.session_tools import SessionErpTools
 
 from erpilot_api.main import create_app
 from erpilot_api.modules import load_module
-from erpilot_api.order_module import create_order_module
+
+ORDER_EXAMPLE = "order-example"
 
 
 def semantic_settings(config, mode):
+    from mcp_erp.intent_semantic import SemanticSettings
+
     enabled = os.getenv("ERPILOT_SEMANTIC", "1").lower()
     if enabled not in {"1", "true", "yes", "0", "false", "no"}:
         raise ValueError("ERPILOT_SEMANTIC must be 1/0, true/false or yes/no")
@@ -60,20 +59,33 @@ async def build_live_app(
     client_factory=None,
     checkpointer=None,
     policy_resolver=None,
+    module_spec=None,
 ):
+    if module_spec is None:
+        module_spec = os.getenv("ERPILOT_MODULE", "")
+    module_spec = module_spec.strip()
+    app_options = {
+        "run_store_path": run_store_path,
+        "trace_dir": trace_dir,
+        "auth_enabled": auth_enabled,
+        "checkpointer": checkpointer,
+    }
+    if not module_spec:
+        return create_app(framework_only=True, **app_options)
+
     config = config or LLMConfig.from_env()
-    module_spec = os.getenv("ERPILOT_MODULE", "").strip()
-    if module_spec:
+    app_options["client_factory"] = client_factory or (lambda: LLMClient(config))
+    app_options["model"] = config.model
+    if module_spec != ORDER_EXAMPLE:
         module = await load_module(module_spec)
-        return create_app(
-            business_module=module,
-            client_factory=client_factory or (lambda: LLMClient(config)),
-            model=config.model,
-            run_store_path=run_store_path,
-            trace_dir=trace_dir,
-            auth_enabled=auth_enabled,
-            checkpointer=checkpointer,
-        )
+        return create_app(business_module=module, **app_options)
+
+    from agent_core.approval import StreamApprovalGate
+    from erp_store.db import DEFAULT_DB
+    from mcp_erp.session_tools import SessionErpTools
+
+    from erpilot_api.order_module import create_order_module
+
     mode = os.getenv("ERPILOT_INTENT_MODE", "enforce")
     settings, reason = semantic_settings(config, mode)
     provider = await SessionErpTools.create(
@@ -84,14 +96,9 @@ async def build_live_app(
         policy_resolver=policy_resolver,
     )
     app = create_app(
-        client_factory=client_factory or (lambda: LLMClient(config)),
-        model=config.model,
         business_module=create_order_module(provider),
         intent_semantic_settings=settings,
-        run_store_path=run_store_path,
-        trace_dir=trace_dir,
-        auth_enabled=auth_enabled,
-        checkpointer=checkpointer,
+        **app_options,
     )
     app.state.semantic_runtime = {
         "intent_mode": mode,

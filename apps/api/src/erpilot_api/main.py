@@ -13,6 +13,8 @@
 """
 
 import asyncio
+import json
+import logging
 import os
 import time
 from collections.abc import AsyncIterator, Callable, Sequence
@@ -25,11 +27,10 @@ from uuid import uuid4
 
 from agent_core.approval import ApprovalDecision, StreamApprovalGate
 from agent_core.demo_tools import DEMO_TOOLS
-from agent_core.events import LoopEnd
 from agent_core.llm import DEFAULT_MODEL, LLMClient, LLMConfig
 from agent_core.prices import cost_of
 from agent_core.tools import Tool
-from fastapi import FastAPI, Query, Request
+from fastapi import Depends, FastAPI, Query, Request
 from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, Field
 from sse_starlette.sse import EventSourceResponse
@@ -38,16 +39,20 @@ from starlette.background import BackgroundTask
 from erpilot_api.auth import AuthMiddleware, register_auth
 from erpilot_api.auth_store import AuthStore
 from erpilot_api.checkpoint import open_checkpointer
-from erpilot_api.draft_routes import register_draft_routes
 from erpilot_api.events import encode_event, sse_frame
 from erpilot_api.history_routes import register_history_routes
-from erpilot_api.intent_routes import register_intent_routes
-from erpilot_api.modules import BusinessModule, BusinessSessionContext, validate_module
-from erpilot_api.operation_routes import register_operation_routes
+from erpilot_api.modules import (
+    BusinessModule,
+    BusinessRuntimeFeatures,
+    BusinessSessionContext,
+    ModuleBindingError,
+    validate_module,
+)
 from erpilot_api.run_store import RunStore
-from erpilot_api.service import ChatService, SessionError
+from erpilot_api.service import ChatService, RunFinished, SessionError
 
 DEFAULT_TRACE_DIR = Path("traces")
+logger = logging.getLogger(__name__)
 
 _WRITES_ENV = ("1", "true", "yes")
 
@@ -113,16 +118,23 @@ def create_app(
     auth_enabled: bool | None = None,
     auth_store: AuthStore | None = None,
     business_module: BusinessModule | None = None,
+    framework_only: bool = False,
 ) -> FastAPI:
     """应用工厂：测试注入 mock 的 LLMClient 工厂、临时 trace 目录与工具集。"""
     if scripted_demo and client_factory is None:
         raise ValueError("scripted_demo requires an explicit offline client_factory")
+    if framework_only and (
+        business_module is not None or tools is not None or session_erp_tools is not None
+        or mutation_reconciler is not None or scripted_demo
+    ):
+        raise ValueError("framework_only does not accept a business module or tools")
     if (business_module is not None
             and (tools is not None or session_erp_tools is not None
                  or mutation_reconciler is not None)):
         raise ValueError("business_module owns tool and recovery configuration")
     if (
-        session_erp_tools is None
+        not framework_only
+        and session_erp_tools is None
         and business_module is None
         and tools is None
         and os.environ.get("ERPILOT_TOOLS", "").lower() == "mcp"
@@ -146,13 +158,43 @@ def create_app(
         env_gate = business_module.approval_gate
         if any(tool.risk is not None for tool in resolved_tools) and approval_gate is None:
             approval_gate = env_gate or StreamApprovalGate()
+    elif framework_only:
+        resolved_tools, env_gate = [], None
     else:
         resolved_tools, env_gate = _resolve_tools(tools)
     analyzer = business_module.semantic_analyzer if business_module is not None else None
     if getattr(analyzer, "semantic", None) is not None:
         raise ValueError("semantic provider already belongs to an API host; "
                          "create a fresh provider")
-    service_options = dict(business_module.service_options or {}) if business_module else {}
+    has_write_tools = any(tool.risk is not None for tool in resolved_tools)
+
+    def bind_tools(context):
+        try:
+            return business_module.tools_for(context)
+        except ModuleBindingError as exc:
+            logger.error("Tool contract mismatch in module %s: %s", business_module.name, exc)
+            raise SessionError(503, "module_contract_mismatch", "业务模块工具契约不匹配") from exc
+
+    def bind_reconciler(context, *, write_access=True):
+        try:
+            return business_module.reconciler_for(
+                context, required=has_write_tools and write_access,
+            )
+        except ModuleBindingError as exc:
+            logger.error("Reconciler contract mismatch in module %s: %s", business_module.name, exc)
+            raise SessionError(
+                503, "module_contract_mismatch", "业务模块缺少有效的写入对账器"
+            ) from exc
+
+    session_binding = None
+    if business_module is not None:
+        manifest = business_module.manifest()
+        instance = os.getenv("ERPILOT_INSTANCE_ID", "").strip() or manifest["name"]
+        session_binding = json.dumps(
+            [instance, manifest["name"], manifest["version"],
+             business_module.recovery_contract or manifest["contract"]],
+            ensure_ascii=False, separators=(",", ":"),
+        )
     service = ChatService(
         client_factory=client_factory or (lambda: LLMClient(LLMConfig.from_env())),
         model=model,
@@ -172,18 +214,20 @@ def create_app(
         ),
         clock=clock,
         session_tools_factory=(
-            (lambda session_id: business_module.tools_for(
+            (lambda session_id: bind_tools(
                 BusinessSessionContext(session_id)
             )) if business_module else None
         ),
         session_reconciler_factory=(
-            (lambda session_id: business_module.reconciler_for(
+            (lambda session_id: bind_reconciler(
                 BusinessSessionContext(session_id)
             )) if business_module else None
         ),
         business_instructions=business_module.instructions if business_module else None,
+        session_binding=session_binding,
         trace_sinks=[] if scripted_demo else None,
-        **service_options,
+        loop_config=business_module.runtime_loop_config if business_module else None,
+        business_hooks=business_module.runtime_order_hooks if business_module else None,
     )
     if intent_semantic_settings is not None:
         from mcp_erp.intent_semantic import SemanticCoordinator
@@ -254,12 +298,14 @@ def create_app(
                 if context is None:
                     return []
                 return auth_store.session_tools(
-                    session_id, business_module.tools_for(context)
+                    session_id, bind_tools(context)
                 )
 
             def authenticated_reconciler(session_id):
                 context = authenticated_context(session_id)
-                return None if context is None else business_module.reconciler_for(context)
+                return None if context is None else bind_reconciler(
+                    context, write_access=context.role == "approver",
+                )
 
             service._session_tools_factory = authenticated_tools
             service._session_reconciler_factory = authenticated_reconciler
@@ -296,14 +342,23 @@ def create_app(
     def healthz() -> dict[str, str]:
         return {"status": "ok"}
 
-    if business_module is None:
+    if business_module is None and not framework_only:
+        from erpilot_api.draft_routes import register_draft_routes
+        from erpilot_api.intent_routes import register_intent_routes
+        from erpilot_api.operation_routes import register_operation_routes
+
         register_draft_routes(app, session_erp_tools, service)
         register_intent_routes(app, session_erp_tools, service)
         register_operation_routes(app, service._operations)
-    register_history_routes(app, service._run_store, authenticated=auth_store is not None)
+    register_history_routes(
+        app, service._run_store, authenticated=auth_store is not None,
+        session_binding=session_binding,
+    )
+    capabilities = (business_module.runtime_capabilities if business_module
+                    else BusinessRuntimeFeatures())
     module_features = {
-        "drafts_enabled": False,
-        **(dict(business_module.runtime_features or {}) if business_module else {}),
+        name: value for name, value in asdict(capabilities).items()
+        if value is not None and name != "business_approvals_enabled"
     }
 
     @app.get("/api/runtime")
@@ -321,30 +376,34 @@ def create_app(
             **({"scripted_demo": True, "demo_persistent": persistent_demo}
                if scripted_demo else {}),
             "data_source": (
+                "unconfigured" if framework_only else
                 business_module.data_source if business_module is not None else
                 "custom" if tools is not None else "demo"
             ),
-            "writes_enabled": any(tool.risk is not None for tool in resolved_tools) and (
+            "writes_enabled": has_write_tools and (
                 auth_store is None or request.state.identity.role == "approver"),
             "reasoning_enabled": os.environ.get("ERPILOT_THINKING", "").lower() in _WRITES_ENV,
             **module_features,
             **({"intent_semantic_revision_enabled": True}
                if intent_semantic_settings is not None else {}),
-            "business_approvals_enabled": bool(
-                business_module
-                and (business_module.runtime_features or {}).get(
-                    "business_approvals_enabled", False)
-                and any(tool.risk is not None for tool in resolved_tools)
+            "business_approvals_enabled": (
+                capabilities.business_approvals_enabled and has_write_tools
             ),
         }
 
-    @app.post("/api/chat/stream")
+    async def require_business_module():
+        # Keep the legacy error code for API clients.
+        raise SessionError(503, "erp_not_configured", "尚未配置业务模块，请设置 ERPILOT_MODULE")
+
+    execution_dependencies = [Depends(require_business_module)] if framework_only else []
+
+    @app.post("/api/chat/stream", dependencies=execution_dependencies)
     async def chat_stream(req: ChatRequest, request: Request) -> EventSourceResponse:
         session_id = req.session_id or (auth_store.new_session(request.state.identity)
                                        if auth_store is not None else uuid4().hex)
         return event_response(session_id, service.stream_run(session_id, req.message))
 
-    @app.post("/api/chat/approve/stream")
+    @app.post("/api/chat/approve/stream", dependencies=execution_dependencies)
     async def resume_approval(req: ResumeRequest) -> EventSourceResponse:
         release = await service.reserve_resume(req.session_id, req.pending_id)
         return event_response(
@@ -359,11 +418,11 @@ def create_app(
             release,
         )
 
-    @app.post("/api/sessions/{session_id}/resume/stream")
+    @app.post("/api/sessions/{session_id}/resume/stream", dependencies=execution_dependencies)
     async def continue_interrupted_session(session_id: str) -> EventSourceResponse:
         return event_response(session_id, service.stream_retry(session_id))
 
-    @app.post("/api/sessions/{session_id}/cancel")
+    @app.post("/api/sessions/{session_id}/cancel", dependencies=execution_dependencies)
     async def cancel_session(session_id: str) -> dict[str, Any]:
         return await service.cancel_session(session_id)
 
@@ -373,6 +432,7 @@ def create_app(
         run = store.get_run(run_id) if store else None
         if run is None:
             raise SessionError(404, "run_not_found", "运行记录不存在")
+        service.check_session_binding(run["session_id"])
 
         async def replay_and_follow():
             cursor = after_seq
@@ -430,7 +490,7 @@ def create_app(
                     encoded = encode_event(item)
                     if encoded is not None:
                         yield sse_frame(*encoded)
-                    if isinstance(item, LoopEnd):
+                    if isinstance(item, RunFinished):
                         yield sse_frame(
                             "done",
                             {
@@ -439,7 +499,8 @@ def create_app(
                                 "usage": asdict(item.usage) if item.usage else None,
                                 "cost": cost_of(service.model, item.usage),
                                 "duration_ms": round((time.perf_counter() - t0) * 1000, 1),
-                                "trace": str(service.last_trace) if service.last_trace else None,
+                                "trace": item.trace_path,
+                                "run_id": item.run_id,
                             },
                         )
             except SessionError as exc:
@@ -458,7 +519,7 @@ def create_app(
             generate(), background=BackgroundTask(release) if release else None
         )
 
-    @app.post("/api/chat/approve")
+    @app.post("/api/chat/approve", dependencies=execution_dependencies)
     async def approve(req: ApproveRequest) -> dict[str, object]:
         """审批决策回填：挂起中的 SSE 流在决策落定后继续推进。"""
         ok = service.respond_approval(

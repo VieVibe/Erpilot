@@ -3,16 +3,46 @@
 import inspect
 import json
 from collections.abc import Awaitable, Callable, Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field, fields
 from hashlib import sha256
 from importlib import import_module
 from importlib.metadata import entry_points
-from typing import Any
+from typing import TYPE_CHECKING, Any, TypedDict
 
 from agent_core.recovery import MutationReconciler
+from agent_core.runtime_config import LoopConfig
 from agent_core.tools import Tool
 
+if TYPE_CHECKING:
+    from erpilot_api.order_module import OrderServiceHooks
+
 ENTRY_POINT_GROUP = "erpilot.business_modules"
+
+
+class ModuleBindingError(ValueError):
+    """The tools or reconciler bound to a session violate the module declaration."""
+
+
+class LegacyServiceOptions(TypedDict, total=False):
+    loop_config: LoopConfig
+    business_hooks: "OrderServiceHooks"
+
+
+@dataclass(frozen=True)
+class BusinessRuntimeFeatures:
+    drafts_enabled: bool = False
+    intent_preview_enabled: bool | None = None
+    intent_recovery_enabled: bool | None = None
+    business_approvals_enabled: bool = False
+
+    def __post_init__(self):
+        for name in ("drafts_enabled", "business_approvals_enabled"):
+            if type(getattr(self, name)) is not bool:
+                raise TypeError(f"{name} must be a boolean")
+        for name in ("intent_preview_enabled", "intent_recovery_enabled"):
+            value = getattr(self, name)
+            if value is not None and type(value) is not bool:
+                raise TypeError(f"{name} must be a boolean when set")
 
 
 @dataclass(frozen=True)
@@ -30,9 +60,9 @@ class BusinessModule:
     """Bind tools and recovery to a trusted session, with optional example UI hints.
 
     Factories must return stable names and schemas across sessions and restarts.
-    Session IDs are host-owned conversation IDs, not ERP user credentials. New
-    modules should prefer the context factories when ERP authorization depends
-    on the signed-in user; the session-only factories remain compatible.
+    New modules should use the context factories to map signed-in users to
+    target-system permissions. The host owns session IDs and keeps the
+    session-only factories for existing plugins.
     """
 
     name: str
@@ -45,7 +75,7 @@ class BusinessModule:
     version: str = "1"
     data_source: str = "custom"
     approval_gate: object | None = None
-    service_options: Mapping[str, Any] | None = None
+    service_options: LegacyServiceOptions | None = None
     runtime_features: Mapping[str, bool] | None = None
     install_routes: Callable[[Any, Any, Callable[..., Any]], None] | None = None
     semantic_analyzer: object | None = None
@@ -56,15 +86,22 @@ class BusinessModule:
     ) = None
     connector_summary: Mapping[str, object] | None = None
     health_check: Callable[[], Awaitable[None]] | None = None
+    recovery_contract: str | None = None
+    loop_config: LoopConfig | None = None
+    features: BusinessRuntimeFeatures | None = None
+    order_hooks: "OrderServiceHooks | None" = None
+    _catalog: dict[str, dict[str, Any]] = field(init=False, repr=False, compare=False)
+    _contract: str = field(init=False, repr=False, compare=False)
+    runtime_loop_config: LoopConfig | None = field(init=False, repr=False, compare=False)
+    runtime_order_hooks: "OrderServiceHooks | None" = field(init=False, repr=False, compare=False)
+    runtime_capabilities: BusinessRuntimeFeatures = field(init=False, repr=False, compare=False)
 
     def __post_init__(self):
-        names = [tool.name for tool in self.tools]
+        tools = tuple(self.tools)
         if not self.name.strip() or not self.title.strip():
             raise ValueError("business module name and title are required")
         if not self.version.strip():
             raise ValueError("business module version is required")
-        if len(names) != len(set(names)):
-            raise ValueError("business module tool names must be unique")
         if self.instructions is None and self.data_source != "mcp":
             raise ValueError("custom business modules must provide instructions")
         if self.data_source not in {"custom", "mcp", "demo"}:
@@ -75,66 +112,135 @@ class BusinessModule:
                for suggestion in self.suggestions):
             raise ValueError("business module suggestions must contain 1 to 32000 characters")
 
+        if any(not isinstance(tool, Tool) for tool in tools):
+            raise TypeError("business module catalog must contain Tool objects")
+        catalog = {tool.name: _tool_contract(tool) for tool in tools}
+        if len(catalog) != len(tools):
+            raise ValueError("business module tool names must be unique")
+        object.__setattr__(self, "tools", tools)
+        object.__setattr__(self, "_catalog", catalog)
+        object.__setattr__(self, "_contract", _contract_digest(list(catalog.values())))
+
+        if self.service_options is not None and not isinstance(self.service_options, Mapping):
+            raise TypeError("service_options must be a mapping")
+        options = self.service_options or {}
+        unknown = options.keys() - LegacyServiceOptions.__annotations__.keys()
+        if unknown:
+            raise ValueError(f"unsupported service_options: {', '.join(sorted(unknown))}")
+        if self.loop_config is not None and "loop_config" in options:
+            raise ValueError("configure loop_config once")
+        if self.order_hooks is not None and "business_hooks" in options:
+            raise ValueError("configure order hooks once")
+        config = self.loop_config if self.loop_config is not None else options.get("loop_config")
+        if config is not None and not isinstance(config, LoopConfig):
+            raise TypeError("loop_config must be a LoopConfig")
+        object.__setattr__(self, "runtime_loop_config", config)
+        hooks = self.order_hooks if self.order_hooks is not None else options.get("business_hooks")
+        object.__setattr__(self, "runtime_order_hooks", hooks)
+
+        if self.features is not None and self.runtime_features is not None:
+            raise ValueError("configure runtime features once")
+        if self.features is not None and not isinstance(self.features, BusinessRuntimeFeatures):
+            raise TypeError("features must be BusinessRuntimeFeatures")
+        if self.runtime_features is not None:
+            if not isinstance(self.runtime_features, Mapping):
+                raise TypeError("runtime_features must be a mapping")
+            known = {feature.name for feature in fields(BusinessRuntimeFeatures)}
+            unknown = self.runtime_features.keys() - known
+            if unknown:
+                raise ValueError(f"unsupported runtime_features: {', '.join(sorted(unknown))}")
+            if any(type(value) is not bool for value in self.runtime_features.values()):
+                raise TypeError("runtime_features values must be booleans")
+
+        features = self.features or BusinessRuntimeFeatures(**(self.runtime_features or {}))
+        object.__setattr__(self, "runtime_capabilities", features)
+
     def tools_for(self, context: BusinessSessionContext) -> Sequence[Tool]:
         if self.for_context is not None:
-            return self.for_context(context)
-        if self.for_session is None:  # Guarded by __post_init__; narrows the type.
+            supplied = self.for_context(context)
+        elif self.for_session is not None:
+            supplied = self.for_session(context.session_id)
+        else:
             raise RuntimeError("business module has no tool factory")
-        return self.for_session(context.session_id)
+        try:
+            tools = list(supplied)
+        except TypeError as exc:
+            raise ModuleBindingError("business module session factory must return tools") from exc
+        if any(not isinstance(tool, Tool) for tool in tools):
+            raise ModuleBindingError("business module session factory must return Tool objects")
+        actual = {tool.name: _tool_contract(tool) for tool in tools}
+        if len(actual) != len(tools) or actual != self._catalog:
+            raise ModuleBindingError(
+                "business module session factory must preserve tool names, descriptions, "
+                "risk, retry policy and schemas"
+            )
+        return tools
 
-    def reconciler_for(self, context: BusinessSessionContext) -> MutationReconciler | None:
+    def reconciler_for(
+        self, context: BusinessSessionContext, *, required: bool = False,
+    ) -> MutationReconciler | None:
         if self.reconciler_for_context is not None:
-            return self.reconciler_for_context(context)
-        return self.reconciler(context.session_id)
+            reconciler = self.reconciler_for_context(context)
+        else:
+            reconciler = self.reconciler(context.session_id)
+        if (required or reconciler is not None) and not callable(
+            getattr(reconciler, "lookup", None)
+        ):
+            raise ModuleBindingError("business modules with write tools must provide a reconciler")
+        return reconciler
 
     def manifest(self) -> dict[str, str]:
-        contract = json.dumps(
-            [_tool_contract(tool) for tool in self.tools],
-            ensure_ascii=False,
-            sort_keys=True,
-            separators=(",", ":"),
-        )
         return {
             "name": self.name,
             "title": self.title,
             "version": self.version,
-            "contract": sha256(contract.encode()).hexdigest(),
+            "contract": self._contract,
         }
 
 
+def tool_contract_digest(tools: Sequence[Tool]) -> str:
+    return _contract_digest([_tool_contract(tool) for tool in tools])
+
+
+def _contract_digest(contracts: list[dict[str, Any]]) -> str:
+    contract = json.dumps(
+        contracts,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    return sha256(contract.encode()).hexdigest()
+
+
 def _tool_contract(tool: Tool) -> dict[str, Any]:
+    try:
+        parameters = tool.params_model.model_json_schema()
+    except Exception as exc:
+        raise ModuleBindingError(f"tool {tool.name!r} has an invalid parameter schema") from exc
     return {
         "name": tool.name,
         "description": tool.description,
         "risk": tool.risk,
         "retry_safe": tool.retry_safe,
-        "parameters": tool.params_model.model_json_schema(),
+        "parameters": parameters,
     }
 
 
 def validate_module(module: BusinessModule) -> BusinessModule:
     """Fail startup when session binding would invalidate persisted tool calls."""
-    catalog = {tool.name: _tool_contract(tool) for tool in module.tools}
     validation_context = BusinessSessionContext(
         session_id="__erpilot_contract_validation__",
         user_id="__erpilot_contract_validation__",
         username="contract-validation",
         role="approver",
     )
-    bound_tools = list(module.tools_for(validation_context))
-    bound = {tool.name: _tool_contract(tool) for tool in bound_tools}
-    if len(bound) != len(bound_tools) or bound != catalog:
-        raise ValueError(
-            "business module session factory must preserve tool names, descriptions and schemas"
-        )
+    module.tools_for(validation_context)
     write_tools = [tool for tool in module.tools if tool.risk is not None]
     for tool in write_tools:
         if "client_token" not in tool.params_model.model_fields:
             raise ValueError(f"write tool {tool.name!r} must accept client_token")
     if write_tools:
-        reconciler = module.reconciler_for(validation_context)
-        if reconciler is None or not callable(getattr(reconciler, "lookup", None)):
-            raise ValueError("business modules with write tools must provide a reconciler")
+        module.reconciler_for(validation_context, required=True)
     return module
 
 

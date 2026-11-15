@@ -29,7 +29,7 @@ class SessionPage(BaseModel):
     has_more: bool
 
 
-def register_history_routes(app: FastAPI, store, *, authenticated=False):
+def register_history_routes(app: FastAPI, store, *, authenticated=False, session_binding=None):
     @app.get("/api/sessions", response_model=SessionPage)
     def list_sessions(
         request: Request,
@@ -45,4 +45,5 @@ def register_history_routes(app: FastAPI, store, *, authenticated=False):
         return store.list_sessions(
             limit=limit, offset=offset,
             owner_id=request.state.identity.user_id if authenticated else None,
+            session_binding=session_binding,
         )

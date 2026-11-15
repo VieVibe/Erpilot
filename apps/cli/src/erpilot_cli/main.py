@@ -47,7 +47,10 @@ from rich.panel import Panel
 from rich.prompt import Confirm
 from rich.table import Table
 
-app = typer.Typer(help="Erpilot 掌柜助手", no_args_is_help=True)
+from erpilot_cli.plugin_scaffold import app as plugin_app
+
+app = typer.Typer(help="Erpilot 业务 Agent 工具", no_args_is_help=True)
+app.add_typer(plugin_app, name="plugin")
 console = Console()
 err_console = Console(stderr=True)
 

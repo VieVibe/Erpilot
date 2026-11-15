@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from pydantic import ConfigDict, Field, model_validator
 
 from erpilot_api.draft_routes import DraftItemRequest, DraftRequest
-from erpilot_api.service import SessionError, thread_id_for_session
+from erpilot_api.service import SessionError
 
 
 class IntentFormItem(DraftItemRequest):
@@ -58,7 +58,7 @@ def register_intent_routes(app: FastAPI, provider, service):
         store()
 
     async def idle(session_id):
-        snapshot = await service._runtime(session_id).get_state(thread_id_for_session(session_id))
+        snapshot = await service.session_snapshot(session_id, for_execution=True)
         if snapshot.next:
             raise SessionError(409, "unfinished_run", "请先处理会话中尚未完成的操作")
 

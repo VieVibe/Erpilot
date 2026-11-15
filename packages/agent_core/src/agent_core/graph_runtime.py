@@ -20,11 +20,12 @@ class LangGraphRuntime:
     def __init__(
         self, client, tools=(), config=None, checkpointer=None, *,
         approval_enabled=False, mutation_reconciler=None,
-        approval_ttl_seconds=1800, clock=None,
+        approval_ttl_seconds=1800, clock=None, session_binding=None,
     ):
         if checkpointer is None:
             raise ValueError("explicit checkpointer is required")
         self._config = config or LoopConfig()
+        self._session_binding = session_binding
         self._direct_tools = {t.name for t in tools if t.risk and t.direct_response is not None}
         self._gates = {t.name: t.approval_gate for t in tools if t.approval_gate is not None}
         approval_enabled = approval_enabled or all(
@@ -48,11 +49,17 @@ class LangGraphRuntime:
     async def get_state(self, thread_id):
         return await self.graph.aget_state(self._checkpoint_config(thread_id))
 
+    def _initial_state(self, messages):
+        state = initial_state(messages)
+        if self._session_binding is not None:
+            state["session_binding"] = self._session_binding
+        return state
+
     async def stream(self, messages, *, thread_id):
         snapshot = await self.get_state(thread_id)
         if snapshot.next:
             raise ValueError("thread has unfinished execution; resume it before a new message")
-        async with aclosing(self._stream(initial_state(messages), thread_id)) as events:
+        async with aclosing(self._stream(self._initial_state(messages), thread_id)) as events:
             async for event in events:
                 yield event
 
@@ -75,7 +82,7 @@ class LangGraphRuntime:
         snapshot = await self.get_state(thread_id)
         if snapshot.next:
             raise ValueError("thread has unfinished execution; resume it before a new action")
-        state = initial_state(messages)
+        state = self._initial_state(messages)
         state["messages"].append(assistant_toolcall_message("", [call]))
         state.update(direct_action=True, pending_calls=[asdict(call)])
         async with aclosing(self._stream(state, thread_id)) as events:

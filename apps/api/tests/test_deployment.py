@@ -5,7 +5,7 @@ from contextlib import contextmanager
 from types import SimpleNamespace
 
 import pytest
-from erpilot_api import deployment
+from erpilot_api import deployment, offline
 
 
 def test_initialization_preserves_existing_data_and_recovers_failed_first_seed(
@@ -17,16 +17,16 @@ def test_initialization_preserves_existing_data_and_recovers_failed_first_seed(
         path.write_bytes(b"incomplete")
         raise RuntimeError("seed interrupted")
 
-    monkeypatch.setattr(deployment, "seed_demo_database", broken)
+    monkeypatch.setattr(offline, "seed_demo_database", broken)
     with pytest.raises(RuntimeError, match="interrupted"):
         deployment.initialize_database(database)
     assert not database.exists() and not list(tmp_path.glob(".seed-*.db"))
     monkeypatch.setattr(
-        deployment, "seed_demo_database", lambda path: path.write_bytes(b"complete")
+        offline, "seed_demo_database", lambda path: path.write_bytes(b"complete")
     )
     deployment.initialize_database(database)
     assert database.read_bytes() == b"complete"
-    monkeypatch.setattr(deployment, "seed_demo_database", broken)
+    monkeypatch.setattr(offline, "seed_demo_database", broken)
     deployment.initialize_database(database)
     assert database.read_bytes() == b"complete"
 
@@ -40,10 +40,24 @@ def test_concurrent_seed_never_replaces_a_database_created_during_initialization
         path.write_bytes(b"new seed")
         database.write_bytes(b"existing business data")
 
-    monkeypatch.setattr(deployment, "seed_demo_database", concurrent)
+    monkeypatch.setattr(offline, "seed_demo_database", concurrent)
     deployment.initialize_database(database)
     assert database.read_bytes() == b"existing business data"
     assert not list(tmp_path.glob(".seed-*.db"))
+
+
+async def test_default_deployment_leaves_reference_erp_database_unseeded(tmp_path, monkeypatch):
+    monkeypatch.delenv("ERPILOT_RUNTIME", raising=False)
+    monkeypatch.delenv("ERPILOT_MODULE", raising=False)
+    monkeypatch.setenv("ERPILOT_DATA_DIR", str(tmp_path))
+    web = tmp_path / "web"
+    web.mkdir()
+    (web / "index.html").write_text("<!doctype html>", encoding="utf-8")
+    monkeypatch.setenv("ERPILOT_WEB_DIST", str(web))
+    app = await deployment.build_app()
+    assert app.state.deployment_mode == "live"
+    assert app.state.business_module is None
+    assert not (tmp_path / "erpilot.db").exists()
 
 
 async def test_readiness_includes_selected_business_module_health():

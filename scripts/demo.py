@@ -56,6 +56,12 @@ async def run_scenario(scenario: str, db: Path, output: Path) -> dict:
     prompts = [PROMPTS[key] for key in ("draft", "revise", "submit")] \
         if scenario in {"order", "order_denied"} else [PROMPTS[scenario]]
     events, traces, turns = [], [], []
+
+    def current_trace():
+        store = app.state.run_store
+        run_id = store.latest_run(scenario)["run_id"]
+        return str(Path(store.get_run(run_id)["trace_path"]).resolve())
+
     approved = scenario not in {"deny", "order_denied"}
     try:
         for prompt in prompts:
@@ -65,13 +71,13 @@ async def run_scenario(scenario: str, db: Path, output: Path) -> dict:
                     turn_events.append(event)
                     if isinstance(event, ApprovalPending):
                         break
-            traces.append(str(service.last_trace.resolve()))
+            traces.append(current_trace())
             pending = [event for event in turn_events if isinstance(event, ApprovalPending)]
             for event in pending:
                 turn_events.extend([event async for event in service.stream_resume(
                     scenario, event.pending_id, approved, "离线演示的固定决策",
                 )])
-                traces.append(str(service.last_trace.resolve()))
+                traces.append(current_trace())
             events.extend(turn_events)
             turns.append({
                 "prompt": prompt,

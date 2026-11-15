@@ -4,15 +4,57 @@ LLM 在 HTTP 边界 mock（agent_core.testing），整条 FastAPI → LangGraphR
 链路都跑真代码，不烧 token。
 """
 
+import asyncio
 import json
 import re
 
 import httpx2
 import pytest
 from agent_core.demo_tools import DEMO_TOOLS
+from agent_core.events import LoopEnd
+from agent_core.llm import StreamEnd, TextDelta
 from agent_core.testing import USAGE, chunk, make_client, sse_response, tool_call_chunks
 from erpilot_api.main import create_app
 from langgraph.checkpoint.memory import InMemorySaver
+
+
+async def test_interleaved_sessions_report_their_own_run_trace(tmp_path):
+    started, release = asyncio.Event(), asyncio.Event()
+
+    class Model:
+        async def stream_chat(self, messages, tools=None):
+            if messages[-1]["content"] == "A":
+                started.set()
+                await release.wait()
+            yield TextDelta("ok")
+            yield StreamEnd()
+
+    app = create_app(
+        checkpointer=InMemorySaver(), trace_dir=tmp_path, tools=[], client_factory=Model,
+    )
+    async with httpx2.AsyncClient(
+        transport=httpx2.ASGITransport(app), base_url="http://test",
+    ) as client, asyncio.TaskGroup() as tasks:
+        first = tasks.create_task(
+            client.post("/api/chat/stream", json={"session_id": "a", "message": "A"})
+        )
+        try:
+            await asyncio.wait_for(started.wait(), timeout=5)
+            second = await client.post(
+                "/api/chat/stream", json={"session_id": "b", "message": "B"},
+            )
+        finally:
+            release.set()
+    traces = []
+    for session_id, response in (("a", first.result()), ("b", second)):
+        done = re.search(r"event: done\r?\ndata: ([^\r\n]+)", response.text)
+        assert done is not None, response.text
+        payload = json.loads(done[1])
+        run = app.state.run_store.get_run(payload["run_id"])
+        assert run["session_id"] == session_id
+        assert payload["trace"] == run["trace_path"]
+        traces.append(payload["trace"])
+    assert traces[0] != traces[1]
 
 
 async def test_runtime_reports_actual_tool_mode_and_write_capability(tmp_path, monkeypatch):
@@ -362,7 +404,7 @@ async def test_approval_flow_via_chat_service(tmp_path) -> None:
 
     names = [type(e).__name__ for e in events]
     assert "ApprovalPending" in names and "ApprovalResolved" in names
-    assert names[-1] == "LoopEnd"
+    assert isinstance(events[-1], LoopEnd)
     finished = next(e for e in events if type(e).__name__ == "ToolCallFinished")
     assert json.loads(finished.content) == {"created": "A1001"}
     from agent_core.demo_tools import WRITES_PROMPT
