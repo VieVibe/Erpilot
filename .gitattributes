@@ -1,2 +1,3 @@
 # Preserve recorded SHA-256 hashes of immutable evaluation evidence across platforms.
 reports/** -text
+.githooks/* text eol=lf
