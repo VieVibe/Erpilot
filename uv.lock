@@ -609,6 +609,7 @@ source = { editable = "apps/cli" }
 dependencies = [
     { name = "agent-core" },
     { name = "erp-store" },
+    { name = "erpilot-api" },
     { name = "mcp-erp" },
     { name = "rich" },
     { name = "typer" },
@@ -618,6 +619,7 @@ dependencies = [
 requires-dist = [
     { name = "agent-core", editable = "packages/agent_core" },
     { name = "erp-store", editable = "packages/erp_store" },
+    { name = "erpilot-api", editable = "apps/api" },
     { name = "mcp-erp", editable = "packages/mcp_erp" },
     { name = "rich", specifier = ">=13" },
     { name = "typer", specifier = ">=0.12" },

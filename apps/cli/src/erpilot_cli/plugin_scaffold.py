@@ -1,12 +1,21 @@
-"""Generate a standalone, read-only business module starter."""
+"""Generate and validate standalone business modules."""
 
+import asyncio
+import json
 import re
 from pathlib import Path
 from typing import Annotated
 
 import typer
+from erpilot_api.modules import (
+    BusinessModule,
+    BusinessSessionContext,
+    PluginApiVersionError,
+    load_module,
+)
+from pydantic import ValidationError
 
-app = typer.Typer(help="创建业务模块插件", no_args_is_help=True)
+app = typer.Typer(help="创建和检查业务模块插件", no_args_is_help=True)
 
 _PROJECT = """\
 [build-system]
@@ -17,7 +26,7 @@ build-backend = "hatchling.build"
 name = "erpilot-plugin-@NAME@"
 version = "0.1.0"
 requires-python = ">=3.12"
-dependencies = ["erpilot-api>=0.1.0", "agent-core", "pydantic>=2"]
+dependencies = ["erpilot-api>=0.1.0", "pydantic>=2"]
 
 [project.entry-points."erpilot.business_modules"]
 @NAME@ = "@PACKAGE@:create_module"
@@ -29,8 +38,7 @@ packages = ["src/@PACKAGE@"]
 _MODULE = '''\
 """@NAME@ plugin starter."""
 
-from agent_core.tools import Tool
-from erpilot_api.modules import BusinessModule, BusinessSessionContext
+from erpilot_api.plugin import BusinessModule, BusinessSessionContext, Tool
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -58,6 +66,7 @@ def create_module() -> BusinessModule:
         name="@NAME@",
         title="@NAME@",
         version="0.1.0",
+        api_version=1,
         instructions="使用 get_ticket 按工单编号查询，只根据工具结果回答。",
         tools=tools_for(BusinessSessionContext("discovery")),
         for_context=tools_for,
@@ -75,6 +84,7 @@ Erpilot 只读插件。示例工具可以查询固定工单 `DEMO-001`。
 ```powershell
 uv sync --all-packages
 uv pip install --no-deps -e ./@NAME@
+uv run --no-sync --package erpilot-cli erpilot plugin check @NAME@
 $env:ERPILOT_MODULE = '@NAME@'
 uv run --no-sync --package erpilot-api python -m erpilot_api
 ```
@@ -119,3 +129,77 @@ def init_plugin(
 
     typer.echo(f"已创建 {target.resolve()}")
     typer.echo(f"接入步骤见 README.md，插件入口为 {name}。")
+
+
+async def _try_read_tool(module: BusinessModule, name: str, arguments: str | None) -> None:
+    context = BusinessSessionContext("erpilot-plugin-check")
+    try:
+        tools = module.tools_for(context)
+    except Exception as error:
+        typer.echo(f"测试会话工具绑定失败（{type(error).__name__}）。", err=True)
+        raise typer.Exit(1) from None
+    selected = next((tool for tool in tools if tool.name == name), None)
+    if selected is None or any((
+        selected.risk is not None,
+        selected.call_validator,
+        selected.required_read,
+        selected.stage_policy,
+        selected.validated_handler,
+    )):
+        typer.echo("只能调用不依赖会话策略或执行前校验的只读工具。", err=True)
+        raise typer.Exit(1)
+    try:
+        params = selected.params_model.model_validate_json(arguments or "{}")
+    except ValidationError as error:
+        for issue in error.errors(include_input=False, include_context=False):
+            field = ".".join(map(str, issue["loc"])) or "args"
+            typer.echo(f"{field}: {issue['type']}", err=True)
+        raise typer.Exit(1) from None
+    try:
+        await selected.handler(params)
+    except Exception as error:
+        typer.echo(f"只读工具调用失败（{type(error).__name__}）。", err=True)
+        raise typer.Exit(1) from None
+
+
+async def _check_plugin(
+    spec: str, read_tool: str | None, arguments: str | None, *, json_output: bool,
+) -> None:
+    try:
+        module = await load_module(spec)
+    except PluginApiVersionError:
+        typer.echo("插件 API 版本不受当前宿主支持，请检查插件与 Erpilot 的版本。", err=True)
+        raise typer.Exit(1) from None
+    except Exception as error:
+        # Plugin configuration errors can contain credentials.
+        typer.echo(f"插件加载或契约校验失败（{type(error).__name__}）。", err=True)
+        raise typer.Exit(1) from None
+
+    if read_tool is not None:
+        await _try_read_tool(module, read_tool, arguments)
+    if json_output:
+        typer.echo(json.dumps({
+            "module": module.manifest(),
+            "tools": [{"name": tool.name, "risk": tool.risk} for tool in module.tools],
+            "read_tool": read_tool,
+        }, ensure_ascii=False))
+        return
+
+    typer.echo(f"{module.name} {module.version}")
+    for tool in module.tools:
+        typer.echo(f"{tool.name} ({'read' if tool.risk is None else 'write'})")
+    if read_tool is not None:
+        typer.echo(f"只读工具已返回：{read_tool}")
+
+
+@app.command("check")
+def check_plugin(
+    spec: Annotated[str, typer.Argument(help="已安装的插件名或 module:factory")],
+    read_tool: Annotated[str | None, typer.Option(help="显式调用的只读工具")] = None,
+    arguments: Annotated[str | None, typer.Option("--args", help="只读工具的 JSON 参数")] = None,
+    json_output: Annotated[bool, typer.Option("--json", help="输出模块契约和工具清单")] = False,
+):
+    """校验插件契约。显式调用工具时可能访问目标系统。"""
+    if read_tool is None and arguments is not None:
+        raise typer.BadParameter("--args 必须与 --read-tool 一起使用")
+    asyncio.run(_check_plugin(spec, read_tool, arguments, json_output=json_output))

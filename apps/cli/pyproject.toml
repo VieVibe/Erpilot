@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Erpilot CLI：typer + rich 流式对话（默认经 MCP 查真数据）"
 requires-python = ">=3.12"
 dependencies = [
+    "erpilot-api",
     "agent-core",
     "mcp-erp",
     "erp-store",
@@ -15,6 +16,7 @@ dependencies = [
 erpilot = "erpilot_cli.main:main"
 
 [tool.uv.sources]
+erpilot-api = { workspace = true }
 agent-core = { workspace = true }
 mcp-erp = { workspace = true }
 erp-store = { workspace = true }

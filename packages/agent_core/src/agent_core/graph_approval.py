@@ -32,6 +32,8 @@ def make_approval_payload(call):
         "risk": call["risk"],
         "arguments": deepcopy(call["arguments"]),
         "expires_at": call.get("approval_expires_at"),
+        **({"presentation": deepcopy(call["approval_presentation"])}
+           if "approval_presentation" in call else {}),
     }
 
 

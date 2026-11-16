@@ -167,6 +167,13 @@ export interface ApprovalPendingPayload {
   risk: string;
   arguments: Record<string, unknown>;
   expires_at?: string | null;
+  presentation?: ApprovalPresentation;
+}
+
+export interface ApprovalPresentation {
+  title: string;
+  summary: string;
+  fields: { label: string; value: string | number | boolean }[];
 }
 
 export interface ReconciliationPendingPayload {

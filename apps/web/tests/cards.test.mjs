@@ -50,6 +50,25 @@ test('custom legacy tool approval stays actionable while fixed-reference or curr
     assertButtonState(html, '拒绝', false);
   }
 });
+test('generic plugin approval shows its declared business fields', () => {
+  const pending = {
+    pending_id:'p', call_id:'c', tool:'submit_expense', risk:'single_confirm', arguments:{},
+    presentation:{title:'提交报销申请', summary:'等待外部系统审核',
+      fields:[{label:'金额（分）',value:3800}]},
+  };
+  const entity = {id:'c', name:pending.tool, arguments:'{}', status:'waiting_approval',
+    display:null, finished:null, approval:pending, approvalResolved:null};
+  const html = renderToStaticMarkup(React.createElement(AssistantMessage, {
+    turn:{role:'assistant',phase:'awaiting_approval',blocks:[{id:'b',type:'tool',callId:'c'}],
+      tools:{c:entity},step:1,phaseAt:0,done:null,error:null},
+    now:0,live:false,stalled:false,submittingApprovals:new Set(),onRespond(){},
+  }));
+  for (const text of ['提交报销申请', '等待外部系统审核', '金额（分）', '3800']) {
+    assert.ok(html.includes(text), text);
+  }
+  assertButtonState(html, '批准', false);
+});
+
 test('cancel business results show success and meaningful failed or denied reasons',()=>{
   for(const [outcome,message] of [['succeeded','取消完成'],['failed','库存发生变化'],['denied','用户拒绝']]){
     const display={version:1,kind:'order_cancellation',outcome,order_id:'123',customer:'客户',status:'已取消',total_amount:300,message,hint:'重新准备预览'};

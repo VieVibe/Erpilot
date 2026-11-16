@@ -3,6 +3,7 @@
 import inspect
 import json
 from collections.abc import Awaitable, Callable, Mapping, Sequence
+from contextlib import AbstractAsyncContextManager
 from dataclasses import dataclass, field, fields
 from hashlib import sha256
 from importlib import import_module
@@ -17,10 +18,15 @@ if TYPE_CHECKING:
     from erpilot_api.order_module import OrderServiceHooks
 
 ENTRY_POINT_GROUP = "erpilot.business_modules"
+PLUGIN_API_VERSION = 1
 
 
 class ModuleBindingError(ValueError):
     """The tools or reconciler bound to a session violate the module declaration."""
+
+
+class PluginApiVersionError(ModuleBindingError):
+    """The plugin requires an unsupported host API version."""
 
 
 class LegacyServiceOptions(TypedDict, total=False):
@@ -90,6 +96,8 @@ class BusinessModule:
     loop_config: LoopConfig | None = None
     features: BusinessRuntimeFeatures | None = None
     order_hooks: "OrderServiceHooks | None" = None
+    lifespan: Callable[[], AbstractAsyncContextManager[None]] | None = None
+    api_version: int = PLUGIN_API_VERSION
     _catalog: dict[str, dict[str, Any]] = field(init=False, repr=False, compare=False)
     _contract: str = field(init=False, repr=False, compare=False)
     runtime_loop_config: LoopConfig | None = field(init=False, repr=False, compare=False)
@@ -189,12 +197,13 @@ class BusinessModule:
             raise ModuleBindingError("business modules with write tools must provide a reconciler")
         return reconciler
 
-    def manifest(self) -> dict[str, str]:
+    def manifest(self) -> dict[str, str | int]:
         return {
             "name": self.name,
             "title": self.title,
             "version": self.version,
             "contract": self._contract,
+            "api_version": self.api_version,
         }
 
 
@@ -217,6 +226,13 @@ def _tool_contract(tool: Tool) -> dict[str, Any]:
         parameters = tool.params_model.model_json_schema()
     except Exception as exc:
         raise ModuleBindingError(f"tool {tool.name!r} has an invalid parameter schema") from exc
+    if tool.approval_presentation is not None and (
+        tool.risk is None or any(
+            name not in tool.params_model.model_fields
+            for name, _ in tool.approval_presentation.fields
+        )
+    ):
+        raise ModuleBindingError("approval fields must reference declared write tool arguments")
     return {
         "name": tool.name,
         "description": tool.description,
@@ -228,6 +244,10 @@ def _tool_contract(tool: Tool) -> dict[str, Any]:
 
 def validate_module(module: BusinessModule) -> BusinessModule:
     """Fail startup when session binding would invalidate persisted tool calls."""
+    if type(module.api_version) is not int or module.api_version != PLUGIN_API_VERSION:
+        raise PluginApiVersionError(
+            f"unsupported plugin API version: this host supports {PLUGIN_API_VERSION}"
+        )
     validation_context = BusinessSessionContext(
         session_id="__erpilot_contract_validation__",
         user_id="__erpilot_contract_validation__",

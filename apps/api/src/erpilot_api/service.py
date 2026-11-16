@@ -128,6 +128,7 @@ class _PresentationLogger:
                 risk=risk,
                 arguments=args,
                 expires_at=expires_at,
+                presentation=presentation,
             ):
                 self._boundary(
                     "approval_pending",
@@ -138,6 +139,7 @@ class _PresentationLogger:
                         "risk": risk,
                         "arguments": args,
                         "expires_at": expires_at,
+                        **({"presentation": presentation} if presentation is not None else {}),
                     },
                 )
             case ReconciliationPending(call_id=cid, client_token=token, code=code, message=message):

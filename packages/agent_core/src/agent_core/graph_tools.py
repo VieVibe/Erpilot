@@ -110,6 +110,10 @@ def prepare_tool_calls(
                         approval_status="pending",
                         invocation_status="waiting_approval",
                     )
+                    if tool.approval_presentation is not None:
+                        record["approval_presentation"] = tool.approval_presentation.snapshot(
+                            record["arguments"]
+                        )
             except Exception as exc:
                 record.update(
                     content=error_payload(

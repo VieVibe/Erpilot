@@ -11,6 +11,7 @@ import { isUsableAssessmentDisplay } from './CancellationAssessmentCard';
 import { isUsableReplenishmentDisplay } from './ReplenishmentCard';
 import { isUsablePolicySearchDisplay } from './PolicySearchCard';
 import { MarkdownContent } from "./MarkdownContent";
+import { PluginApprovalDetails } from "./PluginApprovalDetails";
 import { ReasoningPanel } from "./ReasoningPanel";
 import { WorkTimeline } from "./WorkTimeline";
 import type { ReactNode } from 'react';
@@ -100,6 +101,7 @@ function ApprovalActions({
   const expired = pending.expires_at != null && Date.parse(pending.expires_at) <= now;
   return (
     <div className="approval">
+      {pending.presentation && <PluginApprovalDetails presentation={pending.presentation} />}
       <span className="approval-label">
         {expired ? "审批已过期" : "待审批"} · 风险等级 {pending.risk}
       </span>

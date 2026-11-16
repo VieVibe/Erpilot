@@ -18,7 +18,7 @@ import logging
 import os
 import time
 from collections.abc import AsyncIterator, Callable, Sequence
-from contextlib import asynccontextmanager
+from contextlib import AsyncExitStack, asynccontextmanager
 from dataclasses import asdict, replace
 from datetime import UTC, datetime
 from pathlib import Path
@@ -252,18 +252,17 @@ def create_app(
     @asynccontextmanager
     async def lifespan(app):
         try:
-            if checkpointer is not None:
+            async with AsyncExitStack() as resources:
+                if checkpointer is None:
+                    service._checkpointer = await resources.enter_async_context(
+                        open_checkpointer(os.environ.get("ERPILOT_CHECKPOINT_DATABASE_URL", ""))
+                    )
+                if business_module is not None and business_module.lifespan is not None:
+                    await resources.enter_async_context(business_module.lifespan())
                 yield
-            else:
-                async with open_checkpointer(
-                    os.environ.get("ERPILOT_CHECKPOINT_DATABASE_URL", "")
-                ) as saver:
-                    service._checkpointer = saver
-                    try:
-                        yield
-                    finally:
-                        service._checkpointer = None
         finally:
+            if checkpointer is None:
+                service._checkpointer = None
             if service._intent_semantic is not None:
                 await service._intent_semantic.aclose()
             if isinstance(service._client, LLMClient):

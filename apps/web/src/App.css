@@ -133,6 +133,10 @@ button, input, textarea { font: inherit; }
 }
 .approval { min-width: 0; font-size: 13px; line-height: 1.8; overflow-wrap: anywhere; }.approval-label { font-weight: 600; display: block; margin-bottom: 12px; }.approval p { margin-block: 10px; }
 .approval > .ant-btn { margin-top: 10px; margin-right: 8px; }.approval .ant-alert { margin-block: 12px; }
+.plugin-approval-details { margin-block: 8px 12px; }
+.plugin-approval-details dl { margin: 4px 0 0; }
+.plugin-approval-details dl > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 8px; }
+.plugin-approval-details dd { margin: 0; }
 .business-technical { margin-top: 18px; color: var(--dim); font-size: 12px; }.business-technical summary { cursor: pointer; }
 .card { border: 1px solid var(--line); border-radius: 10px; padding: 14px; background: #fff; margin-top: 12px; }
 .card-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; }.card-title { font-size: 13px; font-weight: 600; }

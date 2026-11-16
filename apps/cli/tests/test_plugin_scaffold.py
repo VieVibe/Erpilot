@@ -5,10 +5,64 @@ import httpx2
 import pytest
 from agent_core.testing import USAGE, chunk, make_client, sse_response, tool_call_chunks
 from erpilot_api.bootstrap import build_live_app
+from erpilot_api.examples.expense import ExpenseAdapter
 from erpilot_api.modules import ENTRY_POINT_GROUP, BusinessSessionContext, load_module
 from erpilot_cli.main import app
 from langgraph.checkpoint.memory import InMemorySaver
 from typer.testing import CliRunner
+
+
+def test_plugin_check_validates_generated_plugin_without_model(tmp_path, monkeypatch):
+    runner = CliRunner()
+    result = runner.invoke(app, ["plugin", "init", "check-ticket", "-o", str(tmp_path)])
+    assert result.exit_code == 0, result.output
+    monkeypatch.syspath_prepend(str(tmp_path / "check-ticket" / "src"))
+    command = ["plugin", "check", "erpilot_plugin_check_ticket:create_module"]
+    result = runner.invoke(app, command)
+    assert result.exit_code == 0, result.output
+    assert "get_ticket" in result.output
+    result = runner.invoke(app, [*command, "--json"])
+    assert result.exit_code == 0, result.output
+    report = json.loads(result.stdout)
+    assert report["module"]["name"] == "check-ticket"
+    assert report["module"]["version"] == "0.1.0"
+    assert report["module"]["api_version"] == 1
+    assert len(report["module"]["contract"]) == 64
+    assert report["tools"] == [{"name": "get_ticket", "risk": None}]
+    assert report["read_tool"] is None
+    result = runner.invoke(app, [
+        *command, "--read-tool", "get_ticket", "--args", '{"ticket_id":"DEMO-001"}',
+    ])
+    assert result.exit_code == 0, result.output
+    assert "get_ticket" in result.output
+    result = runner.invoke(app, [
+        *command, "--json", "--read-tool", "get_ticket", "--args", '{"ticket_id":"DEMO-001"}',
+    ])
+    assert result.exit_code == 0, result.output
+    assert json.loads(result.stdout)["read_tool"] == "get_ticket"
+    result = runner.invoke(app, [*command, "--read-tool", "get_ticket", "--args", "{}"])
+    assert result.exit_code == 1, result.output
+
+
+def test_plugin_check_refuses_installed_write_tool(monkeypatch):
+    monkeypatch.setenv("ERPILOT_WRITES", "1")
+    monkeypatch.setenv("ERPILOT_EXPENSE_URL", "http://127.0.0.1:8011")
+    monkeypatch.delenv("ERPILOT_EXPENSE_SERVICE_TOKEN", raising=False)
+
+    async def unexpected_write(*args):
+        pytest.fail("plugin check executed a write tool")
+
+    monkeypatch.setattr(ExpenseAdapter, "submit", unexpected_write)
+    command = ["plugin", "check", "expense-example"]
+    result = CliRunner().invoke(app, command)
+    assert result.exit_code == 0, result.output
+    assert "submit_expense (write)" in result.output
+    result = CliRunner().invoke(app, [
+        *command, "--read-tool", "submit_expense", "--args",
+        '{"purpose":"demo","amount_cents":123,"client_token":"test"}',
+    ])
+    assert result.exit_code == 1, result.output
+    assert "只读工具" in result.output
 
 
 async def test_generated_ticketing_plugin_runs_through_live_api(tmp_path, monkeypatch):

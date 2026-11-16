@@ -2,12 +2,11 @@
 
 import os
 
-import httpx2
 from agent_core.recovery import MutationLookup
-from agent_core.tools import Tool
+from agent_core.tools import ApprovalPresentation, Tool
 from pydantic import BaseModel, ConfigDict, Field
 
-from erpilot_api.connectors import HttpConnectorConfig
+from erpilot_api.connectors import HttpConnector, HttpConnectorConfig
 from erpilot_api.modules import BusinessModule, BusinessSessionContext
 
 
@@ -24,18 +23,11 @@ class ExpenseQuery(BaseModel):
 
 
 class ExpenseAdapter:
-    def __init__(self, config, context: BusinessSessionContext, transport=None):
-        self.config, self.context, self.transport = config, context, transport
+    def __init__(self, connector: HttpConnector, context: BusinessSessionContext):
+        self.connector, self.context = connector, context
 
     async def request(self, method, path, **kwargs):
-        async with httpx2.AsyncClient(
-            base_url=self.config.base_url,
-            headers=self.config.headers(self.context),
-            transport=self.transport,
-            timeout=self.config.timeout_seconds,
-            verify=self.config.verify_tls,
-        ) as client:
-            return await client.request(method, path, **kwargs)
+        return await self.connector.request(method, path, context=self.context, **kwargs)
 
     async def health(self):
         response = await self.request("GET", "healthz")
@@ -80,6 +72,11 @@ class ExpenseAdapter:
             tools.append(Tool(
                 "submit_expense", "提交报销申请，金额单位为人民币分，执行前需要人工确认",
                 ExpenseInput, self.submit, risk="single_confirm", retry_safe=True,
+                approval_presentation=ApprovalPresentation(
+                    title="提交报销申请",
+                    summary="向报销系统提交申请，后续审批由该系统负责。",
+                    fields=(("purpose", "用途"), ("amount_cents", "金额（分）")),
+                ),
             ))
         return tools
 
@@ -102,9 +99,10 @@ def create_module(*, config=None, base_url=None, service_token=None,
             )
     writes = (os.getenv("ERPILOT_WRITES", "0").lower() in {"1", "true", "yes"}
               if writes is None else writes)
+    connector = HttpConnector(config, transport=transport, trust_env=True)
 
     def context_adapter(context):
-        return ExpenseAdapter(config, context, transport)
+        return ExpenseAdapter(connector, context)
 
     def adapter(session_id):
         return context_adapter(BusinessSessionContext(session_id))
@@ -121,5 +119,6 @@ def create_module(*, config=None, base_url=None, service_token=None,
         reconciler_for_context=context_adapter,
         connector_summary=config.public_summary(),
         health_check=context_adapter(BusinessSessionContext("health-check")).health,
+        lifespan=connector.lifespan,
         suggestions=("提交一笔交通费报销，用途为客户拜访，金额为 38 元",),
     )

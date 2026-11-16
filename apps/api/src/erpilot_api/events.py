@@ -65,7 +65,7 @@ def encode_event(event: AgentEvent) -> tuple[str, dict[str, Any]] | None:
             }
         case ApprovalPending(
             call_id=cid, pending_id=pid, tool=name, risk=risk,
-            arguments=args, expires_at=expires_at,
+            arguments=args, expires_at=expires_at, presentation=presentation,
         ):
             return "approval_pending", {
                 "call_id": cid,
@@ -74,6 +74,7 @@ def encode_event(event: AgentEvent) -> tuple[str, dict[str, Any]] | None:
                 "risk": risk,
                 "arguments": args,
                 **({"expires_at": expires_at} if expires_at is not None else {}),
+                **({"presentation": presentation} if presentation is not None else {}),
             }
         case ReconciliationPending(
             call_id=cid, client_token=token, code=code, message=message

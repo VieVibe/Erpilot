@@ -90,6 +90,7 @@ class ApprovalPending:
     risk: str
     arguments: dict
     expires_at: str | None = None
+    presentation: dict | None = None
 
 
 @dataclass(frozen=True, slots=True)

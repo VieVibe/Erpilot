@@ -13,6 +13,7 @@ from agent_core.tools import Tool
 from erpilot_api.auth_store import AuthStore
 from erpilot_api.bootstrap import build_live_app
 from erpilot_api.connectors import HttpConnectorConfig
+from erpilot_api.events import encode_event
 from erpilot_api.examples.expense import ExpenseInput, create_module
 from erpilot_api.examples.expense_backend import create_app as backend_app
 from erpilot_api.main import create_app
@@ -24,6 +25,74 @@ from erpilot_api.modules import (
 )
 from langgraph.checkpoint.memory import InMemorySaver
 from pydantic import BaseModel
+
+
+async def test_connector_client_uses_configured_auth_without_following_redirects():
+    seen = []
+
+    def respond(request):
+        seen.append(request)
+        return httpx2.Response(302, headers={"Location": "https://other.example.test"})
+
+    config = HttpConnectorConfig("https://erp.example.test/api", service_token="example")
+    async with config.client(
+        raw_authorization=True, transport=httpx2.MockTransport(respond),
+    ) as client:
+        response = await client.get("products")
+
+    assert response.status_code == 302
+    request, = seen
+    assert str(request.url) == "https://erp.example.test/api/products"
+    assert request.headers["Authorization"] == "example"
+
+
+async def test_host_reuses_connector_without_sharing_identity_or_cookies(tmp_path, monkeypatch):
+    created = []
+    original = HttpConnectorConfig.client
+
+    def create_client(self, *args, **kwargs):
+        client = original(self, *args, **kwargs)
+        created.append(client)
+        return client
+
+    seen = []
+
+    def respond(request):
+        seen.append(request)
+        return httpx2.Response(404, headers={"Set-Cookie": "upstream=private; Path=/"})
+
+    monkeypatch.setattr(HttpConnectorConfig, "client", create_client)
+    module = create_module(transport=httpx2.MockTransport(respond))
+    host = create_app(
+        business_module=module, checkpointer=InMemorySaver(), auth_enabled=False,
+        run_store_path=tmp_path / "runs.db", trace_dir=tmp_path / "traces",
+    )
+    async with host.router.lifespan_context(host):
+        for actor in ("alice", "bob"):
+            context = BusinessSessionContext(actor, user_id=actor)
+            adapter = module.reconciler_for(context)
+            assert (await adapter.lookup("submit_expense", {}, actor)).status == "absent"
+        with pytest.raises(ValueError, match="relative upstream path"):
+            await adapter.request("GET", "https://other.example.test")
+        with pytest.raises(ValueError, match="cannot follow redirects"):
+            await adapter.request("GET", "expenses", follow_redirects=True)
+        assert len(created) == 1 and not created[0].is_closed
+    assert created[0].is_closed
+    assert [request.headers["X-Erpilot-User-Id"] for request in seen] == ["alice", "bob"]
+    assert all("Cookie" not in request.headers for request in seen)
+
+
+def test_connector_error_categories_do_not_use_request_or_response_content():
+    from erpilot_api.connectors import classify_http_error
+
+    assert classify_http_error(httpx2.ReadTimeout("private")) == "timeout"
+    assert classify_http_error(httpx2.ConnectError("private")) == "transport"
+    request = httpx2.Request("GET", "https://erp.example.test")
+    response = httpx2.Response(429, request=request, text="private")
+    with pytest.raises(httpx2.HTTPStatusError) as error:
+        response.raise_for_status()
+    assert classify_http_error(error.value) == "rate_limited"
+    assert classify_http_error(ValueError("private")) is None
 
 
 def expense_llm(request):
@@ -155,6 +224,15 @@ async def test_module_approval_http_restart_and_session_isolation(tmp_path, appr
                 break
         state = (await client.get("/api/sessions/s1/state")).json()
         pending = state["pending_approvals"][0]
+        assert pending["presentation"] == {
+            "title": "提交报销申请",
+            "summary": "向报销系统提交申请，后续审批由该系统负责。",
+            "fields": [
+                {"label": "用途", "value": "客户拜访"},
+                {"label": "金额（分）", "value": 3800},
+            ],
+        }
+        assert encode_event(event)[1]["presentation"] == pending["presentation"]
 
     module = app.state.business_module
     reconciler = module.reconciler("s1")
@@ -355,6 +433,16 @@ async def test_installed_plugin_entry_point_and_contract_validation(monkeypatch)
     assert loaded.manifest()["contract"] == module.manifest()["contract"]
 
 
+def test_plugin_api_version_is_separate_from_module_version():
+    from erpilot_api.plugin import PLUGIN_API_VERSION
+
+    module = create_module()
+    assert module.manifest()["api_version"] == PLUGIN_API_VERSION
+    assert replace(module, version="99.0").manifest()["api_version"] == PLUGIN_API_VERSION
+    with pytest.raises(ValueError, match="unsupported plugin API version"):
+        create_app(business_module=replace(module, api_version=PLUGIN_API_VERSION + 1))
+
+
 async def test_module_rejects_session_schema_drift_and_unreconciled_writes(tmp_path):
     class ReadArgs(BaseModel):
         value: str
@@ -521,6 +609,20 @@ async def test_committed_write_with_lost_response_recovers_from_backend(tmp_path
     recovered = await adapter.lookup("submit_expense", args.model_dump(), args.client_token)
     assert recovered.status == "found"
     assert await adapter.submit(args) == recovered.result
+
+
+async def test_external_write_contract_against_expense_adapter(tmp_path):
+    from erpilot_api.plugin_testing import assert_write_tool_contract
+
+    transport = httpx2.ASGITransport(backend_app(tmp_path / "contract-expenses.db"))
+    module = create_module(writes=True, transport=transport)
+    await assert_write_tool_contract(
+        module,
+        context=BusinessSessionContext("expense-contract"),
+        tool_name="submit_expense",
+        arguments={"purpose": "travel", "amount_cents": 100},
+        conflicting_arguments={"purpose": "travel", "amount_cents": 200},
+    )
 
 
 async def test_expense_backend_migrates_legacy_session_records(tmp_path):

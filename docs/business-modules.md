@@ -9,7 +9,6 @@ Erpilot 提供会话、工具执行、人工确认、执行恢复和操作记录
 | 未设置或留空 | 工作台显示「尚未配置业务模块」，无需模型密钥，继续使用框架的 PostgreSQL checkpoint 配置 |
 | `order-example` | 启用订单、库存、草稿与审批参考实现。本地首次运行先执行 `uv run --package erp-store python -m erp_store seed` |
 | `expense-example` | 启用报销示例，另需启动示例 ERP HTTP 服务 |
-| `le_shen_erp:create_module` | 加载 Leshen 只读插件，按 [Leshen 示例](../examples/le-shen-erp/README.md) 配置模块搜索路径和账号 |
 | 已安装插件名称或 `module:factory` | 加载开发者提供的插件 |
 
 ## 运行报销示例
@@ -64,6 +63,18 @@ acme-ticketing = "your_company.ticketing:create_module"
 
 安装这个包后设置 `ERPILOT_MODULE=acme-ticketing` 即可加载。没有同名入口、存在重复入口或工厂返回类型错误时，Erpilot 会拒绝启动。
 
+新插件统一从 `erpilot_api.plugin` 导入 `BusinessModule`、`BusinessSessionContext`、`Tool`、连接器和对账类型。构造模块时声明 `api_version=1`。未声明版本的现有模块按 v1 加载，当前宿主拒绝其他 API 版本。兼容扩展沿用 v1，破坏性变更需要新的 API 版本。模块自己的 `version` 用于插件发布与会话恢复，和宿主 API 版本各自独立。可在 `plugin check --json` 或 `/api/runtime` 查看 `module.api_version`。
+
+插件仓库可以在 CI 中运行 `erpilot plugin check acme-ticketing --json`。它使用宿主的加载和契约校验逻辑，无需启动模型、API 或 checkpoint 数据库。插件工厂仍需要自己的配置。JSON 中的 `module.contract` 与宿主报告的工具契约摘要来自同一接口，可用于比较发布前后的契约。工具清单包含名称与风险级别。
+
+要验收脚手架的示例查询，可执行：
+
+```powershell
+erpilot plugin check acme-ticketing --read-tool get_ticket --args '{"ticket_id":"DEMO-001"}'
+```
+
+这个选项以测试会话直接调用普通只读工具，可使用模拟后端。连接真实后端时，命令会发起查询。业务结果由插件自己的测试断言，命令只报告工具是否正常返回。
+
 | 扩展点 | 开发者实现 |
 | --- | --- |
 | `name` / `title` | 稳定标识与工作台名称 |
@@ -75,11 +86,18 @@ acme-ticketing = "your_company.ticketing:create_module"
 | `reconciler_for_context(context)` | 推荐的新接口，按同一身份上下文创建写入结果核对器 |
 | `connector_summary` | 可安全返回给工作台的连接状态摘要，不能包含地址凭据或令牌 |
 | `health_check()` | 异步检查目标系统依赖；部署 `/readyz` 会调用它 |
+| `lifespan` | 可选异步上下文管理器工厂，由 API 在启动时进入、关闭时退出 |
 | `suggestions` | 工作台的示例输入 |
 | `version` | 模块版本，升级业务契约时同步调整 |
 | `loop_config` | 可选 `agent_core.runtime_config.LoopConfig`，设置工具超时、重试和最大推理步数等运行参数 |
 
 可以直接复制 `apps/api/src/erpilot_api/examples/expense.py`，替换 HTTP 地址、请求映射和结果映射。调用方也可以通过 `create_app(business_module=...)` 直接装配。模块模式拥有工具和恢复配置，混用显式 `tools`、旧 ERP provider 或全局 reconciler 会报错。
+
+HTTP 插件可以使用 `HttpConnectorConfig.client(context)` 创建异步客户端，复用连接配置、会话身份头和访问凭据。客户端由调用方关闭，支持传入测试 transport。默认禁止重定向和使用环境代理配置。目标系统要求在 `Authorization` 中直接发送令牌时，可设 `raw_authorization=True`。
+
+需要跨请求复用连接池时，在模块工厂创建 `HttpConnector(config)`，将 `connector.lifespan` 传给 `BusinessModule`，再通过 `await connector.request("GET", "tickets", context=context)` 发起请求。身份头按请求生成，连接器不会保存上游 Cookie，只接受相对路径且不会跟随重定向。离线测试可显式进入连接器生命周期，也可以直接调用，此时客户端在该请求结束后关闭。
+
+`classify_http_error(exc)` 可将 HTTP 客户端异常映射成不含 URL、凭据和响应内容的分类，例如 `timeout`、`transport`、`access_denied`、`rate_limited` 和 `upstream_failure`。HTTP 状态分类适用于 `raise_for_status()` 抛出的异常，只有插件知道某个状态是否有业务含义，例如对账查询何时可以把 404 判为记录不存在。连接器不会自动重试写请求。
 
 工具名、描述、风险等级、可重试标志和参数 schema 应在不同会话与服务重启之间保持稳定。Erpilot 启动时检查声明和示例上下文，也在每次绑定真实会话工具时复查，再由宿主按角色过滤。绑定工厂可以为不同用户创建带不同身份的处理函数，但须返回声明中的完整工具目录。发现工具重复、契约不一致，或拥有写权限的会话缺少对账器时，执行在模型调用前停止，接口返回 `module_contract_mismatch`。所有写工具必须接受 `client_token`。`/api/runtime` 返回模块版本和工具契约摘要，方便部署侧核对版本。
 
@@ -96,6 +114,22 @@ acme-ticketing = "your_company.ticketing:create_module"
 ## 写入和身份边界
 
 写工具设置 `risk` 后通过现有图运行时进入人工确认。运行时把稳定请求号放入 `client_token` 参数，模块把它传到目标系统。仅在目标系统确实支持幂等提交时设置 `retry_safe=True`。
+
+写工具可通过 `approval_presentation=ApprovalPresentation(...)` 声明审批标题、影响说明和可展示字段。字段以 `(参数名, 显示标签)` 声明，例如 `fields=(("purpose", "用途"), ("amount_cents", "金额（分）"))`。框架从已校验的参数读取标量值，随待审批状态保存同一份摘要，工作台即时显示和恢复后显示一致。展示声明不能包含 `client_token`。审批仍绑定原始参数，目标系统的业务约束仍由写工具实现。
+
+外部插件可在自己的 CI 中导入 `erpilot_api.plugin_testing.assert_write_tool_contract`。传入插件模块、`BusinessSessionContext`、写工具名和两组合法但业务含义不同的参数。两组参数都由宿主生成 `client_token`。例如，报销插件可以用金额分别为 100 分和 200 分的两组参数：
+
+```python
+await assert_write_tool_contract(
+    module,
+    context=BusinessSessionContext("expense-contract"),
+    tool_name="submit_expense",
+    arguments={"purpose": "travel", "amount_cents": 100},
+    conflicting_arguments={"purpose": "travel", "amount_cents": 200},
+)
+```
+
+检查使用模拟模型和内存检查点，通过框架执行图验证审批前无写入、拒绝后无写入、写入后丢失响应可按原请求号找回结果，以及同一请求号绑定不同参数时返回冲突。恢复过程会检查写处理函数只执行一次。声明 `retry_safe=True` 的工具还会收到一次同参数、同请求号的重放，返回值应等于原结果。**检查会真实调用插件写处理函数，请使用模拟后端或一次性测试库。** 涉及业务记录数量、金额或库存的断言可在插件测试里继续验证。
 
 对账返回 `found` 时附上已提交结果，返回 `conflict` 表示请求号对应的内容不一致。只有能够确定未提交时返回 `absent`。网络超时、服务不可用以及无法确定的提交查询结果应抛出异常，由运行时保持待核对状态。目标系统如存在索引延迟，应根据能确认实际提交结果的记录实现此接口。
 
@@ -119,7 +153,7 @@ HTTP 插件可以复用 `HttpConnectorConfig`。它统一解析 `<PREFIX>_URL`�
 
 ## 验证
 
-真实系统接入见[乐深 ERP 只读验证](../examples/le-shen-erp/README.md)。工单脚手架可通过正式 API 启动入口执行示例查询，使用固定数据和脚本化模型测试。接入真实 CRM、OA 或工单后端仍需实现并验证对应适配器。
+工单脚手架可通过正式 API 启动入口执行示例查询，使用固定数据和脚本化模型测试。接入真实 CRM、OA 或工单后端时，可在独立插件仓库实现和验证对应适配器。
 
 ```powershell
 uv run python -m pytest apps/api/tests/test_business_modules.py apps/api/tests/test_graph_api.py apps/api/tests/test_live_defaults.py apps/cli/tests/test_plugin_scaffold.py

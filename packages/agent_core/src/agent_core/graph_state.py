@@ -17,6 +17,7 @@ class InvocationState(TypedDict, total=False):
     arguments_fingerprint: str
     approval_created_at: str
     approval_expires_at: str
+    approval_presentation: dict[str, Any]
     approval_status: Literal[
         "pending", "approved", "denied", "expired", "cancelled"
     ]

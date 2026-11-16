@@ -32,6 +32,30 @@ def _strip_titles(node: Any) -> Any:
 
 
 @dataclass(frozen=True, slots=True)
+class ApprovalPresentation:
+    """Operator-facing text and an allowlist of scalar tool arguments to show."""
+
+    title: str
+    fields: tuple[tuple[str, str], ...] = ()
+    summary: str = ""
+
+    def __post_init__(self):
+        if any(name == "client_token" for name, _ in self.fields):
+            raise ValueError("approval fields cannot include client_token")
+
+    def snapshot(self, arguments: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "title": self.title,
+            "summary": self.summary,
+            "fields": [
+                {"label": label, "value": arguments[name]}
+                for name, label in self.fields
+                if isinstance(arguments.get(name), (str, int, float))
+            ],
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class Tool:
     name: str
     description: str
@@ -60,6 +84,7 @@ class Tool:
     direct_response: Callable[[dict], str | None] | None = None
     # Optional application policy; also checked when a model bypasses visibility.
     stage_policy: Callable[[list[dict], list[dict]], bool] | None = None
+    approval_presentation: ApprovalPresentation | None = None
 
     def __post_init__(self):
         if self.validated_handler is not None and self.risk is not None:

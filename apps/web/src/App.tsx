@@ -41,6 +41,7 @@ import { approvalDraftIssue, createOrderDraft, draftConfirmationText, getOrderDr
 import { requestIntentRevisionPreview } from './intent-preview';
 import { approvalOperationIssue, getOperation, requiresBusinessSummary, parseOperation, retainOperationSnapshot, type BusinessOperation } from './operations';
 import { BusinessApprovalSummary } from './components/BusinessApprovalSummary';
+import { PluginApprovalDetails } from './components/PluginApprovalDetails';
 import { SessionRequests } from './history';
 import { SessionHistory } from './components/SessionHistory';
 
@@ -729,8 +730,13 @@ export default function App() {
         {requiresBusinessSummary(pending, businessEnabled) ? renderBusinessApproval(pending) :
           draftsEnabled && pending.tool === 'submit_order_draft' ? renderDraftApproval(pending) :
           <section className="approval" aria-label="操作审批">
-            <h3>待审批 · {pending.tool}</h3><Tag>风险等级 {pending.risk}</Tag>
-            <pre className="args">{JSON.stringify(pending.arguments, null, 2)}</pre>
+            <h3>{pending.presentation ? '待审批' : `待审批 · ${pending.tool}`}</h3><Tag>风险等级 {pending.risk}</Tag>
+            {pending.presentation ? <>
+              <PluginApprovalDetails presentation={pending.presentation} />
+              <details className="tool-technical"><summary>调用参数</summary>
+                <pre className="args">{JSON.stringify(pending.arguments, null, 2)}</pre>
+              </details>
+            </> : <pre className="args">{JSON.stringify(pending.arguments, null, 2)}</pre>}
             {pending.expires_at && Date.parse(pending.expires_at) <= now && <Alert type="warning" title="审批已过期，请拒绝后重新准备。" />}
             <div className="approval-actions"><Button type="primary" className="approve"
               disabled={submittingApprovals.has(pending.pending_id) || (pending.expires_at != null && Date.parse(pending.expires_at) <= now)}
