@@ -44,6 +44,10 @@ export function IntentPreviewPanel({sessionId, refresh, busy, onBusy, onSaved}: 
   const budgetValid = budget === '' || (/^\d+(?:\.\d{1,2})?$/.test(budget) && Number(budget) > 0 && Number(budget) <= 1e12);
   const valid = !!customer.trim() && customer.trim().length <= 64 && note.length <= 255 && budgetValid && items.length > 0 && items.length <= 100 && items.every(r => !!r.sku.trim() && r.sku.trim().length <= 32 && /^[1-9][0-9]{0,8}$/.test(r.quantity)) && new Set(items.map(r => r.sku.trim())).size === items.length;
   const locked = busy || saving;
+  const beforeLines = new Map(editor?.before_fields?.items.map(row => [row.sku, row.quantity]));
+  const afterLines = new Map(items.map(row => [row.sku.trim(), row.quantity]));
+  const changedLines = [...new Set([...beforeLines.keys(), ...afterLines.keys()])]
+    .filter(sku => sku && String(beforeLines.get(sku) ?? '') !== (afterLines.get(sku) ?? ''));
   if (!preview && !editor && !error) return null;
   return <section className="draft-panel intent-preview" aria-label="待完成请求核对">
     <h2>待完成的订单请求</h2>
@@ -75,6 +79,14 @@ export function IntentPreviewPanel({sessionId, refresh, busy, onBusy, onSaved}: 
           <h3>目标草稿：{editor.before_fields.customer} · 版本 {editor.target?.revision}</h3>
           <p style={{overflowWrap: 'anywhere'}}>草稿标识：{editor.target?.draft_id}</p>
           <p>原客户：{editor.before_fields.customer}；原备注：{editor.before_fields.note ?? '无'}；原预算：{editor.before_fields.budget_limit ?? '未设置'}</p>
+          {changedLines.length > 0 && <section aria-label="商品行变更">
+            <h4>商品行变更</h4>
+            <ul>{changedLines.map(sku => <li key={sku}>{sku} · {
+              !beforeLines.has(sku) ? `新增 ${afterLines.get(sku)} 件` :
+              !afterLines.has(sku) ? `移除原有 ${beforeLines.get(sku)} 件` :
+              `${beforeLines.get(sku)} → ${afterLines.get(sku) || '待填写'} 件`
+            }</li>)}</ul>
+          </section>}
           <ul>{editor.before_fields.items.map(r => <li key={r.sku}>{r.sku}：{r.quantity} 件</li>)}</ul>
           <h3>候选完整清单</h3>
         </section>}

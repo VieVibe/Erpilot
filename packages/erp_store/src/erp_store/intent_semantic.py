@@ -23,6 +23,7 @@ _NOTE_PREFIX = re.compile(
     r"(?P<quote>[『「“‘\"'])?\s*$"
 )
 _NOTE_QUOTES = {"『": "』", "「": "」", "“": "”", "‘": "’", '"': '"', "'": "'"}
+_CLAUSE_BREAK = re.compile(r"[，,。；;、\n]")
 
 
 def _note_field(message, note, scoped):
@@ -63,6 +64,16 @@ class ItemCandidate(StrictModel):
     quantity: QuantityCandidate | None
 
 
+class RevisionItem(ItemCandidate):
+    change: SourceSpan | None = None
+
+    @property
+    def operation(self):
+        if self.change is None:
+            return "update"
+        return {"新增": "add", "删除": "remove", "移除": "remove"}.get(self.change.quote)
+
+
 class CreateProposal(StrictModel):
     schema_version: Literal[1]
     operation: Literal["create"]
@@ -76,7 +87,7 @@ class CreateProposal(StrictModel):
 
 class ReviseProposal(CreateProposal):
     operation: Literal["revise"]
-    items: list[ItemCandidate] = Field(max_length=100)
+    items: list[RevisionItem] = Field(max_length=100)
 
 
 class QuoteEvidence(StrictModel):
@@ -107,6 +118,12 @@ class QuoteItem(ItemCandidate):
     quantity: QuoteQuantity | None
 
 
+class QuoteRevisionItem(QuoteItem):
+    change: QuoteEvidence | None = Field(
+        default=None, description="新增、删除或移除时引用商品前的动作词，改件数时填 null。"
+    )
+
+
 class QuoteCreateProposal(CreateProposal):
     """Wire schema only; persisted candidates retain the original strict span schema."""
 
@@ -126,7 +143,7 @@ class QuoteCreateProposal(CreateProposal):
 
 class QuoteReviseProposal(QuoteCreateProposal):
     operation: Literal["revise"]
-    items: list[QuoteItem] = Field(max_length=100)
+    items: list[QuoteRevisionItem] = Field(max_length=100)
 
 
 def locate_proposal(message, proposal, *, revision=False):
@@ -182,13 +199,16 @@ def revision_eligible(source):
     text = scoped.command_text
     return (
         not scoped.issues
-        and bool(re.search(r"修改|调整|改|换成|更新", text))
+        and bool(re.search(r"修改|调整|改|换成|更新|新增|删除|移除", text))
         and not re.search(
             r"如果|假如|假设|除非|一旦|先别|不要|是否|能否|可以吗|"
             r"不改|不调整|不更新|不修改|不用|无需|不需要|没必要|"
             r"别改|别调整|别修改|勿改|禁止|能不能|要不要|可不可以|"
+            r"(?:不|别|勿)\s*(?:删除|移除|新增|删|加)|"
+            r"(?:暂缓|延后|稍后再|暂且别)\s*(?:删除|移除|新增|删|加)|"
+            r"不是|而是|而非|并非|不为|先不|暂不|"
             r"怎么|如何|只查|只看|查询|解释|等.*确认|"
-            r"提交|下单|建单|审批|取消|删除|移除|新增|刚才|上次|第.*行",
+            r"提交|下单|建单|审批|取消|刚才|上次|第.*行",
             text,
         )
     )
@@ -201,15 +221,15 @@ def validate_proposal(message, proposal, *, revision=False):
         raise ValueError("该作用域不能生成创建候选，请明确完整新请求")
     scoped = scan_source(message.text)
     if not re.match(
-        r"修改|调整|改|换成|更新|把" if revision else r"准备|列|做|创建|建|帮|给|要",
+        r"修改|调整|改|换成|更新|把|新增|删除|移除"
+        if revision else r"准备|列|做|创建|建|帮|给|要",
         proposal.action.quote,
     ):
         raise ValueError("候选动作未指向实际动作片段")
     if revision and (
         not any((proposal.customer, proposal.note, proposal.budget_limit, proposal.items))
-        or any(r.quantity is None for r in proposal.items)
     ):
-        raise ValueError("修改候选必须有明确字段或最终件数，缺失不能清空原值")
+        raise ValueError("修改候选必须有明确的字段或商品变更")
     spans = [proposal.action, *proposal.unresolved]
     unquoted = [proposal.action]
     for field in (proposal.customer, proposal.note):
@@ -224,6 +244,31 @@ def validate_proposal(message, proposal, *, revision=False):
             raise ValueError("商品必须来自原文中的完整名称或 SKU")
         spans.append(row.product.evidence)
         unquoted.append(row.product.evidence)
+        if isinstance(row, RevisionItem):
+            if row.operation is None or (row.quantity is None) != (row.operation == "remove"):
+                raise ValueError("新增和改件数需要明确件数，删除不接受件数")
+            if row.change is not None:
+                prefix = _CLAUSE_BREAK.split(message.text[:row.change.start])[-1].strip()
+                between = message.text[row.change.end : row.product.evidence.start]
+                if (
+                    not re.fullmatch(r"(?:请|帮我)?\s*(?:先|再|并|同时)?", prefix)
+                    or row.change.end > row.product.evidence.start
+                    or not re.fullmatch(r"[ \t]*(?:商品|SKU)?[ \t]*", between, re.I)
+                    or _CLAUSE_BREAK.search(row.product.evidence.quote)
+                ):
+                    raise ValueError("增删动作必须紧邻其对应商品")
+                if (row.quantity is not None
+                        and row.quantity.evidence.start < row.product.evidence.end):
+                    raise ValueError("新增件数必须位于其对应商品之后")
+                if row.change != proposal.action:
+                    spans.append(row.change)
+                    unquoted.append(row.change)
+            if row.quantity is not None:
+                left, right = sorted(
+                    (row.product.evidence, row.quantity.evidence), key=lambda span: span.start,
+                )
+                if _CLAUSE_BREAK.search(message.text[left.end : right.start]):
+                    raise ValueError("件数必须与对应商品来自同一分句")
         if row.quantity:
             count = re.fullmatch(
                 r"([1-9][0-9]{0,8}|[零一二两三四五六七八九十百千]+)\s*[件个]",
@@ -321,6 +366,8 @@ def unmapped_text(message, proposal):
             spans.append(field.evidence)
     for row in proposal.items:
         spans.append(row.product.evidence)
+        if isinstance(row, RevisionItem) and row.change is not None:
+            spans.append(row.change)
         if row.quantity:
             spans.append(row.quantity.evidence)
     for span in spans:

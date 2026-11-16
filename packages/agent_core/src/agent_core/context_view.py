@@ -27,6 +27,8 @@ class ContextView:
     retain_user_messages: bool = False
     fail_on_overflow: bool = False
     current_projectors: Mapping[str, ToolProjector] | None = None
+    preserve_user: Callable[[str], bool] | None = None
+    preserve_current_results: bool = False
 
     def __call__(self, history: list[dict], policy: ContextPolicy) -> list[dict]:
         messages = deepcopy(history)
@@ -40,9 +42,14 @@ class ContextView:
             if message["role"] != "tool" or not isinstance(message.get("content"), str):
                 continue
             name = calls.get(message.get("tool_call_id"), (None, None))[1]
+            current = current_turn >= 0 and i > current_turn
+            if self.preserve_current_results and current and (
+                policy.max_tool_chars <= 0 or len(message["content"]) <= policy.max_tool_chars
+            ):
+                continue
             projectors = (
                 self.current_projectors
-                if self.current_projectors is not None and current_turn >= 0 and i > current_turn
+                if self.current_projectors is not None and current
                 else self.projectors
             )
             projector = projectors.get(name)
@@ -79,7 +86,14 @@ class ContextView:
             # promoting them to system instructions or cross-session memory.
             protected.update(i for i, m in enumerate(messages) if m["role"] == "user")
         boundary = max(0, len(messages) - max(1, policy.keep_last_messages))
-        protected.update(range(boundary, len(messages)))
+        if self.preserve_user is not None:
+            # A long current run needs its original request and latest model/tool exchange.
+            if current_turn >= 0:
+                protected.add(current_turn)
+            if messages:
+                protected.add(len(messages) - 1)
+        else:
+            protected.update(range(boundary, len(messages)))
         # Retain the most recent observation, including errors/none/ambiguity.
         # Never resurrect an older successful observation after a newer failure.
         for name in self.remember_tools:
@@ -94,18 +108,36 @@ class ContextView:
                 user = next(
                     (i for i in range(latest - 1, -1, -1) if messages[i]["role"] == "user"), None
                 )
-                if user is not None:
+                if user is not None and self.preserve_user is None:
                     protected.add(user)
         for unit in units:
             if protected.intersection(unit):
                 protected.update(unit)
+        if self.preserve_user is not None:
+            # Historical user requirements share a bounded reserve. Keep them verbatim
+            # where possible without starving the new request or its latest tool result.
+            remaining = min(
+                policy.max_tokens // 4,
+                policy.max_tokens - estimate_tokens([messages[i] for i in protected]),
+            )
+            for i in range(current_turn - 1, -1, -1):
+                message = messages[i]
+                content = message.get("content")
+                if (i not in protected and message["role"] == "user"
+                        and isinstance(content, str) and self.preserve_user(content)):
+                    cost = estimate_tokens([message])
+                    if cost <= remaining:
+                        protected.add(i)
+                        remaining -= cost
         selected = set(protected) if self.recent_only else set(range(len(messages)))
+        total = estimate_tokens([messages[i] for i in sorted(selected)])
         for unit in units:
-            if estimate_tokens([messages[i] for i in sorted(selected)]) <= policy.max_tokens:
+            if total <= policy.max_tokens:
                 break
             if not protected.intersection(unit):
+                total -= estimate_tokens([messages[i] for i in unit if i in selected])
                 selected.difference_update(unit)
         result = [messages[i] for i in sorted(selected)]
-        if self.fail_on_overflow and estimate_tokens(result) > policy.max_tokens:
+        if self.fail_on_overflow and total > policy.max_tokens:
             raise ContextBudgetExceeded("protected context exceeds estimated token budget")
         return result

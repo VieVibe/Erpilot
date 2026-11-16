@@ -191,8 +191,8 @@ def create_app(
         manifest = business_module.manifest()
         instance = os.getenv("ERPILOT_INSTANCE_ID", "").strip() or manifest["name"]
         session_binding = json.dumps(
-            [instance, manifest["name"], manifest["version"],
-             business_module.recovery_contract or manifest["contract"]],
+            [instance, manifest["name"], manifest["recovery_version"],
+             manifest["recovery_contract"]],
             ensure_ascii=False, separators=(",", ":"),
         )
     service = ChatService(

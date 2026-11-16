@@ -22,6 +22,20 @@ buildSync({entryPoints: ["src/components/AssistantMessage.tsx"], bundle: true,
   platform: "node", format: "esm", outfile: ".test-build/assistant-message.mjs",
   packages: "external", jsx: "automatic", alias: { "@ant-design/x": "./tests/ant-design-x-node.mjs" }});
 const { AssistantMessage } = await import("../.test-build/assistant-message.mjs");
+buildSync({entryPoints:["src/components/BusinessResultCard.tsx"],bundle:true,platform:"node",
+  format:"esm",outfile:".test-build/business-result.mjs",packages:"external",jsx:"automatic"});
+const { BusinessResultCard } = await import("../.test-build/business-result.mjs");
+
+test("plugin result card shows declared fields without requiring a summary", () => {
+  const display = {version:1,kind:"plugin_result",outcome:"succeeded",title:"Roundup 工单",
+    fields:[{label:"编号",value:"42"},{label:"标题",value:"<补货报表>"}]};
+  const html = renderToStaticMarkup(React.createElement(BusinessResultCard, {display}));
+  assert.match(html, /Roundup 工单/);
+  assert.match(html, /&lt;补货报表&gt;/);
+  assert.equal(renderToStaticMarkup(React.createElement(BusinessResultCard, {
+    display:{...display,fields:[{label:"错误字段",value:{}}]},
+  })), "");
+});
 buildSync({entryPoints:['src/components/OrderDraftPanel.tsx'],bundle:true,platform:'node',format:'esm',outfile:'.test-build/order-draft-panel.mjs',packages:'external',jsx:'automatic'});
 const { OrderDraftPanel, DraftSummary } = await import('../.test-build/order-draft-panel.mjs');
 buildSync({entryPoints:['src/components/BusinessApprovalSummary.tsx'],bundle:true,platform:'node',format:'esm',outfile:'.test-build/business-approval.mjs',packages:'external',jsx:'automatic'});

@@ -127,9 +127,18 @@ async def test_other_module_or_instance_cannot_resume_and_original_can(tmp_path,
     body = {"session_id": "shared", "pending_id": pending.pending_id, "approved": True}
     token, arguments = pending.arguments["client_token"], pending.arguments
     reconciler = module.reconciler("shared")
+
+    def describe(tools):
+        return [replace(tool, description=tool.description + "（文案更新）") for tool in tools]
+
+    edited = replace(
+        module, tools=describe(module.tools), version="1.1.0", recovery_version=module.version,
+        for_context=lambda context: describe(module.tools_for(context)),
+    )
     changed = (
         host(replace(module, name="other-module")),
         host(replace(module, version="2")),
+        host(edited),
         host(create_module(writes=False, transport=transport)),
         host(replace(module, name="other-module"), database="other-runs.db"),
     )
@@ -154,7 +163,11 @@ async def test_other_module_or_instance_cannot_resume_and_original_can(tmp_path,
         assert result.json()["error"]["code"] == "module_checkpoint_missing"
 
     async with httpx2.AsyncClient(
-        transport=httpx2.ASGITransport(host()), base_url="http://host",
+        transport=httpx2.ASGITransport(
+            host(replace(edited, recovery_descriptions={
+                tool.name: tool.description for tool in module.tools
+            })),
+        ), base_url="http://host",
     ) as client:
         result = await client.post("/api/chat/approve/stream", json=body)
         assert result.status_code == 200 and "event: done" in result.text

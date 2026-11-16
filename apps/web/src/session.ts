@@ -280,14 +280,14 @@ export function phaseLabel(turn: AssistantTurn): string {
     case "connecting": return "正在连接…";
     case "started": return "请求已接收";
     case "analyzing": return turn.blocks.at(-1)?.type === "reasoning"
-      ? `正在思考 · 第 ${turn.step} 轮`
-      : turn.step > 0 ? `正在分析请求 · 第 ${turn.step} 轮` : "正在分析请求";
+      ? `正在思考 · 执行第 ${turn.step} 步`
+      : turn.step > 0 ? `正在分析请求 · 执行第 ${turn.step} 步` : "正在分析请求";
     case "generating": return "正在生成回复";
     case "awaiting_approval": return "等待你的批准";
     case "reconciliation_required": return "写入结果待核对";
     case "approved": return "已批准，等待执行";
     case "completed": return "已完成";
-    case "max_steps": return "达到执行轮次上限";
+    case "max_steps": return "本条请求达到执行步数上限";
     case "failed": return "执行失败";
     case "disconnected": return "连接中断";
   }

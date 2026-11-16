@@ -5,6 +5,8 @@ The existing tool guidance still requires a fresh get_order_task before mutation
 """
 
 import json
+import re
+from dataclasses import replace
 
 from agent_core.context_view import ContextView
 
@@ -58,6 +60,19 @@ def summarize_task(content: str, *, numbered: bool = False, historical: bool = T
         return json.dumps(result, ensure_ascii=False, separators=(",", ":"))
     except (ValueError, KeyError, TypeError):
         return None
+
+
+def order_context_view() -> ContextView:
+    requirements = re.compile(
+        r"预算|上限|必须|不得|只允许|不能超过|约束|保持.*不变|至少|至多|只在|仅",
+    )
+    return replace(
+        erp_context_view(workflow=True),
+        recent_only=False,
+        retain_user_messages=False,
+        preserve_current_results=True,
+        preserve_user=lambda message: bool(requirements.search(message)),
+    )
 
 
 def erp_context_view(*, workflow: bool = False) -> ContextView:

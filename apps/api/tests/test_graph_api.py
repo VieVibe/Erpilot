@@ -3,9 +3,9 @@ import json
 import httpx2
 import pytest
 from agent_core.approval import ApprovalDecision, StreamApprovalGate
-from agent_core.events import ApprovalPending
+from agent_core.events import ApprovalPending, LoopEnd
 from agent_core.testing import USAGE, chunk, make_client, sse_response, tool_call_chunks
-from agent_core.tools import Tool
+from agent_core.tools import ResultPresentation, Tool
 from erpilot_api.main import create_app
 from erpilot_api.run_store import RunStore
 from erpilot_api.service import ChatService
@@ -16,6 +16,41 @@ from pydantic import BaseModel
 class Params(BaseModel):
     sku: str
     client_token: str | None = None
+
+
+async def test_complex_run_can_finish_after_eight_model_calls_in_a_long_session(tmp_path):
+    def llm(request):
+        messages = json.loads(request.content)["messages"]
+        start = max(i for i, message in enumerate(messages) if message["role"] == "user")
+        if messages[start]["content"] == "complex":
+            calls = sum(message["role"] == "tool" for message in messages[start:])
+            if calls < 8:
+                return sse_response(tool_call_chunks(f"read-{calls}", "read", '{"sku":"A1001"}'))
+        return sse_response([chunk(delta={"content": "done"}), chunk(usage=USAGE)])
+
+    async def read(args):
+        return {"sku": args.sku}
+
+    service = ChatService(
+        client_factory=lambda: make_client(llm),
+        model="scripted",
+        trace_dir=tmp_path,
+        checkpointer=InMemorySaver(),
+        run_store=RunStore(tmp_path / "long-session.db"),
+        tools=[Tool(
+            "read", "Read product", Params, read,
+            result_presentation=ResultPresentation("商品", (("sku", "商品编号"),)),
+        )],
+    )
+    for message in ["simple"] * 7 + ["complex"]:
+        events = [event async for event in service.stream_run("long-session", message)]
+        assert isinstance(events[-1], LoopEnd)
+        assert events[-1].completed
+    assert events[-1].steps == 9
+    state = await service.session_state("long-session")
+    card = state["tool_results"][-1]["display"]
+    assert card["kind"] == "plugin_result"
+    assert card["fields"] == [{"label": "商品编号", "value": "A1001"}]
 
 
 def setup_service(tmp_path, saver, executed):

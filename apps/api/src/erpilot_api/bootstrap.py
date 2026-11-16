@@ -3,11 +3,13 @@
 import asyncio
 import os
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import replace
 from decimal import Decimal
 from urllib.parse import urlsplit
 
 from agent_core.billing import EndpointRate, endpoint_rate
 from agent_core.llm import LLMClient, LLMConfig
+from agent_core.runtime_config import LoopConfig
 
 from erpilot_api.main import create_app
 from erpilot_api.modules import load_module
@@ -82,6 +84,7 @@ async def build_live_app(
 
     from agent_core.approval import StreamApprovalGate
     from erp_store.db import DEFAULT_DB
+    from mcp_erp.context_view import order_context_view
     from mcp_erp.session_tools import SessionErpTools
 
     from erpilot_api.order_module import create_order_module
@@ -96,7 +99,10 @@ async def build_live_app(
         policy_resolver=policy_resolver,
     )
     app = create_app(
-        business_module=create_order_module(provider),
+        business_module=replace(
+            create_order_module(provider),
+            loop_config=LoopConfig(context_view=order_context_view()),
+        ),
         intent_semantic_settings=settings,
         **app_options,
     )

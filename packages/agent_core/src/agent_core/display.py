@@ -17,6 +17,7 @@ from typing import Any
 
 from agent_core.policy_display import assessment_fields, policy_search_fields
 from agent_core.replenishment_display import replenishment_fields
+from agent_core.tools import ResultPresentation
 
 logger = logging.getLogger("agent_core.display")
 
@@ -26,10 +27,24 @@ _BUILDERS = {}
 
 
 def build_display(
-    name: str, arguments: str | dict, content: str, ok: bool
+    name: str, arguments: str | dict, content: str, ok: bool,
+    *, presentation: ResultPresentation | None = None,
 ) -> dict[str, Any] | None:
     """按工具名构建 display；未知工具或契约不符返回 None（不抛出）。"""
     builder = _BUILDERS.get(name)
+    if presentation is not None:
+        if not ok:
+            return None
+        try:
+            result = json.loads(content)
+        except (TypeError, ValueError):
+            return None
+        if not isinstance(result, dict) or "error" in result or "approval" in result:
+            return None
+        snapshot = presentation.snapshot(result)
+        if not snapshot["fields"] or len(snapshot["fields"]) != len(presentation.fields):
+            return None
+        return _display("plugin_result", "succeeded", {}, **snapshot)
     if builder is None:
         return None
     try:

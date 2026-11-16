@@ -103,7 +103,11 @@ HTTP 插件可以使用 `HttpConnectorConfig.client(context)` 创建异步客户
 
 新插件可通过 `loop_config=LoopConfig(max_steps=4, tool_timeout=15)` 配置运行参数。订单示例使用 `BusinessRuntimeFeatures` 声明工作台能力。现有 `service_options` 中的 `loop_config` 和 `business_hooks` 以及已知的 `runtime_features` 布尔字段仍可用。宿主保留认证和写权限状态字段，插件的运行参数由显式扩展点接收。
 
-新会话首次执行时，Erpilot 将实例 ID、模块名称、版本和工具契约摘要绑定到会话记录及 checkpoint。只有这四项都匹配才能继续该会话或恢复待审批操作。设置稳定的 `ERPILOT_INSTANCE_ID` 来区分实际接入实例，尤其是同一个插件连接不同系统实例、组织或租户时。留空时用模块名称作为实例 ID。切换目标系统实例时，改用独立的实例 ID 和存储，并新建会话。恢复旧任务时使用原实例配置和原存储。若升级会改变版本或工具契约，先处理旧部署下的待审批任务。
+默认模型执行预算为每条用户请求 16 步。下一条消息使用新的执行预算；插件可通过自己的 `loop_config` 设置其他值。
+
+新会话首次执行时，Erpilot 将实例 ID、模块名称、恢复版本和恢复契约摘要绑定到会话记录及 checkpoint。只有这四项都匹配才能继续该会话或恢复待审批操作。设置稳定的 `ERPILOT_INSTANCE_ID` 来区分实际接入实例，尤其是同一个插件连接不同系统实例、组织或租户时。留空时用模块名称作为实例 ID。切换目标系统实例时，改用独立的实例 ID 和存储，并新建会话。恢复旧任务时使用原实例配置和原存储。
+
+经回归验证的兼容升级可以显式声明 `recovery_version`，保持原版本的绑定值。未声明时沿用发布版本。仅修改工具说明文字时，`recovery_descriptions` 可以为修改过的工具声明旧说明，用于计算恢复摘要。工具参数、风险、重试规则及实例身份仍需匹配。遇到写入语义、权限或对账行为变化，应更新恢复版本并在旧部署处理旧待办。可在 `/api/runtime` 和 `plugin check --json` 核对版本与摘要。
 
 升级前已存在且没有绑定记录的会话可以查看历史。继续对话和恢复执行需要新建会话，或在原版本和原目标系统环境中先处理旧任务。
 
@@ -116,6 +120,8 @@ HTTP 插件可以使用 `HttpConnectorConfig.client(context)` 创建异步客户
 写工具设置 `risk` 后通过现有图运行时进入人工确认。运行时把稳定请求号放入 `client_token` 参数，模块把它传到目标系统。仅在目标系统确实支持幂等提交时设置 `retry_safe=True`。
 
 写工具可通过 `approval_presentation=ApprovalPresentation(...)` 声明审批标题、影响说明和可展示字段。字段以 `(参数名, 显示标签)` 声明，例如 `fields=(("purpose", "用途"), ("amount_cents", "金额（分）"))`。框架从已校验的参数读取标量值，随待审批状态保存同一份摘要，工作台即时显示和恢复后显示一致。展示声明不能包含 `client_token`。审批仍绑定原始参数，目标系统的业务约束仍由写工具实现。
+
+插件还可通过 `result_presentation=ResultPresentation(...)` 声明成功结果的标题及字段。宿主使用工具返回的标量字段渲染业务卡，字段缺失或工具返回错误时使用通用详情。
 
 外部插件可在自己的 CI 中导入 `erpilot_api.plugin_testing.assert_write_tool_contract`。传入插件模块、`BusinessSessionContext`、写工具名和两组合法但业务含义不同的参数。两组参数都由宿主生成 `client_token`。例如，报销插件可以用金额分别为 100 分和 200 分的两组参数：
 
@@ -147,13 +153,15 @@ HTTP 插件可以复用 `HttpConnectorConfig`。它统一解析 `<PREFIX>_URL`�
 
 当前已支持 Python 入口插件和 `module:factory` 两种加载方式、启动契约校验、带登录身份的会话工具与对账器绑定、失效账号安全关闭、HTTP 连接配置与服务凭据、目标系统健康检查、业务提示词、通用审批与恢复、模块工作台提示，以及订单示例的显式装配。订单专用路由由订单模块装配。
 
-订单示例通过 `order_module.py` 声明自己的路由、运行特性、状态增强和语义解析能力。工作台按运行特性加载订单草稿组件，第三方模块复用通用参数确认和结果展示。当前安装包仍包含订单示例和 `mcp_erp`，可按实际发布需求继续拆分依赖。
+订单示例通过 `order_module.py` 声明自己的路由、运行特性、状态增强和语义解析能力。工作台按运行特性加载订单草稿组件，第三方模块复用通用审批和结果卡。独立安装宿主时，订单依赖通过 `erpilot-api[order-example]` 安装。工作区全包同步及容器仍包含参考业务模块。
 
 单 API 执行进程约束继续适用。企业 SSO、租户隔离、多 worker 执行协调和动态插件安装需要独立实现与验证。
 
 ## 验证
 
 工单脚手架可通过正式 API 启动入口执行示例查询，使用固定数据和脚本化模型测试。接入真实 CRM、OA 或工单后端时，可在独立插件仓库实现和验证对应适配器。
+
+[Roundup 独立插件](../examples/roundup-plugin/README.md)可在本地启动真实工单系统，验收基于操作者身份的查询、创建审批和丢失响应后的提交核对。
 
 ```powershell
 uv run python -m pytest apps/api/tests/test_business_modules.py apps/api/tests/test_graph_api.py apps/api/tests/test_live_defaults.py apps/cli/tests/test_plugin_scaffold.py

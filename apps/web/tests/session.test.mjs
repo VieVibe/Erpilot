@@ -201,7 +201,7 @@ test("done separates normal completion from the max_steps guard; errors and EOF 
   turn = applyTurnEvent(turn, {event: "delta", data: {text: "部分回答"}}, 1100);
   turn = applyTurnEvent(turn, {event: "done", data: {steps: 2, completed: false, usage: null, cost: null, duration_ms: 1, trace: null}}, 1200);
   assert.equal(turn.phase, "max_steps");
-  assert.equal(phaseLabel(turn), "达到执行轮次上限");
+  assert.equal(phaseLabel(turn), "本条请求达到执行步数上限");
 
   let errored = newAssistantTurn(1000);
   errored = applyTurnEvent(errored, {event: "delta", data: {text: "部分回答"}}, 1100);

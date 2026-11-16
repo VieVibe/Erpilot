@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 from test_intent_semantic_api import Model, host, journal, span
 
 SOURCE = "调整机械键盘到六个，预算改为1200元，备注改为『加急😀』。"
+LINE_EDITS = {"edit_lines", "wrong_action", "wrong_quantity", "deferred_removal", "negated_count"}
 
 
 class RevisionModel(Model):
@@ -23,13 +24,16 @@ class RevisionModel(Model):
         def field(quote):
             return {"value": quote, "evidence": span(message, quote)}
 
+        editing_lines = self.behavior in LINE_EDITS
         proposal = {
             "schema_version": 1,
             "operation": "revise",
             "action": span(message, "调整"),
             "customer": None,
-            "note": field("加急😀"),
-            "budget_limit": {"value": "1200", "evidence": span(message, "1200元")},
+            "note": None if editing_lines else field("加急😀"),
+            "budget_limit": (
+                None if editing_lines else {"value": "1200", "evidence": span(message, "1200元")}
+            ),
             "items": [
                 {
                     "product": field("机械键盘"),
@@ -47,6 +51,17 @@ class RevisionModel(Model):
             proposal["items"][0]["quantity"] = None
         elif self.behavior == "extra":
             proposal["target"] = {"draft_id": "forged"}
+        elif editing_lines:
+            proposal["items"].extend([
+                {"product": field("鼠标"), "quantity": None,
+                 "change": span(message, "新增" if self.behavior == "wrong_action" else "删除")},
+                {"product": field("D1"), "change": span(message, "新增"),
+                 "quantity": {"value": 2, "evidence": span(message, "两个")}},
+            ])
+            if self.behavior == "wrong_quantity":
+                proposal["items"][0]["quantity"] = {
+                    "value": 4, "evidence": span(message, "四个"),
+                }
         yield TextDelta(json.dumps(proposal, ensure_ascii=False))
         yield StreamEnd(None if self.behavior == "missing_usage" else Usage(11, 3, 14))
 
@@ -65,11 +80,27 @@ async def setup(tmp_path, behavior="valid"):
         evidence={"contract": "draft-form-1"},
         budget_limit=1000,
     )
+    editing_lines = behavior in LINE_EDITS
+    if editing_lines:
+        with Session(engine) as session:
+            session.add(ProductRow(
+                sku="D1", name="显示器", category="测试", price=20, status="在售",
+            ))
+            session.add(StockRow(sku="D1", quantity=1000, warehouse="主仓"))
+            session.commit()
     request = {
-        "source": SOURCE,
+        "source": (
+            "调整机械键盘到六个，删除鼠标，新增商品 D1 两个。" if editing_lines else SOURCE
+        ),
         "target": {k: draft[k] for k in ("draft_id", "revision")},
         "request_id": uuid4().hex,
     }
+    if behavior == "wrong_quantity":
+        request["source"] += "另有四个包装盒。"
+    elif behavior == "deferred_removal":
+        request["source"] = request["source"].replace("删除鼠标", "暂缓删除鼠标")
+    elif behavior == "negated_count":
+        request["source"] = request["source"].replace("两个", "不是两个而是三个")
     return app, provider, engine, model, request
 
 
@@ -82,6 +113,34 @@ def fields(preview):
         "budget_limit": None,
         "items": [{"sku": row["sku"], "quantity": row["quantity"]} for row in preview["items"]],
     }
+
+
+@pytest.mark.parametrize("behavior", sorted(LINE_EDITS))
+async def test_revision_line_changes_are_source_bound_and_need_form_confirmation(
+    tmp_path, behavior,
+):
+    app, provider, engine, model, req = await setup(tmp_path, behavior)
+    try:
+        async with httpx2.AsyncClient(
+            transport=httpx2.ASGITransport(app), base_url="http://test"
+        ) as client:
+            before = snapshot_all(engine)
+            response = await client.post("/api/sessions/s/pending-intent/revise-preview", json=req)
+            assert snapshot_all(engine) == before
+            if behavior != "edit_lines":
+                assert response.status_code == 422
+                return
+            assert response.status_code == 200, response.text
+            preview = response.json()["preview"]
+            assert [(r["sku"], r["quantity"]) for r in preview["items"]] == [("K1", 6), ("D1", 2)]
+            assert preview["note"] == "原备注" and preview["budget_limit"] == 1000
+            confirmed = await client.post("/api/sessions/s/pending-intent/confirm", json={
+                **fields(preview), "note": preview["note"], "budget_limit": preview["budget_limit"],
+            })
+            assert confirmed.status_code == 201, confirmed.text
+            assert confirmed.json()["revision"] == 2
+    finally:
+        engine.dispose()
 
 
 async def test_revision_preview_preserves_unmentioned_fields_and_confirms_once(tmp_path):

@@ -2,7 +2,7 @@
 
 import httpx2
 import pytest
-from agent_core.llm import LLMConfig
+from agent_core.llm import LLMConfig, TextDelta
 from erp_store.db import ProductRow, StockRow, init_db, make_engine
 from erpilot_api.bootstrap import ORDER_EXAMPLE, build_live_app, semantic_settings
 from evals.context_workflow import snapshot_all
@@ -48,6 +48,28 @@ async def build(tmp_path, model):
         checkpointer=InMemorySaver(),
         auth_enabled=False,
     )
+
+
+async def test_order_live_context_retains_early_user_constraints(configured, tmp_path):
+    class ContextModel(Model):
+        async def stream_chat(self, messages, tools=None):
+            self.calls.append(messages)
+            yield TextDelta("已记录。")
+
+    model = ContextModel()
+    app = await build(tmp_path, model)
+    condition = "这个任务的交付地点必须是南仓。"
+    service = app.state.service
+    async for _ in service.stream_run("s", condition):
+        pass
+    # Force ordinary message truncation while leaving room for the structured view.
+    for _ in range(3):
+        async for _ in service.stream_run("s", "行情背景 " * 5700):
+            pass
+    async for _ in service.stream_run("s", "继续核对交付地点"):
+        pass
+    assert model.calls[-1][-1]["content"] == "继续核对交付地点"
+    assert any(m["role"] == "user" and m["content"] == condition for m in model.calls[-1])
 
 
 async def test_unconfigured_startup_exposes_no_tools_or_business_routes(tmp_path, monkeypatch):

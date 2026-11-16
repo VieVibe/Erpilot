@@ -18,7 +18,7 @@ class ToolRetryPolicy:
 
 @dataclass(frozen=True, slots=True)
 class LoopConfig:
-    max_steps: int = 8
+    max_steps: int = 16
     tool_timeout: float = 30.0
     retry: ToolRetryPolicy = field(default_factory=ToolRetryPolicy)
     context: ContextPolicy = field(default_factory=ContextPolicy)

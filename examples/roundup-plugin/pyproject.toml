@@ -1,0 +1,15 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "erpilot-plugin-roundup"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["erpilot-api>=0.1.0", "pydantic>=2"]
+
+[project.entry-points."erpilot.business_modules"]
+roundup = "erpilot_plugin_roundup:create_module"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/erpilot_plugin_roundup"]

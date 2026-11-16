@@ -7,12 +7,13 @@ from datetime import datetime
 from sqlalchemy import select
 
 from erp_store.db import OrderDraftRow, ProductRow
+from erp_store.intent_catalog import ExactCatalog
 from erp_store.intent_contract import digest
 from erp_store.intent_rules import field_values
 from erp_store.intent_semantic import validate_proposal
 
 REVISION_SEMANTIC_VERSION = "order-revise-proposal-2"
-REVISION_PROMPT_VERSION = "order-revise-proposal-prompt-3"
+REVISION_PROMPT_VERSION = "order-revise-proposal-prompt-4"
 
 
 def revision_target(session, session_id, draft_id, revision, now):
@@ -36,14 +37,35 @@ def bind_revision(session, message, proposal, base):
         ProductRow.sku.in_(skus)).order_by(ProductRow.sku)))
     if len(products) != len(skus) or any(p.status != "在售" for p in products):
         raise ValueError("原清单商品目录已变化，请重新核对")
+    originals = tuple(products)
+    added_queries = {item.product.value for item in proposal.items if item.operation == "add"}
+    catalogue = ExactCatalog(session, added_queries, added_queries) if added_queries else None
     changed = set()
     for item in proposal.items:
-        matches = [p for p in products if item.product.value in (p.sku, p.name)]
-        if len(matches) != 1 or matches[0].sku in changed:
-            raise ValueError("请明确原草稿中唯一商品名或 SKU，不自动新增或合并商品")
-        sku = matches[0].sku
+        if item.operation == "add":
+            count, matches = catalogue.lookup(item.product.value)
+            if count != 1 or matches[0].sku in skus or matches[0].status != "在售":
+                raise ValueError("新增商品须为草稿中没有的唯一在售商品")
+            sku = matches[0].sku
+            products.append(session.get(ProductRow, sku))
+        else:
+            matches = [p for p in originals if item.product.value in (p.sku, p.name)]
+            if len(matches) != 1:
+                raise ValueError("请明确原草稿中唯一商品名或 SKU")
+            sku = matches[0].sku
+        if sku in changed:
+            raise ValueError("同一商品不能重复修改")
         changed.add(sku)
-        next(r for r in fields["items"] if r["sku"] == sku)["quantity"] = item.quantity.value
+        if item.operation == "add":
+            fields["items"].append({"sku": sku, "quantity": item.quantity.value})
+        else:
+            row = next(r for r in fields["items"] if r["sku"] == sku)
+            if item.operation == "remove":
+                fields["items"].remove(row)
+            else:
+                row["quantity"] = item.quantity.value
+    if not 1 <= len(fields["items"]) <= 100:
+        raise ValueError("修改后的草稿须包含 1 到 100 行商品")
     for name in ("customer", "note", "budget_limit"):
         candidate = getattr(proposal, name)
         if candidate is not None:

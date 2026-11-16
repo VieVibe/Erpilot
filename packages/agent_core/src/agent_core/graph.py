@@ -338,7 +338,8 @@ def build_graph(
                             "ok": True,
                             "content": content,
                             "display": build_display(
-                                call["name"], call["arguments"], content, True
+                                call["name"], call["arguments"], content, True,
+                                presentation=tool.result_presentation,
                             ),
                             "approval_status": "approved",
                             "invocation_status": "succeeded",
@@ -451,7 +452,10 @@ def build_graph(
                     **call,
                     "ok": True,
                     "content": content,
-                    "display": build_display(call["name"], call["arguments"], content, True),
+                    "display": build_display(
+                        call["name"], call["arguments"], content, True,
+                        presentation=tool.result_presentation,
+                    ),
                     "approval_status": "approved",
                     "invocation_status": "succeeded",
                 }

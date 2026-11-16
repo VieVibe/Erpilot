@@ -7,6 +7,7 @@ M3 起真实 ERP 工具走 mcp_erp（FastMCP），本模块是 agent 侧的本�
 
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
+from math import isfinite
 from typing import Any
 
 from pydantic import BaseModel
@@ -32,16 +33,14 @@ def _strip_titles(node: Any) -> Any:
 
 
 @dataclass(frozen=True, slots=True)
-class ApprovalPresentation:
-    """Operator-facing text and an allowlist of scalar tool arguments to show."""
-
+class _ScalarPresentation:
     title: str
     fields: tuple[tuple[str, str], ...] = ()
     summary: str = ""
 
     def __post_init__(self):
         if any(name == "client_token" for name, _ in self.fields):
-            raise ValueError("approval fields cannot include client_token")
+            raise ValueError("presentation fields cannot include client_token")
 
     def snapshot(self, arguments: dict[str, Any]) -> dict[str, Any]:
         return {
@@ -51,8 +50,19 @@ class ApprovalPresentation:
                 {"label": label, "value": arguments[name]}
                 for name, label in self.fields
                 if isinstance(arguments.get(name), (str, int, float))
+                and (not isinstance(arguments[name], float) or isfinite(arguments[name]))
             ],
         }
+
+
+@dataclass(frozen=True, slots=True)
+class ApprovalPresentation(_ScalarPresentation):
+    """Operator-facing text and an allowlist of scalar tool arguments to show."""
+
+
+@dataclass(frozen=True, slots=True)
+class ResultPresentation(_ScalarPresentation):
+    """Operator-facing text and an allowlist of scalar tool result fields."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -85,6 +95,7 @@ class Tool:
     # Optional application policy; also checked when a model bypasses visibility.
     stage_policy: Callable[[list[dict], list[dict]], bool] | None = None
     approval_presentation: ApprovalPresentation | None = None
+    result_presentation: ResultPresentation | None = None
 
     def __post_init__(self):
         if self.validated_handler is not None and self.risk is not None:

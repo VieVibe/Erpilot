@@ -98,8 +98,11 @@ class BusinessModule:
     order_hooks: "OrderServiceHooks | None" = None
     lifespan: Callable[[], AbstractAsyncContextManager[None]] | None = None
     api_version: int = PLUGIN_API_VERSION
+    recovery_version: str | None = None
+    recovery_descriptions: Mapping[str, str] = field(default_factory=dict)
     _catalog: dict[str, dict[str, Any]] = field(init=False, repr=False, compare=False)
     _contract: str = field(init=False, repr=False, compare=False)
+    _recovery_digest: str = field(init=False, repr=False, compare=False)
     runtime_loop_config: LoopConfig | None = field(init=False, repr=False, compare=False)
     runtime_order_hooks: "OrderServiceHooks | None" = field(init=False, repr=False, compare=False)
     runtime_capabilities: BusinessRuntimeFeatures = field(init=False, repr=False, compare=False)
@@ -110,6 +113,8 @@ class BusinessModule:
             raise ValueError("business module name and title are required")
         if not self.version.strip():
             raise ValueError("business module version is required")
+        if self.recovery_version is not None and not self.recovery_version.strip():
+            raise ValueError("recovery_version must not be blank")
         if self.instructions is None and self.data_source != "mcp":
             raise ValueError("custom business modules must provide instructions")
         if self.data_source not in {"custom", "mcp", "demo"}:
@@ -128,6 +133,18 @@ class BusinessModule:
         object.__setattr__(self, "tools", tools)
         object.__setattr__(self, "_catalog", catalog)
         object.__setattr__(self, "_contract", _contract_digest(list(catalog.values())))
+        previous_descriptions = self.recovery_descriptions
+        if not isinstance(previous_descriptions, Mapping) or any(
+            name not in catalog or not isinstance(description, str)
+            for name, description in previous_descriptions.items()
+        ):
+            raise ValueError("recovery_descriptions must map declared tools to prior descriptions")
+        if previous_descriptions and self.recovery_contract is not None:
+            raise ValueError("configure recovery descriptions or a recovery contract")
+        object.__setattr__(self, "_recovery_digest", self.recovery_contract or _contract_digest([
+            {**entry, "description": previous_descriptions.get(name, entry["description"])}
+            for name, entry in catalog.items()
+        ]))
 
         if self.service_options is not None and not isinstance(self.service_options, Mapping):
             raise TypeError("service_options must be a mapping")
@@ -202,6 +219,8 @@ class BusinessModule:
             "name": self.name,
             "title": self.title,
             "version": self.version,
+            "recovery_version": self.recovery_version or self.version,
+            "recovery_contract": self._recovery_digest,
             "contract": self._contract,
             "api_version": self.api_version,
         }

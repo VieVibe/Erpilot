@@ -21,7 +21,7 @@ export function WorkTimeline(
     return (
       <details className="process done">
         <summary>
-          {steps > 0 ? `回复完成 · 第 ${steps} 轮` : '操作完成'} · {(duration_ms / 1000).toFixed(1)}s
+          {steps > 0 ? `回复完成 · ${steps} 次模型调用` : '操作完成'} · {(duration_ms / 1000).toFixed(1)}s
           {usage ? ` · ${usage.prompt_tokens}+${usage.completion_tokens} tok` : ""}
           {cost != null ? ` · ≈¥${cost.toFixed(4)}` : ""}
         </summary>
@@ -41,8 +41,8 @@ export function WorkTimeline(
   if (turn.phase === "max_steps") {
     return (
       <div className="phase warn" role="status">
-        达到执行轮次上限，未正常完成
-        {turn.done ? ` · 共 ${turn.done.steps} 轮 · ${(turn.done.duration_ms / 1000).toFixed(1)}s` : ""}
+        本条请求达到执行步数上限。可在此会话继续追问。
+        {turn.done ? ` · ${turn.done.steps} 次模型调用 · ${(turn.done.duration_ms / 1000).toFixed(1)}s` : ""}
       </div>
     );
   }

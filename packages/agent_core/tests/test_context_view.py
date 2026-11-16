@@ -195,6 +195,37 @@ def test_current_task_projection_preserves_actual_blocking_issues():
     assert current["draft"]["submission_check"]["can_submit"] is False
 
 
+def test_live_order_context_preserves_current_price_and_inventory_fields():
+    from mcp_erp.context_view import order_context_view
+
+    payload = {
+        "status": "active",
+        "draft": {
+            "draft_id": "d", "revision": 1, "customer": "甲", "note": None,
+            "status": "open", "expires_at": "future",
+            "items": [{"sku": "A", "quantity": 2, "unit_price": 190, "stock_after": 8}],
+        },
+    }
+    history = [
+        {"role": "user", "content": "当前草稿预计提交后的库存"},
+        *exchange("get_order_task", json.dumps(payload)),
+    ]
+    assert json.loads(order_context_view()(history, ContextPolicy())[-1]["content"]) == payload
+
+
+def test_order_history_with_many_explicit_requirements_leaves_room_for_a_new_request():
+    from mcp_erp.context_view import order_context_view
+
+    requirements = [
+        {"role": "user", "content": f"任务 {i} 的预算与交付约束：" + ("描述 " * 1000)}
+        for i in range(70)
+    ]
+    current = {"role": "user", "content": "查询当前草稿"}
+    view = order_context_view()([*requirements, current], ContextPolicy())
+    assert view[-2:] == [requirements[-1], current]
+    assert len(view) < len(requirements)
+
+
 async def test_workflow_overflow_sends_no_request_and_keeps_source():
     class Client:
         async def stream_chat(self, *args, **kwargs):

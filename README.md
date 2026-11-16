@@ -122,7 +122,7 @@ npm --prefix apps/web run dev
 
 访问[开发工作台](http://localhost:5173)。`ERPILOT_MODULE` 留空时，工作台显示「尚未配置业务模块」。该模式依然使用配置的 PostgreSQL checkpoint，业务对话在接入插件后启用。
 
-要运行订单示例，先执行 `uv run --package erp-store python -m erp_store seed`，然后在 `.env` 设置 `ERPILOT_MODULE=order-example` 并重启 API。订单示例默认只读，显式设置 `ERPILOT_WRITES=1` 可演示写入审批。模型、嵌入及语义解析配置见[开发指南](docs/development.md)和[语义配置](docs/semantic-parsing.md)。接入目标系统的配置和工单插件脚手架见[业务模块开发指南](docs/business-modules.md)。
+要运行订单示例，先执行 `uv run --package erp-store python -m erp_store seed`，然后在 `.env` 设置 `ERPILOT_MODULE=order-example`，使用 `uv run --package erpilot-api --extra order-example python -m erpilot_api` 启动。订单示例默认只读，显式设置 `ERPILOT_WRITES=1` 可演示写入审批。模型、嵌入及语义解析配置见[开发指南](docs/development.md)和[语义配置](docs/semantic-parsing.md)。接入目标系统的配置和工单插件脚手架见[业务模块开发指南](docs/business-modules.md)。
 
 CLI：`uv run erpilot chat "查询商品 A1001 的库存"`。独立 MCP：`uv run --package mcp-erp python -m mcp_erp serve`。更多命令见[开发指南](docs/development.md)。
 

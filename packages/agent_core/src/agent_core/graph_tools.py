@@ -168,5 +168,8 @@ async def execute_tool_call(call, tools, config, *, allow_retries=True):
             break
     result = {**deepcopy(call), "content": content, "ok": ok}
     # 展示适配器失败只回退 None，不影响业务结果
-    result["display"] = build_display(call["name"], call.get("arguments", {}), content, ok)
+    result["display"] = build_display(
+        call["name"], call.get("arguments", {}), content, ok,
+        presentation=tool.result_presentation if tool else None,
+    )
     return result

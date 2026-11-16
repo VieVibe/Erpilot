@@ -7,15 +7,27 @@ import { Card, Tag } from "antd";
 import { CancellationAssessmentCard, isUsableAssessmentDisplay } from './CancellationAssessmentCard';
 import { ReplenishmentCard, isUsableReplenishmentDisplay } from './ReplenishmentCard';
 import { PolicySearchCard, isUsablePolicySearchDisplay } from './PolicySearchCard';
+import { PluginApprovalDetails } from './PluginApprovalDetails';
 import type { ReactNode } from "react";
 import type {
   BusinessDisplay,
+  ApprovalPresentation,
   OrderCreationDisplay,
   StockAdjustmentDisplay,
   StockQueryDisplay,
 } from "../protocol";
 
+function pluginResult(display: BusinessDisplay | null | undefined): ApprovalPresentation | null {
+  if (display?.version !== 1 || display.kind !== "plugin_result" || display.outcome !== "succeeded") return null;
+  const { title, summary = "", fields } = display as unknown as ApprovalPresentation;
+  if (typeof title !== "string" || typeof summary !== "string" || !Array.isArray(fields) ||
+      !fields.length || fields.some(field => !field || typeof field.label !== "string" ||
+        !(["string", "boolean"].includes(typeof field.value) || Number.isFinite(field.value)))) return null;
+  return {title, summary, fields};
+}
+
 export function isUsableDisplay(display: BusinessDisplay | null | undefined): boolean {
+  if (display?.kind === "plugin_result") return pluginResult(display) !== null;
   if (display?.kind === 'policy_search') return isUsablePolicySearchDisplay(display);
   if (display?.kind === 'replenishment_suggestion') return isUsableReplenishmentDisplay(display);
   if (display?.kind === 'cancellation_assessment') return isUsableAssessmentDisplay(display);
@@ -44,6 +56,10 @@ export function isUsableDisplay(display: BusinessDisplay | null | undefined): bo
 const OUTCOME_LABEL: Record<string, string> = { succeeded: '成功', failed: '失败', denied: '未执行', unknown: '结果未知' };
 
 export function BusinessResultCard({ display }: { display: BusinessDisplay }) {
+  const result = pluginResult(display);
+  if (result) return <Card size="small" className="card succeeded">
+    <PluginApprovalDetails presentation={result} />
+  </Card>;
   if (isUsablePolicySearchDisplay(display)) return <PolicySearchCard display={display}/>;
   if (isUsableReplenishmentDisplay(display)) return <ReplenishmentCard display={display}/>;
   if (isUsableAssessmentDisplay(display)) return <CancellationAssessmentCard display={display}/>;
