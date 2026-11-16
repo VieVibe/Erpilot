@@ -62,5 +62,5 @@ SKU 明确表达支持英文字母、数字、连字符、下划线和点；数�
 的旧集成不会自动获得商品授权检查。手工表单继续明确编辑完整商品。
 该机制属于应用执行契约，不是身份认证或防止可信调用方修改程序的权限边界。
 
-工程结果见[本批验收](../reports/acceptance/2026-10-22-draft-item-guard.md)。
+工程结果见[本批验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-22-draft-item-guard.md)。
 未新增付费模型或嵌入请求，旧 GLM / DeepSeek 真实模型结果不改判。

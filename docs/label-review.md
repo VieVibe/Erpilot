@@ -31,11 +31,11 @@
 
 ## 记录与自动核验
 
-- [完整逐条审核表](../reports/review/20261104-intent-label-audit/review.md)
+- [完整逐条审核表](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/review/20261104-intent-label-audit/review.md)
 - [版本化审核数据](../packages/evals/src/evals/intent_core_120_review.json)
-- [审核完整性验证](../reports/review/20261104-intent-label-audit/verification.json)
-- [审核后120/120规则回归](../reports/acceptance/20261104-intent-label-review-regression.json)
-- [本次449项测试及收尾验收](../reports/acceptance/2026-11-04-intent-label-review.md)
+- [审核完整性验证](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/review/20261104-intent-label-audit/verification.json)
+- [审核后120/120规则回归](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/20261104-intent-label-review-regression.json)
+- [本次449项测试及收尾验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-04-intent-label-review.md)
 
 运行以下命令验证当前审核状态与来源绑定；不调用付费模型：
 

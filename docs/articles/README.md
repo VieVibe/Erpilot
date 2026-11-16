@@ -16,14 +16,14 @@
 | 顺序 | 标题 / 方向 | 要讲清的问题 | 状态与依据 |
 |---|---|---|---|
 | 01 | [手写 Agent Loop：从一次 API 调用到多步任务](01-handwritten-agent-loop.md) | 流式、工具调用、错误回填和 trace 如何组成循环 | 已发布；保留早期实现语境 |
-| 02 | [给 ERP 写一个 MCP Server：工具契约、错误恢复与返回值设计](02-mcp-server.md) | 业务能力如何经过 MCP 接回 Agent；描述、错误、结果体积和桥接限制 | 文稿完成，待发布；[核对记录](reviews/02-mcp-server-review.md) |
-| 03 | [让 Agent 等待审批：LangGraph 中断与固定版本确认](03-langgraph-approval.md) | 从回调门到 interrupt；确认对象、参数、版本与恢复后的决定如何绑定 | 文稿完成，待发布；[ADR-0006](../adr/0006-suspending-approval-events.md)、[ADR-0009](../adr/0009-langgraph-runtime.md)、[订单草稿设计](../superpowers/specs/2026-10-11-order-draft-design.md)、[业务审批设计](../superpowers/specs/2026-10-11-business-approval-design.md) |
-| 04 | [工具超时以后，订单到底建没建：幂等与崩溃对账](04-idempotency-and-recovery.md) | 稳定 token、业务提交与 checkpoint 的窗口；展示记录为何不能决定重试 | 文稿完成，待发布；[ADR-0007](../adr/0007-write-reliability.md)、[ADR-0010](../adr/0010-crash-recovery-reconciliation-scope.md)、[崩溃恢复验收](../../reports/acceptance/2026-10-08-crash-recovery.md) |
+| 02 | [给 ERP 写一个 MCP Server：工具契约、错误恢复与返回值设计](02-mcp-server.md) | 业务能力如何经过 MCP 接回 Agent；描述、错误、结果体积和桥接限制 | 文稿完成，待发布；[核对记录](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/docs/articles/reviews/02-mcp-server-review.md) |
+| 03 | [让 Agent 等待审批：LangGraph 中断与固定版本确认](03-langgraph-approval.md) | 从回调门到 interrupt；确认对象、参数、版本与恢复后的决定如何绑定 | 文稿完成，待发布；[ADR-0006](../adr/0006-suspending-approval-events.md)、[ADR-0009](../adr/0009-langgraph-runtime.md)、[订单草稿设计](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/docs/superpowers/specs/2026-10-11-order-draft-design.md)、[业务审批设计](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/docs/superpowers/specs/2026-10-11-business-approval-design.md) |
+| 04 | [工具超时以后，订单到底建没建：幂等与崩溃对账](04-idempotency-and-recovery.md) | 稳定 token、业务提交与 checkpoint 的窗口；展示记录为何不能决定重试 | 文稿完成，待发布；[ADR-0007](../adr/0007-write-reliability.md)、[ADR-0010](../adr/0010-crash-recovery-reconciliation-scope.md)、[崩溃恢复验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-08-crash-recovery.md) |
 | 05 | [怎样判断 Agent 做对了：从工具名到业务状态的评测](05-agent-evaluation.md) | 固定样本、判分版本、成功执行与零变更、预算、未知 usage 和跨模型对照 | 文稿完成，待发布；[标注标准](../eval-annotation-guide.md)、[质量门槛](../eval-quality-gates.md)、[评测叙事](../eval-regression-narrative.md) |
-| 06 | [政策 RAG：检索命中之后，回答为什么仍然会错](06-rag-evidence-and-answers.md) | 冻结检索集、阈值和 BM25/RRF；逐问选证、本轮绑定、原文渲染与剩余失败 | 文稿完成，待发布；[检索实验](../retrieval-experiment.md)、[回答契约](../rag-answer-reliability.md)、[最新真实验收](../../reports/acceptance/2026-10-19-structured-policy-and-resume.md) |
-| 07 | [对话裁短以后，业务任务还在吗：多轮状态与上下文实验](07-context-and-multi-turn-state.md) | 对话历史、持久化草稿和模型视图的区别；快照实验如何走到连续任务验证 | 文稿完成，待发布；[快照实验](../context-experiment.md)、[连续任务契约](../context-workflow.md)、[连续任务验收](../../reports/acceptance/2026-10-19-continuous-context-and-delivery.md) |
+| 06 | [政策 RAG：检索命中之后，回答为什么仍然会错](06-rag-evidence-and-answers.md) | 冻结检索集、阈值和 BM25/RRF；逐问选证、本轮绑定、原文渲染与剩余失败 | 文稿完成，待发布；[检索实验](../retrieval-experiment.md)、[回答契约](../rag-answer-reliability.md)、[最新真实验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-19-structured-policy-and-resume.md) |
+| 07 | [对话裁短以后，业务任务还在吗：多轮状态与上下文实验](07-context-and-multi-turn-state.md) | 对话历史、持久化草稿和模型视图的区别；快照实验如何走到连续任务验证 | 文稿完成，待发布；[快照实验](../context-experiment.md)、[连续任务契约](../context-workflow.md)、[连续任务验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-19-continuous-context-and-delivery.md) |
 
-第 03–07 篇完整文稿及统一[核对记录](reviews/03-07-series-review.md)已完成，不预先承诺发布日期。
+第 03–07 篇完整文稿及统一[核对记录](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/docs/articles/reviews/03-07-series-review.md)已完成，不预先承诺发布日期。
 提示注入的评分器复判已纳入第 05 篇；攻击覆盖与边界另见[攻击面清单](../security/prompt-injection-attack-surface.md)，本批没有另增待写专题。
 
 ## 各篇范围

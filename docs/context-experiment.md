@@ -53,7 +53,7 @@ SDK 重试为 0，单次总截止默认 60 秒。每次请求前写入并 fsync 
 - 临时库烟测使用脚本客户端读取实际投影，执行真实 LangGraph → FastMCP → SQLite：60 行草稿修改第 31 行，核对客户、备注、版本与全表状态。脚本结果不能替代真实模型操作成功率。
 - 受保护内容超预算和未持久化约束丢失按失败或限制保留；候选策略的推广需要新的业务回归证据。
 
-当前结果与费用汇总见[本批验收](../reports/acceptance/2026-10-19-context-and-portfolio.md)。
+当前结果与费用汇总见[本批验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-19-context-and-portfolio.md)。
 
 后续[连续多轮业务验证](context-workflow.md)使用独立场景、源码指纹与计量，新增显式
 `workflow=True` 视图来保留用户原话、明细行号及超预算停止。该后续结果不修改本页 v2 原判，

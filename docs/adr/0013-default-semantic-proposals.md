@@ -22,4 +22,4 @@
 人工金标作为扩大模型语言覆盖范围的质量依据。预算标识持久化、不自动轮换，未知费用可追溯。
 本决策更新 ADR-0011 的默认关闭约定，历史验收及失败不重写。
 
-[配置与验证](../semantic-parsing.md) · [计划](../plans/2026-11-04-semantic-default.md)
+[配置与验证](../semantic-parsing.md) · [计划](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/docs/plans/2026-11-04-semantic-default.md)

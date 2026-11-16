@@ -2,7 +2,7 @@
 
 - 状态：历史草案（2026-10-05）；后续架构决策见 ADR-0009
 - 日期：2026-10-05
-- 关联：[下一阶段总体规划](../../tasks/plan.md) §4（设计建议来源）、[恢复协议明细](../plans/恢复协议明细.md)（冻结明细）、ADR-0005/0006/0007
+- 关联：[下一阶段总体规划](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/tasks/plan.md) §4（设计建议来源）、[恢复协议明细](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/docs/plans/%E6%81%A2%E5%A4%8D%E5%8D%8F%E8%AE%AE%E6%98%8E%E7%BB%86.md)（冻结明细）、ADR-0005/0006/0007
 
 ## 背景
 

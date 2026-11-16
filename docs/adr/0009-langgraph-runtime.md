@@ -2,7 +2,7 @@
 
 - 状态：已接受并实施
 - 日期：2026-10-06
-- 关联：ADR-0005/0006/0007/0008；[M6–8 实施计划](../superpowers/plans/2026-10-06-langgraph-postgres-hitl.md)
+- 关联：ADR-0005/0006/0007/0008；[M6–8 实施计划](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/docs/superpowers/plans/2026-10-06-langgraph-postgres-hitl.md)
 
 ## 背景
 

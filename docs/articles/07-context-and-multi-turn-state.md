@@ -60,7 +60,7 @@ v2 同范围的实际结果如下，输入 token 来自端点 usage：
 | DeepSeek | current | 2/10 | 69202 |
 | DeepSeek | structured | 9/10 | 26300 |
 
-原始结果见 [GLM JSON](../../reports/context/20261019-context-glm-live-02.json)和 [DeepSeek JSON](../../reports/context/20261019-context-deepseek-live-02.json)，范围与用量说明见[快照实验验收](../../reports/acceptance/2026-10-19-context-and-portfolio.md)。
+原始结果见 [GLM JSON](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/context/20261019-context-glm-live-02.json)和 [DeepSeek JSON](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/context/20261019-context-deepseek-live-02.json)，范围与用量说明见[快照实验验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-19-context-and-portfolio.md)。
 
 在这个固定批次，候选相对现有策略的输入 token 分别减少约 **62.7%** 和 **62.0%**，但没有全部通过；GLM 的候选尾延迟也没有改善。输入变少、答题变好与整体变快，需要分别用指标证明。
 
@@ -93,7 +93,7 @@ v2 同范围的实际结果如下，输入 token 来自端点 usage：
 | DeepSeek / current | 2/3 | 1/3 | 15/17 | 13 |
 | DeepSeek / structured | 3/3 | 3/3 | 17/17 | 17 |
 
-原始结果分别在[连续任务 GLM](../../reports/context/20261019-workflow-glm-01.json)与[连续任务 DeepSeek](../../reports/context/20261019-workflow-deepseek-01.json)。失败原因、执行范围和费用审计见[连续任务验收](../../reports/acceptance/2026-10-19-continuous-context-and-delivery.md)。未执行轮没有被当作通过，两模型整份报告也因其中的策略存在未完成场景而保留 `complete=false`；DeepSeek 候选自身的三个场景则全部完整通过。
+原始结果分别在[连续任务 GLM](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/context/20261019-workflow-glm-01.json)与[连续任务 DeepSeek](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/context/20261019-workflow-deepseek-01.json)。失败原因、执行范围和费用审计见[连续任务验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-19-continuous-context-and-delivery.md)。未执行轮没有被当作通过，两模型整份报告也因其中的策略存在未完成场景而保留 `complete=false`；DeepSeek 候选自身的三个场景则全部完整通过。
 
 ## 六、按失败原因解释结果
 

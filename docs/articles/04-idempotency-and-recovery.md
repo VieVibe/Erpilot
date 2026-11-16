@@ -107,7 +107,7 @@ uv run python examples/articles/04_idempotency.py
 
 特别是提交前窗口，恢复可能让 handler 总共进入两次：原尝试一次，恢复一次。验收要求的是最终业务只提交一次，而非任何情况下 handler 只能进入一次。
 
-这份结果来自[历史进程测试 JUnit](../../reports/acceptance/2026-10-08-process-recovery.xml)，逐项解释见[验收报告](../../reports/acceptance/2026-10-08-crash-recovery.md)。本次写作没有重新连接 PostgreSQL 或重跑硬崩溃测试，也没有把后续草稿与预览流程自动纳入这份旧矩阵。
+这份结果来自[历史进程测试 JUnit](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-08-process-recovery.xml)，逐项解释见[验收报告](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-08-crash-recovery.md)。本次写作没有重新连接 PostgreSQL 或重跑硬崩溃测试，也没有把后续草稿与预览流程自动纳入这份旧矩阵。
 
 ## 六、展示恢复与业务恢复分别处理
 

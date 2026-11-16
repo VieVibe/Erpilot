@@ -111,4 +111,4 @@ macOS / Linux：`ERPILOT_DEPLOYMENT_PROJECT=erpilot-deployment-tests npm run tes
 - 自由输入没有理解：默认脚本模型只认固定指令，页面明确标注；真实模型需使用显式覆盖配置。
 
 安全设计与取舍见 [ADR-0012](adr/0012-authenticated-container-deployment.md)，本批结果见
-[部署与权限验收](../reports/acceptance/2026-11-04-production-readiness.md)。
+[部署与权限验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-04-production-readiness.md)。

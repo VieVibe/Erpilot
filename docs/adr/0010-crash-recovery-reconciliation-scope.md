@@ -2,7 +2,7 @@
 
 - 状态：提案，待评审
 - 日期：2026-10-08
-- 关联：[ADR-0008：运行持久化与断点恢复](0008-persistent-run-recovery.md)、[ADR-0009：LangGraph 与 PostgreSQL checkpoint](0009-langgraph-runtime.md)、[设计说明](../superpowers/specs/2026-10-08-crash-recovery-reconciliation-design.md)、[实施计划](../superpowers/plans/2026-10-08-crash-recovery-reconciliation.md)
+- 关联：[ADR-0008：运行持久化与断点恢复](0008-persistent-run-recovery.md)、[ADR-0009：LangGraph 与 PostgreSQL checkpoint](0009-langgraph-runtime.md)、[设计说明](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/docs/superpowers/specs/2026-10-08-crash-recovery-reconciliation-design.md)、[实施计划](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/docs/superpowers/plans/2026-10-08-crash-recovery-reconciliation.md)
 
 ## 背景
 
@@ -59,4 +59,4 @@ R01–R10 均须通过确定性测试；提交前/后的崩溃必须用独立子
 - 两个 SQLite/PostgreSQL 存储之间没有分布式事务；正确性依赖先 checkpoint、原 token 幂等和恢复时先查询业务提交事实。
 - 事件和 checkpoint 数据继续需要本机容量/备份管理；本提案不引入自动清理或保留期变更。
 - 提案接受后应按实施计划分阶段落地；各阶段分别通过本地确定性门槛，最终以 R01–R10 全矩阵和四工具提交窗口覆盖作为完成条件。
-- 2026-10-08 实现状态：Task 1–7 已提交。隔离 PostgreSQL 上 R01–R06 进程矩阵 19/19 通过，四种写工具的 R03–R06 均有同次证据；R07–R10 按计划由 API、RunStore、graph 与 web 确定性用例覆盖，并在同日全量测试中通过。全量 pytest 仍失败于工作区里一条无关的评测版本断言，本 ADR 保持提案、待评审。逐项证据见[验收报告](../../reports/acceptance/2026-10-08-crash-recovery.md)。
+- 2026-10-08 实现状态：Task 1–7 已提交。隔离 PostgreSQL 上 R01–R06 进程矩阵 19/19 通过，四种写工具的 R03–R06 均有同次证据；R07–R10 按计划由 API、RunStore、graph 与 web 确定性用例覆盖，并在同日全量测试中通过。全量 pytest 仍失败于工作区里一条无关的评测版本断言，本 ADR 保持提案、待评审。逐项证据见[验收报告](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-08-crash-recovery.md)。

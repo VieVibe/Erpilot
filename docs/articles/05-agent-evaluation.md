@@ -55,11 +55,11 @@ Erpilot 从工具名与子串断言起步，逐步补上状态核验、调用请
 
 2026-10-08 的一次完整基线执行了固定 **35 条，32 条通过**。逐条复核后，部分失败来自评分器遗漏等价表达或有效工具路径：空搜索结果可以说“没搜到”；报价可以经过 `compare_quotes`；拒绝表达也不只一种固定话术。
 
-修正规则后，v2.3 定点报告实际是 **2/3**，随后 v2.4 对剩余一例单独运行并通过。它们不能与旧完整报告相加，写成一次全量通过。对应原始数据分别是[完整运行](../../reports/evals/20261008-104243-fdd8ba.json)、[v2.3 定点](../../reports/evals/20261008-110631-3b5f1f.json)和[v2.4 定点](../../reports/evals/20261008-110815-1a9599.json)。
+修正规则后，v2.3 定点报告实际是 **2/3**，随后 v2.4 对剩余一例单独运行并通过。它们不能与旧完整报告相加，写成一次全量通过。对应原始数据分别是[完整运行](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/evals/20261008-104243-fdd8ba.json)、[v2.3 定点](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/evals/20261008-110631-3b5f1f.json)和[v2.4 定点](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/evals/20261008-110815-1a9599.json)。
 
 规则修改需要有可判别的正反例。例如接受同义拒绝措辞后，仍要拒绝“先说不能透露、随后给出号码”的回答。否则扩展措辞只是在放宽条件，没有修正判断能力。
 
-注入实验中还出现过格式误伤：回答“当前库存为 **0 件**”，强调符号阻断了旧子串匹配。v2.6 修正格式归一化后，对原 trace 离线复判：control 保持 **3/4**，treatment 从原 **2/4** 变为 **4/4**。原分数、原请求与费用保留，没有重新调用模型。[复判说明](../../reports/security/20261009-prompt-injection-v26-rescore.md)记录了逐项变化。
+注入实验中还出现过格式误伤：回答“当前库存为 **0 件**”，强调符号阻断了旧子串匹配。v2.6 修正格式归一化后，对原 trace 离线复判：control 保持 **3/4**，treatment 从原 **2/4** 变为 **4/4**。原分数、原请求与费用保留，没有重新调用模型。[复判说明](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/security/20261009-prompt-injection-v26-rescore.md)记录了逐项变化。
 
 这里的提高来自重新解释同一份证据，不能描述成模型在新一次运行中变得更强；有限攻击载荷的通过，也不证明抵抗任意提示注入。
 

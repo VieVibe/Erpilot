@@ -2,7 +2,7 @@
 
 - 状态：已接受并实施
 - 日期：2026-11-04
-- 依据：[成熟度诊断](../plans/2026-11-04-portfolio-maturity.md)、[实际架构](../architecture.md)
+- 依据：[成熟度诊断](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/docs/plans/2026-11-04-portfolio-maturity.md)、[实际架构](../architecture.md)
 
 后续范围更新：[ADR-0012](0012-authenticated-container-deployment.md)增加带账号的前端/API容器和持久演示。
 本页保留此前本地收口的决策依据；其“仅 PostgreSQL 容器、可信单用户”范围已由新 ADR 扩展。

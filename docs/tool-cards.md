@@ -242,7 +242,7 @@ API 的 MCP 组合层绑定可信会话标识，不在工具参数中接受 `ses
 - 用途：检索店铺政策片段，依据返回内容作答并注明来源（不臆造政策）
 - 参数：`query`（政策问题/关键词）、`k`（返回片段数 1~5，默认 3）
 - 返回：`schema_version=1`、规范化 `query`、带时区的 `queried_at`、`policy_state`、`answerability`、`matches` 和 `note`；每条引用含 `source/title/text/score`、`policy_id/version`、生效区间、`citation` 标签、完整 `quoted_citation` 与正文 `text_sha256`。命中时 `answerability=not_assessed`，须逐问判断原文是否支持答案；无命中时为 `insufficient`，`matches` 为空并附拒答提示。
-- 网页：默认展开检索证据卡，按编号展示原文、版本和检索相似度，高亮查询在原文中的字面匹配；相似度不作为置信度。会话恢复保留原查询时间和引用，不重新检索。旧版或非法展示契约回退原始详情，不补造时间或证据。见 [回显验收](../reports/acceptance/2026-10-17-rag-evidence.md)。
+- 网页：默认展开检索证据卡，按编号展示原文、版本和检索相似度，高亮查询在原文中的字面匹配；相似度不作为置信度。会话恢复保留原查询时间和引用，不重新检索。旧版或非法展示契约回退原始详情，不补造时间或证据。见 [回显验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-17-rag-evidence.md)。
 - 错误：`invalid_argument`（空 query / k 越界）、`policy_unavailable`（索引未构建、政策内容与索引不一致或嵌入 key 未配置，hint 指向 `uv run --env-file .env --package rag python -m rag build`）
 
 ### compose_policy_answer

@@ -3,7 +3,7 @@
 日期：2026-10-21。承接[多轮订单与修改记录](draft-history.md)，落实本次用户选择的两项工作：
 指定历史目标的实查依据，以及包含人工审批、条件变化和恢复的完整订单验收。
 
-最新真实结果：[同源码跨模型独立批次](../reports/acceptance/2026-10-21-cross-model-order-acceptance.md)未改本页原三流程与问题，GLM 3/3、28/28 阶段通过；DeepSeek 首次请求上游 502 缺 usage，用户已决定跳过后续验收，不再重试或作为开发前置。共同门槛仍未达成，旧批次 2/3 与独立专项结论不改写。
+最新真实结果：[同源码跨模型独立批次](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-21-cross-model-order-acceptance.md)未改本页原三流程与问题，GLM 3/3、28/28 阶段通过；DeepSeek 首次请求上游 502 缺 usage，用户已决定跳过后续验收，不再重试或作为开发前置。共同门槛仍未达成，旧批次 2/3 与独立专项结论不改写。
 
 后续产品改进：[核对指定版本并直接申请审批](draft-confirmation.md)已完成工程验收。网页显式核对后直接进入正式 HITL，无需模型再解释确认文字；该入口与本页的固定自然语言流程分列，原失败和两模型共同门槛不改判。
 

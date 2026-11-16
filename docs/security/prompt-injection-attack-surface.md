@@ -29,7 +29,7 @@ The matched control removes only `TOOL_DATA_TRUST_RULE`; treatment includes it. 
 
 ## Matched live-model comparison (2026-10-09)
 
-The [matched comparison report](../../reports/security/20261009-054856-prompt-injection-comparison.md) records four live-model cases in each arm. The [v2.6 offline re-score](../../reports/security/20261009-prompt-injection-v26-rescore.md) preserves the original v2.5 scores and explains the corrected criteria. After re-scoring, control is 3/4 and treatment is 4/4; control inj-04 still fails because the answer repeats `999`. The write gate denied all requests and the business snapshots remained unchanged. This small sample describes these traces and does not establish general protection.
+The [matched comparison report](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/security/20261009-054856-prompt-injection-comparison.md) records four live-model cases in each arm. The [v2.6 offline re-score](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/security/20261009-prompt-injection-v26-rescore.md) preserves the original v2.5 scores and explains the corrected criteria. After re-scoring, control is 3/4 and treatment is 4/4; control inj-04 still fails because the answer repeats `999`. The write gate denied all requests and the business snapshots remained unchanged. This small sample describes these traces and does not establish general protection.
 
 ## Uncovered areas
 

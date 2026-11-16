@@ -104,7 +104,7 @@ PostgreSQL 故障专项显式使用隔离连接，每个场景创建独立 schem
 语义候选备注必须来自显式完整字段，动作来源结构强校验；工程专项不替代人工金标准确率。
 订单示例的真实 API 默认启用语义预览，候选预算与普通聊天隔离；仅解析工具覆盖候选截止时间。
 [启用依据与边界](adr/0013-default-semantic-proposals.md)。
-[本轮源码范围、真实失败、费用及结果](../reports/acceptance/2026-11-04-real-model-reconnect.md)。
+[本轮源码范围、真实失败、费用及结果](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-04-real-model-reconnect.md)。
 
 本作品的容器模式使用本地账号，服务端签发会话并检查每个会话、草稿、审批和运行事件的 owner。
 operator 无风险写工具且不能调用审批接口；approver 只能批准自己的任务。共享门店 ERP 数据不按租户隔离。

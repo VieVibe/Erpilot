@@ -1,6 +1,6 @@
 # ADR-0012：同源容器部署与最小账号权限
 
-日期：2026-11-04；状态：已实现，验证结果见[本批报告](../../reports/acceptance/2026-11-04-production-readiness.md)。
+日期：2026-11-04；状态：已实现，验证结果见[本批报告](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-04-production-readiness.md)。
 更新 ADR-0011 的“仅 PostgreSQL 容器、可信单用户”交付范围；保留 ADR-0010 的单 API 执行进程约束和原评审状态。
 
 ## 问题

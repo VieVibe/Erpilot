@@ -1,12 +1,12 @@
 # Erpilot 求职投递材料
 
-Erpilot 是面向企业业务系统的可插拔 Agent 框架。业务插件提供工具和接口映射，框架统一负责会话、人工确认、执行恢复与操作记录。订单与库存是完整参考实现，报销示例演示独立 HTTP 后端接入，工单插件脚手架使用固定数据。
+Erpilot 是面向企业业务系统的可插拔 Agent 框架。业务插件提供工具和接口映射，框架统一负责会话、人工确认、执行恢复与操作记录。订单与库存是完整参考实现，乐深 ERP 是真实只读接入案例，工单插件脚手架使用固定数据。
 
 2026-11-04 已完成一键运行、实际架构和展示收口，并补上带账号的容器与持久恢复；在仓库根目录运行
 `python scripts/quickstart.py` 即可演示，使用脚本模型、正式 API / MCP 和临时库。
-[本轮验收](../reports/acceptance/2026-11-04-portfolio-maturity.md)含全仓 PostgreSQL、浏览器和源码副本验证；
-当前部署与权限结果见[最新补强验收](../reports/acceptance/2026-11-04-production-readiness.md)。
-最新[可恢复真实验收](../reports/acceptance/2026-11-04-real-model-reconnect.md)为订单 4/4、34/34，
+[本轮验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-04-portfolio-maturity.md)含全仓 PostgreSQL、浏览器和源码副本验证；
+当前部署与权限结果见[最新补强验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-04-production-readiness.md)。
+最新[可恢复真实验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-04-real-model-reconnect.md)为订单 4/4、34/34，
 语义创建 7/7、修改 6/6，并验证带账号的默认 API 建单；原失败与费用仍保留。
 120条工程标签现已完成用户委托的AI审核，6条补充范围说明，不将其表述为真人金标。
 [逐条审核依据](label-review.md)。
@@ -42,9 +42,9 @@ Python、FastAPI、LangGraph、FastMCP、SQLite、PostgreSQL checkpoint、React 
 批准、政策原文和无依据拒答。视频使用脚本化模型和临时库；真实模型数据从报告解释。
 可校验源码和视频统一打包方式见[作品入口](portfolio-overview.md)。
 
-订单 v2 在 2026-10-28 的[历史批次](../reports/acceptance/2026-10-28-contracts-and-policy.md)
+订单 v2 在 2026-10-28 的[历史批次](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-28-contracts-and-policy.md)
 因连接中断缺 usage 冻结，该批次没有整单通过。
-2026-11-04 的[独立修复批次](../reports/acceptance/2026-11-04-real-model-reconnect.md)
+2026-11-04 的[独立修复批次](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-04-real-model-reconnect.md)
 已通过 4/4 流程、34/34 阶段；展示时分别解释新旧结果，不合并成绩。
 使用演示指南的三分钟顺序；已有视频为历史脚本录制，政策 13/13 来自独立受控检索报告。
 
@@ -53,11 +53,11 @@ Python、FastAPI、LangGraph、FastMCP、SQLite、PostgreSQL checkpoint、React 
 | 话题 | 可以这样解释 | 证据 |
 |---|---|---|
 | 审批、版本与幂等 | 模型提出操作；批准绑定具体版本，执行时再次校验。幂等解决重复提交，条件变化则重新确认 | [订单案例](interview-cases.md)、[当前恢复边界](architecture.md)、[历史修复](write-reliability.md) |
-| RAG 来源与回答 | 命中与充分性分别验证；程序从本轮取证并复制原文，受阻后直接结束；问题与证据的语义选择仍可能失败 | [检索对照](retrieval-experiment.md)、[GLM 新批次与旧结果边界](../reports/acceptance/2026-10-28-contracts-and-policy.md) |
+| RAG 来源与回答 | 命中与充分性分别验证；程序从本轮取证并复制原文，受阻后直接结束；问题与证据的语义选择仍可能失败 | [检索对照](retrieval-experiment.md)、[GLM 新批次与旧结果边界](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-28-contracts-and-policy.md) |
 | 上下文与状态 | 业务状态存数据库；请求视图保留用户原话、最新任务快照和工具配对，超过估算预算时停止。摘要仍有事实时效和字段边界 | [连续业务任务](context-workflow.md)、[历史快照实验](context-experiment.md) |
 
 每个话题按“具体故障 → 为什么这样设计 → 怎么测 → 尚有什么边界”讲解。
-历史崩溃恢复的 19 项进程测试在 2026-11-04 全仓中重新通过，见[本轮记录](../reports/acceptance/2026-11-04-portfolio-maturity.md)；视频中的刷新仍只覆盖进程内恢复。
+历史崩溃恢复的 19 项进程测试在 2026-11-04 全仓中重新通过，见[本轮记录](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-04-portfolio-maturity.md)；视频中的刷新仍只覆盖进程内恢复。
 
 ## 面试前自行演练
 

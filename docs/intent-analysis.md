@@ -1,18 +1,18 @@
 # 意图识别：规则、澄清续接与版本指代
 
-2026-10-28。对应[设计](plans/2026-10-28-intent-analysis-design.md)的 P0/P1 首批实现。
+2026-10-28。对应[设计](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/docs/plans/2026-10-28-intent-analysis-design.md)的 P0/P1 首批实现。
 本页保留分阶段记录。11-04 收尾后真实 API 默认 enforce 并接入创建/修改语义预览；
 规则完整识别时不调用候选模型。[当前配置与启用依据](semantic-parsing.md)。
-本轮结果及逐例证据见[工程验收](../reports/acceptance/2026-10-28-intent-analysis.md)。
-后续 P1 的增量续接和展示指代见[续接验收](../reports/acceptance/2026-10-28-intent-p1-continuation.md)。
-独立字段补充、直接 SKU 选择与重放保护见[独立补槽验收](../reports/acceptance/2026-10-28-intent-p1-slots.md)。
+本轮结果及逐例证据见[工程验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-28-intent-analysis.md)。
+后续 P1 的增量续接和展示指代见[续接验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-28-intent-p1-continuation.md)。
+独立字段补充、直接 SKU 选择与重放保护见[独立补槽验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-28-intent-p1-slots.md)。
 2026-10-31 继续补齐初始缺件数/单位请求的持久化补问，并加入目录批量核对及本地压力对照，
-见[本批验收](../reports/acceptance/2026-10-31-intent-missing-count.md)。
-同日继续加入创建请求的完整可编辑核对与版本绑定，见[预览验收](../reports/acceptance/2026-10-31-intent-preview.md)。
+见[本批验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-31-intent-missing-count.md)。
+同日继续加入创建请求的完整可编辑核对与版本绑定，见[预览验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-31-intent-preview.md)。
 2026-11-02 补充 API 整轮本地诊断、带状态压力验证，以及包装单位回复保留请求的修正，
-见[本批记录](../reports/acceptance/2026-11-02-intent-diagnostics.md)。
+见[本批记录](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-02-intent-diagnostics.md)。
 同日继续接入单次创建语义候选、统一原币种预算和完整表单确认，
-见[语义候选验收](../reports/acceptance/2026-11-02-intent-semantic.md)。
+见[语义候选验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-02-intent-semantic.md)。
 
 ## 使用
 
@@ -221,7 +221,7 @@ P2 的创建候选、共享预算和完整表单已通过脚本模型故障注�
 旧 checkpoint 的模式切换及新契约回退演练已在本机隔离 PostgreSQL 完成，见文末更新。
 
 2026-11-02 已补充真实供应商七例工程探针及唯一原文定位优化，详见
-[实测记录](../reports/acceptance/2026-11-02-intent-quotes-live.md)。该探针直接验证协调器与隔离 SQLite，
+[实测记录](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-02-intent-quotes-live.md)。该探针直接验证协调器与隔离 SQLite，
 不确认表单、不保存业务草稿；不能替代完整 API/浏览器真实模型验收或人工金标。
 同一输出目录只运行一次，原始请求/输出、实际 usage、预算账本和失败均保留。
 缺 usage 时停止后续付费样例，保护样例继续离线检查；未运行样例明确标记，不算成功。
@@ -253,7 +253,7 @@ GET 恢复仍只读，界面展示目标标识/版本、原完整清单及候选
 保存仍只重新报价，不提交订单、不扣库存、不申请审批。
 
 该入口复用现有持久化共享预算、一次请求、无自动重试、缺 usage 停止的协议，未开启额外真实预算。
-本批只完成脚本模型/API/SQLite/前端验证，详见[验收](../reports/acceptance/2026-11-02-intent-revision.md)。
+本批只完成脚本模型/API/SQLite/前端验证，详见[验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-02-intent-revision.md)。
 聊天内自动目标选择和规则修改权限没有据此扩展，上一批未知费用与冻结状态保留。
 
 ## 模式切换与旧会话恢复
@@ -272,10 +272,10 @@ GET 预览与会话恢复可只读展示“需重新核对”，can_confirm=fals
 真实 PostgreSQL 断开连接并重建宿主/连接池的三模式矩阵，保留旧 pending_id、参数和 expires_at，
 批准与拒绝分别核对实际订单和库存。draft-intent-2 已保存草稿在 off/shadow/enforce 下仍可核对与提交。
 原有进程硬退出和恢复专项也使用隔离 PostgreSQL 执行，不再因缺配置跳过。
-完整证据及环境清理见[恢复验收](../reports/acceptance/2026-11-02-intent-mode-recovery.md)。
+完整证据及环境清理见[恢复验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-02-intent-mode-recovery.md)。
 
-历史人工复核包位于 [11-02待审表](../reports/review/20261102-intent-core/review.md)，原冻结数据未修改。
-当前已由用户委托AI完成审核，见[120条已审核表](../reports/review/20261104-intent-label-audit/review.md)。
+历史人工复核包位于 [11-02待审表](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/review/20261102-intent-core/review.md)，原冻结数据未修改。
+当前已由用户委托AI完成审核，见[120条已审核表](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/review/20261104-intent-label-audit/review.md)。
 11-02 当时选择暂未复核、保持 off；11-04 已按 ADR-0013 默认接入预览，
 原工程预期标签及旧批次判定保持不变。
 真实创建新批次首笔推理连接失败、缺 usage 后停止，修改新批次未启动，没有通过重建账本绕开未知费用。

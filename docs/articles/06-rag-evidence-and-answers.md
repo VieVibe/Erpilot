@@ -34,7 +34,7 @@ Erpilot 的政策问答围绕这个边界做了两组工作：先冻结问题与
 
 ## 三、混合检索需要用结果决定是否采用
 
-以下数字来自同一份[真实查询向量缓存报告](../../reports/rag/20261019-retrieval-v1-real.json)的 test 部分。排名在本地完成，报告本身没有再发模型或嵌入请求；缓存所需的真实查询向量采集另有账本。
+以下数字来自同一份[真实查询向量缓存报告](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/rag/20261019-retrieval-v1-real.json)的 test 部分。排名在本地完成，报告本身没有再发模型或嵌入请求；缓存所需的真实查询向量采集另有账本。
 
 | 方法 | 阈值后 Recall@3 | 证据精度 | 语料外空返回 |
 |---|---:|---:|---:|
@@ -106,7 +106,7 @@ GLM 在政策不可用和失效场景没有提交结构化结束工具；程序�
 
 这些失败需要分别解释。安全降级不应被改判成结构化流程通过；背景条件拆分失败也不等于模型已经编造了运费。两模型 strict 对照通过，只表明实验条件可比，质量 gate 仍然失败。
 
-最终结果、原文复核和原币种计量见[验收记录](../../reports/acceptance/2026-10-19-structured-policy-and-resume.md)。其中可见正文由开发代理逐例复核，属于开发过程审查，没有独立外部盲评。
+最终结果、原文复核和原币种计量见[验收记录](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-19-structured-policy-and-resume.md)。其中可见正文由开发代理逐例复核，属于开发过程审查，没有独立外部盲评。
 
 ## 七、分段续跑，也不能重试到通过
 

@@ -34,4 +34,4 @@ fetch + ReadableStream 解析 POST SSE，类型和解析见 src/protocol.ts，�
 最大 JavaScript 块约 361 KB（压缩后约 111 KB），没有循环或大块构建告警。
 分包改善缓存与单块体积，不代表首屏总资源量等比例减少。
 本轮锁文件审计无已知漏洞；KaTeX 安全覆盖版本用上游插件验证行内、块级渲染及默认信任边界。
-完整验收及范围见[最终打磨报告](../../reports/acceptance/2026-11-04-finishing.md)。
+完整验收及范围见[最终打磨报告](https://github.com/VieVibe/Erpilot/blob/72d51c7b807bd07042d727fe66a47e36c2303c91/reports/acceptance/2026-11-04-finishing.md)。

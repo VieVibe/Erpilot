@@ -10,7 +10,7 @@
 
 **现场展示**：演示客户 A1001 × 10、B2001 × 20，改第二行为 50，版本 2 金额 ¥3355。刷新待审批页面后拒绝，确认未执行；再次提交并批准，创建一张待付款订单。数据来自[演示指南与逐项断言](demo-guide.md)，脚本模型不作为真实模型成功率。
 
-**实现入口**：[草稿事务](../packages/erp_store/src/erp_store/drafts.py)、[幂等写入](../packages/erp_store/src/erp_store/mutations.py)、[图审批执行](../packages/agent_core/src/agent_core/graph.py)。[订单草稿验收](../reports/acceptance/2026-10-11-order-draft.md)覆盖版本失效与重复提交；[B4 最终指代专项](../reports/acceptance/2026-10-19-b4-final-validation.md)两模型各 3/3 场景、7/7 轮，仅说明这一组成对运行通过。
+**实现入口**：[草稿事务](../packages/erp_store/src/erp_store/drafts.py)、[幂等写入](../packages/erp_store/src/erp_store/mutations.py)、[图审批执行](../packages/agent_core/src/agent_core/graph.py)。[订单草稿验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-11-order-draft.md)覆盖版本失效与重复提交；[B4 最终指代专项](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-19-b4-final-validation.md)两模型各 3/3 场景、7/7 轮，仅说明这一组成对运行通过。
 
 **追问与取舍**：报价库存是预计值，保存不预留；执行时条件变化会停止并要求重新确认。审批不能只存在前端按钮里，因为刷新、断线和重复请求都可能发生。幂等防止重复业务提交，不替代人工审批，也不表示所有系统间操作都有全局事务。
 
@@ -28,7 +28,7 @@ flowchart LR
     B -->|不可确认或冲突| E[待核对并停止写入]
 ```
 
-**证据**：[2026-10-08 恢复验收](../reports/acceptance/2026-10-08-crash-recovery.md)记录 R01–R06 共 19 项进程硬退出测试通过，四个写工具覆盖批准后、事务提交前后和答复前窗口；R07–R10 为组件级证据。2026-11-04 已在隔离 PostgreSQL 全仓中重新通过这 19 项，见[本轮记录](../reports/acceptance/2026-11-04-portfolio-maturity.md)。ADR-0010 的评审状态保持不变。
+**证据**：[2026-10-08 恢复验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-08-crash-recovery.md)记录 R01–R06 共 19 项进程硬退出测试通过，四个写工具覆盖批准后、事务提交前后和答复前窗口；R07–R10 为组件级证据。2026-11-04 已在隔离 PostgreSQL 全仓中重新通过这 19 项，见[本轮记录](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-04-portfolio-maturity.md)。ADR-0010 的评审状态保持不变。
 
 **实现入口**：[恢复协调](../apps/api/src/erpilot_api/service.py)、[写节点与对账](../packages/agent_core/src/agent_core/graph.py)、[ERP 对账适配](../packages/mcp_erp/src/mcp_erp/bridge.py)、[范围决策](adr/0010-crash-recovery-reconciliation-scope.md)。
 
@@ -40,7 +40,7 @@ flowchart LR
 
 **实现**：检索层校验政策生效区间、冲突与索引状态。回答阶段由模型提交当前用户原话对应的问题分项、证据标签或缺口；可信程序从本轮工具历史读取引用，校验版本、原文与哈希，再渲染正文。历史证据不能冒充本轮新检索，主题相近的片段不能自动成为充分依据。
 
-**实测**：[36 条检索对照](retrieval-experiment.md)中，现有向量策略 test Recall@3 为 96.9%，RRF 未超过它，因此保留默认策略。这个数字是片段检索指标。[旧 v3 回答验收](../reports/acceptance/2026-10-19-structured-policy-and-resume.md)两模型各 11/13，保留原失败。后续将检索受阻结束交给程序，并将背景条件留在所属问题中；[独立 v4 验收](../reports/acceptance/2026-10-28-contracts-and-policy.md)GLM 13/13、22 次请求均有 usage，估价 CNY 0.015908；DeepSeek 没有运行 v4，不推断其已通过。
+**实测**：[36 条检索对照](retrieval-experiment.md)中，现有向量策略 test Recall@3 为 96.9%，RRF 未超过它，因此保留默认策略。这个数字是片段检索指标。[旧 v3 回答验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-19-structured-policy-and-resume.md)两模型各 11/13，保留原失败。后续将检索受阻结束交给程序，并将背景条件留在所属问题中；[独立 v4 验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-28-contracts-and-policy.md)GLM 13/13、22 次请求均有 usage，估价 CNY 0.015908；DeepSeek 没有运行 v4，不推断其已通过。
 
 **实现入口**：[回答契约](../packages/mcp_erp/src/mcp_erp/policy_answer.py)、[引用校验](../packages/rag/src/rag/citations.py)、[质量门槛](eval-quality-gates.md)。[上下文实验](context-experiment.md)另行检查长历史和大结果的内容丢失，输入量优化不与上述检索成功率混算。
 

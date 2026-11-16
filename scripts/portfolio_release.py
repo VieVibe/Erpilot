@@ -12,10 +12,12 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
-ROOT_FILES = {"README.md", "pyproject.toml", "uv.lock", "compose.yaml",
+ROOT_FILES = {"README.md", "AGENTS.md", "pyproject.toml", "uv.lock", "compose.yaml",
               "compose.live.yaml", "Dockerfile", ".dockerignore",
               ".env.example", ".gitignore", ".gitattributes", ".python-version"}
-DIRECTORIES = {"apps", "packages", "scripts", "docs", "tasks", "configs", ".github", "reports"}
+DIRECTORIES = {"apps", "packages", "scripts", "docs", "examples", "configs", ".github"}
+# Older source snapshots included these paths. Keep them readable during verification.
+LEGACY_DIRECTORIES = {"tasks", "reports"}
 EXCLUDED = {"node_modules", ".venv", "__pycache__", ".pytest_cache", ".ruff_cache",
             "dist", "build", ".test-build", ".git", ".codex", ".agents", ".aws",
             ".playwright-mcp", "test-results", "playwright-report"}
@@ -30,7 +32,7 @@ def allowed(name):
         return False
     if name in ROOT_FILES:
         return True
-    return (len(path.parts) > 1 and path.parts[0] in DIRECTORIES
+    return (len(path.parts) > 1 and path.parts[0] in (DIRECTORIES | LEGACY_DIRECTORIES)
             and not set(path.parts).intersection(EXCLUDED)
             and not any(part.startswith(".env") for part in path.parts)
             and (path.suffix in SUFFIXES
@@ -41,7 +43,8 @@ def allowed(name):
 def source_names(root):
     result = subprocess.run(["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"],
                             cwd=root, capture_output=True, check=True)
-    return sorted({name for name in result.stdout.decode("utf-8").split("\0") if allowed(name)})
+    return sorted({name for name in result.stdout.decode("utf-8").split("\0")
+                   if allowed(name) and PurePosixPath(name).parts[0] not in LEGACY_DIRECTORIES})
 
 
 def sha(data):
@@ -72,7 +75,7 @@ def build(root, output, *, names=None):
         raise ValueError("empty snapshot")
     manifest = {"format": "erpilot-source-snapshot-1", "files": entries,
                 "content_sha256": sha(canonical(entries)),
-                "scope": "source, locks, documentation and recorded reports; no runtime data"}
+                "scope": "source, locks and documentation; no runtime data"}
     output.parent.mkdir(parents=True, exist_ok=True)
     # Exclusive creation prevents replacement; stable metadata makes repeat builds reproducible.
     with zipfile.ZipFile(output, "x", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:

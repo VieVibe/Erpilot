@@ -9,6 +9,7 @@ Erpilot 提供会话、工具执行、人工确认、执行恢复和操作记录
 | 未设置或留空 | 工作台显示「尚未配置业务模块」，无需模型密钥，继续使用框架的 PostgreSQL checkpoint 配置 |
 | `order-example` | 启用订单、库存、草稿与审批参考实现。本地首次运行先执行 `uv run --package erp-store python -m erp_store seed` |
 | `expense-example` | 启用报销示例，另需启动示例 ERP HTTP 服务 |
+| `le_shen_erp:create_module` | 加载 Leshen 只读插件，按 [Leshen 示例](../examples/le-shen-erp/README.md) 配置模块搜索路径和账号 |
 | 已安装插件名称或 `module:factory` | 加载开发者提供的插件 |
 
 ## 运行报销示例
@@ -118,7 +119,7 @@ HTTP 插件可以复用 `HttpConnectorConfig`。它统一解析 `<PREFIX>_URL`�
 
 ## 验证
 
-内置报销示例验证独立 HTTP 后端的接入。工单脚手架可通过正式 API 启动入口执行示例查询，使用固定数据和脚本化模型测试。接入真实 CRM、OA 或工单后端仍需实现并验证对应适配器。
+真实系统接入见[乐深 ERP 只读验证](../examples/le-shen-erp/README.md)。工单脚手架可通过正式 API 启动入口执行示例查询，使用固定数据和脚本化模型测试。接入真实 CRM、OA 或工单后端仍需实现并验证对应适配器。
 
 ```powershell
 uv run python -m pytest apps/api/tests/test_business_modules.py apps/api/tests/test_graph_api.py apps/api/tests/test_live_defaults.py apps/cli/tests/test_plugin_scaffold.py

@@ -6,7 +6,7 @@
 
 2026-10-05，按“入口/生命周期 → 执行证据 → 幂等/并发 → 回归展示”实施。
 保持手写 loop、SQLite、20 个工具。实施清单见
-[计划](plans/2026-10-05-write-reliability.md)，事务决策见 [ADR-0007](adr/0007-write-reliability.md)。
+[计划](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/docs/plans/2026-10-05-write-reliability.md)，事务决策见 [ADR-0007](adr/0007-write-reliability.md)。
 
 ## 改变了什么
 
@@ -38,7 +38,7 @@
 库存不足后查库存恢复，130→130。全部状态断言通过。这些是确定性工程链路证据，
 不能替代真实模型行为评测。
 
-真实模型完整基线：[20261005-142553-dcc830](../reports/evals/20261005-142553-dcc830.md)：
+真实模型完整基线：[20261005-142553-dcc830](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/evals/20261005-142553-dcc830.md)：
 35 条全执行、34 通过；写拒绝与审批 6/6，估算成本 ¥0.0308，耗时 1255 秒。
 只读任务第一条有两次重试，计量不完整 1 条。运行期间源码未改变；开始时为
 未提交工作区，报告保留原 HEAD 与源码哈希，随后按阶段提交。

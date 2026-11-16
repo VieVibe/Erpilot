@@ -60,7 +60,7 @@ uv run --package rag python -m rag.benchmark --backend local-tfidf --output repo
 uv run --package rag python -m rag.benchmark --export-queries reports/rag/retrieval-query-request.json
 ```
 
-清单绑定当前真实 index 文件 hash、语料 hash、数据集 hash、维度和全部 36 条查询。[请求清单](../reports/rag/20261019-retrieval-v1-query-request.json)本身不发请求。2026-10-19 用户允许真实模型验收后，已使用单独采集器完成 36 条配套查询向量：4 次请求、1,038 token，响应模型均为 `qwen3.7-text-embedding-flash`，维度 1024，原文档索引未重建。
+清单绑定当前真实 index 文件 hash、语料 hash、数据集 hash、维度和全部 36 条查询。[请求清单](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/rag/20261019-retrieval-v1-query-request.json)本身不发请求。2026-10-19 用户允许真实模型验收后，已使用单独采集器完成 36 条配套查询向量：4 次请求、1,038 token，响应模型均为 `qwen3.7-text-embedding-flash`，维度 1024，原文档索引未重建。
 
 显式发起真实嵌入（会使用供应商额度，不属于离线基准命令）：
 
@@ -70,7 +70,7 @@ uv run --env-file .env --package rag python -m rag.collect --expected-model qwen
 
 每次请求先持久化计数；SDK 不重试，单次请求总截止 30 秒。用量缺失或超时会保留未知记录并停止后续请求；模型不符、响应 index 重复、维度或数值错误也停止。输出或账本已经存在时拒绝重开。token 上限根据每次已返回用量决定后续是否继续，不能阻止最后一次响应超过阈值；嵌入端点价目未确认，不把金额未知记成免费。
 
-本轮[真实采集账本](../reports/rag/20261019-retrieval-v1-collection-audit.json)保存每批状态、用量、请求模型及完整查询向量，便于不发新请求地恢复实验材料；临时向量包位于 `traces/rag/20261019-retrieval-v1-real-vectors.json`。`scripts/collect_retrieval_queries.py` 是工作区组合入口，只加载本地 `.env` 后调用同一采集器，不输出密钥。
+本轮[真实采集账本](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/rag/20261019-retrieval-v1-collection-audit.json)保存每批状态、用量、请求模型及完整查询向量，便于不发新请求地恢复实验材料；临时向量包位于 `traces/rag/20261019-retrieval-v1-real-vectors.json`。`scripts/collect_retrieval_queries.py` 是工作区组合入口，只加载本地 `.env` 后调用同一采集器，不输出密钥。
 
 严格缓存对照：
 
@@ -100,7 +100,7 @@ CI 在普通单测后运行显式代理烟测并上传产物，不增加真实�
 
 ## 首轮结果与取舍
 
-2026-10-19 的[首轮代理报告](../reports/rag/20261019-retrieval-v1-proxy.md)与[逐题数据](../reports/rag/20261019-retrieval-v1-proxy.json)均保留。测试集数据：
+2026-10-19 的[首轮代理报告](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/rag/20261019-retrieval-v1-proxy.md)与[逐题数据](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/rag/20261019-retrieval-v1-proxy.json)均保留。测试集数据：
 
 | 方法（均使用代理向量条件） | Raw Recall@3 | 阈值后 Recall@3 | 证据精度 | OOD 拒答 |
 |---|---|---|---|---|
@@ -110,7 +110,7 @@ CI 在普通单测后运行显式代理烟测并上传产物，不增加真实�
 
 BM25 在代理条件下提高了阈值后召回，同时带来更多无关片段；RRF 的负例误接纳更明显。
 
-用户授权后的[真实向量对照](../reports/rag/20261019-retrieval-v1-real.md)与[逐题数据](../reports/rag/20261019-retrieval-v1-real.json)已完整执行。同一代码另外保存[配套代理复跑](../reports/rag/20261019-retrieval-v1-proxy-final.md)，原首轮数据不覆盖。真实向量条件下 test 结果：
+用户授权后的[真实向量对照](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/rag/20261019-retrieval-v1-real.md)与[逐题数据](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/rag/20261019-retrieval-v1-real.json)已完整执行。同一代码另外保存[配套代理复跑](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/rag/20261019-retrieval-v1-proxy-final.md)，原首轮数据不覆盖。真实向量条件下 test 结果：
 
 | 方法 | 阈值 | 阈值后 Recall@3 | 证据精度 | OOD 拒答 | 正例空返回 |
 |---|---|---|---|---|---|
@@ -121,4 +121,4 @@ BM25 在代理条件下提高了阈值后召回，同时带来更多无关片段
 
 这些结果仍支持保留当前 0.57 默认策略。直接提高阈值虽然减少无关片段，也漏掉更多有依据的问题；RRF 的拒答与召回均未超过当前策略。当前策略仍会返回“退货地址 / 电话”问题 n12 的相关主题片段，但片段并不提供地址或电话，说明主题相似不等于足够回答。后续需要冻结新的独立样本验证证据充分性和生成回答，而非按本次 test 分数继续调阈值。36 条问题本轮只跑片段检索，没有声称完成逐题模型答复验收。
 
-初始离线工程记录见[代理实验验收](../reports/acceptance/2026-10-19-retrieval-experiment.md)，新授权批次的真实向量、B6、失败复盘和费用见[真实模型验收](../reports/acceptance/2026-10-19-live-model-validation.md)。
+初始离线工程记录见[代理实验验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-19-retrieval-experiment.md)，新授权批次的真实向量、B6、失败复盘和费用见[真实模型验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-19-live-model-validation.md)。

@@ -2,7 +2,7 @@
 
 通过可安装的业务模块，将自然语言交互接入 ERP、CRM、OA、工单系统和企业自建服务。Erpilot 提供会话、工具调用、人工确认、执行恢复和操作记录，业务模块定义工具、接口映射、权限规则与提交结果核对，用户通过同一套工作台完成查询和确认。
 
-仓库提供订单与库存参考实现、连接独立 HTTP 服务的报销示例，以及基于固定示例数据的工单查询插件脚手架。每个应用实例启动时加载一个业务模块，CRM、OA 和其他目标系统通过实现同一插件契约接入。 [业务模块开发与接入](docs/business-modules.md)
+仓库提供订单与库存参考实现、连接独立 HTTP 服务的报销示例、乐深 ERP 只读适配器，以及基于固定示例数据的工单查询插件脚手架。每个应用实例启动时加载一个业务模块，CRM、OA 和其他目标系统通过实现同一插件契约接入。 [业务模块开发与接入](docs/business-modules.md)
 
 面向 **Agent 应用开发 / Python 后端工程**的求职作品。模型负责提出工具调用，应用负责核对来源、业务规则与审批，数据库负责记录最终事实。
 
@@ -100,29 +100,13 @@ flowchart TD
 
 具体难点、源码入口、失败归因和面试追问见[三个实现案例](docs/interview-cases.md)。项目描述应按本人实际参与范围使用，见[求职投递材料](docs/application-kit.md)。
 
-## 验证与证据
+## 验证
 
 `verify` 默认执行静态检查、Python 离线测试、前端协议与渲染测试、构建及 **11 个离线业务场景**。加 `--browser` 后安装匹配 Chromium，运行工作台和真实 API 的浏览器验收。逐步日志、JUnit 和汇总留在 `artifacts/verification/`；任何步骤失败返回非零状态。
 
 PostgreSQL 恢复测试仅在显式设置隔离的 `ERPILOT_TEST_CHECKPOINT_DATABASE_URL` 后运行；未配置时会标注跳过。真实模型用例默认排除，浏览器中另有两个需独立实验服务的语义预览用例，未配置时单列跳过。[完整检查与故障处理](docs/development.md)。
 
-2026-11-04 最终打磨验收：Python **1861 passed / 0 skipped**（含独立 PostgreSQL）、前端 116、
-工作台浏览器 60、正式离线 API 浏览器 5、容器浏览器 3、业务场景 11/11；上述两个专用实验用例跳过。
-干净源码副本从锁定安装到实际建单、320/1440px 和刷新恢复通过，正常离线流程浏览器错误及告警为 0。
-依赖审计无已知漏洞，已重新录制字幕演示。[打磨清单与证据](reports/acceptance/2026-11-04-finishing.md)。
-
-| 已有真实观察 | 结果与范围 | 原始证据 |
-|---|---|---|
-| 政策答复 v4，GLM | 13/13 受控检索用例；旧 v3 两模型各 11/13 保留 | [独立批次](reports/acceptance/2026-10-28-contracts-and-policy.md) |
-| 预算完整流程，GLM | 1/1 流程、10/10 阶段；超额停止、明确调预算、重新审批 | [预算专项](reports/acceptance/2026-10-21-budget-live-validation.md) |
-| 草稿指代最终专项 | GLM / DeepSeek 各 3/3 场景、7/7 轮 | [指代验收](reports/acceptance/2026-10-19-b4-final-validation.md) |
-| 只读补货建议 | GLM / DeepSeek 各 7/7，一组成对运行 | [B6 验收](reports/acceptance/2026-10-19-live-model-validation.md) |
-| 冻结检索对照 | test Recall@3 96.9%；RRF 未超过当前策略，保留原默认 | [检索实验](docs/retrieval-experiment.md) |
-| 11-04 订单 v2 修复后真实批次 | **4/4 流程、34/34 阶段**；55 请求/usage 齐全，估价 CNY 0.052260；旧失败保留 | [本轮验收](reports/acceptance/2026-11-04-real-model-reconnect.md)、[原始批次](reports/acceptance/20261104-reconnect-corrected-order-v2.json) |
-| 11-04 语义工程专项 | 创建 **7/7**、修改 **6/6**；真实 API 默认开启受约束语义预览；120条标签已完成委托AI审核 | [真实专项与失败历史](reports/acceptance/2026-11-04-real-model-reconnect.md)、[标签审核](docs/label-review.md) |
-| 带登录的真实 HTTP 建单 | 真实模型草稿 → 指定版本核对 → 审批 → 精确库存与重复批准拦截，**6 项检查通过** | [API 证据](reports/acceptance/20261104-reconnect-live-api-network.json)、[业务状态](reports/acceptance/20261104-reconnect-live-api-network-state.json) |
-
-这些数字各自对应报告中的源码、固定样本和运行，不代表通用准确率或生产稳定率。最新工程结果见[项目状态](docs/project-status.md)，历史原始失败和费用冻结继续保留。
+历史验收按运行批次记录，见 [Git 历史验收报告](https://github.com/VieVibe/Erpilot/tree/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports)。
 
 ## 使用真实模型开发
 
@@ -155,10 +139,9 @@ packages/rag/         政策语料、检索、版本与引用校验
 packages/evals/       冻结任务、真实模型评测、计量与质量门槛
 scripts/              启动、离线演示和可校验交付
 docs/                 架构、ADR、演示、技术文章和面试材料
-reports/              分批验收及历史失败证据
 ```
 
 当前支持**本地账号、单 API 执行进程**及容器复现。账号隔离工作会话，目标系统的数据权限由插件和目标系统共同执行。订单演示使用共享门店数据；
 多租户、跨进程执行权和自动业务补偿未交付。默认核心任务已通过受控真实验收；语义工程专项通过，
 语义预览已默认接入，原120条工程预期已完成委托AI审核，不据小样本宣称通用准确率。
-[能力边界](docs/architecture.md) · [本轮计划](docs/plans/2026-11-04-production-readiness.md) · [文章系列](docs/articles/README.md) · [可校验交付包](docs/portfolio-overview.md)
+[能力边界](docs/architecture.md) · [可校验交付包](docs/portfolio-overview.md)

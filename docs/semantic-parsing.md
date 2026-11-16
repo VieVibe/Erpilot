@@ -49,13 +49,13 @@ operator 可整理自己的草稿；只有 approver 且开启写工具后才能�
 
 原120条工程用例及 SHA-256 保持不变。用户已委托 AI 项目负责人完成逐条审核，
 **120/120已审核，无需用户继续复核**；6条补充支持范围说明，判定/字段改动0条。
-[完整审核表](../reports/review/20261104-intent-label-audit/review.md) ·
-[审核后规则回归](../reports/acceptance/20261104-intent-label-review-regression.json)。
+[完整审核表](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/review/20261104-intent-label-audit/review.md) ·
+[审核后规则回归](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/20261104-intent-label-review-regression.json)。
 审核主体记录为AI，不冒称真人金标；规则回归不代表LLM准确率。[审核依据与核验](label-review.md)。
 
 按用户明确要求，以来源/目录校验、完整表单、版本绑定、独立审批、默认入口正反例、
 实际模型 HTTP 验收和失败降级作为启用依据。原人工复核待办已由委托AI审核收口，
 今后可另做真人外部验证。旧日期报告中的 off、待审和失败判定保留其历史含义。
 
-[本轮验收](../reports/acceptance/2026-11-04-semantic-default.md) ·
+[本轮验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-11-04-semantic-default.md) ·
 [决策](adr/0013-default-semantic-proposals.md) · [项目状态](project-status.md)

@@ -46,7 +46,7 @@
 5. 没有识别到的创建字段明确记为 `unverified_fields`，不伪装成已验证。
 6. 通用回调失败跳过 handler 与审批，非法或不可序列化检查记录也拒绝执行。
 
-验证结果见[本阶段验收](../reports/acceptance/2026-10-21-order-constraints.md)。
+验证结果见[本阶段验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-21-order-constraints.md)。
 
 ## 当前边界
 

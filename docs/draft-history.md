@@ -2,7 +2,7 @@
 
 日期：2026-10-21。本阶段承接[保存前参数检查](order-task-reliability.md)，把有限范围的
 客户 / 备注来源保存到业务库，并提供可审阅的版本变更。后续已补[完整订单任务验收](whole-order-acceptance.md)；
-[最新真实结果](../reports/acceptance/2026-10-21-whole-order-acceptance.md)中 GLM 历史 2/2，跨模型共同门槛仍未达成。
+[最新真实结果](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-21-whole-order-acceptance.md)中 GLM 历史 2/2，跨模型共同门槛仍未达成。
 
 ## 用户可以做什么
 
@@ -71,7 +71,7 @@ MCP：`get_order_draft_history(draft_id, before_revision=null, limit=5)`。
 
 ## 验证与边界
 
-结果、命令及原始证据见[本阶段验收](../reports/acceptance/2026-10-21-draft-history.md)。
+结果、命令及原始证据见[本阶段验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-21-draft-history.md)。
 覆盖新实例恢复、丢失聊天、数量修改保留来源、明确改名 / 清空备注、伪造来源拒绝、
 插入后故障回滚、并发编辑、分页与隔离、旧记录兼容、窄屏与桌面、重试、迟到结果与 HTML 转义。
 
@@ -85,4 +85,4 @@ MCP：`get_order_draft_history(draft_id, before_revision=null, limit=5)`。
 原 GLM 连续任务失败与政策各 11/13 保持原判；新批次不与旧结果混算。
 以上为当时批次结果，保留原判。后续已完成指定目标前置实查与完整任务验收，最终源码
 GLM 历史 2/2；DeepSeek 在新批次遇上游限流且缺 usage 后冻结，未完成共同验收，
-详见[最新报告](../reports/acceptance/2026-10-21-whole-order-acceptance.md)。不宣称真实稳定率。
+详见[最新报告](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-21-whole-order-acceptance.md)。不宣称真实稳定率。

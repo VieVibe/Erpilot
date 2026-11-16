@@ -16,7 +16,7 @@ API、CLI 与评测共享的提示词要求：逐问核对结论、条件、例�
 
 ## 独立生成验收
 
-新增 `--suite rag-grounding`，固定 13 个场景，当前 scorer 为 `rag-grounding-2`，fixture 为 `policy-answer-support-1`。首轮 v1 原判分与[清单](../reports/rag/20261019-grounding-v1-manifest.json)保留，`--suite rag-grounding-v1` 可继续使用原规则；最终使用单独冻结的 [v2 清单](../reports/rag/20261019-grounding-v2-manifest.json)：
+新增 `--suite rag-grounding`，固定 13 个场景，当前 scorer 为 `rag-grounding-2`，fixture 为 `policy-answer-support-1`。首轮 v1 原判分与[清单](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/rag/20261019-grounding-v1-manifest.json)保留，`--suite rag-grounding-v1` 可继续使用原规则；最终使用单独冻结的 [v2 清单](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/rag/20261019-grounding-v2-manifest.json)：
 
 | 类别 | 场景 |
 |---|---|
@@ -49,6 +49,6 @@ $env:LLM_MODEL = 'deepseek-v4.1-flash'
 uv run python -m evals --suite rag-grounding --budget 0.03 --budget-currency USD --timeout 60 --gate configs/evals/rag-grounding.json
 ```
 
-多次运行共用一个独立批次累计额度，后续调用仅使用剩余额度；上例为初始额度示意，实际续跑须读取[账本](../reports/acceptance/20261019-grounding-live-batch-01.json)余额。本批为完成格式修复与明确版本的拒答判分修复，已在后续调用前说明并记录 CNY 上限从 0.06 增至 0.08；USD 上限 0.03 保持不变。每次请求总截止 60 秒，SDK 与整轮重试均为 0，缺失 usage 停止整个新批次。所有额度是请求前累计估价熔断，单次响应可能超出余额，不是供应商硬额度。历史冻结预算与已完成 B4 / B6 批次不重开。
+多次运行共用一个独立批次累计额度，后续调用仅使用剩余额度；上例为初始额度示意，实际续跑须读取[账本](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/20261019-grounding-live-batch-01.json)余额。本批为完成格式修复与明确版本的拒答判分修复，已在后续调用前说明并记录 CNY 上限从 0.06 增至 0.08；USD 上限 0.03 保持不变。每次请求总截止 60 秒，SDK 与整轮重试均为 0，缺失 usage 停止整个新批次。所有额度是请求前累计估价熔断，单次响应可能超出余额，不是供应商硬额度。历史冻结预算与已完成 B4 / B6 批次不重开。
 
 离线检查进入普通 pytest，CI 不自动增加付费运行；真实结果与人工复核另行保存。现有 baseline、B4、B5、B6 case / scorer 与历史结果均不改判。

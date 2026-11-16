@@ -57,6 +57,6 @@ uv run python -m evals.gate reports/evals/candidate.json --policy configs/evals/
 
 带 `--gate` 的真实评测默认生成 `reports/gates/<运行报告名>.json/.md`，由策略决定验收返回码；默认策略要求全部通过。未带策略时保留原来的全 case 通过条件。参考报告缺少完整性证据时在模型配置解析前拒绝。CI 的既有真实 baseline 步骤已接入 baseline 策略，并同时上传 gate 产物；未配置模型 secrets 时继续跳过该付费步骤。普通 pytest 的模拟供应商和真实 MCP / 临时库测试不会产生真实模型费用。
 
-本次验收与已知限制见[2026-10-19 验收记录](../reports/acceptance/2026-10-19-job-readiness.md)。
+本次验收与已知限制见[2026-10-19 验收记录](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-19-job-readiness.md)。
 
-2026-10-19 生成验收审计发现，旧 runner 将预算跳过的占位行计入 `complete=True`，旧 strict 只信任此标记，可能放行未完整执行的报告。质量门槛的独立执行计数已经正确拒绝。现修复 runner 的标记，并让 strict 独立核对用例覆盖、唯一性、实际 / 报告执行数、跳过项、多轮计数、源码稳定性和未知计量；原错误报告不回填。真实故障、错误派生对照和修复后实际拒绝结果见[回答可靠性审计](../reports/acceptance/2026-10-19-rag-answer-reliability.md)。
+2026-10-19 生成验收审计发现，旧 runner 将预算跳过的占位行计入 `complete=True`，旧 strict 只信任此标记，可能放行未完整执行的报告。质量门槛的独立执行计数已经正确拒绝。现修复 runner 的标记，并让 strict 独立核对用例覆盖、唯一性、实际 / 报告执行数、跳过项、多轮计数、源码稳定性和未知计量；原错误报告不回填。真实故障、错误派生对照和修复后实际拒绝结果见[回答可靠性审计](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-19-rag-answer-reliability.md)。

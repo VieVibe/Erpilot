@@ -78,8 +78,6 @@ jobs:
       - name: Browser demo against real API and temporary ERP
         run: npm run test:demo
         working-directory: apps/web
-      - name: Preserve recorded acceptance evidence
-        run: git diff --exit-code -- reports/
       - name: Upload browser failure evidence
         if: failure()
         uses: actions/upload-artifact@v4

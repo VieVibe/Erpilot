@@ -57,4 +57,4 @@ uv run python scripts/demo.py --serve --port 8765
 ¥500；保存 v1，保持库存不变。展开原始要求并刷新，可核对同一份来源记录。
 这是正式 API / LangGraph / MCP / 临时 ERP 配合脚本模型，未调用真实供应商。
 
-实现、工程检查与边界见[本批验收](../reports/acceptance/2026-10-28-natural-order.md)。
+实现、工程检查与边界见[本批验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-28-natural-order.md)。

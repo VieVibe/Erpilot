@@ -57,12 +57,12 @@ uv run python scripts/audit_context_workflow.py reports/context/new-workflow-glm
 不是供应商账单硬上限。逐请求审计从原始 usage 重新计算费用，并检查输入哈希、工具配对、
 逐轮 token 合计、场景完成标志和两模型源码 / 范围是否相同。
 
-最新独立批次见[2026-10-21 真实验收](../reports/acceptance/2026-10-21-live-order-validation.md)：
+最新独立批次见[2026-10-21 真实验收](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-21-live-order-validation.md)：
 新增参数来源与持久记录后，同一应用源码下 GLM structured 3/3 场景、17/17 轮通过；
 current 1/3 场景、15/17 轮执行且 13 轮通过。DeepSeek 第二轮超时缺 usage，
 仅执行 2/34 轮后冻结，structured 未开始；共同门槛未达成，候选不切默认。
 GLM 历史专项另计 1/2，不并入本套场景成功率。
 
-[2026-10-19 批次](../reports/acceptance/2026-10-19-continuous-context-and-delivery.md)保留当时失败与费用，
+[2026-10-19 批次](https://github.com/VieVibe/Erpilot/blob/b076ee4ff16c4338130f25db7e320abb62fc7e87/reports/acceptance/2026-10-19-continuous-context-and-delivery.md)保留当时失败与费用，
 不使用新结果改判，也不合成跨版本成功率。
 历史快照的 62% 输入减少只属于[原实验](context-experiment.md)，不移植为本批降本结论。
